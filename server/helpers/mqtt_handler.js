@@ -2,10 +2,10 @@ const mqtt = require('mqtt');
 const config = require('./config');
 
 class MqttHandler {
-    constructor() {
+    constructor(username) {
         this.mqttClient = null;
         this.host = config.host;
-        this.username = config.userDataUser.name;
+        this.username = username;
     }
 
     connect() {
@@ -17,7 +17,7 @@ class MqttHandler {
 
         this.mqttClient.reconnectPeriod = 1000;
 
-        // Mqtt error calback
+        // Mqtt error callback
         this.mqttClient.on('error', (err) => {
             console.log(err);
             this.mqttClient.end();

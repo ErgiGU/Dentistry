@@ -7,9 +7,9 @@ const mqttHandler = require('../helpers/mqtt_handler');
 const config = require('../helpers/config');
 
 // Variables
-const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.userDataUser.name + ':' + config.userDataUser.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';
+const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.appointmentUser.name + ':' + config.appointmentUser.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';
 //const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
-const port = process.env.PORT || config.userDataUser.port;
+const port = process.env.PORT || config.appointmentUser.port;
 const version = 'v1'
 
 // MQTT Client
@@ -57,7 +57,6 @@ let root = path.normalize(__dirname + '/..');
 let client = path.join(root, 'client', 'dist');
 app.use(express.static(client));
 
-
 // Error handler (i.e., when exception is thrown) must be registered last
 let env = app.get('env');
 // eslint-disable-next-line no-unused-vars
@@ -75,7 +74,6 @@ app.use(function (err, req, res, next) {
     res.json(err_res);
 });
 
-
 app.listen(port, function (err) {
     if (err) throw err;
     console.log(`Express server listening on port ${port}, in ${env} mode`);
@@ -84,4 +82,3 @@ app.listen(port, function (err) {
 });
 
 module.exports = app;
-

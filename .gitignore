@@ -176,7 +176,12 @@ $RECYCLE.BIN/
 # End of https://www.gitignore.io/api/node,vuejs,visualstudiocode,linux,macos,windows
 
 ## Webstorm/Jetbrains
+.idea/workspace-*.xml
+.idea/workspace.xml
+usage.statistics.xml
+/shelf
 *.iml
 misc.xml
 deploymentTargetDropDown.xml
 render.experimental.xml
+config.js
