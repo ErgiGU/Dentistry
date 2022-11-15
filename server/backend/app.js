@@ -9,7 +9,7 @@ const config = require('../helpers/config');
 // Variables
 const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.appointmentUser.name + ':' + config.appointmentUser.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';
 //const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
-const port = process.env.PORT || config.appointmentUser.port;
+const port = process.env.PORT || config.admin.port;
 const version = 'v1'
 
 // MQTT Client

@@ -21,5 +21,4 @@ mongoose.connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, fu
     console.log(`Connected to MongoDB with URI: ${mongoURI}`);
 });
 
-
 module.exports = app;

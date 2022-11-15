@@ -1,8 +1,4 @@
-const cors = require('cors');
-const express = require('express');
 const mongoose = require('mongoose');
-const morgan = require('morgan');
-const path = require('path');
 const mqttHandler = require('../helpers/mqtt_handler');
 const config = require('../helpers/config');
 
@@ -10,7 +6,6 @@ const config = require('../helpers/config');
 const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.authorizationUser.name + ':' + config.authorizationUser.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';
 //const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
 const port = process.env.PORT || config.authorizationUser.port;
-const version = 'v1'
 
 // MQTT Client
 const mqttClient = new mqttHandler()

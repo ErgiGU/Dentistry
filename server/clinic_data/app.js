@@ -1,8 +1,4 @@
-const cors = require('cors');
-const express = require('express');
 const mongoose = require('mongoose');
-const morgan = require('morgan');
-const path = require('path');
 const mqttHandler = require('../helpers/mqtt_handler');
 const config = require('../helpers/config');
 
