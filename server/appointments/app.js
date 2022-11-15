@@ -21,4 +21,11 @@ mongoose.connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, fu
     console.log(`Connected to MongoDB with URI: ${mongoURI}`);
 });
 
-module.exports = app;
+mqttClient.subscribeTopic('thing')
+
+// When a message arrives, console.log it
+mqttClient.mqttClient.on('message', function (topic, message) {
+    console.log(message.toString());
+});
+
+module.exports = mqttClient;

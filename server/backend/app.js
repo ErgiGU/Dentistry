@@ -5,9 +5,10 @@ const morgan = require('morgan');
 const path = require('path');
 const mqttHandler = require('../helpers/mqtt_handler');
 const config = require('../helpers/config');
+const {response} = require("express");
 
 // Variables
-const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.appointmentUser.name + ':' + config.appointmentUser.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';
+const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.admin.name + ':' + config.admin.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';
 //const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
 const port = process.env.PORT || config.admin.port;
 const version = 'v1'
@@ -41,6 +42,16 @@ app.use(cors());
 // Import routes
 app.get('/api/' + version, function (req, res) {
     res.json({'message': 'Dentistry portal API endpoint.'});
+});
+
+app.get('/api/' + version + '/thing', function (req, res) {
+    mqttClient.sendMessage(req.body.topic, req.body.message);
+    res.status(200).json({"mqtt": "sent"});
+});
+
+app.post('/api/' + version + '/*', function (req, res) {
+    mqttClient.sendMessage(req.body.topic, req.body.message);
+    res.status(200).json({"mqtt": "sent"});
 });
 
 // Catch all non-error handler for api (i.e., 404 Not Found)

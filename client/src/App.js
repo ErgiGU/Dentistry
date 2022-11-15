@@ -1,23 +1,29 @@
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  return (
+    function sendMessage() {
+        fetch('http://localhost:3000/api/v1/thing', {
+            method: 'POST',
+            body: JSON.stringify({
+                topic: "test",
+                message: "POST test mqtt"
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+            .then((response) => {
+                console.log('Sent request')
+                console.log(response.json())
+            })
+    }
+
+    return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+        <button onClick={sendMessage}>Click me</button>
+        <div id={"response"}></div>
+      </div>
     </div>
   );
 }
