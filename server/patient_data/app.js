@@ -5,7 +5,6 @@ const config = require('../helpers/config');
 // Variables
 const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.userDataUser.name + ':' + config.userDataUser.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';
 //const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
-const port = process.env.PORT || config.userDataUser.port;
 
 // MQTT Client
 const mqttClient = new mqttHandler()

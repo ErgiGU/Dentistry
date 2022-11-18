@@ -2,7 +2,7 @@
   "name": "clinic_data",
   "version": "1.0.0",
   "description": "Clinic service",
-  "main": "app.js",
+  "main": "clinic_data_app.js",
   "author": "",
   "license": "MIT",
   "engines": {

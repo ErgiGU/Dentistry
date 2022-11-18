@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="authorizationApp.js" type="NodeJSConfigurationType" path-to-js-file="app.js" working-dir="$PROJECT_DIR$/server/authorization">
+  <configuration default="false" name="authorizationApp.js" type="NodeJSConfigurationType" path-to-js-file="$PROJECT_DIR$/server/authorization/authorization_app.js" working-dir="$PROJECT_DIR$/server/authorization">
     <method v="2" />
   </configuration>
 </component>

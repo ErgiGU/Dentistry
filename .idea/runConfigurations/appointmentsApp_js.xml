@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="appointmentsApp.js" type="NodeJSConfigurationType" path-to-js-file="app.js" working-dir="$PROJECT_DIR$/server/appointments">
+  <configuration default="false" name="appointmentsApp.js" type="NodeJSConfigurationType" path-to-js-file="$PROJECT_DIR$/server/appointments/appointments_app.js" working-dir="$PROJECT_DIR$/server/appointments">
     <method v="2" />
   </configuration>
 </component>

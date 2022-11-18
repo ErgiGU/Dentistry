@@ -2,7 +2,7 @@
   "name": "appointments",
   "version": "1.0.0",
   "description": "Appointments service",
-  "main": "app.js",
+  "main": "appointments_app.js",
   "author": "",
   "license": "MIT",
   "engines": {

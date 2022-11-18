@@ -1,31 +1,15 @@
 const cors = require('cors');
 const express = require('express');
-const mongoose = require('mongoose');
 const morgan = require('morgan');
 const path = require('path');
-const mqttHandler = require('../helpers/mqtt_handler');
 const config = require('../helpers/config');
-const {response} = require("express");
+const appointment_handler = require("./handlers/appointment_handler");
+const clinic_data_handler = require("./handlers/authorization_handler");
+const authorization_handler = require("./handlers/clinic_data_handler");
 
 // Variables
-const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.admin.name + ':' + config.admin.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';
-//const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
 const port = process.env.PORT || config.admin.port;
 const version = 'v1'
-
-// MQTT Client
-const mqttClient = new mqttHandler()
-mqttClient.connect()
-
-// Connect to MongoDB
-mongoose.connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, function (err) {
-    if (err) {
-        console.error(`Failed to connect to MongoDB with URI: ${mongoURI}`);
-        console.error(err.stack);
-        process.exit(1);
-    }
-    console.log(`Connected to MongoDB with URI: ${mongoURI}`);
-});
 
 // Create Express app
 let app = express();
@@ -44,18 +28,12 @@ app.get('/api/' + version, function (req, res) {
     res.json({'message': 'Dentistry portal API endpoint.'});
 });
 
-app.get('/api/' + version + '/thing', function (req, res) {
-    mqttClient.sendMessage(req.body.topic, req.body.message);
-    res.status(200).json({"mqtt": "sent"});
-});
-
-app.post('/api/' + version + '/*', function (req, res) {
-    mqttClient.sendMessage(req.body.topic, req.body.message);
-    res.status(200).json({"mqtt": "sent"});
-});
+app.use(appointment_handler);
+app.use(authorization_handler);
+app.use(clinic_data_handler);
 
 // Catch all non-error handler for api (i.e., 404 Not Found)
-app.use('/api/' + version + '/*', function (req, res) {
+app.use('/api/' + config.version + '/*', function (req, res) {
     res.status(404).json({'message': 'Not Found'});
 });
 

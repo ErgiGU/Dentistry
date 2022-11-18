@@ -2,13 +2,14 @@
   "name": "authorization",
   "version": "1.0.0",
   "description": "Authorization service",
-  "main": "app.js",
+  "main": "authorization_app.js",
   "author": "",
   "license": "MIT",
   "engines": {
     "node": "16.x"
   },
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "mongoose": "^6.7.2",
     "mqtt": "^4.3.7"
   }
