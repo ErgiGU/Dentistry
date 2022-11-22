@@ -1,8 +1,15 @@
 import './App.css';
+import {
+    Routes, //replaces "Switch" used till v5
+    Route,
+} from "react-router-dom";
+import {Registration} from "./ClinicRegistration/Registration";
+import React from 'react';
+
 
 function App() {
 
-    function sendMessage(type, url, topic, message) {
+/*    function sendMessage(type, url, topic, message) {
         fetch(url, {
             method: type,
             body: JSON.stringify({
@@ -18,16 +25,18 @@ function App() {
             console.log(response.json())
         })
         return ""
-    }
+    }*/
 
-    return (
-    <div className="App">
-      <div>
-        <div className="btn btn-primary" onClick={() => sendMessage('POST', 'http://localhost:3001/api/v1/auth', 'auth', 'true')}>Click me</div>
-        <div id={"response"}></div>
-      </div>
-    </div>
-  );
+
+    return(
+        //you can add more routes here, just follow the same format
+        <Routes>
+            <Route path = "/" element = {< Registration />} />
+            <Route />
+        </Routes>
+    );
+
+
 }
 
 export default App;
