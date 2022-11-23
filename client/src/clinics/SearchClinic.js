@@ -1,11 +1,10 @@
 import React from 'react';
-import SearchClinic from './clinics/SearchClinic';
-
+import Map from './clinics_components/ClinicsMap';
 
 function App() {
     return (
         <div>
-            <SearchClinic />
+            <Map />
         </div>
     );
 }
