@@ -1,7 +1,7 @@
 import React from 'react';
 import Map from './clinics_components/ClinicsMap';
 
-function App() {
+export function SearchClinic() {
     return (
         <div>
             <Map />
@@ -9,4 +9,4 @@ function App() {
     );
 }
 
-export default App;
+export default SearchClinic;
