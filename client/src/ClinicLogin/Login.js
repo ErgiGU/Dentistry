@@ -9,9 +9,9 @@ export function Login(){
                     <div className="col-md-4" id="parentContainer2">
                         <form id="loginForm"  >
                             <h2 className="text-center mb-2 text-white" style={{lineHeight: '2'}}>Sign In</h2>
-                            <div className="alert alert-danger" style={{lineHeight: '10px'}}>
+                            <b-alert v-model="showDismissibleAlert" variant="danger" style={{lineHeight: '10px'}}>
                                 Invalid password/email
-                            </div>
+                            </b-alert>
 
                             <div className="form-floating mb-4">
                                 <input type="email" className="form-control form-control-lg" id="email" placeholder="deeznuts@mail.com"
