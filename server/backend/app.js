@@ -3,13 +3,10 @@ const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const config = require('../helpers/config');
-const appointment_handler = require("./handlers/appointment_handler");
-const clinic_data_handler = require("./handlers/authorization_handler");
-const authorization_handler = require("./handlers/clinic_data_handler");
 
 // Variables
 const port = process.env.PORT || config.admin.port;
-const version = 'v1'
+const version = config.version
 
 // Create Express app
 let app = express();
@@ -27,10 +24,6 @@ app.use(cors());
 app.get('/api/' + version, function (req, res) {
     res.json({'message': 'Dentistry portal API endpoint.'});
 });
-
-app.use(appointment_handler);
-app.use(authorization_handler);
-app.use(clinic_data_handler);
 
 // Catch all non-error handler for api (i.e., 404 Not Found)
 app.use('/api/' + config.version + '/*', function (req, res) {

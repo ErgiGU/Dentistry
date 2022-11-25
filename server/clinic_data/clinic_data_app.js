@@ -7,7 +7,7 @@ const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.clinicUser
 //const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ClinicDB';
 
 // MQTT Client
-const mqttClient = new mqttHandler()
+const mqttClient = new mqttHandler(config.clinicUser.handler)
 mqttClient.connect()
 
 // Connect to MongoDB
@@ -20,14 +20,18 @@ mongoose.connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, fu
     console.log(`Connected to MongoDB with URI: ${mongoURI}`);
 });
 
+// MQTT subscriptions
 mqttClient.subscribeTopic('test')
 
-// When a message arrives, console.log it
+// When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
-    console.log("Appointments service received MQTT message")
+    console.log(config.clinicUser.handler + " service received MQTT message")
     console.log(message.toString());
-    if (topic === 'test') {
-        mqttClient.sendMessage('testAppointment', 'Testing callback')
+
+    switch (topic) {
+        case 'test':
+            mqttClient.sendMessage('testAppointment', 'Testing callback')
+            break;
     }
 });
 

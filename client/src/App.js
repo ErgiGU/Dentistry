@@ -9,25 +9,6 @@ import React from 'react';
 
 function App() {
 
-/*    function sendMessage(type, url, topic, message) {
-        fetch(url, {
-            method: type,
-            body: JSON.stringify({
-                topic: topic,
-                message: message
-            }),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        })
-        .then((response) => {
-            console.log('Sent request')
-            console.log(response.json())
-        })
-        return ""
-    }*/
-
-
     return(
         //you can add more routes here, just follow the same format
         <Routes>
@@ -35,7 +16,6 @@ function App() {
             <Route />
         </Routes>
     );
-
 
 }
 
