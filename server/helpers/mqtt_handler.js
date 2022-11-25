@@ -12,32 +12,24 @@ class MqttHandler {
         // Connect mqtt with credentials
         this.mqttClient = mqtt.connect(this.host,
             {
-                username: this.username
+                username: this.username,
+                reconnectPeriod: 1000
             });
-
-        this.mqttClient.reconnectPeriod = 1000;
 
         // Mqtt error callback
         this.mqttClient.on('error', (err) => {
+            console.log('Error on client' + this.username);
             console.log(err);
             this.mqttClient.end();
         });
 
         // Connection callback
         this.mqttClient.on('connect', () => {
-            console.log(`mqtt client connected`);
+            console.log(`mqtt client ${this.username} connected`);
         });
 
-        // MQTT subscriptions
-        // this.mqttClient.subscribe('', {qos: 0});
-
-        // When a message arrives, console.log it
-        // this.mqttClient.on('message', function (topic, message) {
-        //     console.log(message.toString());
-        // });
-
         this.mqttClient.on('close', () => {
-            console.log(`mqtt client disconnected`);
+            console.log(`mqtt client ${this.username} disconnected`);
         });
     }
 
