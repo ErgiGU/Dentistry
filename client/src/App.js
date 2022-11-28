@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 import {Registration} from "./ClinicRegistration/Registration";
 import React from 'react';
+import {AboutUs} from "./AboutUs/AboutUs";
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         //you can add more routes here, just follow the same format
         <Routes>
             <Route path = "/" element = {< Registration />} />
+            <Route path = "/aboutUs" element = {< AboutUs />} />
             <Route />
         </Routes>
     );
