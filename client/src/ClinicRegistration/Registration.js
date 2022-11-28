@@ -1,7 +1,27 @@
 import React from 'react';
 import './Registration.css';
+import {useState} from "react";
 
 export function Registration(){
+    const [checked, setChecked] = useState(false);
+    const handleChange = () => {
+        setChecked(!checked);
+        const okButton = document.getElementById('btn1')
+        if(checked){
+            okButton.classList.add('disabled')
+        }else{
+            okButton.classList.remove('disabled')
+        }
+    };
+    function checkIfPassMatches() {
+        const pass = document.getElementById('pass');
+        const confPass = document.getElementById('confPass');
+        if (pass.value !== confPass.value) {
+            confPass.setCustomValidity("Passwords don't match");
+        } else {
+            confPass.setCustomValidity('');
+        }
+    }
 
     return (
        <>
@@ -20,7 +40,6 @@ export function Registration(){
                                           required/>
                                        <label>Clinic Name</label>
                                </div>
-
                                <div className="form-floating mb-4">
                                    <input type="text" className="form-control form-control-lg" id="address" placeholder="a"
                                           required/>
@@ -37,25 +56,23 @@ export function Registration(){
                                <div className="form-floating mb-4">
                                    <input type="password" className="form-control form-control-lg" id="pass" title="
                                     Password must contain: Minimum 8 characters at least 1 alphabetic character and 1 number"
-                                          placeholder="b" required=""
+                                          placeholder="b" required
                                           pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"/>
                                        <label>Password</label>
                                </div>
 
                                <div className="form-floating mb-4">
                                    <input type="password" className="form-control form-control-lg" id="confPass"
-                                          placeholder="b" required/>
+                                          placeholder="b" onKeyUp={checkIfPassMatches} required/>
                                        <label>Confirm Password</label>
                                </div>
 
                                <div className="form-check d-flex mb-2">
-                                   <input className="form-check-input me-2" type="checkbox"
-                                          value=""
-                                          id="tosCheckbox"/>
+                                   <input className="form-check-input me-2" type="checkbox" checked={checked}
+                                          onChange={handleChange} id="tosCheckbox"/>
                                    <label className="form-check-label text-white">I accept the <a href="#!"
                                                                                                   className="text-body "><u>Terms
-                                       of
-                                       Service</u></a>
+                                       of Service</u></a>
                                    </label>
                                </div>
 
