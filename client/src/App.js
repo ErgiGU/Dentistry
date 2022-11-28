@@ -4,6 +4,7 @@ import {
     Route,
 } from "react-router-dom";
 import {Registration} from "./ClinicRegistration/Registration";
+import {MyInformation} from "./MyInformation/MyInformation"
 import React from 'react';
 
 
@@ -12,7 +13,9 @@ function App() {
     return(
         //you can add more routes here, just follow the same format
         <Routes>
-            <Route path = "/" element = {< Registration />} />
+            <Route path = "/n" element = {< Registration />} />
+            <Route />
+            <Route path = "/" element = {< MyInformation />} />
             <Route />
         </Routes>
     );
