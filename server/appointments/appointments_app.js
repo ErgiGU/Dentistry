@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const mqttHandler = require('../helpers/mqtt_handler');
 const config = require('../helpers/config');
 
+const Clinic = require('../helpers/schemas/clinic')
+const Timeslot = require('../helpers/schemas/timeslot.js')
+
 // Variables
 const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.appointmentUser.name + ':' + config.appointmentUser.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';
 //const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
@@ -27,7 +30,13 @@ mqttClient.mqttClient.on('message', function (topic, message) {
     console.log("Appointments service received MQTT message")
     console.log(message.toString());
     if (topic === 'test') {
-        mqttClient.sendMessage('testAppointment', 'Testing callback')
+        const newClinic = new Timeslot({
+        });
+        newClinic.save();
+        mqttClient.sendMessage('testAppointment', JSON.stringify(newClinic))
+    }
+    if (topic === 'schema') {
+        mqttClient.sendMessage('testAppointment', "newClinic")
     }
 });
 
