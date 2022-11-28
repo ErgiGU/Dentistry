@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
 });
 
 //Dummy test data
-
+/*
 const recipient = "burakaskan2001@gmail.com"
 const timeslot = {
     Dentist: "john",
@@ -20,32 +20,7 @@ const clinic = {
     addressLocation: "rando",
     addressEmail: "somegmail",
     phoneNumber: "072312"
-}
-
-
-const option = {
-    from: "DentistryAutomated@hotmail.com",
-    to: recipient,
-    subject: "Your Dentist Appointment",
-    text: "You have booked a time with "
-        + timeslot.Dentist +
-        ". The time slot is from "
-        + timeslot.StartingTime
-        + " to " + timeslot.EndingTime
-        + ". The clinic is located in "
-        + clinic.addressLocation + ". "
-        + "For contacting the clinic either email: " + clinic.addressEmail
-        + " or call: " + clinic.phoneNumber
-        + ". Hope you have enjoyed our service and use our website again for dental bookings!",
-    html: '<b>You have booked a time with timeslot.Dentist </b><img src = "cid:toothLogo"/>',
-    attachments: [
-        {
-            filename: 'toothLogo.png',
-            path:'./toothLogo.png',
-            cid: 'toothLogo'
-        }
-    ]
-}
+}*/
 
 transporter.sendMail(option, async function(err, info) {
     if (err) {
@@ -57,5 +32,33 @@ transporter.sendMail(option, async function(err, info) {
 })
 
 function sendAppointmentMail (recipient, timeslot, clinic) {
-
+    const option = {
+        from: "DentistryAutomated@hotmail.com",
+        to: recipient,
+        subject: "Your Dentist Appointment",
+        text: "You have booked a time with "
+            + timeslot.Dentist +
+            ". The time slot is from "
+            + timeslot.StartingTime
+            + " to " + timeslot.EndingTime
+            + ". The clinic is located in "
+            + clinic.addressLocation + ". "
+            + "For contacting the clinic either email: " + clinic.addressEmail
+            + " or call: " + clinic.phoneNumber
+            + ". Hope you have enjoyed our service and use our website again for dental bookings!",
+        html: '<nobr>You have booked a time with</nobr>' + timeslot.Dentist +
+            '<nobr>. The time slot is from "</nobr>' + timeslot.StartingTime +
+            '<nobr> to </nobr>' + timeslot.EndingTime +
+            '<nobr>. The clinic is located in </nobr>' + clinic.addressLocation +
+            '<nobr>. For contacting the clinic either email: </nobr>' + clinic.addressEmail +
+            '<nobr> or call: </nobr>' + clinic.phoneNumber +
+            '<nobr>. Hope you have enjoyed our service and use our website again for dental bookings!<br/></nobr> <img src = "cid:toothLogo"/>',
+        attachments: [
+            {
+                filename: 'toothLogo.png',
+                path:'./toothLogo.png',
+                cid: 'toothLogo'
+            }
+        ]
+    }
 }
