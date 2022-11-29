@@ -1,5 +1,5 @@
 .registrationBody{
-    background-color: #3B6DBB;
+    background-color: whitesmoke;
     height: 100vh;
     align-items: center;
 }
@@ -24,11 +24,13 @@
     padding: 50px;
     height: 700px;
     margin: auto;
-    background-color: rgba(255, 255, 255, 0.13);
+    background-color: steelblue;
     border-radius: 10px;
     backdrop-filter: blur(10px);
     border: 2px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
 }
+
+
 
 
