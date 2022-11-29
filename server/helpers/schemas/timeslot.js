@@ -6,4 +6,4 @@ const timeslotSchema = new Schema({
     dentist: { type: Schema.Types.ObjectId, ref: 'Dentist' }
 })
 
-module.exports = mongoose.model('Timeslot', timeslotSchema)
+module.exports = timeslotSchema
