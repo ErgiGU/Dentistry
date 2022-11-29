@@ -11,14 +11,17 @@ const mqttClient = new mqttHandler(config.clinicUser.handler)
 mqttClient.connect()
 
 // Connect to MongoDB
-mongoose.connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, function (err) {
+const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, function (err) {
     if (err) {
         console.error(`Failed to connect to MongoDB with URI: ${mongoURI}`);
         console.error(err.stack);
         process.exit(1);
     }
     console.log(`Connected to MongoDB with URI: ${mongoURI}`);
-});
+})
+
+// Model creation
+//const timeSlotModel = mongooseClient.model('timeslot', timeslotSchema)
 
 // MQTT subscriptions
 mqttClient.subscribeTopic('test')
