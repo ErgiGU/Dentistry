@@ -40,6 +40,9 @@ mqttClient.mqttClient.on('message', function (topic, message) {
     if (topic === 'mapDataRequest') {
         mapDataRequest()
     }
+    if (topic === 'mapDataRequest') {
+        mapDataRequest()
+    }
 });
 
 function mapDataRequest() {
