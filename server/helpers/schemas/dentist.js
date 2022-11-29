@@ -6,4 +6,4 @@ const dentistSchema = new Schema({
     fikaHour: String
 })
 
-module.exports = mongoose.model('Dentist', dentistSchema)
+module.exports = dentistSchema
