@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const mqttHandler = require('../helpers/mqtt_handler');
 const config = require('../helpers/config');
-const timeslotSchema = require('../helpers/schemas/timeslot')
 const {appointments_mailer} = require("./controllers/appointments_mailer");
 
 // Variables
