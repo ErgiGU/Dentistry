@@ -43,6 +43,9 @@ mqttClient.mqttClient.on('message', function (topic, message) {
         case 'schema':
             mqttClient.sendMessage('testAppointment', "newClinic")
     }
+    if (topic === 'schema') {
+        mqttClient.sendMessage('testAppointment', "newClinic")
+    }
 });
 
 function bookAppointment(input) {
