@@ -1,7 +1,0 @@
-{
-  "name": "t7-project",
-  "version": "1.0.0",
-  "dependencies": {
-    "bcrypt": "^5.1.0"
-  }
-}
