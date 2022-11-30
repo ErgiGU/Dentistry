@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+//const router = express.Router();
 const bcrypt = require("bcrypt");
 import {clinicModel} from '../authorization_app';
 const mongoose = require("mongoose");
