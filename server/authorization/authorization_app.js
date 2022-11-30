@@ -41,5 +41,4 @@ mqttClient.mqttClient.on('message', function (topic, message) {
     }
 });
 
-module.exports = mqttClient;
-
+module.exports = {mqttClient, clinicModel}
