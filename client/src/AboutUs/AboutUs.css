@@ -31,6 +31,16 @@
     font-size: 20px;
 }
 
-@media only screen and (max-device-width: 1000px){
+@media only screen and (max-device-width: 500px){
+    #image{
+        width: 100%;
+    }
+    #text{
+        width: 100%;
+    }
+    #intro-text{
+        font-size: 15px;
+    }
 
-}
+
+    }
