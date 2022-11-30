@@ -6,7 +6,6 @@ import {
 import {Registration} from "./ClinicRegistration/Registration";
 import {SearchClinic} from "./clinics/SearchClinic"
 import React from 'react';
-import SearchClinic from './clinics/SearchClinic';
 
 
 function App() {
