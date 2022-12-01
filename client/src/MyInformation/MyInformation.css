@@ -1,29 +1,70 @@
-body {
-    background-color: lightgray;
+* {
+    margin: 0px;
 }
-.form {
+body {
+    background-color: whitesmoke;
+}
+.passwordChanging, .leftBox {
     font-family: Inter;
     font-size: 18px;
+    color: white;
     padding: 30px;
-    width: 30vw;
     height:490px;
     float: left;
-    margin: 8%;
-    background-color: powderblue;
+    margin-top: 8%;
+    margin-left: 3%;
+    background-color: steelblue;
     box-shadow: 10px 0px 15px #888888;
     border-radius: 5px;
+}
+.passwordChanging{
+    width: 30vw;
+    margin-left: 9%;
+}
+.leftBox {
+    padding-right: 0px;
+    width: 45vw;
+}
+.clinicInfo, .openingHours {
+    width: 48%;
+    float: left;
+}
+.clinicInfo {
+    padding-right: 5px;
+    margin-right: 23px;
+    border-right: 0.5px solid #444444;
 }
 h2 {
     text-shadow: 4px 2px 4px #888888;
     margin-bottom: 18px;
 }
+h3 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    text-shadow: 3px 2px 2px #888888;
+}
 input {
-    width: 80%;
     margin-top: 10px;
     margin-bottom: 10px;
     border-color: darkgray;
     border-radius: 5px;
+}
+.clinicInfo > input, .passwordChanging > input {
+    width: 90%;
     display: block;
+}
+.day > input {
+    width: 30%;
+    margin-left: 10px;
+    margin-right:6px;
+}
+.day {
+    font-size: 17px;
+    font-weight: bold;
+}
+.day > label {
+    font-size: 16px;
+    font-weight: normal;
 }
 #form2 > input  {
     margin-bottom: 25px;
@@ -31,6 +72,9 @@ input {
 .button {
     font-size: 18px;
     margin-top: 20px;
-    background-color: white;
+    background-color: whitesmoke;
     border-radius: 5px;
+}
+#passwordError {
+    color: red;
 }
