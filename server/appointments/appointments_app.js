@@ -26,6 +26,7 @@ const timeSlotModel = mongooseClient.model('timeslot', timeslotSchema)
 
 // MQTT subscriptions
 mqttClient.subscribeTopic('test')
+mqttClient.subscribeTopic('testingTestingRequest')
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
@@ -39,6 +40,9 @@ mqttClient.mqttClient.on('message', function (topic, message) {
         case 'schema':
             mqttClient.sendMessage('testAppointment', "newClinic")
             break;
+        case 'testingTestingRequest':
+            console.log('is something being sent out?')
+            mqttClient.sendMessage('testingTesting', "wrong message")
     }
 });
 
