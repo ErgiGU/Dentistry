@@ -20,6 +20,7 @@ mqttClient.connect()
 // MQTT subscriptions
 mqttClient.subscribeTopic('test')
 mqttClient.subscribeTopic('appointment')
+mqttClient.subscribeTopic('testingTestingRequest')
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
