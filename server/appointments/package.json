@@ -2,6 +2,9 @@
   "name": "appointments",
   "version": "1.0.0",
   "description": "Appointments service",
+  "scripts": {
+    "test": "npx mocha appointments_app_test.js"
+  },
   "main": "appointments_app.js",
   "author": "",
   "license": "MIT",
@@ -9,6 +12,8 @@
     "node": "16.x"
   },
   "dependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.1.0",
     "mongoose": "^6.7.2",
     "mqtt": "^4.3.7",
     "nodemailer": "^6.8.0"
