@@ -8,6 +8,7 @@ mqttClient.connect()
 // MQTT subscriptions
 mqttClient.subscribeTopic('test')
 mqttClient.subscribeTopic('appointment')
+mqttClient.subscribeTopic('testingTestingRequest')
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
@@ -21,6 +22,10 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             break;
         case 'appointment':
             testAppointment(intermediary)
+            break;
+        case 'testingTestingRequest':
+            console.log('is something being sent out?')
+            mqttClient.sendMessage('testingTesting', "wrong message")
             break;
         default:
             console.log('topic: ' + topic)
