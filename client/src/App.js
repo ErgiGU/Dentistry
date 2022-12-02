@@ -3,8 +3,9 @@ import {
     Routes, //replaces "Switch" used till v5
     Route,
 } from "react-router-dom";
-import {Registration} from "./ClinicRegistration/Registration";
+import Registration from "./ClinicRegistration/Registration";
 import React from 'react';
+import Home from "./home/Home";
 
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
         //you can add more routes here, just follow the same format
         <Routes>
             <Route path = "/" element = {< Registration />} />
-            <Route />
+            <Route path={"/Home"} element= {<Home/>} />
         </Routes>
     );
 
