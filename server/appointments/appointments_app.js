@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 const mqttHandler = require('../helpers/mqtt_handler');
 const config = require('../helpers/config');
-
-const Clinic = require('../helpers/schemas/clinic')
-const Timeslot = require('../helpers/schemas/timeslot.js')
+const timeslotSchema = require('../helpers/schemas/timeslot')
 
 // Variables
 const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.appointmentUser.name + ':' + config.appointmentUser.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';
@@ -14,14 +12,17 @@ const mqttClient = new mqttHandler(config.appointmentUser.handler)
 mqttClient.connect()
 
 // Connect to MongoDB
-mongoose.connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, function (err) {
+const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, function (err) {
     if (err) {
         console.error(`Failed to connect to MongoDB with URI: ${mongoURI}`);
         console.error(err.stack);
         process.exit(1);
     }
     console.log(`Connected to MongoDB with URI: ${mongoURI}`);
-});
+})
+
+// Model creation
+const timeSlotModel = mongooseClient.model('timeslot', timeslotSchema)
 
 // MQTT subscriptions
 mqttClient.subscribeTopic('test')
@@ -29,27 +30,37 @@ mqttClient.subscribeTopic('test')
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
     console.log(config.appointmentUser.handler + " service received MQTT message")
-    console.log(message.toString());
+    console.log(message.toString())
 
     switch (topic) {
         case 'test':
-            const newClinic = new Timeslot({});
-            newClinic.save();
-            mqttClient.sendMessage('testAppointment', JSON.stringify(newClinic))
-            break;
-        case 'bookAppointment':
-            bookAppointment(message)
+            testAppointment(message)
             break;
         case 'schema':
             mqttClient.sendMessage('testAppointment', "newClinic")
+            break;
     }
 });
 
-function bookAppointment(input) {
-    // mongodb manipulation
 
+// Function declaration
 
-    //mqtt message response
+/**
+ * Test function extracted from topic switcher
+ * @param input MQTT message
+ */
+function testAppointment(input) {
+    const newClinic = new timeSlotModel({
+        startTime: Date.parse(input.startTime),
+        dentist: "6386284314d29ecf98a61c70"
+    });
+    newClinic.save(function (err) {
+        if (err) {
+            console.log(err);
+        }
+        console.log('successfully saved')
+    });
+    mqttClient.sendMessage('testAppointment', JSON.stringify(newClinic))
 }
 
 module.exports = mqttClient;
