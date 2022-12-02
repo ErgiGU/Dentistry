@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const mqttHandler = require('../helpers/mqtt_handler');
 const config = require('../helpers/config');
+const registerClinic = require('./controllers/authorization_controller');
 
 // Variables
 const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.authorizationUser.name + ':' + config.authorizationUser.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';
@@ -25,6 +26,7 @@ const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: tru
 
 // MQTT subscriptions
 mqttClient.subscribeTopic('auth')
+mqttClient.subscribeTopic('registration');
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
@@ -32,13 +34,18 @@ mqttClient.mqttClient.on('message', function (topic, message) {
     console.log(message.toString());
 
     switch (topic) {
-        case "test":
-            mqttClient.sendMessage('testAppointment', 'Testing callback')
-            break;
         case 'auth':
             mqttClient.sendMessage('authTest', 'Authorization confirmed')
             break;
+        case 'registration':
+           /* registerClinic.registerClinic(JSON.parse(message)).then(
+
+            );*/
+            console.log("got the message");
+            mqttClient.sendMessage('registrationResponse', 'Heres the response');
+            break;
     }
+
 });
 
 module.exports = mqttClient;

@@ -1,8 +1,22 @@
 import React from 'react';
 import './Registration.css';
 import {useState} from "react";
+import Mqtt from "mqtt";
 
 export function Registration(){
+    //This is for connecting to the mqtt broker
+    const mqttClient =  Mqtt.connect("ws://localhost:1884/mqtt");
+    mqttClient.subscribe('registrationResponse');
+    //receives mqtt messages
+    mqttClient.on('message', function (topic, message) {
+        switch(topic){
+            case 'registrationResponse':
+                console.log(message.toString());
+                break;
+        }
+    })
+    
+    //This is for the checkbox
     const [checked, setChecked] = useState(false);
     const handleChange = () => {
         setChecked(!checked);
@@ -13,6 +27,8 @@ export function Registration(){
             okButton.classList.remove('disabled')
         }
     };
+
+    //Checks if the 2 password fields match
     function checkIfPassMatches() {
         const pass = document.getElementById('pass');
         const confPass = document.getElementById('confPass');
@@ -22,6 +38,29 @@ export function Registration(){
             confPass.setCustomValidity('');
         }
     }
+/*    function successAlert(){
+        document.getElementById('displayAlert').innerHTML +=
+            <div className="alert alert-success" id = "alert" style={{lineHeight: '10px'}}>
+                You've successfully registered your clinic! Redirecting to login...
+            </div>;
+    }*/
+
+    function registerClinic() {
+        alert("You've registered","success");
+        mqttClient.publish("registration","Hellooooo" );
+        const clinicName = document.getElementById('clinicName');
+        const address = document.getElementById('address');
+        const email = document.getElementById('email');
+        const pass = document.getElementById('pass');
+        const confPass = document.getElementById('confPass');
+
+
+/*        if(clinicName.checkValidity() && address.checkValidity() && email.checkValidity() && pass.checkValidity() &&
+            confPass.checkValidity()){
+            mqttClient.publish("registration","Hellooooo" );
+        }*/
+
+    }
 
     return (
        <>
@@ -30,12 +69,10 @@ export function Registration(){
                    <div className="col-md-4" id="parentContainer1" >
                        <form id="registrationForm" className='flex flex-column'>
                            <h2 className="text-center text-white mb-3" style={{top: '100px'}} >Register your clinic</h2>
-                           <div className="alert alert-success" style={{lineHeight: '10px'}}>
-                               Registration Successful!
-                           </div>
+                           <div id='displayAlert'></div>
 
                            <div className="form-floating mb-4">
-                               <input type="text" className="form-control form-control-lg" id="fName" placeholder="a"
+                               <input type="text" className="form-control form-control-lg" id="clinicName" placeholder="a"
                                       required/>
                                    <label>Clinic Name</label>
                            </div>
@@ -75,7 +112,7 @@ export function Registration(){
                                </label>
                            </div>
 
-                           <button className="btn btn-primary text-white sign-up disabled" id="btn1"
+                           <button className="btn btn-primary text-white sign-up disabled" id="btn1" onClick={registerClinic}
                                    style={{width: '150px', height: '50px', alignSelf: "center"}} >Sign Up
                            </button>
 
