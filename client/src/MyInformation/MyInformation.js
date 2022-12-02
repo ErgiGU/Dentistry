@@ -98,7 +98,7 @@ export function MyInformation(){
         if(mondayStart > mondayEnd || tuesdayStart > tuesdayEnd || wednesdayStart > wednesdayEnd || thursdayStart > thursdayEnd || fridayStart > fridayEnd) {
             alert("Start time should be before the end time in the opening hours.");
         }
-        if(!/\S+@\S+\.\S+/.test(email)) {
+        if(!/\S+@\S+\.\S+/.test(email) && email) {
             alert("Invalid email format.")
         }
     }
@@ -249,6 +249,9 @@ export function MyInformation(){
                             onChange = {(e) => handleChanges(e)}
                         />
                     </label>
+                    <button id={"otherButton"} onClick={()=>submit()}>
+                        Change info
+                    </button>
                 </div>
             </div>
             <div className="passwordChanging" id={"form2"}>

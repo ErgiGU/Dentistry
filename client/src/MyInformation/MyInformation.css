@@ -10,20 +10,15 @@ body {
     color: white;
     padding: 30px;
     height:490px;
-    float: left;
     margin-top: 8%;
-    margin-left: 3%;
     background-color: steelblue;
     box-shadow: 10px 0px 15px #888888;
     border-radius: 5px;
 }
 .passwordChanging{
-    width: 30vw;
-    margin-left: 9%;
 }
 .leftBox {
     padding-right: 0px;
-    width: 45vw;
 }
 .clinicInfo, .openingHours {
     width: 48%;
@@ -69,12 +64,67 @@ input {
 #form2 > input  {
     margin-bottom: 25px;
 }
+#otherButton{
+    display: none;
+}
 .button {
     font-size: 18px;
     margin-top: 20px;
     background-color: whitesmoke;
     border-radius: 5px;
 }
+.button:hover{
+    background-color: lightgray;
+}
+#otherButton:hover{
+    background-color: lightgray;
+}
 #passwordError {
     color: red;
+}
+@media only screen and (min-width: 1400px) {
+    .passwordChanging, .leftBox {
+        float: left;
+        margin-left: 3%;
+    }
+    .passwordChanging{
+        width: 30vw;
+        margin-left: 9%;
+    }
+    .leftBox{
+        width: 45vw;
+    }
+}
+@media only screen and (min-width: 992px) and (max-width: 1399px) {
+    .passwordChanging {
+        width: 70%;
+        margin-left: 15%;
+    }
+    .leftBox {
+        margin-left: 15%;
+        width: 70%;
+    }
+}
+@media only screen and (max-width: 768px) {
+    .leftBox{
+        height: 945px;
+        padding-right: 10px;
+    }
+    .clinicInfo, .openingHours {
+        margin: 20px;
+        width: 100%;
+    }
+    .clinicInfo {
+        border-right: none;
+    }
+    .button{
+        display: none;
+    }
+    #otherButton{
+        display: block;
+        font-size: 18px;
+        margin-top: 20px;
+        background-color: whitesmoke;
+        border-radius: 5px;
+    }
 }
