@@ -1,6 +1,5 @@
 const mqttHandler = require('../helpers/mqtt_handler');
 const config = require('../helpers/config');
-const clinicData = require('../helpers/schemas/clinic')
 
 // MQTT Client
 const mqttClient = new mqttHandler(config.clinicUser.handler)
