@@ -71,5 +71,7 @@ export default function Home() {
             <div className={"btn btn-primary"} onClick={sendMessage}>Send message</div>
             <h2>{response}</h2>
         </>
-    )
+    );
 }
+
+export default Home;
