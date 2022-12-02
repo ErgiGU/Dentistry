@@ -15,7 +15,19 @@ export function Registration(){
                 break;
         }
     })
-    
+
+    const alertPlaceholder = document.getElementById('displayAlert')
+
+    const alert = (message, type) => {
+        const wrapper = document.createElement('div')
+        wrapper.innerHTML = [
+            `<div class="alert alert-${type} alert-dismissible" style="line-height: 10px">`,
+            `   <div>${message}</div>`,
+            '</div>'
+        ].join('')
+
+        alertPlaceholder.append(wrapper)
+    }
     //This is for the checkbox
     const [checked, setChecked] = useState(false);
     const handleChange = () => {
@@ -46,19 +58,18 @@ export function Registration(){
     }*/
 
     function registerClinic() {
-        alert("You've registered","success");
-        mqttClient.publish("registration","Hellooooo" );
+
         const clinicName = document.getElementById('clinicName');
         const address = document.getElementById('address');
         const email = document.getElementById('email');
         const pass = document.getElementById('pass');
         const confPass = document.getElementById('confPass');
 
-
-/*        if(clinicName.checkValidity() && address.checkValidity() && email.checkValidity() && pass.checkValidity() &&
+        if(clinicName.checkValidity() && address.checkValidity() && email.checkValidity() && pass.checkValidity() &&
             confPass.checkValidity()){
+            alert(" You've successfully registered your clinic!","success");
             mqttClient.publish("registration","Hellooooo" );
-        }*/
+        }
 
     }
 
