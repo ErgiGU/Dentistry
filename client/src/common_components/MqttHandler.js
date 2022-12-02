@@ -1,10 +1,15 @@
 const mqtt = require('mqtt');
-const url = 'ws://localhost:1884'
+const uuid = require('uuid')
 
-function getClient(errorHandler) {
-    const client = mqtt.connect(url,
+function getClient(prevClient) {
+
+    if (prevClient !== null) {
+        return prevClient;
+    }
+
+    const client = mqtt.connect('ws://localhost:1884/mqtt',
         {
-            clientId: `webclient_ + ${Math.random().toString(16).slice(2, 8)}`,
+            clientId: 'webclient/' + uuid.v4({stringify: true}),
             reconnectPeriod: 1000
         });
 
@@ -17,33 +22,18 @@ function getClient(errorHandler) {
 
     // Connection callback
     client.on('connect', () => {
-        console.log(`mqtt client ${this.clientId} connected`);
+        console.log(`mqtt client ${client.options.clientId} connected`);
     });
 
     client.on('close', () => {
-        console.log(`mqtt client ${this.clientId} disconnected`);
+        console.log(`mqtt client ${client.options.clientId} disconnected`);
     });
 
     return client;
 }
 
-// Sends a mqtt message
-function sendMessage(topic, message) {
-    this.mqttClient.publish(topic, message);
-}
-
-function subscribe(client, topic, errorHandler) {
-    const callBack = (err, granted) => {
-        if (err) {
-            errorHandler("Subscription request failed");
-        }
-    };
-    return client.subscribe(topic, callBack);
-}
-
 const MqttHandler = {
-    getClient,
-    subscribe,
+    getClient
 }
 
 export default MqttHandler;

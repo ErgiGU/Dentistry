@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-const timeslotSchema = require('../../helpers/schemas/timeslot')
+const config = require('../../helpers/config');
 
 // Variables
-//const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.appointmentUser.name + ':' + config.appointmentUser.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';
-const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
+const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.clinicUser.name + ':' + config.clinicUser.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';
+//const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ClinicDB';
 
 // Connect to MongoDB
 const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, function (err) {
@@ -16,4 +16,4 @@ const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: tru
 })
 
 // Model creation
-const timeSlotModel = mongooseClient.model('timeslot', timeslotSchema)
+//const timeSlotModel = mongooseClient.model('timeslot', timeslotSchema)
