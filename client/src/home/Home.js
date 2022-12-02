@@ -1,17 +1,19 @@
-// Example homepage
 import React from 'react';
-
-export default function Home() {
-
-    // Boilerplate sendMessage method
-    function sendMessage(topic, message) {
-        console.log('Sending ' + message + ' to ' + topic)
-    }
-
+import './Card.css';
+import CardItem from './CardItem';
+import Card from './Card'
+import Navbar from '../common_components/navbar'
+import './Home.css'
+function Home() {
     return (
         <>
-            <h1>Testing</h1>
-            <div className={"btn btn-primary"} onClick={() => sendMessage('test', 'testMessage')}>Test</div>
+            <Navbar/>
+            <Card />
+            <div className="footer">
+                <a id="clinic" href="url">link text</a>
+            </div>
         </>
-    )
+    );
 }
+
+export default Home;
