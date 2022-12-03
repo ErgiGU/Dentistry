@@ -1,0 +1,36 @@
+body {
+    background-color: lightgray;
+}
+.form {
+    font-family: Inter;
+    font-size: 18px;
+    padding: 30px;
+    width: 30vw;
+    height:490px;
+    float: left;
+    margin: 8%;
+    background-color: powderblue;
+    box-shadow: 10px 0px 15px #888888;
+    border-radius: 5px;
+}
+h2 {
+    text-shadow: 4px 2px 4px #888888;
+    margin-bottom: 18px;
+}
+input {
+    width: 80%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-color: darkgray;
+    border-radius: 5px;
+    display: block;
+}
+#form2 > input  {
+    margin-bottom: 25px;
+}
+.button {
+    font-size: 18px;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 5px;
+}
