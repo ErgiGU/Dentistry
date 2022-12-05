@@ -1,7 +1,11 @@
 const mqttHandler = require('../helpers/mqtt_handler');
 const config = require('../helpers/config');
+const {appointments_mailer} = require("./controllers/appointments_mailer");
+
+// Variables
 
 // MQTT Client
+const mailer = new appointments_mailer
 const mqttClient = new mqttHandler(config.appointmentUser.handler)
 mqttClient.connect()
 
@@ -46,6 +50,13 @@ function testAppointment(message) {
         console.log('successfully saved')
     });
     mqttClient.sendMessage(message.id + '/appointmentResponse', JSON.stringify(newClinic))
+}
+
+function bookAppointment(input) {
+    // mongodb manipulation
+    mailer.sendAppointmentMail(input.recipient, input.timeslot, input.clinic)
+    mqttClient.sendMessage('bookAppointment', 'ADD MESSAGE HERE') //TODO: Add a message here.
+    //mqtt message response
 }
 
 module.exports = mqttClient;
