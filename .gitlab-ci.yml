@@ -45,17 +45,19 @@ appointments-build-job:       # This job runs in the build stage, which runs fir
 
 appointments-unit-test-job:   # This job runs in the test stage.
   stage: appointments         # It only starts when the job in the build stage completes successfully.
+  needs: ["appointments-build-job"]
   when: delayed
-  start_in: 1 minute
+  start_in: 100 seconds
   tags:
     - docker
   script:
     - cd server
     - cd appointments
-    - node appointments_app_test.js
+    - npx mocha appointments_app_test.js
 
 appointments-unit-run-job:   # This job runs in the test stage.
   stage: appointments         # It only starts when the job in the build stage completes successfully.
+  needs: ["appointments-build-job"]
   tags:
     - docker
   script:
@@ -74,17 +76,19 @@ clinic_data-build-job:       # This job runs in the build stage, which runs firs
 
 clinic_data-unit-test-job:   # This job runs in the test stage.
   stage: clinic_data         # It only starts when the job in the build stage completes successfully.
+  needs: ["clinic_data-build-job"]
   when: delayed
-  start_in: 1 minute
+  start_in: 100 seconds
   tags:
     - docker
   script:
     - cd server
     - cd clinic_data
-    - node clinic_data_app_test.js
+    - npx mocha clinic_data_app_test.js
 
 clinic_data-unit-run-job:   # This job runs in the test stage.
   stage: clinic_data         # It only starts when the job in the build stage completes successfully.
+  needs: ["clinic_data-build-job"]
   tags:
     - docker
   script:
@@ -103,17 +107,19 @@ authorization-build-job:       # This job runs in the build stage, which runs fi
 
 authorization-unit-test-job:   # This job runs in the test stage.
   stage: authorization         # It only starts when the job in the build stage completes successfully.
+  needs: ["authorization-build-job"]
   when: delayed
-  start_in: 1 minute
+  start_in: 100 seconds
   tags:
     - docker
   script:
     - cd server
     - cd authorization
-    - node authorization_app_test.js
+    - npx mocha authorization_app_test.js
 
 authorization-unit-run-job:   # This job runs in the test stage.
   stage: authorization         # It only starts when the job in the build stage completes successfully.
+  needs: ["authorization-build-job"]
   tags:
     - docker
   script:
