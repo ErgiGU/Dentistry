@@ -7,10 +7,9 @@ try {
     config = require('../helpers/dummy_config')
 }
 
-mqttClient = new mqttHandler('appointmentTester')
+mqttClient = new mqttHandler(config.admin2.name, config.admin2.password, config.admin2.handler)
 mqttClient.connect()
 mqttClient.subscribeTopic('testingTesting')
-
 
 function asyncMethod() {
     return new Promise((resolve, reject) => {

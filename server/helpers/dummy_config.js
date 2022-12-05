@@ -6,8 +6,15 @@ const config = {
     // DB
     admin: {
         name: 'admin',
+        handler: 'admin-handler',
         password: process.env.HIVE_MQ_CLOUD_PASSWORD,
         port: 3001
+    },
+
+    admin2: {
+        name: 'admin2',
+        handler: 'admin2-handler',
+        password: process.env.HIVE_MQ_CLOUD_PASSWORD
     },
 
     clinicUser: {
