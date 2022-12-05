@@ -5,7 +5,7 @@ import './Registration.css';
 import Mqtt from "mqtt";
 
 export function Registration(){
-    //const navigate = useNavigate()
+    const navigate = useNavigate();
     const [client, setClient] = useState(null);
     const [response, setResponse] = useState('')
 
