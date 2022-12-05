@@ -75,4 +75,5 @@ describe('Clinic_data Tests', function () {
             mqttClient.sendMessage('test', JSON.stringify({message: 'someMsg'}))
         })
     })
+    process.exit()
 })

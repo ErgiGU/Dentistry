@@ -75,4 +75,5 @@ describe('AuthorizationTests', function () {
             mqttClient.sendMessage('test', JSON.stringify({message: 'someMsg'}))
         })
     })
+    process.exit()
 })
