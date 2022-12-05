@@ -8,20 +8,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-export class appointments_mailer {
-//Dummy test data
-    /*
-    const recipient = "burakaskan2001@gmail.com"
-    const timeslot = {
-        Dentist: "john",
-        StartingTime: "01",
-        EndingTime: "02"
-    }
-    const clinic = {
-        addressLocation: "rando",
-        addressEmail: "somegmail",
-        phoneNumber: "072312"
-    }*/
+class appointments_mailer {
     sendAppointmentMail (recipient, timeslot, clinic) {
         const option = {
             from: "DentistryAutomated@hotmail.com",
@@ -62,3 +49,4 @@ export class appointments_mailer {
         })
     }
 }
+module.exports = appointments_mailer

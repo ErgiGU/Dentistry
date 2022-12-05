@@ -1,5 +1,5 @@
 const mqttHandler = require('../helpers/mqtt_handler');
-const {appointments_mailer} = require("./controllers/appointments_mailer");
+const appointments_mailer = require("./controllers/appointments_mailer");
 let config
 try {
     config = require('../helpers/config');
@@ -9,17 +9,15 @@ try {
 
 // MQTT Client
 const mqttClient = new mqttHandler(config.appointmentUser.name, config.appointmentUser.password, config.appointmentUser.handler)
+mqttClient.connect()
 
 // Variables
-
-// MQTT Client
 const mailer = new appointments_mailer
-const mqttClient = new mqttHandler(config.appointmentUser.handler)
-mqttClient.connect()
 
 // MQTT subscriptions
 mqttClient.subscribeTopic('test')
 mqttClient.subscribeTopic('appointment')
+mqttClient.subscribeTopic('testingTestingRequest')
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
@@ -33,6 +31,9 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             break;
         case 'appointment':
             testAppointment(intermediary)
+            break;
+        case 'testingTestingRequest':
+            mqttClient.sendMessage('testingTesting', 'ToothyClinic')
             break;
         case 'test':
             process.exit()
