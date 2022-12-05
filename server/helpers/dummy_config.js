@@ -14,7 +14,7 @@ const config = {
     admin2: {
         name: 'admin2',
         handler: 'admin2-handler',
-        password: process.env.HIVE_MQ_CLOUD_PASSWORD
+        password: process.env.HIVE_MQ_CLOUD_PASSWORD_2
     },
 
     clinicUser: {
