@@ -1,6 +1,14 @@
 const mqttHandler = require('../helpers/mqtt_handler');
-const config = require('../helpers/config');
 const {appointments_mailer} = require("./controllers/appointments_mailer");
+let config
+try {
+    config = require('../helpers/config');
+} catch (e) {
+    config = require('../helpers/dummy_config')
+}
+
+// MQTT Client
+const mqttClient = new mqttHandler(config.appointmentUser.name, config.appointmentUser.password, config.appointmentUser.handler)
 
 // Variables
 
@@ -25,6 +33,9 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             break;
         case 'appointment':
             testAppointment(intermediary)
+            break;
+        case 'test':
+            process.exit()
             break;
         default:
             console.log('topic: ' + topic)
