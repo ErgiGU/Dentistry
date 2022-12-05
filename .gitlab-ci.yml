@@ -16,6 +16,7 @@ stages:          # List of stages for jobs, and their order of execution
 
 variables:
   HIVE_MQ_CLOUD_PASSWORD: $HIVE_MQ_CLOUD_PASSWORD
+  HIVE_MQ_CLOUD_PASSWORD_2: $HIVE_MQ_CLOUD_PASSWORD_2
 
 helper-run-job: 
   stage: .pre
