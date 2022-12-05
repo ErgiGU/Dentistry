@@ -17,6 +17,7 @@ const mailer = new appointments_mailer
 // MQTT subscriptions
 mqttClient.subscribeTopic('test')
 mqttClient.subscribeTopic('appointment')
+mqttClient.subscribeTopic('testingTestingRequest')
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
@@ -30,6 +31,9 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             break;
         case 'appointment':
             testAppointment(intermediary)
+            break;
+        case 'testingTestingRequest':
+            mqttClient.sendMessage('testingTesting', 'ToothyClinic')
             break;
         case 'test':
             process.exit()

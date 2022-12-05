@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-export default class appointments_mailer {
+class appointments_mailer {
     sendAppointmentMail (recipient, timeslot, clinic) {
         const option = {
             from: "DentistryAutomated@hotmail.com",
@@ -49,3 +49,4 @@ export default class appointments_mailer {
         })
     }
 }
+module.exports = appointments_mailer

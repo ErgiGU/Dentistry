@@ -7,7 +7,8 @@ try {
     config = require('../helpers/dummy_config')
 }
 
-mqttClient = new mqttHandler('appointmentTester')
+
+mqttClient = new mqttHandler('authorizationTester')
 mqttClient.connect()
 mqttClient.subscribeTopic('testingTesting')
 
@@ -30,7 +31,7 @@ function asyncMethod() {
     })
 }
 
-describe('AppointmentsTests', function () {
+describe('AuthorizationTests', function () {
     describe('Multiplication', function () {
         it('This is for testing purposes. Fifty times two should equal one hundred', function () {
             var result = 50 * 2
