@@ -45,6 +45,7 @@ appointments-build-job:       # This job runs in the build stage, which runs fir
 
 appointments-unit-test-job:   # This job runs in the test stage.
   stage: appointments         # It only starts when the job in the build stage completes successfully.
+  needs: ["appointments-build-job"]
   when: delayed
   start_in: 1 minute
   tags:
@@ -56,6 +57,7 @@ appointments-unit-test-job:   # This job runs in the test stage.
 
 appointments-unit-run-job:   # This job runs in the test stage.
   stage: appointments         # It only starts when the job in the build stage completes successfully.
+  needs: ["appointments-build-job"]
   tags:
     - docker
   script:
@@ -74,6 +76,7 @@ clinic_data-build-job:       # This job runs in the build stage, which runs firs
 
 clinic_data-unit-test-job:   # This job runs in the test stage.
   stage: clinic_data         # It only starts when the job in the build stage completes successfully.
+  needs: ["clinic_data-build-job"]
   when: delayed
   start_in: 1 minute
   tags:
@@ -85,6 +88,7 @@ clinic_data-unit-test-job:   # This job runs in the test stage.
 
 clinic_data-unit-run-job:   # This job runs in the test stage.
   stage: clinic_data         # It only starts when the job in the build stage completes successfully.
+  needs: ["clinic_data-build-job"]
   tags:
     - docker
   script:
@@ -103,6 +107,7 @@ authorization-build-job:       # This job runs in the build stage, which runs fi
 
 authorization-unit-test-job:   # This job runs in the test stage.
   stage: authorization         # It only starts when the job in the build stage completes successfully.
+  needs: ["authorization-build-job"]
   when: delayed
   start_in: 1 minute
   tags:
@@ -114,6 +119,7 @@ authorization-unit-test-job:   # This job runs in the test stage.
 
 authorization-unit-run-job:   # This job runs in the test stage.
   stage: authorization         # It only starts when the job in the build stage completes successfully.
+  needs: ["authorization-build-job"]
   tags:
     - docker
   script:
