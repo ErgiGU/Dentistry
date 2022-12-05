@@ -38,7 +38,7 @@ export class appointments_mailer {
                 + " or call: " + clinic.phoneNumber
                 + ". Hope you have enjoyed our service and use our website again for dental bookings!",
             html: '<nobr>You have booked a time with</nobr>' + timeslot.Dentist +
-                '<nobr>. The time slot is from "</nobr>' + timeslot.StartingTime +
+                '<nobr>. The time slot is from </nobr>' + timeslot.StartingTime +
                 '<nobr> to </nobr>' + timeslot.EndingTime +
                 '<nobr>. The clinic is located in </nobr>' + clinic.addressLocation +
                 '<nobr>. For contacting the clinic either email: </nobr>' + clinic.addressEmail +
