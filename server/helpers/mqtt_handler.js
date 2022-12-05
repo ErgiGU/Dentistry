@@ -1,17 +1,26 @@
 const mqtt = require('mqtt');
-const config = require('./config');
+let config
+try {
+    config = require('./config');
+} catch (e) {
+    config = require('./dummy_config')
+}
 
 class MqttHandler {
-    constructor(clientId) {
+    constructor(username, password, clientId) {
         this.mqttClient = null;
         this.host = config.host;
         this.clientId = clientId;
+        this.username = username;
+        this.password = password;
     }
 
     connect() {
         // Connect mqtt with credentials
         this.mqttClient = mqtt.connect(this.host,
             {
+                username: this.username,
+                password: this.password,
                 clientId: this.clientId,
                 reconnectPeriod: 1000
             });
@@ -25,7 +34,7 @@ class MqttHandler {
 
         // Connection callback
         this.mqttClient.on('connect', () => {
-            console.log(`mqtt client ${this.clientId} connected`);
+            console.log(`mqtt client ${this.clientId} connected to ${this.host}`);
         });
 
         this.mqttClient.on('close', () => {

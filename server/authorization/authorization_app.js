@@ -1,8 +1,13 @@
 const mqttHandler = require('../helpers/mqtt_handler');
-const config = require('../helpers/config');
+let config
+try {
+    config = require('../helpers/config');
+} catch (e) {
+    config = require('../helpers/dummy_config')
+}
 
 // MQTT Client
-const mqttClient = new mqttHandler(config.authorizationUser.handler)
+const mqttClient = new mqttHandler(config.authorizationUser.name, config.authorizationUser.password, config.authorizationUser.handler)
 mqttClient.connect()
 
 // MQTT subscriptions
