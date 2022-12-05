@@ -2,9 +2,6 @@
   "name": "appointments",
   "version": "1.0.0",
   "description": "Appointments service",
-  "scripts": {
-    "test": "npx mocha appointments_app_test.js"
-  },
   "main": "appointments_app.js",
   "author": "",
   "license": "MIT",
