@@ -66,14 +66,16 @@ describe('AuthorizationTests', function () {
         })
     })
     describe('lastThing', function () {
-        it('Is this activating ',   function () {
+        it('Is this last thing activating?',   function () {
             assert.equal(1,1)
         })
     })
-    describe('lastThing', function () {
-        it('Is this activating ',   function () {
+    describe('Closing runner', function () {
+        it('Is this closing the runner?',   function () {
             mqttClient.sendMessage('test', JSON.stringify({message: 'someMsg'}))
         })
     })
-    process.exit()
 })
+after(function () {
+    process.exit()
+});
