@@ -10,7 +10,7 @@ export function AboutUs(){
             <div id="info">
                <div id="text">
                    <p id="intro-text">
-                   <span style={{color: "#003d80"}}> OUR STORY </span>   <br/>
+                   <br /><span style={{color: "#003d80"}}>OUR STORY </span>   <br/> <br/>
                    Dentistry is an online dental care booking application for clinics all over Gothenburg  <br/>
                    Through our very flexible booking time slots specially adapted to the patients needs, <br/>
                    We aim to help you book your desired clinic at your desired time and location in Gothenburg! </p>
@@ -21,8 +21,8 @@ export function AboutUs(){
             </div>
             <br/>
             <div id="b-row" class="row">
-                <p id="clinic-name" >OUR CLINICS </p>
-            <div class="col-lg-3 col-md-6 mb-4">
+                <p id="clinic-name" >OUR CLINICS <hr /> </p>
+            <div class="col-lg-4 col-md-6 mb-4">
             <Card style={{ width: "20rem"}}>
                 <Card.Body>
                     <Card.Title style={{ color: "#003d80" }}>YOUR DENTIST</Card.Title>
@@ -33,11 +33,11 @@ export function AboutUs(){
                         Owner: Dan Tist <br/>
                         Address: Spannmålsgatan 20
                     </Card.Text>
-                    <Card.Link href="#"> More info</Card.Link>
+                    <Card.Link href="/aboutUs/yourDentist"> More info</Card.Link>
                 </Card.Body>
             </Card>
             </div>
-            <div class="col-lg-3 col-md-6 mb-4">
+            <div class="col-lg-4 col-md-6 mb-4">
             <Card style={{ width: "20rem"}}>
                 <Card.Body>
                     <Card.Title style={{ color: "#003d80" }}>TOOTH FAIR DENTIST</Card.Title>
@@ -48,11 +48,11 @@ export function AboutUs(){
                         Owner: Tooth Fairy <br/>
                         Address: Slottskogen
                     </Card.Text>
-                    <Card.Link href="#"> More info</Card.Link>
+                    <Card.Link href="/aboutUs/toothFairy"> More info</Card.Link>
                 </Card.Body>
             </Card>
             </div>
-            <div class="col-lg-3 col-md-6 mb-4">
+            <div class="col-lg-4 col-md-6 mb-4">
             <Card style={{ width: "20rem" }}>
                 <Card.Body>
                     <Card.Title style={{ color: "#003d80" }}>THE CROWN</Card.Title>
@@ -63,11 +63,11 @@ export function AboutUs(){
                         Owner: Carmen Crown <br/>
                         Address: Lindholmsallén 19
                     </Card.Text>
-                    <Card.Link href="#"> More info</Card.Link>
+                    <Card.Link href="/aboutUs/theCrown"> More info</Card.Link>
                 </Card.Body>
             </Card>
             </div>
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-4 col-md-6">
             <Card style={{ width: "20rem"}}>
                 <Card.Body>
                     <Card.Title style={{ color: "#003d80" }}>LISEBERGS DENTISTS</Card.Title>
@@ -78,7 +78,7 @@ export function AboutUs(){
                         Owner: Glen Hysén <br/>
                         Address: Liseberg
                     </Card.Text>
-                    <Card.Link href="#"> More info</Card.Link>
+                    <Card.Link href="/aboutUs/lisebergDentist"> More info</Card.Link>
                 </Card.Body>
             </Card>
             </div>
