@@ -1,74 +1,101 @@
-import React, { useRef, useEffect } from "react";
+import React, {useRef, useEffect, useState} from "react";
 import mapboxgl from "mapbox-gl";
 import "./ClinicsMap.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
+import mqttHandler from "../../common_components/MqttHandler";
 
 // Access token for API
 mapboxgl.accessToken =
     "pk.eyJ1IjoiYnVyYWthc2thbjIxIiwiYSI6ImNsYXFxNjY2YzAzdjMzb280YTVsMGUzYWQifQ.knfsQ7s0FiRYVpf5-yDGWQ";
 
 // Sample data
-const geoJson = {
-    type: 'FeatureCollection',
-    features: [
+let geoJson = {
+    random: "random"
+}
+/*let geoJson = {
+    clinics: [
         {
-            type: 'Feature',
-            geometry: {
-                type: 'Point',
-                coordinates: [-77.032, 38.913]
-            },
+            coordinates: [-77.032, 38.913],
             properties: {
                 title: 'Mapbox',
                 description: 'Washington, D.C.'
             }
         },
         {
-            type: 'Feature',
-            geometry: {
-                type: 'Point',
-                coordinates: [11.9746, 57.7089]
-            },
+            coordinates: [11.9746, 57.7089],
             properties: {
                 title: 'Mapbox',
                 description: 'San Francisco, California'
             }
         },
         {
-            type: 'Feature',
-            geometry: {
-                type: 'Point',
-                coordinates: [11.9746, 52.7089]
-            },
+            coordinates: [11.9746, 52.7089],
             properties: {
                 title: 'Mapbox',
                 description: 'San Francisco, California'
             }
         },
         {
-            type: 'Feature',
-            geometry: {
-                type: 'Point',
-                coordinates: [10.9746, 57.7089]
-            },
+            coordinates: [10.9746, 57.7089],
             properties: {
                 title: 'Mapbox',
                 description: 'San Francisco, California'
             }
         }
     ]
-};
+};*/
 
 //Method which routes to timetable page with selected clinicTitle
 function selectAppointment(title) {
 
 }
 
-const Map = () => {
+export default function Maps() {
+
+    const [client, setClient] = useState(null);
+
+    // Primary client generating effect
+    useEffect(() => {
+        if (client === null) {
+            setClient(mqttHandler.getClient(client))
+        }
+    }, [client])
+
+    // Secondary effect containing all message logic and closure state
+    useEffect(() => {
+        if (client !== null) {
+            client.subscribe(client.options.clientId + 'mapDataResponse')
+
+            client.on('message', function (topic, message) {
+                switch (topic) {
+                    case client.options.clientId + 'mapDataResponse':
+                        geoJson = message
+                        break;
+                    default:
+                        break;
+                }
+            })
+        }
+
+        return () => {
+            if (client !== null) {
+                console.log('ending process')
+                client.end()
+            }
+        }
+    }, [client])
 
     const mapContainerRef = useRef(null);
 
     // Initialize map when component mounts
     useEffect(() => {
+        if (client !== null) {
+            console.log("Is this message being send?")
+            client.publish('mapDataRequest', JSON.stringify({
+                id:client.options.clientId,
+                body: "MapDataRequest"
+            }))
+        }
         //Actual map
         const map = new mapboxgl.Map({
             container: mapContainerRef.current,
@@ -78,20 +105,20 @@ const Map = () => {
         });
 
         // add markers to map
-        for (const feature of geoJson.features) {
-            // make a marker for each feature and add to the map
-            new mapboxgl.Marker().setLngLat(feature.geometry.coordinates).setPopup(
+        for (const clinic of geoJson.clinics) {
+            // make a marker for each clinic and add to the map
+            new mapboxgl.Marker().setLngLat(clinic.coordinates).setPopup(
                 new mapboxgl.Popup({ offset: 25 }) // add popups
                     .setHTML(
-                        `<h3>${feature.properties.title}</h3>
-                         <p>${feature.properties.description}</p>
-                         <button type="button" class="btn btn-primary" onclick="selectAppointment(${feature.properties.title})">Book Appointment</button>`
+                        `<h3>${clinic.properties.title}</h3>
+                         <p>${clinic.properties.description}</p>
+                         <button type="button" class="btn btn-primary" onclick="selectAppointment(${clinic.properties.title})">Book Appointment</button>`
                     )
             ).addTo(map);
         }
         // Clean up on unmount
         return () => map.remove();
-    }, []);
+    }, [client]);
 
     return (
         <div id="map-wrapper">
@@ -99,5 +126,3 @@ const Map = () => {
         </div>
     );
 };
-
-export default Map;
