@@ -13,11 +13,10 @@ const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: tru
         console.error(err.stack);
         process.exit(1);
     }
-
     console.log(`Connected to MongoDB with URI: ${mongoURI}`);
 })
 
-function mapDataRequest() {
+/*function mapDataRequest() {
 
     let clinicMapJSON = {
         clinics: []
@@ -26,9 +25,7 @@ function mapDataRequest() {
     let clinicErrorFlag = false
     ClinicModel.find(function (err, clinics) {
         try {
-            if (err) {
-                return next(err);
-            }
+
             let geoJson = {
                 clinics: [
                     {
@@ -65,26 +62,168 @@ function mapDataRequest() {
                     }
                 ]
             };
-            geoJson.forEach(clinic =>
+            geoJson.clinics.forEach(clinic => {
                 clinicMapJSON.clinics.push({
                     coordinates: clinic.coordinates,
                     properties: {
                         title: clinic.name,
                         description: clinic.address
-                    },
+                    }
                 })
-            )
-        }catch(err) {
+                //console.log(JSON.stringify(clinicMapJSON))
+            })
+        } catch (err) {
             console.log(err)
             clinicErrorFlag = true
         }
+    }).then((clients) => {
+        if (!clinicErrorFlag) {
+            console.log(JSON.stringify(clinicMapJSON) + ": during return")
+            return clinicMapJSON
+        } else {
+            return clinicErrorFlag
+        }
     })
-    if (clinicErrorFlag) {
-        return clinicMapJSON
-    }else {
-        return clinicErrorFlag
+}*/
+
+/*async function mapDataRequest() {
+
+    let clinicMapJSON = {
+        clinics: []
+    }
+
+    let clinicErrorFlag = false
+    await ClinicModel.find()
+        .exec(function (err, clinics) {
+            try {
+                let geoJson = {
+                    clinics: [
+                        {
+                            ruining: "ruin it all",
+                            coordinates: [-77.032, 38.913],
+                            properties: {
+                                title: 'Mapbox',
+                                description: 'Washington, D.C.'
+                            }
+                        },
+                        {
+                            ruining: "ruin it all",
+                            coordinates: [11.9746, 57.7089],
+                            properties: {
+                                title: 'Mapbox',
+                                description: 'San Francisco, California'
+                            }
+                        },
+                        {
+                            ruining: "ruin it all",
+                            coordinates: [11.9746, 52.7089],
+                            properties: {
+                                title: 'Mapbox',
+                                description: 'San Francisco, California'
+                            }
+                        },
+                        {
+                            ruining: "ruin it all",
+                            coordinates: [10.9746, 57.7089],
+                            properties: {
+                                title: 'Mapbox',
+                                description: 'San Francisco, California'
+                            }
+                        }
+                    ]
+                };
+                geoJson.clinics.forEach(clinic => {
+                    clinicMapJSON.clinics.push({
+                        coordinates: clinic.coordinates,
+                        properties: {
+                            title: clinic.name,
+                            description: clinic.address
+                        }
+                    })
+                    //console.log(JSON.stringify(clinicMapJSON))
+                })
+            } catch (err) {
+                console.log(err)
+                clinicErrorFlag = true
+            }
+            if (!clinicErrorFlag) {
+                console.log(JSON.stringify(clinicMapJSON) + ": during return")
+                return clinicMapJSON
+            } else {
+                return clinicErrorFlag
+            }
+        })
+}*/
+
+async function mapDataRequest() {
+
+    let clinicMapJSON = {
+        clinics: []
+    }
+
+    let clinicErrorFlag = false
+    //const clinics = await ClinicModel.find()
+    try {
+
+        let geoJson = {
+            clinics: [
+                {
+                    ruining: "ruin it all",
+                    coordinates: [-77.032, 38.913],
+                    properties: {
+                        title: 'Mapbox',
+                        description: 'Washington, D.C.'
+                    }
+                },
+                {
+                    ruining: "ruin it all",
+                    coordinates: [11.9746, 57.7089],
+                    properties: {
+                        title: 'Mapbox',
+                        description: 'San Francisco, California'
+                    }
+                },
+                {
+                    ruining: "ruin it all",
+                    coordinates: [11.9746, 52.7089],
+                    properties: {
+                        title: 'Mapbox',
+                        description: 'San Francisco, California'
+                    }
+                },
+                {
+                    ruining: "ruin it all",
+                    coordinates: [10.9746, 57.7089],
+                    properties: {
+                        title: 'Mapbox',
+                        description: 'San Francisco, California'
+                    }
+                }
+            ]
+        };
+        geoJson.clinics.forEach(clinic => {
+            clinicMapJSON.clinics.push({
+                coordinates: clinic.coordinates,
+                properties: {
+                    title: clinic.name,
+                    description: clinic.address
+                }
+            })
+            //console.log(JSON.stringify(clinicMapJSON))
+        })
+        if (!clinicErrorFlag) {
+            console.log(JSON.stringify(clinicMapJSON) + ": during return")
+            return clinicMapJSON
+        } else {
+            return clinicErrorFlag
+        }
+    } catch (err) {
+        console.log(err)
+        clinicErrorFlag = true
     }
 }
+
+
 
 const ClinicModel = mongooseClient.model('clinic', clinicSchema)
 

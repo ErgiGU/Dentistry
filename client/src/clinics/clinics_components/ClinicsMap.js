@@ -12,6 +12,35 @@ mapboxgl.accessToken =
 let geoJson = {
     random: "random"
 }
+function asyncMethod(client) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (client !== null) {
+                client.subscribe(client.options.clientId + '/mapDataResponse')
+                client.publish('mapDataRequest', JSON.stringify({
+                    id: client.options.clientId,
+                    body: "MapDataRequest"
+                }))
+                client.on('message', function (topic, message) {
+                    switch (topic) {
+                        case client.options.clientId + '/mapDataResponse':
+                            geoJson = JSON.parse(message)
+                            console.log(geoJson)
+                            resolve("Sucess")
+                            break;
+                        default:
+                            reject()
+                            break;
+                    }
+                })
+            }
+        }, 1000)
+    })
+}
+
+async function waitMap(client) {
+    await asyncMethod(client)
+}
 /*let geoJson = {
     clinics: [
         {
@@ -63,19 +92,6 @@ export default function Maps() {
 
     // Secondary effect containing all message logic and closure state
     useEffect(() => {
-        if (client !== null) {
-            client.subscribe(client.options.clientId + 'mapDataResponse')
-
-            client.on('message', function (topic, message) {
-                switch (topic) {
-                    case client.options.clientId + 'mapDataResponse':
-                        geoJson = message
-                        break;
-                    default:
-                        break;
-                }
-            })
-        }
 
         return () => {
             if (client !== null) {
@@ -89,40 +105,34 @@ export default function Maps() {
 
     // Initialize map when component mounts
     useEffect(() => {
-        if (client !== null) {
-            console.log("Is this message being send?")
-            client.publish('mapDataRequest', JSON.stringify({
-                id:client.options.clientId,
-                body: "MapDataRequest"
-            }))
-        }
-        //Actual map
-        const map = new mapboxgl.Map({
-            container: mapContainerRef.current,
-            style: "mapbox://styles/mapbox/streets-v11",
-            center: [11.9746, 57.7089],
-            zoom: 10,
-        });
+        waitMap(client).then(r => {
+            //Actual map
+            const map = new mapboxgl.Map({
+                container: mapContainerRef.current,
+                style: "mapbox://styles/mapbox/streets-v11",
+                center: [11.9746, 57.7089],
+                zoom: 10,
+            });
 
-        // add markers to map
-        for (const clinic of geoJson.clinics) {
-            // make a marker for each clinic and add to the map
-            new mapboxgl.Marker().setLngLat(clinic.coordinates).setPopup(
-                new mapboxgl.Popup({ offset: 25 }) // add popups
-                    .setHTML(
-                        `<h3>${clinic.properties.title}</h3>
+            // add markers to map
+            for (const clinic of geoJson.clinics) {
+                // make a marker for each clinic and add to the map
+                new mapboxgl.Marker().setLngLat(clinic.coordinates).setPopup(
+                    new mapboxgl.Popup({offset: 25}) // add popups
+                        .setHTML(
+                            `<h3>${clinic.properties.title}</h3>
                          <p>${clinic.properties.description}</p>
                          <button type="button" class="btn btn-primary" onclick="selectAppointment(${clinic.properties.title})">Book Appointment</button>`
-                    )
-            ).addTo(map);
-        }
-        // Clean up on unmount
-        return () => map.remove();
+                        )
+                ).addTo(map);
+            }
+            return () => map.remove();
+        })
     }, [client]);
 
     return (
         <div id="map-wrapper">
-            <div className="map-container" ref={mapContainerRef} />
+            <div className="map-container" ref={mapContainerRef}/>
         </div>
     );
 };

@@ -12,7 +12,7 @@ mqttClient.subscribeTopic('mapDataRequest')
 
 
 // When a message arrives, respond to it or propagate it further
-mqttClient.mqttClient.on('message', function (topic, message) {
+mqttClient.mqttClient.on('message', async function (topic, message) {
     console.log(config.clinicUser.handler + " service received MQTT message")
     console.log(message.toString());
 
@@ -21,9 +21,9 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             mqttClient.sendMessage('testAppointment', 'Testing callback')
             break;
         case 'mapDataRequest':
-            console.log("Map data reieved: " + JSON.parse(message))
-            const body = clinicData.mapDataRequest()
-            mqttClient.sendMessage(message.id + '/mapDataResponse', JSON.stringify(body))
+            const body = await clinicData.mapDataRequest()
+            console.log(JSON.stringify(body) + ": is the body")
+            mqttClient.sendMessage(JSON.parse(message).id + '/mapDataResponse', JSON.stringify(body))
             break;
     }
 });
