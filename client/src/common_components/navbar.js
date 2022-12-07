@@ -1,8 +1,6 @@
 // Example common component
 import React from 'react';
 import './Navbar.css'
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
 function Navbar() {
     return (
         <body>
@@ -11,10 +9,15 @@ function Navbar() {
             <h1>DENTAL CLINIC</h1>
         </div>
     <div id="navbar">
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,no-script-url */}
         <a className="active" href="javascript:void(0)">Home</a>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,no-script-url */}
         <a href="javascript:void(0)">News</a>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,no-script-url */}
         <a href="javascript:void(0)">Contact</a>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,no-script-url */}
         <a href="javascript:void(0)">Contact</a>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,no-script-url */}
         <a href="javascript:void(0)">Contact</a>
     </div>
         </body>

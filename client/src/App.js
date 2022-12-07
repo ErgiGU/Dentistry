@@ -3,7 +3,7 @@ import {
     Routes, //replaces "Switch" used till v5
     Route,
 } from "react-router-dom";
-import {Registration} from "./ClinicRegistration/Registration";
+import Registration from "./ClinicRegistration/Registration";
 import {MyInformation} from "./MyInformation/MyInformation"
 import React from 'react';
 

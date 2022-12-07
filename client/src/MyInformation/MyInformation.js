@@ -1,7 +1,10 @@
 import './MyInformation.css'
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import Navbar from '../common_components/navbar';
+import mqttHandler from "../common_components/MqttHandler";
 
 export function MyInformation(){
+    const [client, setClient] = useState(null);
     const [name, setName] = useState("");
     const [owner, setOwner] = useState("");
     const [address, setAddress] = useState("");
@@ -20,6 +23,38 @@ export function MyInformation(){
     const [fridayStart,setFridayStart] = useState("");
     const [fridayEnd,setFridayEnd] = useState("");
 
+    useEffect(() => {
+        if (client === null) {
+            setClient(mqttHandler.getClient(client))
+        }
+    }, [client])
+
+    useEffect(() => {
+        if (client !== null) {
+            client.subscribe(client.options.clientId + '/#')
+
+            client.on('message', function (topic, message) {
+                switch (topic) {
+                    case client.options.clientId + '/editInfoResponse':
+                        console.log(message)
+                        break;
+                    case client.options.clientId + '/changePasswordResponse':
+                        console.log(message)
+                        break;
+                    default:
+                        break;
+                }
+            })
+        }
+
+        return () => {
+            if (client !== null) {
+                console.log('ending process')
+                client.end()
+            }
+        }
+    }, [client])
+
     // Connect to backend, to get the current state of the variables and display them in the form.
     // eslint-disable-next-line no-unused-vars
     const setInitialStates = () => {
@@ -31,7 +66,6 @@ export function MyInformation(){
         const {id , value} = e.target;
         if(id === "name"){
             setName(value);
-
         }
         if(id === "owner"){
             setOwner(value);
@@ -99,27 +133,63 @@ export function MyInformation(){
             alert("Start time should be before the end time in the opening hours.");
         }
         if(!/\S+@\S+\.\S+/.test(email) && email) {
-            alert("Invalid email format.")
+            const email = document.getElementById("email");
+            email.setCustomValidity("Invalid email format")
+        }
+        else {
+            if (client !== null) {
+                client.publish('editInfo', JSON.stringify(
+                    {
+                        id: client.options.clientId,
+                        body: {
+                            name: name,
+                            owner: owner,
+                            address: address,
+                            email: 'dantist@hotmail.se',
+                            openingHours: {
+                                monday: mondayStart + "-" + mondayEnd,
+                                tuesday: tuesdayStart + "-" + tuesdayEnd,
+                                wednesday: wednesdayStart + "-" + wednesdayEnd,
+                                thursday: thursdayStart + "-" + thursdayEnd,
+                                friday: fridayStart + "-" + fridayEnd
+                            }
+                        },
+                    }
+                ))
+            }
         }
     }
-
     // This will be connected to the backend, and it will also validate the old password
     const changePassword  = () => {
         console.log(oldPassword,password, confirmPassword);
         if (password.length < 8) {
-            document.getElementById("passwordError").innerHTML = "Password contain at least 8 characters!";
+            document.getElementById("passwordError").setCustomValidity("Password contain at least 8 characters!");
         }
         if (!/\d/.test(password) || !/[a-zA-Z]/g.test(password)) {
-            document.getElementById("passwordError").innerHTML = "Password contain at least 1 letter and 1 number!";
+            document.getElementById("password").setCustomValidity("Password contain at least 1 letter and 1 number!");
         }
         else if (password !== confirmPassword) {
-            document.getElementById("passwordError").innerHTML = "Passwords do not match!";
+            document.getElementById("confirmPassword").setCustomValidity("Passwords do not match!");
+        }
+        else {
+            if (client !== null) {
+                client.publish('changePassword', JSON.stringify(
+                    {
+                        id:client.options.clientId,
+                        body: {
+                            password: password
+                        }
+                    }
+                ))
+            }
         }
     }
     return (
+        <>
+        <Navbar/>
         <div className={"container"}>
             <div className="leftBox">
-           <div className="clinicInfo">
+           <form className="clinicInfo">
                <h2> My Information </h2>
                <label> Clinic's name </label>
                    <input
@@ -156,9 +226,9 @@ export function MyInformation(){
                <button className={"button"} onClick={()=>submit()}>
                    Change info
                </button>
-           </div>
-                <div className="openingHours">
-                    <h3> Opening hours </h3>
+           </form>
+                <form className="openingHours">
+                    <h3 id={"openingHoursID"}> Opening hours </h3>
                     <label className={"day"}> Monday <br/>
                         <label> Start: </label>
                         <input
@@ -252,12 +322,12 @@ export function MyInformation(){
                     <button id={"otherButton"} onClick={()=>submit()}>
                         Change info
                     </button>
-                </div>
+                </form>
             </div>
-            <div className="passwordChanging" id={"form2"}>
+            <form className="passwordChanging" id={"form2"}>
                 <h2> Change password </h2>
                 <label> Old password   </label>
-                <input
+                <input required
                     type="password"
                     name="password"
                     id={"oldPassword"}
@@ -265,7 +335,7 @@ export function MyInformation(){
                     onChange = {(e) => handleChanges(e)}
                 />
                 <label> New password   </label>
-                <input
+                <input required
                     type="password"
                     name="password"
                     id={"password"}
@@ -273,7 +343,7 @@ export function MyInformation(){
                     onChange = {(e) => handleChanges(e)}
                 />
                 <label> Confirm password   </label>
-                <input
+                <input required
                     type="password"
                     name="confirmPassword"
                     id={"confirmPassword"}
@@ -284,10 +354,8 @@ export function MyInformation(){
                 <button className={"button"} onClick={()=>changePassword()}>
                     Change password
                 </button>
-            </div>
-            <div className="openingHours">
-                <div> </div>
-            </div>
+            </form>
         </div>
+        </>
     )
 }

@@ -18,26 +18,11 @@ const clinicSchema = new Schema({
     address: String,
     city: String,
     openingHours: {
-        monday: {
-            start: { type: String, default: "8:00" },
-            end: { type: String, default: "17:00" },
-        },
-        tuesday: {
-            start: { type: String, default: "8:00" },
-            end: { type: String, default: "17:00" },
-        },
-        wednesday: {
-            start: { type: String, default: "8:00" },
-            end: { type: String, default: "17:00" },
-        },
-        thursday: {
-            start: { type: String, default: "8:00" },
-            end: { type: String, default: "17:00" },
-        },
-        friday: {
-            start: { type: String, default: "8:00" },
-            end: { type: String, default: "17:00" },
-        },
+        monday: { type: String, default: "8:00-17:00" },
+        tuesday: {type: String, default: "8:00-17:00"} ,
+        wednesday: { type: String, default: "8:00-17:00" },
+        thursday: { type: String, default: "8:00-17:00" },
+        friday: { type: String, default: "8:00-17:00" },
     }
 })
 
