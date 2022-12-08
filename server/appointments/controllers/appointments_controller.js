@@ -1,5 +1,11 @@
 const mongoose = require('mongoose');
 const timeslotSchema = require('../../helpers/schemas/timeslot')
+let config
+try {
+    config = require('../../helpers/config');
+} catch (e) {
+    config = require('../../helpers/dummy_config')
+}
 
 // Variables
 //const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.appointmentUser.name + ':' + config.appointmentUser.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';

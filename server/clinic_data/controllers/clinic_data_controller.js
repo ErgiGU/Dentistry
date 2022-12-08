@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
-const config = require('../../helpers/config');
 const clinicSchema = require('../../helpers/schemas/clinic')
+let config
+try {
+    config = require('../../helpers/config');
+} catch (e) {
+    config = require('../../helpers/dummy_config')
+}
 
 // Variables
 const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.clinicUser.name + ':' + config.clinicUser.password + '@cluster0.lj881zv.mongodb.net/ClinicDB?retryWrites=true&w=majority';

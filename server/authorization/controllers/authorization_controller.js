@@ -1,5 +1,11 @@
 const mongoose = require("mongoose");
 const passwordSchema = require("../../helpers/schemas/password_model");
+let config
+try {
+    config = require('../../helpers/config');
+} catch (e) {
+    config = require('../../helpers/dummy_config')
+}
 
 // Variables
 const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.authorizationUser.name + ':' + config.authorizationUser.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';
