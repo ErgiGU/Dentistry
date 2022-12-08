@@ -86,6 +86,7 @@ clinic_data-unit-test-job:   # This job runs in the test stage.
   script:
     - cd server
     - cd clinic_data
+    - npm install
     - npx mocha clinic_data_app_test.js
 
 clinic_data-unit-run-job:   # This job runs in the test stage.
@@ -117,6 +118,7 @@ authorization-unit-test-job:   # This job runs in the test stage.
   script:
     - cd server
     - cd authorization
+    - npm install
     - npx mocha authorization_app_test.js
 
 authorization-unit-run-job:   # This job runs in the test stage.
