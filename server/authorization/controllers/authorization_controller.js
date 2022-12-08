@@ -1,13 +1,14 @@
 //const express = require("express");
 //const router = express.Router();
 const bcrypt = require("bcrypt");
-import clinicModel from '../../helpers/schemas/clinic';
+const clinicSchema = require('../../helpers/schemas/clinic');
 const config = require('../../helpers/config');
 const mongoose = require("mongoose");
 
 // Variables
-const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.authorizationUser.name + ':' + config.authorizationUser.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';
+const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.authorizationUser.name + ':' + config.authorizationUser.password + '@cluster0.lj881zv.mongodb.net/ClinicDB?retryWrites=true&w=majority';
 //const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
+
 
 // Connect to MongoDB
 const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, function (err) {
@@ -18,6 +19,9 @@ const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: tru
     }
     console.log(`Connected to MongoDB with URI: ${mongoURI}`);
 })
+
+//Model creation
+const clinicModel = mongooseClient.model('clinic', clinicSchema);
 
 // Register new clinic
 const registerClinic = async (req, res) => {
@@ -61,6 +65,17 @@ const registerClinic = async (req, res) => {
     }
 }
 
+ async function emailExists(email) {
+     const clinic = await clinicModel.findOne({email: email})
+        console.log(clinic);
+        if(clinic){
+            return "email already exists"
+        }
+
+ }
+
+
+
 // Authenticate a clinic
 const loginClinic = async (req, res) => {
     const {email, password} = req.body
@@ -80,6 +95,7 @@ const loginClinic = async (req, res) => {
 }
     res.json({message:'authenticate clinic'})
 }
+module.exports = {emailExists};
 
 // Model creation
 /*
@@ -88,3 +104,4 @@ module.exports = {
    registerClinic,
    loginClinic
 }*/
+

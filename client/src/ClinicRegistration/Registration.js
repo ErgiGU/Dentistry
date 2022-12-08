@@ -27,6 +27,13 @@ export function Registration(){
                     case client.options.clientId + '/appointmentResponse':
                         receivedMessage(message)
                         break;
+                    case client.options.clientId + "/checkEmail":
+                        const email = document.getElementById("email");
+                        console.log(message);
+                        email.setCustomValidity("");
+                        if (message==="email already exists"){
+                            email.setCustomValidity("Email already exists");
+                        }
                     default:
                         break;
                 }
@@ -35,7 +42,7 @@ export function Registration(){
 
         return () => {
             if (client !== null) {
-                console.log('ending process')
+                console.log("ending process");
                 client.end()
             }
         }
@@ -47,35 +54,29 @@ export function Registration(){
         setResponse(message.toString())
     }
 
-    function sendMessage() {
+    function sendMessage(topic,json) {
         if (client !== null) {
-            client.publish('appointment', JSON.stringify(
-                {
-                    id:client.options.clientId,
-                    body: {
-                        startTime: '2001-01-01'
-                    }
-                }
-            ))
+            client.publish(topic, JSON.stringify(json));
         }
     }
 
+
     //This is for connecting to the mqtt broker
     const mqttClient =  Mqtt.connect("ws://localhost:1884/mqtt");
-    mqttClient.subscribe('registrationResponse');
+    mqttClient.subscribe("registrationResponse");
     //receives mqtt messages
-    mqttClient.on('message', function (topic, message) {
+    mqttClient.on("message", function (topic, message) {
         switch(topic){
-            case 'registrationResponse':
+            case "registrationResponse":
                 console.log(message.toString());
                 break;
         }
     })
 
-    const alertPlaceholder = document.getElementById('displayAlert')
+    const alertPlaceholder = document.getElementById("displayAlert");
 
     const alert = (message, type) => {
-        const wrapper = document.createElement('div')
+        const wrapper = document.createElement("div")
         wrapper.innerHTML = [
             `<div class="alert alert-${type} alert-dismissible" style="line-height: 10px">`,
             `   <div>${message}</div>`,
@@ -88,23 +89,37 @@ export function Registration(){
     const [checked, setChecked] = useState(false);
     const handleChange = () => {
         setChecked(!checked);
-        const okButton = document.getElementById('btn1')
+        const okButton = document.getElementById("btn1");
         if(checked){
-            okButton.classList.add('disabled')
+            okButton.classList.add("disabled");
         }else{
-            okButton.classList.remove('disabled')
+            okButton.classList.remove("disabled");
         }
     };
 
     //Checks if the 2 password fields match
     function checkIfPassMatches() {
-        const pass = document.getElementById('pass');
-        const confPass = document.getElementById('confPass');
+        const pass = document.getElementById("pass");
+        const confPass = document.getElementById("confPass");
         if (pass.value !== confPass.value) {
             confPass.setCustomValidity("Passwords don't match");
         } else {
-            confPass.setCustomValidity('');
+            confPass.setCustomValidity("");
         }
+    }
+
+    function checkIfEmailExists() {
+        const email = document.getElementById("email").value;
+        const json =
+            {
+                "id": client.options.clientId,
+                "body": {
+                    "email": email
+                }
+            }
+        sendMessage('checkIfEmailExists',json);
+
+
     }
 /*    function successAlert(){
         document.getElementById('displayAlert').innerHTML +=
@@ -150,7 +165,7 @@ export function Registration(){
                            </div>
 
                            <div className="form-floating mb-4">
-                               <input type="email" className="form-control form-control-lg" id="email"
+                               <input type="email" className="form-control form-control-lg" id="email" onKeyUp={checkIfEmailExists}
                                       placeholder="exampleEmail"
                                       required title="Please enter a valid email."/>
                                    <label>Email</label>
