@@ -3,7 +3,7 @@ const config = require('../../helpers/config');
 const clinicSchema = require('../../helpers/schemas/clinic')
 
 // Variables
-const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.clinicUser.name + ':' + config.clinicUser.password + '@cluster0.lj881zv.mongodb.net/?retryWrites=true&w=majority';
+const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.clinicUser.name + ':' + config.clinicUser.password + '@cluster0.lj881zv.mongodb.net/ClinicDB?retryWrites=true&w=majority';
 //const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ClinicDB';
 
 // Connect to MongoDB
@@ -16,145 +16,6 @@ const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: tru
     console.log(`Connected to MongoDB with URI: ${mongoURI}`);
 })
 
-/*function mapDataRequest() {
-
-    let clinicMapJSON = {
-        clinics: []
-    }
-
-    let clinicErrorFlag = false
-    ClinicModel.find(function (err, clinics) {
-        try {
-
-            let geoJson = {
-                clinics: [
-                    {
-                        ruining: "ruin it all",
-                        coordinates: [-77.032, 38.913],
-                        properties: {
-                            title: 'Mapbox',
-                            description: 'Washington, D.C.'
-                        }
-                    },
-                    {
-                        ruining: "ruin it all",
-                        coordinates: [11.9746, 57.7089],
-                        properties: {
-                            title: 'Mapbox',
-                            description: 'San Francisco, California'
-                        }
-                    },
-                    {
-                        ruining: "ruin it all",
-                        coordinates: [11.9746, 52.7089],
-                        properties: {
-                            title: 'Mapbox',
-                            description: 'San Francisco, California'
-                        }
-                    },
-                    {
-                        ruining: "ruin it all",
-                        coordinates: [10.9746, 57.7089],
-                        properties: {
-                            title: 'Mapbox',
-                            description: 'San Francisco, California'
-                        }
-                    }
-                ]
-            };
-            geoJson.clinics.forEach(clinic => {
-                clinicMapJSON.clinics.push({
-                    coordinates: clinic.coordinates,
-                    properties: {
-                        title: clinic.name,
-                        description: clinic.address
-                    }
-                })
-                //console.log(JSON.stringify(clinicMapJSON))
-            })
-        } catch (err) {
-            console.log(err)
-            clinicErrorFlag = true
-        }
-    }).then((clients) => {
-        if (!clinicErrorFlag) {
-            console.log(JSON.stringify(clinicMapJSON) + ": during return")
-            return clinicMapJSON
-        } else {
-            return clinicErrorFlag
-        }
-    })
-}*/
-
-/*async function mapDataRequest() {
-
-    let clinicMapJSON = {
-        clinics: []
-    }
-
-    let clinicErrorFlag = false
-    await ClinicModel.find()
-        .exec(function (err, clinics) {
-            try {
-                let geoJson = {
-                    clinics: [
-                        {
-                            ruining: "ruin it all",
-                            coordinates: [-77.032, 38.913],
-                            properties: {
-                                title: 'Mapbox',
-                                description: 'Washington, D.C.'
-                            }
-                        },
-                        {
-                            ruining: "ruin it all",
-                            coordinates: [11.9746, 57.7089],
-                            properties: {
-                                title: 'Mapbox',
-                                description: 'San Francisco, California'
-                            }
-                        },
-                        {
-                            ruining: "ruin it all",
-                            coordinates: [11.9746, 52.7089],
-                            properties: {
-                                title: 'Mapbox',
-                                description: 'San Francisco, California'
-                            }
-                        },
-                        {
-                            ruining: "ruin it all",
-                            coordinates: [10.9746, 57.7089],
-                            properties: {
-                                title: 'Mapbox',
-                                description: 'San Francisco, California'
-                            }
-                        }
-                    ]
-                };
-                geoJson.clinics.forEach(clinic => {
-                    clinicMapJSON.clinics.push({
-                        coordinates: clinic.coordinates,
-                        properties: {
-                            title: clinic.name,
-                            description: clinic.address
-                        }
-                    })
-                    //console.log(JSON.stringify(clinicMapJSON))
-                })
-            } catch (err) {
-                console.log(err)
-                clinicErrorFlag = true
-            }
-            if (!clinicErrorFlag) {
-                console.log(JSON.stringify(clinicMapJSON) + ": during return")
-                return clinicMapJSON
-            } else {
-                return clinicErrorFlag
-            }
-        })
-}*/
-
 async function mapDataRequest() {
 
     let clinicMapJSON = {
@@ -162,64 +23,40 @@ async function mapDataRequest() {
     }
 
     let clinicErrorFlag = false
-    //const clinics = await ClinicModel.find()
+    const clinics = await ClinicModel.find()
     try {
 
-        let geoJson = {
-            clinics: [
-                {
-                    ruining: "ruin it all",
-                    coordinates: [-77.032, 38.913],
-                    properties: {
-                        title: 'Mapbox',
-                        description: 'Washington, D.C.'
-                    }
-                },
-                {
-                    ruining: "ruin it all",
-                    coordinates: [11.9746, 57.7089],
-                    properties: {
-                        title: 'Mapbox',
-                        description: 'San Francisco, California'
-                    }
-                },
-                {
-                    ruining: "ruin it all",
-                    coordinates: [11.9746, 52.7089],
-                    properties: {
-                        title: 'Mapbox',
-                        description: 'San Francisco, California'
-                    }
-                },
-                {
-                    ruining: "ruin it all",
-                    coordinates: [10.9746, 57.7089],
-                    properties: {
-                        title: 'Mapbox',
-                        description: 'San Francisco, California'
-                    }
-                }
-            ]
-        };
-        geoJson.clinics.forEach(clinic => {
+        clinics.forEach(clinic => {
+
+            let openingHourString
+
+            if(clinic.openingHours.monday.start) {
+                openingHourString = "Opening Hours: " +
+                    "\nMonday: " + clinic.openingHours.monday.start + " - " + clinic.openingHours.monday.end +
+                    "\nTuesday: " + clinic.openingHours.tuesday.start + " - " + clinic.openingHours.tuesday.end +
+                    "\nWednesday: " + clinic.openingHours.wednesday.start + " - " + clinic.openingHours.wednesday.end +
+                    "\nThursday: " + clinic.openingHours.thursday.start + " - " + clinic.openingHours.thursday.end +
+                    "\nFriday : " + clinic.openingHours.friday.start + " - " + clinic.openingHours.friday.end
+            }else {
+                openingHourString = "No opening hours given"
+            }
             clinicMapJSON.clinics.push({
-                coordinates: clinic.coordinates,
+                coordinates: [clinic.coordinates.longitude, clinic.coordinates.latitude],
                 properties: {
                     title: clinic.name,
-                    description: clinic.address
+                    address: "Address: " + clinic.address,
+                    opening_hours: openingHourString
+
                 }
             })
-            //console.log(JSON.stringify(clinicMapJSON))
         })
         if (!clinicErrorFlag) {
-            console.log(JSON.stringify(clinicMapJSON) + ": during return")
             return clinicMapJSON
         } else {
             return clinicErrorFlag
         }
     } catch (err) {
         console.log(err)
-        clinicErrorFlag = true
     }
 }
 
@@ -232,5 +69,3 @@ const clinicController = {
 }
 
 module.exports = clinicController
-// Model creation
-//const timeSlotModel = mongooseClient.model('timeslot', timeslotSchema)

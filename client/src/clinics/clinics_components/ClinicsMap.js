@@ -8,15 +8,11 @@ import mqttHandler from "../../common_components/MqttHandler";
 mapboxgl.accessToken =
     "pk.eyJ1IjoiYnVyYWthc2thbjIxIiwiYSI6ImNsYXFxNjY2YzAzdjMzb280YTVsMGUzYWQifQ.knfsQ7s0FiRYVpf5-yDGWQ";
 
-// Sample data
-let geoJson = {
-    random: "random"
-}
 function asyncMethod(client) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             if (client !== null) {
-                client.subscribe(client.options.clientId + '/mapDataResponse')
+                client.subscribe(client.options.clientId + '/#')
                 client.publish('mapDataRequest', JSON.stringify({
                     id: client.options.clientId,
                     body: "MapDataRequest"
@@ -24,12 +20,10 @@ function asyncMethod(client) {
                 client.on('message', function (topic, message) {
                     switch (topic) {
                         case client.options.clientId + '/mapDataResponse':
-                            geoJson = JSON.parse(message)
-                            console.log(geoJson)
-                            resolve("Sucess")
+                            resolve(JSON.parse(message))
                             break;
                         default:
-                            reject()
+                            reject(new Error("The wrong message is received"))
                             break;
                     }
                 })
@@ -39,40 +33,8 @@ function asyncMethod(client) {
 }
 
 async function waitMap(client) {
-    await asyncMethod(client)
+    return await asyncMethod(client)
 }
-/*let geoJson = {
-    clinics: [
-        {
-            coordinates: [-77.032, 38.913],
-            properties: {
-                title: 'Mapbox',
-                description: 'Washington, D.C.'
-            }
-        },
-        {
-            coordinates: [11.9746, 57.7089],
-            properties: {
-                title: 'Mapbox',
-                description: 'San Francisco, California'
-            }
-        },
-        {
-            coordinates: [11.9746, 52.7089],
-            properties: {
-                title: 'Mapbox',
-                description: 'San Francisco, California'
-            }
-        },
-        {
-            coordinates: [10.9746, 57.7089],
-            properties: {
-                title: 'Mapbox',
-                description: 'San Francisco, California'
-            }
-        }
-    ]
-};*/
 
 //Method which routes to timetable page with selected clinicTitle
 function selectAppointment(title) {
@@ -115,13 +77,14 @@ export default function Maps() {
             });
 
             // add markers to map
-            for (const clinic of geoJson.clinics) {
+            for (const clinic of r.clinics) {
                 // make a marker for each clinic and add to the map
                 new mapboxgl.Marker().setLngLat(clinic.coordinates).setPopup(
                     new mapboxgl.Popup({offset: 25}) // add popups
                         .setHTML(
                             `<h3>${clinic.properties.title}</h3>
-                         <p>${clinic.properties.description}</p>
+                         <p>${clinic.properties.address}</p>
+                         <p>${clinic.properties.opening_hours}</p>
                          <button type="button" class="btn btn-primary" onclick="selectAppointment(${clinic.properties.title})">Book Appointment</button>`
                         )
                 ).addTo(map);

@@ -22,7 +22,6 @@ mqttClient.mqttClient.on('message', async function (topic, message) {
             break;
         case 'mapDataRequest':
             const body = await clinicData.mapDataRequest()
-            console.log(JSON.stringify(body) + ": is the body")
             mqttClient.sendMessage(JSON.parse(message).id + '/mapDataResponse', JSON.stringify(body))
             break;
     }
