@@ -54,6 +54,7 @@ appointments-unit-test-job:   # This job runs in the test stage.
   script:
     - cd server
     - cd appointments
+    - npm install
     - npx mocha appointments_app_test.js
 
 appointments-unit-run-job:   # This job runs in the test stage.
