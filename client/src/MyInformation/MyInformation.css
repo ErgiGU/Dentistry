@@ -10,7 +10,7 @@ body {
     color: white;
     padding: 30px;
     height:490px;
-    margin-top: 8%;
+    margin-top: 3%;
     background-color: steelblue;
     box-shadow: 10px 0px 15px #888888;
     border-radius: 5px;
@@ -79,6 +79,20 @@ input {
 }
 #passwordError {
     color: red;
+}
+#liveAlertPlaceholder {
+    font-family: Inter;
+    display: none;
+    width: 300px;
+    height: 60px;
+    padding: 10px;
+    padding-left: 13px;
+    margin-top: 30px;
+    margin-bottom: 0px;
+    margin-left: 3%;
+    font-size: 23px;
+    border: 1px solid black;
+    border-radius: 3px;
 }
 @media only screen and (min-width: 1400px) {
     .passwordChanging, .leftBox {

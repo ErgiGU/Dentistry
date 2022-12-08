@@ -36,10 +36,10 @@ export function MyInformation(){
             client.on('message', function (topic, message) {
                 switch (topic) {
                     case client.options.clientId + '/editInfoResponse':
-                        console.log(message)
+                        receivedMessage(message.toString())
                         break;
                     case client.options.clientId + '/changePasswordResponse':
-                        console.log(message)
+                        receivedMessage(message.toString())
                         break;
                     default:
                         break;
@@ -54,6 +54,30 @@ export function MyInformation(){
             }
         }
     }, [client])
+
+
+     function receivedMessage(message) {
+        console.log(message)
+         const pMessage = JSON.parse(message)
+         console.log(pMessage.status)
+         const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+
+         const alert = (message) => {
+             alertPlaceholder.style.display = "block"
+             alertPlaceholder.innerHTML = message.text
+             if(message.status === 200) {
+                 alertPlaceholder.style.backgroundColor = "#90ee90"
+                 alertPlaceholder.style.borderColor = "#023020";
+                 alertPlaceholder.style.color = "#023020";
+             }
+             else {
+                 alertPlaceholder.style.backgroundColor = "#FF9494";
+                 alertPlaceholder.style.borderColor = "#8b0000";
+                 alertPlaceholder.style.color = "#8b0000";
+             }
+         }
+        alert(pMessage)
+    }
 
     // Connect to backend, to get the current state of the variables and display them in the form.
     // eslint-disable-next-line no-unused-vars
@@ -127,7 +151,8 @@ export function MyInformation(){
         }
     }
     // this will be connected to the backend
-    const submit  = () => {
+    const submit  = (event) => {
+        event.preventDefault();
         console.log(name,owner, address, email);
         if(mondayStart > mondayEnd || tuesdayStart > tuesdayEnd || wednesdayStart > wednesdayEnd || thursdayStart > thursdayEnd || fridayStart > fridayEnd) {
             alert("Start time should be before the end time in the opening hours.");
@@ -145,13 +170,28 @@ export function MyInformation(){
                             name: name,
                             owner: owner,
                             address: address,
-                            email: 'dantist@hotmail.se',
+                            email: 'modify@hotmail.se',
                             openingHours: {
-                                monday: mondayStart + "-" + mondayEnd,
-                                tuesday: tuesdayStart + "-" + tuesdayEnd,
-                                wednesday: wednesdayStart + "-" + wednesdayEnd,
-                                thursday: thursdayStart + "-" + thursdayEnd,
-                                friday: fridayStart + "-" + fridayEnd
+                                monday: {
+                                    start: mondayStart,
+                                    end: mondayEnd
+                                },
+                                tuesday: {
+                                    start: tuesdayStart,
+                                    end: tuesdayEnd
+                                },
+                                wednesday:{
+                                    start: wednesdayStart,
+                                    end: wednesdayEnd
+                                },
+                                thursday: {
+                                    start: thursdayStart,
+                                    end: thursdayEnd
+                                },
+                                friday: {
+                                    start: fridayStart,
+                                    end: fridayEnd
+                                },
                             }
                         },
                     }
@@ -160,7 +200,8 @@ export function MyInformation(){
         }
     }
     // This will be connected to the backend, and it will also validate the old password
-    const changePassword  = () => {
+    const changePassword  = (event) => {
+        event.preventDefault();
         console.log(oldPassword,password, confirmPassword);
         if (password.length < 8) {
             document.getElementById("passwordError").setCustomValidity("Password contain at least 8 characters!");
@@ -177,7 +218,9 @@ export function MyInformation(){
                     {
                         id:client.options.clientId,
                         body: {
-                            password: password
+                            email: "modify@hotmail.se",
+                            password: password,
+                            oldPassword: oldPassword
                         }
                     }
                 ))
@@ -188,6 +231,7 @@ export function MyInformation(){
         <>
         <Navbar/>
         <div className={"container"}>
+            <div id="liveAlertPlaceholder"></div>
             <div className="leftBox">
            <form className="clinicInfo">
                <h2> My Information </h2>
@@ -223,7 +267,7 @@ export function MyInformation(){
                        value={email}
                        onChange = {(e) => handleChanges(e)}
                    />
-               <button className={"button"} onClick={()=>submit()}>
+               <button className={"button"} onClick={(e)=>submit(e)}>
                    Change info
                </button>
            </form>
@@ -351,7 +395,7 @@ export function MyInformation(){
                     onChange = {(e) => handleChanges(e)}
                 />
                 <label id={"passwordError"}>  </label> <br/>
-                <button className={"button"} onClick={()=>changePassword()}>
+                <button className={"button"} onClick={(e)=>changePassword(e)}>
                     Change password
                 </button>
             </form>
