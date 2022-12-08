@@ -37,9 +37,9 @@ async function waitMap(client) {
 }
 
 //Method which routes to timetable page with selected clinicTitle
-function selectAppointment(title) {
+/*function selectAppointment(title) {
 
-}
+}*/
 
 export default function Maps() {
 
@@ -75,7 +75,6 @@ export default function Maps() {
                 center: [11.9746, 57.7089],
                 zoom: 10,
             });
-            throw Error
 
             // add markers to map
             for (const clinic of r.clinics) {
