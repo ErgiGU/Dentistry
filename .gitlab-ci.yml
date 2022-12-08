@@ -34,7 +34,7 @@ client-build-job:       # This job runs in the build stage, which runs first.
   script:
     - cd client
     - npm install
-    - npm start
+    - npm build
 
 appointments-build-job:       # This job runs in the build stage, which runs first.
   stage: appointments
