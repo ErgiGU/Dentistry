@@ -67,7 +67,6 @@ appointments-unit-run-job:   # This job runs in the test stage.
   script:
     - cd server
     - cd appointments
-    - npm install
     - node appointments_app.js
 
 clinic_data-build-job:       # This job runs in the build stage, which runs first.
@@ -100,7 +99,6 @@ clinic_data-unit-run-job:   # This job runs in the test stage.
   script:
     - cd server
     - cd clinic_data
-    - npm install
     - node clinic_data_app.js
 
 authorization-build-job:       # This job runs in the build stage, which runs first.
@@ -133,5 +131,4 @@ authorization-unit-run-job:   # This job runs in the test stage.
   script:
     - cd server
     - cd authorization
-    - npm install
     - node authorization_app.js
