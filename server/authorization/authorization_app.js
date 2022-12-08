@@ -1,12 +1,19 @@
 const mqttHandler = require('../helpers/mqtt_handler');
-const config = require('../helpers/config');
+let config
+try {
+    config = require('../helpers/config');
+} catch (e) {
+    config = require('../helpers/dummy_config')
+}
 
 // MQTT Client
-const mqttClient = new mqttHandler(config.authorizationUser.handler)
+const mqttClient = new mqttHandler(config.authorizationUser.name, config.authorizationUser.password, config.authorizationUser.handler)
 mqttClient.connect()
 
 // MQTT subscriptions
 mqttClient.subscribeTopic('auth')
+mqttClient.subscribeTopic('test')
+mqttClient.subscribeTopic('testingTestingRequest')
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
@@ -15,11 +22,17 @@ mqttClient.mqttClient.on('message', function (topic, message) {
     console.log(intermediary);
 
     switch (topic) {
-        case "test":
+        case "firstTest":
             mqttClient.sendMessage('testAppointment', 'Testing callback')
             break;
         case 'auth':
             mqttClient.sendMessage('authTest', 'Authorization confirmed')
+            break;
+        case 'testingTestingRequest':
+            mqttClient.sendMessage('testingTesting', 'ToothyClinic')
+            break;
+        case 'test':
+            process.exit()
             break;
     }
 });

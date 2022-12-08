@@ -1,0 +1,129 @@
+image: node:18-alpine
+
+cache: 
+  paths:
+    - client/node_modules
+    - server/helpers/node_modules
+    - server/clinic_data/node_modules
+    - server/appointments/node_modules
+    - server/authorization/node_modules
+
+stages:          # List of stages for jobs, and their order of execution
+  - client.build
+  - appointments
+  - clinic_data
+  - authorization
+
+variables:
+  HIVE_MQ_CLOUD_PASSWORD: $HIVE_MQ_CLOUD_PASSWORD
+  HIVE_MQ_CLOUD_PASSWORD_2: $HIVE_MQ_CLOUD_PASSWORD_2
+
+helper-run-job: 
+  stage: .pre
+  tags:
+    - docker
+  script:
+    - cd server
+    - cd helpers
+    - npm install
+
+client-build-job:       # This job runs in the build stage, which runs first.
+  stage: client.build
+  tags:
+    - docker
+  script:
+    - cd client
+    - npm install
+
+appointments-build-job:       # This job runs in the build stage, which runs first.
+  stage: appointments
+  tags:
+    - docker
+  script:
+    - cd server
+    - cd appointments
+    - npm install
+
+appointments-unit-test-job:   # This job runs in the test stage.
+  stage: appointments         # It only starts when the job in the build stage completes successfully.
+  needs: ["appointments-build-job"]
+  when: delayed
+  start_in: 100 seconds
+  tags:
+    - docker
+  script:
+    - cd server
+    - cd appointments
+    - npx mocha appointments_app_test.js
+
+appointments-unit-run-job:   # This job runs in the test stage.
+  stage: appointments         # It only starts when the job in the build stage completes successfully.
+  needs: ["appointments-build-job"]
+  tags:
+    - docker
+  script:
+    - cd server
+    - cd appointments
+    - node appointments_app.js
+
+clinic_data-build-job:       # This job runs in the build stage, which runs first.
+  stage: clinic_data
+  tags:
+    - docker
+  script:
+    - cd server
+    - cd clinic_data
+    - npm install
+
+clinic_data-unit-test-job:   # This job runs in the test stage.
+  stage: clinic_data         # It only starts when the job in the build stage completes successfully.
+  needs: ["clinic_data-build-job"]
+  when: delayed
+  start_in: 100 seconds
+  tags:
+    - docker
+  script:
+    - cd server
+    - cd clinic_data
+    - npx mocha clinic_data_app_test.js
+
+clinic_data-unit-run-job:   # This job runs in the test stage.
+  stage: clinic_data         # It only starts when the job in the build stage completes successfully.
+  needs: ["clinic_data-build-job"]
+  tags:
+    - docker
+  script:
+    - cd server
+    - cd clinic_data
+    - node clinic_data_app.js
+
+authorization-build-job:       # This job runs in the build stage, which runs first.
+  stage: authorization
+  tags:
+    - docker
+  script:
+    - cd server
+    - cd authorization
+    - npm install
+
+authorization-unit-test-job:   # This job runs in the test stage.
+  stage: authorization         # It only starts when the job in the build stage completes successfully.
+  needs: ["authorization-build-job"]
+  when: delayed
+  start_in: 100 seconds
+  tags:
+    - docker
+  script:
+    - cd server
+    - cd authorization
+    - npx mocha authorization_app_test.js
+
+authorization-unit-run-job:   # This job runs in the test stage.
+  stage: authorization         # It only starts when the job in the build stage completes successfully.
+  needs: ["authorization-build-job"]
+  tags:
+    - docker
+  script:
+    - cd server
+    - cd authorization
+    - node authorization_app.js
