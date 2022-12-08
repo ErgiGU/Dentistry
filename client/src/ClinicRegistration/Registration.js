@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import mqttHandler from "../common_components/MqttHandler";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import './Registration.css';
 import Mqtt from "mqtt";
 
@@ -135,6 +135,7 @@ export function Registration(){
         const email = document.getElementById('email');
         const pass = document.getElementById('pass');
         const confPass = document.getElementById('confPass');
+        checkIfEmailExists()
 
         if(clinicName.checkValidity() && address.checkValidity() && email.checkValidity() && pass.checkValidity() &&
             confPass.checkValidity()){
@@ -165,7 +166,7 @@ export function Registration(){
                            </div>
 
                            <div className="form-floating mb-4">
-                               <input type="email" className="form-control form-control-lg" id="email" onKeyUp={checkIfEmailExists}
+                               <input type="email" className="form-control form-control-lg" id="email"
                                       placeholder="exampleEmail"
                                       required title="Please enter a valid email."/>
                                    <label>Email</label>
@@ -199,7 +200,7 @@ export function Registration(){
                            </button>
 
                            <p className="text-center mt-1 mb-2 text-white">Already have an account?
-                               <router-link to="/" style={{color: 'black'}}>Login here</router-link>
+                               <Link to="/login" style={{color: 'black'}}>Login here </Link>
                            </p>
                        </form>
                    </div>
