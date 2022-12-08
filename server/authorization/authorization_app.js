@@ -13,7 +13,7 @@ mqttClient.subscribeTopic("checkIfEmailExists");
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
-    let intermediary = JSON.parse(message)
+    let intermediary = JSON.parse(message);
     console.log(config.authorizationUser.handler + " service received MQTT message")
     console.log(intermediary);
 
@@ -30,15 +30,13 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             break;
         case 'checkIfEmailExists':
             const email = intermediary.body.email;
-            const response =  registerClinic.emailExists(email).then(res=>{
-                console.log(res);
-                if(res === "email already exists"){
-                    sendMessage("email already exists");
-                }else{
-                    sendMessage("email doesn't exist")
-                }
-                });
-            console.log(response);
+            registerClinic.emailExists(email).then(res=>{
+            console.log(res);
+
+            if(res === "email already exists"){
+                sendMessage(intermediary,"email already exists");
+            }
+            });
 
     }
 
@@ -49,12 +47,10 @@ mqttClient.mqttClient.on('message', function (topic, message) {
  * Test function
  * @param message MQTT message
  */
-function testMessage(message) {
-    mqttClient.sendMessage(message.id + '/appointmentResponse', JSON.stringify(newClinic))
-}
 
-function  sendMessage(message) {
-    mqttClient.sendMessage(message.id + '/',message)
+
+function sendMessage(intermediary,message) {
+    mqttClient.sendMessage( intermediary.id + '/checkEmail', message)
 }
 
 module.exports = mqttClient;
