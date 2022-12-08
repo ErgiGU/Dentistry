@@ -66,8 +66,7 @@ const registerClinic = async (req, res) => {
 }
 
  async function emailExists(email) {
-     const clinic = await clinicModel.findOne({email: email})
-        console.log(clinic);
+     const clinic = await clinicModel.findOne({email:email});
         if(clinic){
             return "email already exists"
         }

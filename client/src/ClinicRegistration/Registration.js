@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import mqttHandler from "../common_components/MqttHandler";
 import {Link, useNavigate} from "react-router-dom";
 import './Registration.css';
-import Mqtt from "mqtt";
 
 export function Registration(){
     const navigate = useNavigate();
@@ -20,7 +19,7 @@ export function Registration(){
     // Secondary effect containing all message logic and closure state
     useEffect(() => {
         if (client !== null) {
-            client.subscribe(client.options.clientId + '/#')
+            client.subscribe(client.options.clientId + '/#');
 
             client.on('message', function (topic, message) {
                 switch (topic) {
@@ -29,11 +28,13 @@ export function Registration(){
                         break;
                     case client.options.clientId + "/checkEmail":
                         const email = document.getElementById("email");
-                        console.log(message);
+                        const intermediary = message.toString();
+                        console.log(intermediary)
                         email.setCustomValidity("");
-                        if (message==="email already exists"){
+                        if (intermediary==="email already exists"){
                             email.setCustomValidity("Email already exists");
                         }
+                        break;
                     default:
                         break;
                 }
@@ -61,17 +62,6 @@ export function Registration(){
     }
 
 
-    //This is for connecting to the mqtt broker
-    const mqttClient =  Mqtt.connect("ws://localhost:1884/mqtt");
-    mqttClient.subscribe("registrationResponse");
-    //receives mqtt messages
-    mqttClient.on("message", function (topic, message) {
-        switch(topic){
-            case "registrationResponse":
-                console.log(message.toString());
-                break;
-        }
-    })
 
     const alertPlaceholder = document.getElementById("displayAlert");
 
@@ -140,7 +130,6 @@ export function Registration(){
         if(clinicName.checkValidity() && address.checkValidity() && email.checkValidity() && pass.checkValidity() &&
             confPass.checkValidity()){
             alert(" You've successfully registered your clinic!","success");
-            mqttClient.publish("registration","Hellooooo" );
         }
 
     }
