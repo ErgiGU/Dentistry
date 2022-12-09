@@ -55,7 +55,10 @@ export function MyInformation(){
         }
     }, [client])
 
-
+    /**
+     * Visually displays the response of the backend to the user.
+     * @param message response from backend
+     */
      function receivedMessage(message) {
         console.log(message)
          const pMessage = JSON.parse(message)
@@ -78,13 +81,19 @@ export function MyInformation(){
          }
         alert(pMessage)
     }
-
-    // Connect to backend, to get the current state of the variables and display them in the form.
+    /**
+     * This will be connected to the backend, to get the current state of the clinic's information
+     * and display them in the form.
+     */
     // eslint-disable-next-line no-unused-vars
     const setInitialStates = () => {
 
     }
-    // Changes the initial state of the variables when the user types in something
+    /**
+     * Changes the initial state of the variables when the user types in something, in order to keep
+     * track of the user's input.
+     * @param e Event object which contains the user input and field id.
+     */
     const handleChanges = (e) => {
         let theTime = String;
         const {id , value} = e.target;
@@ -150,10 +159,13 @@ export function MyInformation(){
             setFridayEnd(theTime)
         }
     }
-    // this will be connected to the backend
+    /**
+     * Checks if the user's input is valid. E.g the email has a valid format and the opening hours are logical.
+     * Then publishes a message to the backend, to swap the information of the clinic with the provided input..
+     * @param event event object.
+     */
     const submit  = (event) => {
         event.preventDefault();
-        console.log(name,owner, address, email);
         if(mondayStart > mondayEnd || tuesdayStart > tuesdayEnd || wednesdayStart > wednesdayEnd || thursdayStart > thursdayEnd || fridayStart > fridayEnd) {
             alert("Start time should be before the end time in the opening hours.");
         }
@@ -199,10 +211,13 @@ export function MyInformation(){
             }
         }
     }
-    // This will be connected to the backend, and it will also validate the old password
+    /**
+     * Checks that the user has written valid passwords that conform to the rules (at least 8 characters, 1 letter, 1 number)
+     * Then publishes a message to the backend as a request to change the clinic's password to the newly provided one.
+     * @param event event object.
+     */
     const changePassword  = (event) => {
         event.preventDefault();
-        console.log(oldPassword,password, confirmPassword);
         if (password.length < 8) {
             document.getElementById("passwordError").setCustomValidity("Password contain at least 8 characters!");
         }

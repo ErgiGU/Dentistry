@@ -18,7 +18,13 @@ const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: tru
 })
 const clinicModel = mongooseClient.model('clinic', clinicSchema);
 
-async function editInfo (req, res){
+/**
+ * Find the correct clinic using the email provided in the body, then changes the clinic's information
+ * with the provided information in the body. If there is none, it keeps the old information.
+ * @param req the message received from the frontend, consisting of the body and user's input.
+ * @returns {Promise<string>} The status and the response text.
+ */
+async function editInfo (req){
     const email = req.body.email
     console.log(email)
     const clinic = await clinicModel.findOne({email})
@@ -53,7 +59,15 @@ async function editInfo (req, res){
         return JSON.stringify(message);
     }
 }
-async function changePassword (req, res) {
+
+/**
+ * Finds the correct clinic using the email provided in the body.
+ * Then validates the old password. If valid, the password is changed.
+ * If invalid, it is communicated to the frontend.
+ * @param req the message from the frontend, including the body, old password and new password.
+ * @returns {Promise<string>} A status and a response text.
+ */
+async function changePassword (req) {
     const email = req.body.email
     console.log(email)
     const clinic = await clinicModel.findOne({email})
