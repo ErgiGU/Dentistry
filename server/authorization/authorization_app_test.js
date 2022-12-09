@@ -7,7 +7,7 @@ try {
     config = require('../helpers/dummy_config')
 }
 
-mqttClient = new mqttHandler(config.admin2.name, config.admin2.password, config.admin2.handler)
+mqttClient = new mqttHandler(config.module_config.authorizationUser.test.name, config.module_config.authorizationUser.test.password, config.module_config.authorizationUser.test.handler)
 mqttClient.connect()
 mqttClient.subscribeTopic('testingTesting')
 

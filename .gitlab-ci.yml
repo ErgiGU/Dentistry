@@ -1,6 +1,7 @@
 image: node:18-alpine
 
 cache: 
+  key: $CI_COMMIT_REF_SLUG
   paths:
     - client/node_modules
     - server/helpers/node_modules
@@ -15,8 +16,11 @@ stages:          # List of stages for jobs, and their order of execution
   - authorization
 
 variables:
-  HIVE_MQ_CLOUD_PASSWORD: $HIVE_MQ_CLOUD_PASSWORD
-  HIVE_MQ_CLOUD_PASSWORD_2: $HIVE_MQ_CLOUD_PASSWORD_2
+  CLOUD_MQTT_HOST: $CLOUD_MQTT_HOST
+  CLOUD_MQTT_ADMIN_PASSWORD: $CLOUD_MQTT_ADMIN_PASSWORD
+  CLOUD_MQTT_ADMIN2_PASSWORD: $CLOUD_MQTT_ADMIN2_PASSWORD
+  MAPBOX_ACCESS_TOKEN: $MAPBOX_ACCESS_TOKEN
+  TESTING_DB_PASSWORD: $TESTING_DB_PASSWORD
 
 helper-run-job: 
   stage: .pre
@@ -34,6 +38,7 @@ client-build-job:       # This job runs in the build stage, which runs first.
   script:
     - cd client
     - npm install
+    - npm run build
 
 appointments-build-job:       # This job runs in the build stage, which runs first.
   stage: appointments
@@ -54,6 +59,7 @@ appointments-unit-test-job:   # This job runs in the test stage.
   script:
     - cd server
     - cd appointments
+    - npm install
     - npx mocha appointments_app_test.js
 
 appointments-unit-run-job:   # This job runs in the test stage.
@@ -85,6 +91,7 @@ clinic_data-unit-test-job:   # This job runs in the test stage.
   script:
     - cd server
     - cd clinic_data
+    - npm install
     - npx mocha clinic_data_app_test.js
 
 clinic_data-unit-run-job:   # This job runs in the test stage.
@@ -116,6 +123,7 @@ authorization-unit-test-job:   # This job runs in the test stage.
   script:
     - cd server
     - cd authorization
+    - npm install
     - npx mocha authorization_app_test.js
 
 authorization-unit-run-job:   # This job runs in the test stage.

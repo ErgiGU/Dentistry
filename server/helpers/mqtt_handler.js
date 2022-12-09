@@ -9,7 +9,7 @@ try {
 class MqttHandler {
     constructor(username, password, clientId) {
         this.mqttClient = null;
-        this.host = config.host;
+        this.host = config.module_config.host;
         this.clientId = clientId;
         this.username = username;
         this.password = password;
