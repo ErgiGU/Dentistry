@@ -15,8 +15,8 @@ function App() {
         //you can add more routes here, just follow the same format
         <Routes>
             <Route path = "/" element = {< MapPage />} />
-            <Route path = "/" element = {< Registration />} />
-            <Route path={"/Home"} element= {<Home/>} />
+            <Route path = "/Registration" element = {< Registration />} />
+            <Route path = "/Home" element= {<Home/>} />
         </Routes>
     );
 }

@@ -3,9 +3,10 @@ import mapboxgl from "mapbox-gl";
 import "./ClinicsMap.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mqttHandler from "../../common_components/MqttHandler";
+const config = require("helpers/config")
 
 // Access token for API
-mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN;
+mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN || config.module_config.mapbox_access_token;
 
 function asyncMethod(client) {
     return new Promise((resolve, reject) => {
@@ -66,9 +67,13 @@ export default function Maps() {
 
     // Initialize map when component mounts
     useEffect(() => {
+        console.log("entered")
+        console.log(mapboxgl.accessToken)
         waitMap(client).then(r => {
+            console.log("done wait")
             //Actual map
             const map = new mapboxgl.Map({
+                accessToken: config.module_config.mapbox_access_token,
                 container: mapContainerRef.current,
                 style: "mapbox://styles/mapbox/streets-v11",
                 center: [11.9746, 57.7089],

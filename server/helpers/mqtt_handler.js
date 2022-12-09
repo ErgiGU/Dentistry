@@ -17,6 +17,7 @@ class MqttHandler {
 
     connect() {
         // Connect mqtt with credentials
+        console.log(this.host)
         this.mqttClient = mqtt.connect(this.host,
             {
                 username: this.username,
@@ -27,7 +28,7 @@ class MqttHandler {
 
         // Mqtt error callback
         this.mqttClient.on('error', (err) => {
-            console.log('Error on client' + this.clientId);
+            console.log('Error on client ' + this.clientId);
             console.log(err);
             this.mqttClient.end();
         });
