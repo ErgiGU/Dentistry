@@ -5,8 +5,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import mqttHandler from "../../common_components/MqttHandler";
 
 // Access token for API
-mapboxgl.accessToken =
-    "pk.eyJ1IjoiYnVyYWthc2thbjIxIiwiYSI6ImNsYXFxNjY2YzAzdjMzb280YTVsMGUzYWQifQ.knfsQ7s0FiRYVpf5-yDGWQ";
+mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN;
 
 function asyncMethod(client) {
     return new Promise((resolve, reject) => {
