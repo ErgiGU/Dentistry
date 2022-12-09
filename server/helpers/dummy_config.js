@@ -23,39 +23,39 @@ const config = {
     },
 
     clinicUser: {
-        name: this.admin_runner.name,
+        name: config.admin_runner.name,
         handler: 'ci-clinic-data-handler',
-        password: this.admin_runner.password,
+        password: config.admin_runner.password,
         test: {
-            name: this.admin_tester.name,
-            password: this.admin_tester.password,
-            handler: this.admin_tester.handler
+            name: config.admin_tester.name,
+            password: config.admin_tester.password,
+            handler: config.admin_tester.handler
         },
-        mongoURI: 'mongodb+srv://' + this.database_tester.name + ':' + this.database_tester.password + '@cluster0.lj881zv.mongodb.net/ClinicTesting?retryWrites=true&w=majority'
+        mongoURI: 'mongodb+srv://' + config.database_tester.name + ':' + config.database_tester.password + '@cluster0.lj881zv.mongodb.net/ClinicTesting?retryWrites=true&w=majority'
     },
 
     appointmentUser: {
-        name: this.admin_runner.name,
+        name: config.admin_runner.name,
         handler: 'ci-appointments-handler',
-        password: this.admin_runner.password,
+        password: config.admin_runner.password,
         test: {
-            name: this.admin_tester.name,
-            password: this.admin_tester.password,
-            handler: this.admin_tester.handler
+            name: config.admin_tester.name,
+            password: config.admin_tester.password,
+            handler: config.admin_tester.handler
         },
-        mongoURI: 'mongodb+srv://' + this.database_tester.name + ':' + this.database_tester.password + '@cluster0.lj881zv.mongodb.net/ClinicTesting?retryWrites=true&w=majority'
+        mongoURI: 'mongodb+srv://' + config.database_tester.name + ':' + config.database_tester.password + '@cluster0.lj881zv.mongodb.net/ClinicTesting?retryWrites=true&w=majority'
     },
 
     authorizationUser: {
-        name: this.admin_runner.name,
+        name: config.admin_runner.name,
         handler: 'ci-authorization-handler',
-        password: this.admin_runner.password,
+        password: config.admin_runner.password,
         test: {
-            name: this.admin_tester.name,
-            password: this.admin_tester.password,
-            handler: this.admin_tester.handler
+            name: config.admin_tester.name,
+            password: config.admin_tester.password,
+            handler: config.admin_tester.handler
         },
-        mongoURI: 'mongodb+srv://' + this.database_tester.name + ':' + this.database_tester.password + '@cluster0.lj881zv.mongodb.net/ClinicTesting?retryWrites=true&w=majority'
+        mongoURI: 'mongodb+srv://' + config.database_tester.name + ':' + config.database_tester.password + '@cluster0.lj881zv.mongodb.net/ClinicTesting?retryWrites=true&w=majority'
     },
 
     // MQTT
