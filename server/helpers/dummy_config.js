@@ -22,27 +22,21 @@ const config = {
     },
 
     clinicUser: {
-        name: 'admin',
+        name: 'testing-user',
         handler: 'ci-clinic-data-handler',
-        password: process.env.CLOUD_MQTT_ADMIN_PASSWORD
-    },
-
-    userDataUser: {
-        name: 'admin',
-        handler: 'ci-user-data-handler',
-        password: process.env.CLOUD_MQTT_ADMIN_PASSWORD
+        password: process.env.TESTING_DB_PASSWORD
     },
 
     appointmentUser: {
-        name: 'admin',
+        name: 'testing-user',
         handler: 'ci-appointments-handler',
-        password: process.env.CLOUD_MQTT_ADMIN_PASSWORD
+        password: process.env.TESTING_DB_PASSWORD
     },
 
     authorizationUser: {
-        name: 'admin',
+        name: 'testing-user',
         handler: 'ci-authorization-handler',
-        password: process.env.CLOUD_MQTT_ADMIN_PASSWORD
+        password: process.env.TESTING_DB_PASSWORD
     },
 
     // MQTT
