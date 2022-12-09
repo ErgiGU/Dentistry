@@ -17,6 +17,11 @@ const config = {
         password: process.env.HIVE_MQ_CLOUD_PASSWORD_2
     },
 
+    testingUser: {
+        name: 'testing-user',
+        password: process.env.TESTING_DB_PASSWORD
+    },
+
     clinicUser: {
         name: 'admin',
         handler: 'ci-clinic-data-handler',
