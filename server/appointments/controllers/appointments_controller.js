@@ -8,7 +8,7 @@ try {
 }
 
 // Variables
-const mongoURI = config.appointmentUser.mongoURI
+const mongoURI = config.module_config.appointmentUser.mongoURI
 //const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
 
 // Connect to MongoDB

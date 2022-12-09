@@ -7,7 +7,7 @@ try {
 }
 
 // MQTT Client
-const mqttClient = new mqttHandler(config.authorizationUser.name, config.authorizationUser.password, config.authorizationUser.handler)
+const mqttClient = new mqttHandler(config.module_config.authorizationUser.name, config.module_config.authorizationUser.password, config.module_config.authorizationUser.handler)
 mqttClient.connect()
 
 // MQTT subscriptions
@@ -18,7 +18,7 @@ mqttClient.subscribeTopic('testingTestingRequest')
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
     let intermediary = JSON.parse(message)
-    console.log(config.authorizationUser.handler + " service received MQTT message")
+    console.log(config.module_config.authorizationUser.handler + " service received MQTT message")
     console.log(intermediary);
 
     switch (topic) {

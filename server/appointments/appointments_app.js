@@ -8,7 +8,7 @@ try {
 }
 
 // MQTT Client
-const mqttClient = new mqttHandler(config.appointmentUser.name, config.appointmentUser.password, config.appointmentUser.handler)
+const mqttClient = new mqttHandler(config.module_config.appointmentUser.name, config.module_config.appointmentUser.password, config.module_config.appointmentUser.handler)
 mqttClient.connect()
 
 // Variables
@@ -22,7 +22,7 @@ mqttClient.subscribeTopic('testingTestingRequest')
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
     let intermediary = JSON.parse(message)
-    console.log(config.appointmentUser.handler + " service received MQTT message")
+    console.log(config.module_config.appointmentUser.handler + " service received MQTT message")
     console.log(intermediary)
 
     switch (topic) {
