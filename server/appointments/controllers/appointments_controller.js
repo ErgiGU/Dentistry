@@ -8,7 +8,7 @@ try {
 }
 
 // Variables
-const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.appointmentUser.name + ':' + config.appointmentUser.password + '@cluster0.lj881zv.mongodb.net/ClinicTesting?retryWrites=true&w=majority';
+const mongoURI = config.appointmentUser.mongoURI
 //const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
 
 // Connect to MongoDB
