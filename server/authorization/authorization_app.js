@@ -22,11 +22,15 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             mqttClient.sendMessage('authTest', 'Authorization confirmed')
             break;
         case 'registration':
-           /* registerClinic.registerClinic(JSON.parse(message)).then(
-
-            );*/
-            console.log("got the message");
-            mqttClient.sendMessage('registrationResponse', "Here's the response");
+            registerClinic.register(intermediary).then(res=>{
+                console.log(res);
+                if(res==="success!"){
+                    //sends the ok to the client for the registration
+                    sendMessage(intermediary, "/register","registration successful");
+                }else{
+                    sendMessage(intermediary, "/register","registration failed");
+                }
+            });
             break;
         case 'checkIfEmailExists':
             const email = intermediary.body.email;
@@ -34,10 +38,10 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             console.log(res);
 
             if(res === "email already exists"){
-                sendMessage(intermediary,"email already exists");
+                sendMessage(intermediary,"/checkEmail","email already exists");
             }
             });
-
+            break;
     }
 
 });
@@ -49,8 +53,8 @@ mqttClient.mqttClient.on('message', function (topic, message) {
  */
 
 
-function sendMessage(intermediary,message) {
-    mqttClient.sendMessage( intermediary.id + '/checkEmail', message)
+function sendMessage(intermediary,topic,message) {
+    mqttClient.sendMessage( intermediary.id + topic, message)
 }
 
 module.exports = mqttClient;

@@ -15,7 +15,7 @@ export function Login(){
                             </div>
 
                             <div className="form-floating mb-4">
-                                <input type="email" className="form-control form-control-lg" id="email" placeholder="deeznuts@mail.com"
+                                <input type="email" className="form-control form-control-lg" id="email" placeholder="aa@mail.com"
                                        required/>
                                     <label>Email</label>
                             </div>

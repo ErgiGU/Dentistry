@@ -23,54 +23,37 @@ const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: tru
 //Model creation
 const clinicModel = mongooseClient.model('clinic', clinicSchema);
 
-// Register new clinic
-const registerClinic = async (req, res) => {
-    const {name, email, password} = req.body
 
-    //checking for missing attributes
-    if(!name || !email || !password){
-        res.status(400)
-        throw new Error("information missing");
-    }
-
-    const clinic = await clinicModel.find({email})
-
-    // finding pre-existing user
-    if(clinic){
-        res.status(400)
-        throw new Error("clinic already registered")
-    }
-
-    //hash password WHAT
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    //create clinic
-    const newClinic = await clinicModel.create({
-        name: name,
-        email: email,
-        password: hashedPassword
-    })
-
-    if(newClinic){
-        res.status(201).json({
-            name: newClinic.name,
-            email: newClinic.email,
-            message: "clinic registered"
-        }
-    )
-    } else {
-        res.status(400)
-        throw new Error("Invalid data")
-    }
-}
-
+//Checks to see if the email exists in the DB
  async function emailExists(email) {
      const clinic = await clinicModel.findOne({email:email});
         if(clinic){
             return "email already exists"
         }
 
+ }
+ //Register new clinic
+ async function register(req){
+     const hashedPassword = await bcrypt.hash(req.body.password, 10);
+     console.log(req.body.clinicName);
+     console.log(req.body.address);
+     console.log(req.body.email);
+     console.log(hashedPassword);
+     const clinicAccount = new clinicModel(
+        {
+            name:req.body.clinicName ,
+            address: req.body.address,
+            email: req.body.email,
+            password: hashedPassword,
+            city: "Göteborg"
+        });
+     try {
+         await clinicAccount.save();
+         return "success!"
+     } catch (error) {
+         console.error(error);
+         return error;
+     }
  }
 
 
@@ -94,13 +77,6 @@ const loginClinic = async (req, res) => {
 }
     res.json({message:'authenticate clinic'})
 }
-module.exports = {emailExists};
+module.exports = {emailExists,register};
 
-// Model creation
-/*
-const passwordModel = mongooseClient.model('password', passwordSchema)
-module.exports = {
-   registerClinic,
-   loginClinic
-}*/
 
