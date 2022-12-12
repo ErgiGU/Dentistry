@@ -14,13 +14,15 @@ mqttClient.connect()
 
 // MQTT subscriptions
 mqttClient.subscribeTopic('auth');
+mqttClient.subscribeTopic('test');
 mqttClient.subscribeTopic('registration');
 mqttClient.subscribeTopic("checkIfEmailExists");
+mqttClient.subscribeTopic('testingTestingRequest');
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
     let intermediary = JSON.parse(message);
-    console.log(config.authorizationUser.handler + " service received MQTT message")
+    console.log(config.module_config.authorizationUser.handler + " service received MQTT message")
     console.log(intermediary);
 
     switch (topic) {
@@ -41,12 +43,18 @@ mqttClient.mqttClient.on('message', function (topic, message) {
         case 'checkIfEmailExists':
             const email = intermediary.body.email;
             registerClinic.emailExists(email).then(res=>{
-            console.log(res);
+                console.log(res);
 
-            if(res === "email already exists"){
-                sendMessage(intermediary,"/checkEmail","email already exists");
-            }
+                if (res === "email already exists") {
+                    sendMessage(intermediary,"/checkEmail","email already exists");
+                }
             });
+            break;
+        case 'testingTestingRequest':
+            mqttClient.sendMessage('testingTesting', 'ToothyClinic')
+            break;
+        case 'test':
+            process.exit()
             break;
     }
 

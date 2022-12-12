@@ -2,9 +2,7 @@
 //const router = express.Router();
 const bcrypt = require("bcrypt");
 const clinicSchema = require('../../helpers/schemas/clinic');
-const config = require('../../helpers/config');
 const mongoose = require("mongoose");
-const passwordSchema = require("../../helpers/schemas/password_model");
 let config
 try {
     config = require('../../helpers/config');
