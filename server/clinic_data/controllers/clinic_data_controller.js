@@ -1,7 +1,8 @@
-
 const mongoose = require('mongoose');
 const config = require('../../helpers/config');
 const clinicSchema = require('../../helpers/schemas/clinic');
+const bcrypt = require('bcrypt');
+const {compare} = require("bcrypt");
 
 // Variables
 const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.clinicUser.name + ':' + config.clinicUser.password + '@cluster0.lj881zv.mongodb.net/ClinicDB?retryWrites=true&w=majority';
@@ -73,8 +74,9 @@ async function changePassword (req) {
     const clinic = await clinicModel.findOne({email})
     console.log(clinic)
     if (clinic) {
-        if(clinic.password === req.body.oldPassword) {
-            clinic.password = req.body.password || clinic.password;
+        if (await bcrypt.compare(req.body.oldPassword, clinic.password)) {
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+            clinic.password = hashedPassword;
             clinic.save();
             console.log("password changed");
             console.log(clinic)

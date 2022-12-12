@@ -56,29 +56,32 @@ export function MyInformation(){
     }, [client])
 
     /**
-     * Visually displays the response of the backend to the user.
+     * A custom alert, which receives a message to be alerted.
+     * @param message message to alert
+     */
+    const alert = (message) => {
+        const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+        alertPlaceholder.style.display = "block"
+        alertPlaceholder.innerHTML = message.text
+        if(message.status === 200) {
+            alertPlaceholder.style.backgroundColor = "#90ee90"
+            alertPlaceholder.style.borderColor = "#023020";
+            alertPlaceholder.style.color = "#023020";
+        }
+        else {
+            alertPlaceholder.style.backgroundColor = "#FF9494";
+            alertPlaceholder.style.borderColor = "#8b0000";
+            alertPlaceholder.style.color = "#8b0000";
+        }
+    }
+    /**
+     * Receives a message from the backend, parses it and sends it further to be alerted.
      * @param message response from backend
      */
      function receivedMessage(message) {
         console.log(message)
          const pMessage = JSON.parse(message)
          console.log(pMessage.status)
-         const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
-
-         const alert = (message) => {
-             alertPlaceholder.style.display = "block"
-             alertPlaceholder.innerHTML = message.text
-             if(message.status === 200) {
-                 alertPlaceholder.style.backgroundColor = "#90ee90"
-                 alertPlaceholder.style.borderColor = "#023020";
-                 alertPlaceholder.style.color = "#023020";
-             }
-             else {
-                 alertPlaceholder.style.backgroundColor = "#FF9494";
-                 alertPlaceholder.style.borderColor = "#8b0000";
-                 alertPlaceholder.style.color = "#8b0000";
-             }
-         }
         alert(pMessage)
     }
     /**
@@ -165,7 +168,6 @@ export function MyInformation(){
      * @param event event object.
      */
     const submit  = (event) => {
-        event.preventDefault();
         if(mondayStart > mondayEnd || tuesdayStart > tuesdayEnd || wednesdayStart > wednesdayEnd || thursdayStart > thursdayEnd || fridayStart > fridayEnd) {
             alert("Start time should be before the end time in the opening hours.");
         }
@@ -174,6 +176,13 @@ export function MyInformation(){
             email.setCustomValidity("Invalid email format")
         }
         else {
+            event.preventDefault();
+            if (!(name || owner || address || email || mondayStart || tuesdayStart || wednesdayStart || thursdayStart || fridayStart)) {
+                const message = {
+                    text: "Can not change empty fields!"
+                }
+                alert(message)
+            } else {
             if (client !== null) {
                 client.publish('editInfo', JSON.stringify(
                     {
@@ -192,7 +201,7 @@ export function MyInformation(){
                                     start: tuesdayStart,
                                     end: tuesdayEnd
                                 },
-                                wednesday:{
+                                wednesday: {
                                     start: wednesdayStart,
                                     end: wednesdayEnd
                                 },
@@ -210,6 +219,7 @@ export function MyInformation(){
                 ))
             }
         }
+        }
     }
     /**
      * Checks that the user has written valid passwords that conform to the rules (at least 8 characters, 1 letter, 1 number)
@@ -217,7 +227,6 @@ export function MyInformation(){
      * @param event event object.
      */
     const changePassword  = (event) => {
-        event.preventDefault();
         if (password.length < 8) {
             document.getElementById("passwordError").setCustomValidity("Password contain at least 8 characters!");
         }
@@ -228,12 +237,13 @@ export function MyInformation(){
             document.getElementById("confirmPassword").setCustomValidity("Passwords do not match!");
         }
         else {
+            event.preventDefault();
             if (client !== null) {
                 client.publish('changePassword', JSON.stringify(
                     {
                         id:client.options.clientId,
                         body: {
-                            email: "modify@hotmail.se",
+                            email: "ergi@gmail.com",
                             password: password,
                             oldPassword: oldPassword
                         }
@@ -250,38 +260,55 @@ export function MyInformation(){
             <div className="leftBox">
            <form className="clinicInfo">
                <h2> My Information </h2>
-               <label> Clinic's name </label>
+               <div className="form-floating">
                    <input
                        type="text"
-                       name="email"
+                       className="form-control"
+                       placeholder="Name"
+                       name="name"
                        id={"name"}
                        value={name}
+                       style={{color: "black"}}
                        onChange = {(e) => handleChanges(e)}
                    />
-               <label> Clinic's owner   </label>
+                   <label for="name"> Clinic's name </label>
+               </div>
+               <div className="form-floating">
                    <input
                        type="text"
+                       className="form-control"
+                       placeholder="Owner"
                        name="owner"
                        id={"owner"}
                        value={owner}
                        onChange = {(e) => handleChanges(e)}
                    />
-               <label> Clinic's Address   </label>
+                   <label for="owner"> Clinic's owner   </label>
+               </div>
+               <div className="form-floating">
                    <input
                        type="text"
+                       className="form-control"
+                       placeholder="Address"
                        name="address"
                        id={"address"}
                        value={address}
                        onChange = {(e) => handleChanges(e)}
                    />
-               <label> Email address   </label>
+                   <label for="address"> Clinic's Address   </label>
+               </div>
+               <div className="form-floating">
                    <input
                        type="text"
+                       className="form-control"
+                       placeholder="name@example.com"
                        name="email"
                        id={"email"}
                        value={email}
                        onChange = {(e) => handleChanges(e)}
                    />
+                   <label for="email"> Email address   </label>
+               </div>
                <button className={"button"} onClick={(e)=>submit(e)}>
                    Change info
                </button>
@@ -385,30 +412,42 @@ export function MyInformation(){
             </div>
             <form className="passwordChanging" id={"form2"}>
                 <h2> Change password </h2>
-                <label> Old password   </label>
+                <div className="form-floating">
                 <input required
                     type="password"
+                       className="form-control"
+                       placeholder="Password"
                     name="password"
                     id={"oldPassword"}
                     value={oldPassword}
                     onChange = {(e) => handleChanges(e)}
                 />
-                <label> New password   </label>
+                    <label for="oldPassword"> Old password   </label>
+                </div>
+                <div className="form-floating">
                 <input required
                     type="password"
+                       className="form-control"
+                       placeholder="Password"
                     name="password"
                     id={"password"}
                     value={password}
                     onChange = {(e) => handleChanges(e)}
                 />
-                <label> Confirm password   </label>
+                    <label for="password"> New password   </label>
+                </div>
+                <div className="form-floating">
                 <input required
                     type="password"
+                       className="form-control"
+                       placeholder="Password"
                     name="confirmPassword"
                     id={"confirmPassword"}
                     value={confirmPassword}
                     onChange = {(e) => handleChanges(e)}
                 />
+                    <label for="confirmPassword"> Confirm password   </label>
+                </div>
                 <label id={"passwordError"}>  </label> <br/>
                 <button className={"button"} onClick={(e)=>changePassword(e)}>
                     Change password

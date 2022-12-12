@@ -7,13 +7,17 @@ body {
 .passwordChanging, .leftBox {
     font-family: Inter;
     font-size: 18px;
-    color: white;
     padding: 30px;
+    color: white;
     height:490px;
     margin-top: 3%;
     background-color: steelblue;
     box-shadow: 10px 0px 15px #888888;
     border-radius: 5px;
+}
+.form-floating {
+    color: black;
+    margin-top: 20px;
 }
 .leftBox {
     padding-right: 0px;
@@ -21,9 +25,10 @@ body {
 .clinicInfo, .openingHours {
     width: 48%;
     float: left;
+    padding: 5px;
 }
 .clinicInfo {
-    padding-right: 5px;
+    padding-right: 25px;
     margin-right: 23px;
     border-right: 0.5px solid #444444;
 }
@@ -46,6 +51,9 @@ input {
     width: 90%;
     display: block;
 }
+.passwordChanging > .form-floating{
+    margin-top: 30px;
+}
 .day > input {
     width: 30%;
     margin-left: 10px;
@@ -59,16 +67,15 @@ input {
     font-size: 16px;
     font-weight: normal;
 }
-#form2 > input  {
-    margin-bottom: 25px;
-}
 #otherButton{
     display: none;
 }
 .button {
+    padding: 10px;
     font-size: 18px;
     margin-top: 20px;
     background-color: whitesmoke;
+    color: black;
     border-radius: 5px;
 }
 .button:hover{
@@ -76,9 +83,6 @@ input {
 }
 #otherButton:hover{
     background-color: lightgray;
-}
-#passwordError {
-    color: red;
 }
 #liveAlertPlaceholder {
     font-family: Inter;
@@ -129,11 +133,13 @@ input {
     .clinicInfo {
         border-right: none;
     }
-    .button{
+    .clinicInfo > .button{
         display: none;
     }
     #otherButton{
         display: block;
+        float: inherit;
+        margin-right: 20px;
         font-size: 18px;
         margin-top: 20px;
         background-color: whitesmoke;
