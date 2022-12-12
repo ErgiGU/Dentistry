@@ -1,8 +1,60 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import "./Login.css";
-import {Link} from "react-router-dom";
+import mqttHandler from "../common_components/MqttHandler";
+import {Link, useNavigate} from "react-router-dom";
 
 export function Login(){
+    const navigate = useNavigate();
+    const [client, setClient] = useState(null);
+
+    // Primary client generating effect
+    useEffect(() => {
+        if (client === null) {
+            setClient(mqttHandler.getClient(client))
+        }
+    }, [client])
+
+ /*   setTimeout(() => {
+        navigate("/");
+    }, 3000);
+*/
+    // Secondary effect containing all message logic and closure state
+    useEffect(() => {
+        if (client !== null) {
+            client.subscribe(client.options.clientId + '/#');
+            client.on('message', function (topic, message) {
+                const intermediary = message.toString();
+                switch (topic) {
+                    case client.options.clientId + "/login":
+
+                        break;
+                    default:
+                        break;
+                }
+            })
+        }
+
+        return () => {
+            if (client !== null) {
+                console.log("ending process");
+                client.end()
+            }
+        }
+    }, [client])
+
+
+
+
+    function sendMessage(topic,json) {
+        if (client !== null) {
+            client.publish(topic, JSON.stringify(json));
+        }
+    }
+
+    function login(){
+
+    }
+
     return(
         <>
             <div className='loginBody'>

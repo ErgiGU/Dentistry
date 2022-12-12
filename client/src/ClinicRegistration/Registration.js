@@ -6,7 +6,6 @@ import './Registration.css';
 export function Registration(){
     const navigate = useNavigate();
     const [client, setClient] = useState(null);
-    const [emailField,setEmailField] = useState(true);
     const [formData, setFormData] = useState({
         clinicName: '',
         address: '',
@@ -33,7 +32,6 @@ export function Registration(){
                     case client.options.clientId + "/checkEmail":
                         if (intermediary==="email already exists"){
                             console.log(intermediary)
-                            setEmailField(false)
                             email.setCustomValidity("Email already exists");
                             email.reportValidity()
                         }else{
