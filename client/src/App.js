@@ -9,6 +9,7 @@ import MapPage from "./clinics/MapPage"
 import React from 'react';
 import Login from "./ClinicLogin/Login";
 import Home from "./home/Home";
+import {Calendar} from "./AppointmentsCalendar/Calendar";
 
 
 function App() {
