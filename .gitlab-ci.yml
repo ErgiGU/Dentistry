@@ -1,5 +1,9 @@
 image: node:18-alpine
 
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
 cache: 
   key: $CI_COMMIT_REF_SLUG
   paths:
