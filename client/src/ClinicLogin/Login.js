@@ -3,7 +3,7 @@ import "./Login.css";
 import mqttHandler from "../common_components/MqttHandler";
 import {Link, useNavigate} from "react-router-dom";
 
-export function Login(){
+export default function Login() {
     const navigate = useNavigate();
     const [client, setClient] = useState(null);
 
@@ -41,8 +41,6 @@ export function Login(){
             }
         }
     }, [client])
-
-
 
 
     function sendMessage(topic,json) {

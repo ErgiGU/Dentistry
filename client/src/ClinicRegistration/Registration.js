@@ -3,7 +3,7 @@ import mqttHandler from "../common_components/MqttHandler";
 import {Link, useNavigate} from "react-router-dom";
 import './Registration.css';
 
-export function Registration(){
+export default function Registration() {
     const navigate = useNavigate();
     const [client, setClient] = useState(null);
     const [formData, setFormData] = useState({
