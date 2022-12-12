@@ -32,7 +32,7 @@ function asyncMethod() {
 describe('AppointmentsTests', function () {
     describe('Multiplication', function () {
         it('This is for testing purposes. Fifty times two should equal one hundred', function () {
-            var result = 50 * 2
+            let result = 50 * 2;
             assert.equal(result, 100)
         })
     })

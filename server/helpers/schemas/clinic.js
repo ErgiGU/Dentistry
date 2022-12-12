@@ -2,8 +2,14 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const clinicSchema = new Schema({
-    name: String,
-    password: String,
+    name: {
+        type:String,
+        required: true
+    },
+    password: {
+        type:String,
+        required: true
+    },
     email: {
         type: String,
         unique: true
@@ -15,8 +21,14 @@ const clinicSchema = new Schema({
         longitude: Number,
         latitude: Number,
     },
-    address: String,
-    city: String,
+    address: {
+        type:String,
+        required: true
+    },
+    city: {
+        type:String,
+        required: true
+    },
     openingHours: {
         monday: {
             start: { type: String, default: "8:00" },
