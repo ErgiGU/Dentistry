@@ -1,9 +1,15 @@
 const mqttHandler = require('../helpers/mqtt_handler');
-const config = require('../helpers/config');
 const registerClinic = require('./controllers/authorization_controller');
 
+let config
+try {
+    config = require('../helpers/config');
+} catch (e) {
+    config = require('../helpers/dummy_config')
+}
+
 // MQTT Client
-const mqttClient = new mqttHandler(config.authorizationUser.handler)
+const mqttClient = new mqttHandler(config.module_config.authorizationUser.name, config.module_config.authorizationUser.password, config.module_config.authorizationUser.handler)
 mqttClient.connect()
 
 // MQTT subscriptions

@@ -4,9 +4,16 @@ const bcrypt = require("bcrypt");
 const clinicSchema = require('../../helpers/schemas/clinic');
 const config = require('../../helpers/config');
 const mongoose = require("mongoose");
+const passwordSchema = require("../../helpers/schemas/password_model");
+let config
+try {
+    config = require('../../helpers/config');
+} catch (e) {
+    config = require('../../helpers/dummy_config')
+}
 
 // Variables
-const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://' + config.authorizationUser.name + ':' + config.authorizationUser.password + '@cluster0.lj881zv.mongodb.net/ClinicDB?retryWrites=true&w=majority';
+const mongoURI = config.module_config.authorizationUser.mongoURI;
 //const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
 
 
