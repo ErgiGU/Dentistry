@@ -13,7 +13,13 @@ export default function Registration() {
         password: '',
         confirmPassword: '',
     });
-
+    const clinicName = document.getElementById('clinicName');
+    const address = document.getElementById('address');
+    const email = document.getElementById('email');
+    const pass = document.getElementById('password');
+    const confPass = document.getElementById('confirmPassword');
+    
+    const alertPlaceholder = document.getElementById("displayAlert");
 
     // Primary client generating effect
     useEffect(() => {
@@ -47,10 +53,22 @@ export default function Registration() {
                         }else{
                             alert("Registration failed","danger");
                         }
+                        break;
                     default:
                         break;
                 }
             })
+        }
+
+        const alert = (message, type) => {
+            const wrapper = document.createElement("div")
+            wrapper.innerHTML = [
+                `<div class="alert alert-${type} alert-dismissible" style="line-height: 10px">`,
+                `   <div>${message}</div>`,
+                '</div>'
+            ].join('')
+
+            alertPlaceholder.append(wrapper)
         }
 
         return () => {
@@ -59,8 +77,7 @@ export default function Registration() {
                 client.end()
             }
         }
-    }, [client])
-
+    }, [alertPlaceholder, client, email, navigate])
 
 
     function sendMessage(topic,json) {
@@ -70,18 +87,6 @@ export default function Registration() {
     }
 
 
-    const alertPlaceholder = document.getElementById("displayAlert");
-
-    const alert = (message, type) => {
-        const wrapper = document.createElement("div")
-        wrapper.innerHTML = [
-            `<div class="alert alert-${type} alert-dismissible" style="line-height: 10px">`,
-            `   <div>${message}</div>`,
-            '</div>'
-        ].join('')
-
-        alertPlaceholder.append(wrapper)
-    }
     //This is for the checkbox
     const [checked, setChecked] = useState(false);
     const handleChange = () => {
@@ -95,13 +100,6 @@ export default function Registration() {
     };
 
 
-
-    const clinicName = document.getElementById('clinicName');
-    const address = document.getElementById('address');
-    const email = document.getElementById('email');
-    const pass = document.getElementById('password');
-    const confPass = document.getElementById('confirmPassword');
-
     function registerClinic1(event){
         //event.preventDefault();
         clinicName.setCustomValidity("");
@@ -111,22 +109,20 @@ export default function Registration() {
         confPass.setCustomValidity("");
 
         //checks if email exists by sending it to the backend
-        const json =
-            {
-                "id": client.options.clientId,
-                "body": {
-                    "email": formData.email
+        const json = {
+                    "id": client.options.clientId,
+                    "body": {
+                        "email": formData.email
+                    }
                 }
-            }
         sendMessage('checkIfEmailExists',json);
 
         console.log(email.checkValidity())
         checkIfPassMatches();
         if(clinicName.checkValidity() && address.checkValidity() && email.checkValidity() && pass.checkValidity() &&
-            confPass.checkValidity()){
+            confPass.checkValidity()) {
             event.preventDefault();
-            let clinicAccount =
-                {
+            let clinicAccount = {
                     "id": client.options.clientId,
                     "body": {
                         "clinicName": formData.clinicName,
@@ -135,23 +131,15 @@ export default function Registration() {
                         "password": formData.password
                     }
                 }
-                sendMessage('registration',clinicAccount);
-            }
-
-
-        // validate the form
-      /*  if (validateForm()) {
-            // submit the form
-        }*/
+            sendMessage('registration',clinicAccount);
+        }
     }
-
 
     function checkIfPassMatches() {
         if (formData.password !== formData.confirmPassword) {
             confPass.setCustomValidity("Passwords don't match");
         }
     }
-
 
     const handleInputChange = (event) => {
         event.persist();
@@ -161,7 +149,6 @@ export default function Registration() {
             [event.target.name]: event.target.value
         }));
     };
-
 
     return (
        <>

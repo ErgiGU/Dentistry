@@ -4,6 +4,7 @@ import mqttHandler from "../common_components/MqttHandler";
 import {Link, useNavigate} from "react-router-dom";
 
 export default function Login() {
+    // eslint-disable-next-line no-unused-vars
     const navigate = useNavigate();
     const [client, setClient] = useState(null);
 
@@ -23,6 +24,7 @@ export default function Login() {
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#');
             client.on('message', function (topic, message) {
+                // eslint-disable-next-line no-unused-vars
                 const intermediary = message.toString();
                 switch (topic) {
                     case client.options.clientId + "/login":
@@ -43,12 +45,14 @@ export default function Login() {
     }, [client])
 
 
+    // eslint-disable-next-line no-unused-vars
     function sendMessage(topic,json) {
         if (client !== null) {
             client.publish(topic, JSON.stringify(json));
         }
     }
 
+    // eslint-disable-next-line no-unused-vars
     function login(){
 
     }
