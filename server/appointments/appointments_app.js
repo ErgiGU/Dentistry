@@ -1,4 +1,5 @@
 const mqttHandler = require('../helpers/mqtt_handler');
+const appointments_controller = require("./controllers/appointments_controller")
 const appointments_mailer = require("./controllers/appointments_mailer");
 let config
 try {
@@ -18,6 +19,7 @@ const mailer = new appointments_mailer
 mqttClient.subscribeTopic('test')
 mqttClient.subscribeTopic('appointment')
 mqttClient.subscribeTopic('testingTestingRequest')
+mqttClient.subscribeTopic('timeslots')
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
@@ -35,6 +37,9 @@ mqttClient.mqttClient.on('message', function (topic, message) {
         case 'testingTestingRequest':
             mqttClient.sendMessage('testingTesting', 'ToothyClinic')
             break;
+        case 'timeslots':
+            const data = waitTimeslots("63966898665335eb08ee8c18")
+            break;
         case 'test':
             process.exit()
             break;
@@ -44,6 +49,10 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             break;
     }
 });
+
+async function waitTimeslots(clinicID) {
+    return await appointments_controller.bookedMailingData(clinicID)
+}
 
 // Function declaration
 /**
@@ -66,7 +75,7 @@ function testAppointment(message) {
 
 function bookAppointment(input) {
     // mongodb manipulation
-    mailer.sendAppointmentMail(input.recipient, input.timeslot, input.clinic)
+    mailer.sendAppointmentNotifPatient(input.recipient, input.timeslot, input.clinic)
     mqttClient.sendMessage('bookAppointment', 'ADD MESSAGE HERE') //TODO: Add a message here.
     //mqtt message response
 }

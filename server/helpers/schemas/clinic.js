@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const clinicSchema = new Schema({
+    dentists: [{ type: Schema.Types.ObjectId, ref: 'Dentist' }],
+    timeslots: [{ type: Schema.Types.ObjectId, ref: 'Timeslot' }],
     name: String,
     password: String,
     email: {
@@ -9,8 +11,6 @@ const clinicSchema = new Schema({
         unique: true
     },
     owner: String,
-    dentists: [{ type: Schema.Types.ObjectId, ref: 'Dentist' }],
-    timeslots: [{ type: Schema.Types.ObjectId, ref: 'Timeslot' }],
     coordinates: {
         longitude: Number,
         latitude: Number,
@@ -42,3 +42,4 @@ const clinicSchema = new Schema({
 })
 
 module.exports = clinicSchema
+
