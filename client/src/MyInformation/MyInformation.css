@@ -154,10 +154,12 @@ input {
     .clinicInfo, .openingHours {
         margin: 20px;
         width: 100%;
+        display: block;
     }
 
     .clinicInfo {
         border-right: none;
+        padding-right: 60px;
     }
 
     .clinicInfo > .button {
@@ -166,7 +168,6 @@ input {
 
     #otherButton {
         display: block;
-        float: inherit;
         margin-right: 20px;
         font-size: 18px;
         margin-top: 20px;

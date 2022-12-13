@@ -16,7 +16,7 @@ function Navbar() {
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,no-script-url */}
         <a href="javascript:void(0)">Contact</a>
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,no-script-url */}
-        <a href="javascript:void(0)">Contact</a>
+        <a href="client/src/MyInformation/MyInformation.js">Profile</a>
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,no-script-url */}
         <a href="javascript:void(0)">Contact</a>
     </div>
