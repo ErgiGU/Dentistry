@@ -24,7 +24,7 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             break;
         case 'editInfo':
             clinicData.editInfo(intermediary).then(res => {
-                mqttClient.sendMessage(intermediary.id +'/editInfoResponse', res)
+                mqttClient.sendMessage(intermediary.id + '/editInfoResponse', res)
             })
             break;
         case 'changePassword':
