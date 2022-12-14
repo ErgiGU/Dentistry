@@ -36,14 +36,8 @@ class appointments_mailer {
                     }
                 ]
             }
-            transporter.sendMail(option, async function(err, info) {
-                if (err) {
-                    console.log('Email could not be sent.')
-                    console.log(err)
-                    return "Failed";
-                }
-                console.log("Sent: " + info.response)
-            })
+            await transporter.sendMail(option)
+            return "Success"
         }catch (e) {
             console.log("Failed to send email to patient")
             console.log(e)
@@ -72,14 +66,8 @@ class appointments_mailer {
                     }
                 ]
             }
-            transporter.sendMail(option, async function(err, info) {
-                if (err) {
-                    console.log('Email could not be sent.')
-                    console.log(err)
-                    return "Failed";
-                }
-                console.log("Sent: " + info.response)
-            })
+            await transporter.sendMail(option)
+            return "Success"
         } catch (e) {
             console.log("Failed to send email to clinic")
             console.log(e)
@@ -115,6 +103,7 @@ class appointments_mailer {
                 }
                 console.log("Sent: " + info.response)
             })
+            return "Success"
         } catch (e) {
             console.log("Failed to send cancelation mail to patient")
             console.log(e)
