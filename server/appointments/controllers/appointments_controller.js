@@ -101,7 +101,7 @@ async function makeAppointment(clinicID, dentistID, patientInfo, timeslotTime) {
     return timeslot
 }
 
-//save timeslots
+// Generates dummy data into the given clinic ID.
 async function generateData(clinicID) {
 
     let clinic = await clinicModel.findById(clinicID).populate('timeslots')
@@ -112,7 +112,7 @@ async function generateData(clinicID) {
     console.log('found clinic timeslots:')
     console.log(clinic.timeslots)
 
-    /*const timeslot = new timeslotModel({
+    const timeslot = new timeslotModel({
         startTime: "Someone Senja",
         clinic: clinicID // <-- The ID of the clinic goes here
     });
@@ -134,37 +134,24 @@ async function generateData(clinicID) {
     timeslot.dentist = dentist
     timeslot.patient = patient
 
-    timeslot.save()*/
+    timeslot.save()
 
-    console.log(clinic.timeslots + " :::: " + clinic.dentists + ":   These are the clinic stuff 1")
+    thingTimeslots = clinic.timeslots
+    clinic.timeslots = []
+    thingTimeslots.push(timeslot._id)
 
-    if (clinic.timeslots === []) {
-        console.log('created timeslots new array')
-        clinic.timeslots = []
-    } else {
-        console.log('exists: ' + clinic.timeslots)
-        thingTimeslots = clinic.timeslots
-        thingTimeslots.push()
-    }
+    console.log('exists: ' + clinic.dentists)
+    thingDentists = clinic.dentists
+    clinic.dentists = []
+    thingDentists.push(dentist._id)
 
-    if (clinic.dentists === []) {
-        console.log('created dentists new array')
-        clinic.dentists = []
-    } else {
-        console.log('exists: ' + clinic.dentists)
-        thingDentists = clinic.dentists
-        console.log()
-        thingDentists.push()
-    }
 
-    clinic.city = 'mathiashow'
-    console.log(clinic.timeslots + " :::: " + clinic.dentists + ":   These are the clinic stuff 2")
+    clinic.city = 'was'
     console.log(thingTimeslots + " ::::: " + thingDentists)
     clinic.timeslots = thingTimeslots
     clinic.dentists = thingDentists
     clinic.save()
 }
-
 
 const appointmentsController = {
     bookedMailingData,
