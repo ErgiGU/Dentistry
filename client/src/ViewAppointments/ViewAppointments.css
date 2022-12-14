@@ -1,0 +1,43 @@
+#appointments{
+    background-color: whitesmoke;
+    width: 20px;
+}
+.card{
+    background-color: steelblue;
+    margin-top: 20%;
+}
+.card1{
+    height: 130px;
+    margin-top: 7%;
+    margin-left: 2%;
+    background-color: white;
+}
+#background{
+    background-color: whitesmoke;
+}
+.btn{
+    color: white;
+    font-family: "Trebuchet MS", sans-serif;
+    margin-left: 35%;
+    margin-bottom: 90%;
+    background-color: #295D8A;
+
+}
+.clinic{
+    width: 150px;
+    height:150px;
+    margin-top: 40%;
+    margin-left: 25%;
+}
+
+.col{
+    text-align: center;
+    font-family: "Trebuchet MS", sans-serif;
+    margin-top: 1%;
+}
+.text{
+    text-align: center;
+    float: bottom;
+    margin-top: 10%;
+    font-family: "Trebuchet MS", sans-serif;
+}
