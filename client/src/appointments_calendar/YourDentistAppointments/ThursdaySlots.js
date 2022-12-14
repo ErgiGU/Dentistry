@@ -1,8 +1,8 @@
 import Badge from 'react-bootstrap/Badge';
 import ListGroup from 'react-bootstrap/ListGroup';
 
-export function ThursdaySlots(){
-    return(
+export function ThursdaySlots() {
+    return (
         <ListGroup variant="flush">
             <ListGroup.Item
                 as="li"
