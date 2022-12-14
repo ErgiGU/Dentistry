@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
 });
 
 class appointments_mailer {
-    sendAppointmentNotifPatient (recipient, timeslot, clinic, dentist) {
+    async sendAppointmentNotifPatient (recipient, timeslot, clinic, dentist) {
         try{
             const option = {
                 from: "DentistryAutomated@hotmail.com",
@@ -31,7 +31,7 @@ class appointments_mailer {
                 attachments: [
                     {
                         filename: 'toothLogo.png',
-                        path:'./toothLogo.png',
+                        path:'./controllers/toothLogo.png',
                         cid: 'toothLogo'
                     }
                 ]
@@ -51,14 +51,14 @@ class appointments_mailer {
         }
     }
 
-    sendAppointmentNotifClinic (patient, timeslot, clinic, dentist) {
+    async sendAppointmentNotifClinic (patient, timeslot, clinic, dentist) {
         try {
             const option = {
                 from: "DentistryAutomated@hotmail.com",
                 to: clinic,
                 subject: "Your Dentist Appointment",
                 text: "",
-                html: '<nobr>You have booked a time with</nobr>' + patient.name +
+                html: '<nobr>You have booked a time with </nobr>' + patient.name +
                     '<nobr>. The time slot at </nobr>' + timeslot +
                     '<nobr> with doctor </nobr>' + dentist.name +
                     '<nobr>. The patient describes booking cause and personal health concerns as the following:  "</nobr>' + patient.text +
@@ -67,7 +67,7 @@ class appointments_mailer {
                 attachments: [
                     {
                         filename: 'toothLogo.png',
-                        path:'./toothLogo.png',
+                        path:'./controllers/toothLogo.png',
                         cid: 'toothLogo'
                     }
                 ]
@@ -102,7 +102,7 @@ class appointments_mailer {
                 attachments: [
                     {
                         filename: 'toothLogo.png',
-                        path:'./toothLogo.png',
+                        path:'./controllers/toothLogo.png',
                         cid: 'toothLogo'
                     }
                 ]

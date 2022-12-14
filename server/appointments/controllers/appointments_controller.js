@@ -64,6 +64,7 @@ async function bookedMailingData(clinicID, timeslotID) {
 async function makeAppointment(clinicID, dentistID, patientInfo, timeslotTime) {
     let clinic = await clinicModel.findById(clinicID)
     let dentist = await dentistModel.findById(dentistID)
+    console.log(dentist + " this is the dentist ")
 
     let middlemanTimeslotsList = []
 
@@ -87,12 +88,9 @@ async function makeAppointment(clinicID, dentistID, patientInfo, timeslotTime) {
 
     timeslot.save()
 
-    if (clinic.timeslots === []) {
-        clinic.timeslots = []
-    } else {
-        middlemanTimeslotsList = clinic.timeslots
-        middlemanTimeslotsList.push(timeslot._id)
-    }
+    middlemanTimeslotsList = clinic.timeslots
+    clinic.timeslots = []
+    middlemanTimeslotsList.push(timeslot._id)
 
     clinic.timeslots = middlemanTimeslotsList
 

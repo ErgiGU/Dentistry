@@ -83,6 +83,14 @@ async function waitMailData(clinicID, timeslotID) {
     return appointments_controller.bookedMailingData(clinicID, timeslotID);
 }
 
+async function waitClinicNotifMail(mailingData) {
+    return await mailer.sendAppointmentNotifClinic(mailingData.patientData, mailingData.timeslotTime, mailingData.clinicData.email, mailingData.dentistData)
+}
+
+async function waitPatientNotifMail(mailingData) {
+    return await mailer.sendAppointmentNotifPatient(mailingData.patientData.email, mailingData.timeslotTime, mailingData.clinicData, mailingData.dentistData)
+}
+
 async function waitDeleteTimeslot(message) {
 
 }
@@ -107,17 +115,18 @@ function testAppointment(message) {
 }
 
 
-function bookAppointment(intermediary) {
+async function bookAppointment(intermediary) {
     //Creates a timeslot. Returns the timeslot JSON.
-    const timeslot = waitMakeTimeslots(intermediary.body)
+    const timeslot = await waitMakeTimeslots(intermediary.body)
+    console.log(timeslot)
     //Takes the ID of the timeslot JSON and ID. Returns success or failure of emailing.
-    const mailingData = waitMailData(intermediary.body.clinicID, timeslot._id)
-    const mailingPatient = mailer.sendAppointmentNotifPatient(mailingData.patientData.email, mailingData.timeslotTime, mailingData.clinicData, mailingData.dentistData)
-    const mailingClinic = mailer.sendAppointmentNotifClinic(mailingData.patientData, mailingData.timeslotTime, mailingData.clinicData.email, mailingData.dentistData)
-    if(mailingPatient === "Success" && mailingClinic === "Success"){
+    const mailingData = await waitMailData(intermediary.body.clinicID, timeslot._id)
+    const mailingPatient = await waitPatientNotifMail(mailingData)
+    const mailingClinic = await waitClinicNotifMail(mailingData)
+    if (mailingPatient === "Success" && mailingClinic === "Success") {
         console.log("Successful Email")
         return "Success"
-    }else {
+    } else {
         console.log("Failure to Email")
         return "Fail"
     }
