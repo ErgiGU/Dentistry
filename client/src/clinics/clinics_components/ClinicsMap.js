@@ -7,11 +7,15 @@ let config
 try {
     config = require("../../config-client")
 } catch (e) {
-    config = ''
+    config = 'testing'
 }
 
 // Access token for API
-mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN || config.mapbox_access_token;
+if (config.mapbox_access_token !== null) {
+    mapboxgl.accessToken = config.mapbox_access_token
+} else if (config === 'testing') {
+    mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN
+}
 
 function asyncMethod(client) {
     return new Promise((resolve, reject) => {
