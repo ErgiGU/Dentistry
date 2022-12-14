@@ -1,7 +1,7 @@
 const mqtt = require('mqtt');
 let config
 try {
-    config = require('./config');
+    config = require('./config-server');
 } catch (e) {
     config = require('./dummy_config')
 }

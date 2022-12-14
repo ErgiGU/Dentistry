@@ -2,7 +2,7 @@ const assert = require('assert')
 const mqttHandler = require('../helpers/mqtt_handler');
 let config
 try {
-    config = require('../helpers/config');
+    config = require('../helpers/config-server');
 } catch (e) {
     config = require('../helpers/dummy_config')
 }

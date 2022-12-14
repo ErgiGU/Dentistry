@@ -5,7 +5,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import mqttHandler from "../../common_components/MqttHandler";
 let config
 try {
-    config = require("../../config")
+    config = require("../../config-client")
 } catch (e) {
     config = ''
 }
