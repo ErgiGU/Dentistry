@@ -1,7 +1,7 @@
 const mqtt = require('mqtt');
 let config
 try {
-    config = require('./config');
+    config = require('./config-server');
 } catch (e) {
     config = require('./dummy_config')
 }
@@ -17,6 +17,7 @@ class MqttHandler {
 
     connect() {
         // Connect mqtt with credentials
+        console.log(this.host)
         this.mqttClient = mqtt.connect(this.host,
             {
                 username: this.username,
@@ -27,7 +28,7 @@ class MqttHandler {
 
         // Mqtt error callback
         this.mqttClient.on('error', (err) => {
-            console.log('Error on client' + this.clientId);
+            console.log('Error on client ' + this.clientId);
             console.log(err);
             this.mqttClient.end();
         });

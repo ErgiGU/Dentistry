@@ -3,7 +3,7 @@ const registerClinic = require('./controllers/authorization_controller');
 
 let config
 try {
-    config = require('../helpers/config');
+    config = require('../helpers/config-server');
 } catch (e) {
     config = require('../helpers/dummy_config')
 }
