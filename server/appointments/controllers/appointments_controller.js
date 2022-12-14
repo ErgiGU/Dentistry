@@ -35,15 +35,84 @@ const patientModel = mongooseClient.model('Patient', patientSchema)
 const dentistModel = mongooseClient.model('Dentist', dentistSchema)
 
 //save timeslots
-async function bookedMailingData(clinicID) {
+async function bookedMailingData(clinicID, timeslotID) {
+    let clinic = await clinicModel.findById(clinicID)
+    let timeslot = await timeslotModel.findById(timeslotID).populate('dentist').populate('patient')
+    let dentist = timeslot.dentist
+    let patient = timeslot.patient
+
+
+    return {
+        clinicData: {
+            name: clinic.name,
+            address: clinic.address,
+            email: clinic.email
+        },
+        timeslotTime: timeslot.startTime,
+        dentistData: {
+            name: dentist.name,
+            email: dentist.email
+        },
+        patientData: {
+            name: patient.name,
+            email: patient.email,
+            text: patient.text
+        }
+    }
+}
+
+async function makeAppointment(clinicID, dentistID, patientInfo, timeslotTime) {
+    let clinic = await clinicModel.findById(clinicID)
+    let dentist = await dentistModel.findById(dentistID)
+
+    let middlemanTimeslotsList = []
+
+    const timeslot = new timeslotModel({
+        startTime: timeslotTime,// <-- The start-time of the selected timeslot goes here
+        clinic: clinicID
+    });
+
+    const patient = new patientModel({
+        name: patientInfo.name,
+        email: patientInfo.email,
+        dateOfBirth: patientInfo.dateOfBirth,
+        text: patientInfo.text,
+        timeslot: timeslot._id
+    });
+
+    patient.save()
+
+    timeslot.dentist = dentist
+    timeslot.patient = patient
+
+    timeslot.save()
+
+    if (clinic.timeslots === []) {
+        clinic.timeslots = []
+    } else {
+        middlemanTimeslotsList = clinic.timeslots
+        middlemanTimeslotsList.push(timeslot._id)
+    }
+
+    clinic.timeslots = middlemanTimeslotsList
+
+    clinic.save()
+
+    return timeslot
+}
+
+//save timeslots
+async function generateData(clinicID) {
 
     let clinic = await clinicModel.findById(clinicID).populate('timeslots')
+    console.log(clinic)
 
-    let thing = []
+    let thingTimeslots = []
+    let thingDentists = []
     console.log('found clinic timeslots:')
     console.log(clinic.timeslots)
 
-    const timeslot = new timeslotModel({
+    /*const timeslot = new timeslotModel({
         startTime: "Someone Senja",
         clinic: clinicID // <-- The ID of the clinic goes here
     });
@@ -55,7 +124,8 @@ async function bookedMailingData(clinicID) {
 
     const dentist = new dentistModel({
         name: "Ergi Senja",
-        timeslot: timeslot._id
+        timeslot: timeslot._id,
+        clinic: clinicID
     });
 
     dentist.save()
@@ -64,68 +134,42 @@ async function bookedMailingData(clinicID) {
     timeslot.dentist = dentist
     timeslot.patient = patient
 
-    timeslot.save()
+    timeslot.save()*/
+
+    console.log(clinic.timeslots + " :::: " + clinic.dentists + ":   These are the clinic stuff 1")
 
     if (clinic.timeslots === []) {
-        console.log('created new array')
+        console.log('created timeslots new array')
         clinic.timeslots = []
     } else {
         console.log('exists: ' + clinic.timeslots)
-        thing = clinic.timeslots
-        thing.push(timeslot._id)
+        thingTimeslots = clinic.timeslots
+        thingTimeslots.push()
     }
-    clinic.city = 'test2'
-    clinic.timeslots = thing
+
+    if (clinic.dentists === []) {
+        console.log('created dentists new array')
+        clinic.dentists = []
+    } else {
+        console.log('exists: ' + clinic.dentists)
+        thingDentists = clinic.dentists
+        console.log()
+        thingDentists.push()
+    }
+
+    clinic.city = 'mathiashow'
+    console.log(clinic.timeslots + " :::: " + clinic.dentists + ":   These are the clinic stuff 2")
+    console.log(thingTimeslots + " ::::: " + thingDentists)
+    clinic.timeslots = thingTimeslots
+    clinic.dentists = thingDentists
     clinic.save()
-
-
-    // timeslotModel.findById(clinicID).populate("timeslots").then( r => {
-    //     console.log('potential null: ' + r)
-    //     return r
-    // });
-
-    return "randomStuff"
-
-    /*
-    try {
-
-        timeslots.forEach(timeslot => {
-
-            let openingHourString
-
-            if(clinic.openingHours.monday.start) {
-                openingHourString = "Opening Hours: " +
-                    "\nMonday: " + clinic.openingHours.monday.start + " - " + clinic.openingHours.monday.end +
-                    "\nTuesday: " + clinic.openingHours.tuesday.start + " - " + clinic.openingHours.tuesday.end +
-                    "\nWednesday: " + clinic.openingHours.wednesday.start + " - " + clinic.openingHours.wednesday.end +
-                    "\nThursday: " + clinic.openingHours.thursday.start + " - " + clinic.openingHours.thursday.end +
-                    "\nFriday : " + clinic.openingHours.friday.start + " - " + clinic.openingHours.friday.end
-            }else {
-                openingHourString = "No opening hours given"
-            }
-            clinicMapJSON.clinics.push({
-                coordinates: [clinic.coordinates.longitude, clinic.coordinates.latitude],
-                properties: {
-                    title: clinic.name,
-                    address: "Address: " + clinic.address,
-                    opening_hours: openingHourString
-
-                }
-            })
-        })
-        if (!clinicErrorFlag) {
-            return clinicMapJSON
-        } else {
-            return clinicErrorFlag
-        }
-    } catch (err) {
-        console.log(err)
-    }*/
 }
 
 
 const appointmentsController = {
-    bookedMailingData
+    bookedMailingData,
+    makeAppointment,
+    generateData
 }
 
 module.exports = appointmentsController
