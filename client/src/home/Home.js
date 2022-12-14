@@ -71,7 +71,7 @@ export default function Home() {
             <Navbar/>
             <Card />
             <div className="footer">
-                <a id="clinic" href="url">link text</a>
+                <a id="clinic" href="url">Are you a clinic? Click here!</a>
             </div>
             <h1>Testing</h1>
             <div className={"btn btn-primary"} onClick={handleClick}>Test</div>
