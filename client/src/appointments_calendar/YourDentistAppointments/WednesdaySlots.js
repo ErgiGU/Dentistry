@@ -1,9 +1,53 @@
 import Badge from 'react-bootstrap/Badge';
 import ListGroup from 'react-bootstrap/ListGroup';
 
-export function FridaySlots(){
-    return(
+export function WednesdaySlots() {
+    return (
         <ListGroup variant="flush">
+            <ListGroup.Item
+                as="li"
+                className="d-flex justify-content-between align-items-start"
+            >
+                <div className="ms-2 me-auto">
+                    07:00
+                </div>
+                <Badge bg="primary" pill>
+                    3
+                </Badge>
+            </ListGroup.Item>
+            <ListGroup.Item
+                as="li"
+                className="d-flex justify-content-between align-items-start"
+            >
+                <div className="ms-2 me-auto">
+                    07:30
+                </div>
+                <Badge bg="primary" pill>
+                    3
+                </Badge>
+            </ListGroup.Item>
+            <ListGroup.Item
+                as="li"
+                className="d-flex justify-content-between align-items-start"
+            >
+                <div className="ms-2 me-auto">
+                    08:00
+                </div>
+                <Badge bg="primary" pill>
+                    3
+                </Badge>
+            </ListGroup.Item>
+            <ListGroup.Item
+                as="li"
+                className="d-flex justify-content-between align-items-start"
+            >
+                <div className="ms-2 me-auto">
+                    08:30
+                </div>
+                <Badge bg="primary" pill>
+                    3
+                </Badge>
+            </ListGroup.Item>
             <ListGroup.Item
                 as="li"
                 className="d-flex justify-content-between align-items-start"
@@ -131,6 +175,28 @@ export function FridaySlots(){
             >
                 <div className="ms-2 me-auto">
                     14:30
+                </div>
+                <Badge bg="primary" pill>
+                    3
+                </Badge>
+            </ListGroup.Item>
+            <ListGroup.Item
+                as="li"
+                className="d-flex justify-content-between align-items-start"
+            >
+                <div className="ms-2 me-auto">
+                    15:00
+                </div>
+                <Badge bg="primary" pill>
+                    3
+                </Badge>
+            </ListGroup.Item>
+            <ListGroup.Item
+                as="li"
+                className="d-flex justify-content-between align-items-start"
+            >
+                <div className="ms-2 me-auto">
+                    15:30
                 </div>
                 <Badge bg="primary" pill>
                     3

@@ -1,0 +1,31 @@
+#rowContainer2 {
+    height: 100%;
+    padding: 10px;
+    margin: auto;
+}
+
+#loginForm {
+    display: flex;
+    flex-direction: column;
+    vertical-align: auto;
+}
+
+.loginBody {
+    height: 100vh;
+    align-items: center;
+    background-color: whitesmoke;
+}
+
+#parentContainer2 {
+    vertical-align: middle;
+    display: table-cell;
+    width: 600px;
+    padding: 10px 50px 50px;
+    height: 400px;
+    margin: auto;
+    background-color: steelblue;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+}
