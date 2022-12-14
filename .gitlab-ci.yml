@@ -1,5 +1,9 @@
 image: node:18-alpine
 
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
 cache: 
   key: $CI_COMMIT_REF_SLUG
   paths:
@@ -27,8 +31,7 @@ helper-run-job:
   tags:
     - docker
   script:
-    - cd server
-    - cd helpers
+    - cd server/helpers
     - npm install
 
 client-build-job:       # This job runs in the build stage, which runs first.
@@ -45,8 +48,7 @@ appointments-build-job:       # This job runs in the build stage, which runs fir
   tags:
     - docker
   script:
-    - cd server
-    - cd appointments
+    - cd server/appointments
     - npm install
 
 appointments-unit-test-job:   # This job runs in the test stage.
@@ -57,8 +59,9 @@ appointments-unit-test-job:   # This job runs in the test stage.
   tags:
     - docker
   script:
-    - cd server
-    - cd appointments
+    - cd server/helpers
+    - npm install
+    - cd ../appointments
     - npm install
     - npx mocha appointments_app_test.js
 
@@ -68,8 +71,7 @@ appointments-unit-run-job:   # This job runs in the test stage.
   tags:
     - docker
   script:
-    - cd server
-    - cd appointments
+    - cd server/appointments
     - node appointments_app.js
 
 clinic_data-build-job:       # This job runs in the build stage, which runs first.
@@ -77,8 +79,7 @@ clinic_data-build-job:       # This job runs in the build stage, which runs firs
   tags:
     - docker
   script:
-    - cd server
-    - cd clinic_data
+    - cd server/clinic_data
     - npm install
 
 clinic_data-unit-test-job:   # This job runs in the test stage.
@@ -89,8 +90,9 @@ clinic_data-unit-test-job:   # This job runs in the test stage.
   tags:
     - docker
   script:
-    - cd server
-    - cd clinic_data
+    - cd server/helpers
+    - npm install
+    - cd ../clinic_data
     - npm install
     - npx mocha clinic_data_app_test.js
 
@@ -100,8 +102,7 @@ clinic_data-unit-run-job:   # This job runs in the test stage.
   tags:
     - docker
   script:
-    - cd server
-    - cd clinic_data
+    - cd server/clinic_data
     - node clinic_data_app.js
 
 authorization-build-job:       # This job runs in the build stage, which runs first.
@@ -109,8 +110,7 @@ authorization-build-job:       # This job runs in the build stage, which runs fi
   tags:
     - docker
   script:
-    - cd server
-    - cd authorization
+    - cd server/authorization
     - npm install
 
 authorization-unit-test-job:   # This job runs in the test stage.
@@ -121,8 +121,9 @@ authorization-unit-test-job:   # This job runs in the test stage.
   tags:
     - docker
   script:
-    - cd server
-    - cd authorization
+    - cd server/helpers
+    - npm install
+    - cd ../authorization
     - npm install
     - npx mocha authorization_app_test.js
 
@@ -132,6 +133,5 @@ authorization-unit-run-job:   # This job runs in the test stage.
   tags:
     - docker
   script:
-    - cd server
-    - cd authorization
+    - cd server/authorization
     - node authorization_app.js
