@@ -51,7 +51,7 @@ mqttClient.mqttClient.on('message', function (topic, message) {
 });
 
 async function waitTimeslots(clinicID) {
-    return await appointments_controller.bookedMailingData(clinicID)
+    return appointments_controller.bookedMailingData(clinicID);
 }
 
 // Function declaration

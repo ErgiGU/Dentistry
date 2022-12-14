@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const timeslotSchema = require('../../helpers/schemas/timeslot')
 const dentistSchema = require('../../helpers/schemas/dentist')
 const patientSchema = require('../../helpers/schemas/patient')
-
+const clinicSchema = require('../../helpers/schemas/clinic')
 
 let config
 try {
@@ -14,8 +14,6 @@ try {
 let timeslotJSON = {
     clinics: []
 }
-
-
 
 // Variables
 const mongoURI = config.module_config.appointmentUser.mongoURI
@@ -32,56 +30,61 @@ const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: tru
 })
 
 const timeslotModel = mongooseClient.model('Timeslot', timeslotSchema)
-const clinicModel = mongooseClient.model('Clinic', patientSchema)
+const clinicModel = mongooseClient.model('Clinic', clinicSchema)
 const patientModel = mongooseClient.model('Patient', patientSchema)
 const dentistModel = mongooseClient.model('Dentist', dentistSchema)
 
 //save timeslots
-function bookedMailingData(clinicID) {
+async function bookedMailingData(clinicID) {
 
-    clinicModel.findById(clinicID, function (err, clinic) {
-        const random = [{
-            hello: "help"
-        }]
+    let clinic = await clinicModel.findById(clinicID).populate('timeslots')
 
-        const timeslot = new timeslotModel({
-            startTime: "Someone Senja",
-            clinic: clinicID // <-- The ID of the clinic goes here
-        });
+    let thing = []
+    console.log('found clinic timeslots:')
+    console.log(clinic.timeslots)
 
-        const patient = new patientModel({
-            name: "Mathias Hallander",
-            timeslot: timeslot._id
-        });
-
-        const dentist = new dentistModel({
-            name: "Ergi Senja",
-            timeslot: timeslot._id
-        });
-
-        dentist.save()
-        patient.save()
-
-        timeslot.dentist = dentist
-        timeslot.patient = patient
-
-        timeslot.save()
-        clinic.timeslots.push(timeslot._id)
-        clinic.markModified('timeslots');
-        clinic.save()
-    })
-
-
-
-    timeslotModel.findById(clinicID).populate("timeslots").then( r => {
-        console.log(r)
-        return r
+    const timeslot = new timeslotModel({
+        startTime: "Someone Senja",
+        clinic: clinicID // <-- The ID of the clinic goes here
     });
 
+    const patient = new patientModel({
+        name: "Mathias Hallander",
+        timeslot: timeslot._id
+    });
+
+    const dentist = new dentistModel({
+        name: "Ergi Senja",
+        timeslot: timeslot._id
+    });
+
+    dentist.save()
+    patient.save()
+
+    timeslot.dentist = dentist
+    timeslot.patient = patient
+
+    timeslot.save()
+
+    if (clinic.timeslots === []) {
+        console.log('created new array')
+        clinic.timeslots = []
+    } else {
+        console.log('exists: ' + clinic.timeslots)
+        thing = clinic.timeslots
+        thing.push(timeslot._id)
+    }
+    clinic.city = 'test2'
+    clinic.timeslots = thing
+    clinic.save()
+
+
+    // timeslotModel.findById(clinicID).populate("timeslots").then( r => {
+    //     console.log('potential null: ' + r)
+    //     return r
+    // });
+
     return "randomStuff"
-
-
-
 
     /*
     try {
