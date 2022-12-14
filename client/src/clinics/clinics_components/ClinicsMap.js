@@ -3,19 +3,10 @@ import mapboxgl from "mapbox-gl";
 import "./ClinicsMap.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mqttHandler from "../../common_components/MqttHandler";
-let config
-try {
-    config = require("../../config-client")
-} catch (e) {
-    config = 'testing'
-}
+import config from "../../config-client"
 
 // Access token for API
-if (config.mapbox_access_token !== null) {
-    mapboxgl.accessToken = config.mapbox_access_token
-} else if (config === 'testing') {
-    mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN
-}
+mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN || config.mapbox_access_token
 
 function asyncMethod(client) {
     return new Promise((resolve, reject) => {
