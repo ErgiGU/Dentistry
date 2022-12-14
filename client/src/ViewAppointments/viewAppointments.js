@@ -1,4 +1,5 @@
 import './ViewAppointments.css'
+<<<<<<< HEAD
 import React, {useEffect, useState} from "react";
 import { MDBRow, MDBCol } from 'mdb-react-ui-kit';
 import TimeslotCard from './components/timeslotCard'
@@ -72,6 +73,18 @@ export default function WithHeaderExample() {
         <div id="ty">
         <div id="background">
             <div className="btn btn-primary" onClick={sendAppointmentInformation("6391e39a3e08ac910fbede6f")}>Refresh </div>
+=======
+import React from "react";
+import { MDBRow, MDBCol } from 'mdb-react-ui-kit';
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+
+function WithHeaderExample(props) {
+    const text = "Hello"
+    return (
+        <div id="ty">
+        <div id="background">
+>>>>>>> 5400a47 (View appointments responsive design)
         <MDBRow>
             <MDBCol md='3'>
                 <div className="card" >
@@ -83,8 +96,73 @@ export default function WithHeaderExample() {
                     </div>
                 </div>
             </MDBCol>
+<<<<<<< HEAD
             <MDBCol md='8'>
                 <Timeslot appointments={appointments}/>
+=======
+
+            <MDBCol md='8'>
+                <div className="card1" >
+
+                    <div className="card-body">
+                        <div className="row align-items-end">
+                            <div className="col">DATE<div className="text">{text}</div></div>
+                            <div className="col">TIME<div className="text">hello</div></div>
+                            <div className="col">LOCATION<div className="text">hello</div></div>
+                            <div className="col">PATIENT<div className="text">hello</div></div>
+                            <div className="col">DOCTOR<div className="text">hello</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div className="card1" >
+
+                    <div className="card-body">
+                        <div className="row align-items-end">
+                            <div className="col">Date</div>
+                            <div className="col">Time</div>
+                            <div className="col">Location</div>
+                            <div className="col">Patient</div>
+                            <div className="col">Doctor</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="card1" >
+
+                    <div className="card-body">
+                        <div className="row align-items-end">
+                            <div className="col">Date</div>
+                            <div className="col">Time</div>
+                            <div className="col">Location</div>
+                            <div className="col">Patient</div>
+                            <div className="col">Doctor</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="card1" >
+
+                    <div className="card-body">
+                        <div className="row align-items-end">
+                            <div className="col">Date</div>
+                            <div className="col">Time</div>
+                            <div className="col">Location</div>
+                            <div className="col">Patient</div>
+                            <div className="col">Doctor</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="card1" >
+
+                    <div className="card-body">
+                        <div className="row align-items-end">
+                            <div className="col">Date</div>
+                            <div className="col">Time</div>
+                            <div className="col">Location</div>
+                            <div className="col">Patient</div>
+                            <div className="col">Doctor</div>
+                        </div>
+                    </div>
+                </div>
+>>>>>>> 5400a47 (View appointments responsive design)
             </MDBCol>
         </MDBRow>
 
@@ -92,3 +170,8 @@ export default function WithHeaderExample() {
         </div>
     );
 }
+<<<<<<< HEAD
+=======
+
+export default WithHeaderExample;
+>>>>>>> 5400a47 (View appointments responsive design)
