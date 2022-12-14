@@ -67,10 +67,7 @@ export default function Maps() {
 
     // Initialize map when component mounts
     useEffect(() => {
-        console.log("entered")
-        console.log(mapboxgl.accessToken)
         waitMap(client).then(r => {
-            console.log("done wait")
             //Actual map
             const map = new mapboxgl.Map({
                 accessToken: config.module_config.mapbox_access_token,
