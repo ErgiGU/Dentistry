@@ -144,17 +144,18 @@ async function bookAppointment(intermediary) {
 
 }
 
-function cancelAppointment(intermediary) {
+async function cancelAppointment(intermediary) {
     //METHOD CALL FOR DB MANIPULATION THAT DELETES THE TIMESLOT BUT RETURNS IT
-    const canceledTimeslot = waitDeleteTimeslot(intermediary.body)
-    /*const mailCancelation = mailer.sendAppointmentCancelNotif(canceledTimeslot.patient.email, canceledTimeslot, intermediary.body.clinic, canceledTimeslot.dentist)
-    if(mailCancelation === "Success"){
+    const canceledTimeslot = await waitDeleteTimeslot(intermediary.body)
+    console.log(canceledTimeslot)
+    const mailCancelation = mailer.sendAppointmentCancelNotif(canceledTimeslot.timeslot.patient.email, canceledTimeslot.timeslot.startTime, canceledTimeslot.timeslot.clinic, canceledTimeslot.timeslot.dentist)
+    if (mailCancelation === "Success") {
         console.log("Successful Email")
         return "Success"
-    }else {
+    } else {
         console.log("Failure to Email")
         return "Fail"
-    }*/
+    }
 }
 
 

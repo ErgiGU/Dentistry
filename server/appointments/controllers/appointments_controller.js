@@ -100,13 +100,11 @@ async function makeAppointment(clinicID, dentistID, patientInfo, timeslotTime) {
 }
 
 async function cancelAppointment(timeslotID){
-    let timeslot = await timeslotModel.findByIdAndDelete(timeslotID)
-    let patient = await patientModel.findByIdAndDelete(timeslot.patient)
-    const deleted = {
-        deletedTimeslot: timeslot,
-        deletedPatient: patient,
+    let timeslot = await timeslotModel.findByIdAndDelete(timeslotID).populate("dentist").populate("patient").populate("clinic")
+    await patientModel.findByIdAndDelete(timeslot.patient)
+    return {
+        timeslot
     }
-    return deleted
 }
 // Generates dummy data into the given clinic ID.
 async function generateData(clinicID) {
