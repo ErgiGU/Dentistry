@@ -1,8 +1,6 @@
-//const express = require("express");
-//const router = express.Router();
 const bcrypt = require("bcrypt");
+const mongooseHandler = require('../../helpers/mongoose_handler')
 const clinicSchema = require('../../helpers/schemas/clinic');
-const mongoose = require("mongoose");
 let config
 try {
     config = require('../../helpers/config-server');
@@ -10,24 +8,25 @@ try {
     config = require('../../helpers/dummy_config')
 }
 
-// Variables
-const mongoURI = config.module_config.authorizationUser.mongoURI;
-//const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
-
-
 // Connect to MongoDB
-const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, function (err) {
-    if (err) {
-        console.error(`Failed to connect to MongoDB with URI: ${mongoURI}`);
-        console.error(err.stack);
-        process.exit(1);
-    }
-    console.log(`Connected to MongoDB with URI: ${mongoURI}`);
-})
+let mongooseClient = new mongooseHandler(config.module_config.authorizationUser.mongoURI)
+mongooseClient.connect().then(() => {
+    createModels()
+}, null)
 
-//Model creation
-const clinicModel = mongooseClient.model('clinic', clinicSchema);
+let clinicModel
 
+function reconnect(mongoURI) {
+    mongooseClient.close()
+    mongooseClient = new mongooseHandler(mongoURI)
+    mongooseClient.connect().then(() => {
+        createModels()
+    }, null)
+}
+
+function createModels() {
+    clinicModel = mongooseClient.model('clinic', clinicSchema)
+}
 
 //Checks to see if the email exists in the DB
  async function emailExists(email) {
@@ -61,8 +60,6 @@ const clinicModel = mongooseClient.model('clinic', clinicSchema);
      }
  }
 
-
-
 // Authenticate a clinic
 const loginClinic = async (req, res) => {
     const {email, password} = req.body
@@ -82,6 +79,11 @@ const loginClinic = async (req, res) => {
 }
     res.json({message:'authenticate clinic'})
 }
-module.exports = {emailExists,register};
+
+module.exports = {
+    emailExists,
+    register,
+    reconnect
+};
 
 

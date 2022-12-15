@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongooseHandler = require('../../helpers/mongoose_handler')
 const clinicSchema = require('../../helpers/schemas/clinic')
 let config
 try {
@@ -7,19 +7,25 @@ try {
     config = require('../../helpers/dummy_config')
 }
 
-// Variables
-const mongoURI = config.module_config.clinicUser.mongoURI
-//const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ClinicDB';
-
 // Connect to MongoDB
-const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, function (err) {
-    if (err) {
-        console.error(`Failed to connect to MongoDB with URI: ${mongoURI}`);
-        console.error(err.stack);
-        process.exit(1);
-    }
-    console.log(`Connected to MongoDB with URI: ${mongoURI}`);
-})
+let mongooseClient = new mongooseHandler(config.module_config.clinicUser.mongoURI)
+mongooseClient.connect().then(() => {
+    createModels()
+}, null)
+
+let clinicModel
+
+function reconnect(mongoURI) {
+    mongooseClient.close()
+    mongooseClient = new mongooseHandler(mongoURI)
+    mongooseClient.connect().then(() => {
+        createModels()
+    }, null)
+}
+
+function createModels() {
+    clinicModel = mongooseClient.model('clinic', clinicSchema)
+}
 
 async function mapDataRequest() {
 
@@ -28,7 +34,7 @@ async function mapDataRequest() {
     }
 
     let clinicErrorFlag = false
-    const clinics = await ClinicModel.find()
+    const clinics = await clinicModel.find()
     try {
 
         clinics.forEach(clinic => {
@@ -65,12 +71,9 @@ async function mapDataRequest() {
     }
 }
 
-
-
-const ClinicModel = mongooseClient.model('clinic', clinicSchema)
-
 const clinicController = {
-    mapDataRequest
+    mapDataRequest,
+    reconnect
 }
 
 module.exports = clinicController

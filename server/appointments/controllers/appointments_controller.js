@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongooseHandler = require('../../helpers/mongoose_handler')
 const timeslotSchema = require('../../helpers/schemas/timeslot')
 const dentistSchema = require('../../helpers/schemas/dentist')
 const patientSchema = require('../../helpers/schemas/patient')
@@ -15,24 +15,31 @@ let timeslotJSON = {
     clinics: []
 }
 
-// Variables
-const mongoURI = config.module_config.appointmentUser.mongoURI
-//const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
-
 // Connect to MongoDB
-const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, function (err) {
-    if (err) {
-        console.error(`Failed to connect to MongoDB with URI: ${mongoURI}`);
-        console.error(err.stack);
-        process.exit(1);
-    }
-    console.log(`Connected to MongoDB with URI: ${mongoURI}`);
-})
+let mongooseClient = new mongooseHandler(config.module_config.appointmentUser.mongoURI)
+mongooseClient.connect().then(() => {
+    createModels()
+}, null)
 
-const timeslotModel = mongooseClient.model('Timeslot', timeslotSchema)
-const clinicModel = mongooseClient.model('Clinic', clinicSchema)
-const patientModel = mongooseClient.model('Patient', patientSchema)
-const dentistModel = mongooseClient.model('Dentist', dentistSchema)
+let timeslotModel;
+let clinicModel;
+let patientModel;
+let dentistModel;
+
+function reconnect(mongoURI) {
+    mongooseClient.close()
+    mongooseClient = new mongooseHandler(mongoURI)
+    mongooseClient.connect().then(() => {
+        createModels()
+    }, null)
+}
+
+function createModels() {
+    timeslotModel = mongooseClient.model('Timeslot', timeslotSchema)
+    clinicModel = mongooseClient.model('Clinic', clinicSchema)
+    patientModel = mongooseClient.model('Patient', patientSchema)
+    dentistModel = mongooseClient.model('Dentist', dentistSchema)
+}
 
 //save timeslots
 async function bookedMailingData(clinicID, timeslotID) {
@@ -154,7 +161,8 @@ async function generateData(clinicID) {
 const appointmentsController = {
     bookedMailingData,
     makeAppointment,
-    generateData
+    generateData,
+    reconnect
 }
 
 module.exports = appointmentsController
