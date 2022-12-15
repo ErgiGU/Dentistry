@@ -99,20 +99,6 @@ async function makeAppointment(clinicID, dentistID, patientInfo, timeslotTime) {
     return timeslot
 }
 
-async function cancelAppointment(timeslotID){
-    try{
-        let timeslotReturn = await timeslotModel.findByIdAndDelete(timeslotID).populate("dentist").populate("patient").populate("clinic")
-        await patientModel.findByIdAndDelete(timeslotReturn.patient)
-
-        return {result: "Success", timeslot: timeslotReturn}
-
-    }catch (e) {
-        console.log(e)
-        console.log("The appointment cancellation has failed")
-        return  {result: "Failure"}
-    }
-
-}
 // Generates dummy data into the given clinic ID.
 async function generateData(clinicID) {
 
@@ -131,8 +117,7 @@ async function generateData(clinicID) {
 
     const patient = new patientModel({
         name: "Mathias Hallander",
-        timeslot: timeslot._id,
-        email: "burakaskan2001@gmail.com"
+        timeslot: timeslot._id
     });
 
     const dentist = new dentistModel({
@@ -166,37 +151,10 @@ async function generateData(clinicID) {
     clinic.save()
 }
 
-async function sendAppointmentInformation(intermediary){
-
-    let ClinicTimeslots = {
-        timeslots: []
-    }
-    const timeslots = await timeslotModel.find({clinic: intermediary}).populate("patient").populate("dentist")
-    console.log(timeslots)
-    try {
-        timeslots.forEach(timeslot => {
-            ClinicTimeslots.timeslots.push({
-                patient: {
-                    name : timeslot.patient.name,
-                    text : timeslot.patient.text
-                },
-                dentist: {
-                    name: timeslot.dentist.name
-                },
-                timeslot: timeslot.startTime
-            })
-        })
-    } catch (e) {
-    console.log(e)
-    }
-    return ClinicTimeslots
-}
 const appointmentsController = {
     bookedMailingData,
     makeAppointment,
-    cancelAppointment,
-    generateData,
-    sendAppointmentInformation
+    generateData
 }
 
 module.exports = appointmentsController
