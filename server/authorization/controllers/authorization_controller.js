@@ -44,12 +44,17 @@ function createModels() {
      console.log(req.body.address);
      console.log(req.body.email);
      console.log(hashedPassword);
-     const geoData = await addressToCoordinates(req.body.address)
-     const coordinates = {
-         longitude: geoData[0].longitude,
-         latitude: geoData[0].latitude
+     let coordinates
+     try{
+         const geoData = await addressToCoordinates("Gothenburg ", req.body.address)
+         coordinates = {
+             longitude: geoData[0].longitude,
+             latitude: geoData[0].latitude
+         }
+     }catch (e) {
+         console.log(e)
+         console.log("The address could not be found.")
      }
-
      const clinicAccount = new clinicModel(
         {
             name:req.body.clinicName ,
@@ -68,14 +73,14 @@ function createModels() {
      }
  }
 
- async function addressToCoordinates(address) {
+ async function addressToCoordinates(city, address) {
     let options = {
         provider: 'openstreetmap'
     }
 
     const geoCoder = nodeGeocoder(options);
 
-    return await geoCoder.geocode(address)
+    return await geoCoder.geocode(city + address)
  }
 
 // Authenticate a clinic
