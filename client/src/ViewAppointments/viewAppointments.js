@@ -1,8 +1,6 @@
 import './ViewAppointments.css'
 import React from "react";
 import { MDBRow, MDBCol } from 'mdb-react-ui-kit';
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
 
 function WithHeaderExample(props) {
     const text = "Hello"

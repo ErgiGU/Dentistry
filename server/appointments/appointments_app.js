@@ -1,5 +1,5 @@
 const mqttHandler = require('../helpers/mqtt_handler');
-const appointments_controller = require("./controllers/appointments_controller");
+const appointments_controller = require("./controllers/appointments_controller")
 const appointments_mailer = require("./controllers/appointments_mailer");
 
 let config
@@ -18,12 +18,12 @@ const mailer = new appointments_mailer
 
 // MQTT subscriptions
 mqttClient.subscribeTopic('test')
-mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('appointment')
 mqttClient.subscribeTopic('testingTestingRequest')
 mqttClient.subscribeTopic('bookTimeslot')
 mqttClient.subscribeTopic('generateData')
 mqttClient.subscribeTopic('cancelBookedTimeslot')
+mqttClient.subscribeTopic('sendAppointmentInformation')
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
@@ -61,9 +61,6 @@ mqttClient.mqttClient.on('message', function (topic, message) {
         case 'test':
             process.exit()
             break;
-        case 'initiateTesting':
-            appointments_controller.reconnect(config.admin_config.database_tester.mongoURI)
-            break;
         default:
             console.log('topic: ' + topic)
             console.log('message: ' + message)
@@ -71,6 +68,9 @@ mqttClient.mqttClient.on('message', function (topic, message) {
     }
 });
 
+async function waitTimeslotData(intermediary){
+    return await appointments_controller.sendAppointmentInformation(intermediary.body.clinicID)
+}
 async function waitGenerateData() {
     await appointments_controller.generateData("6391e39a3e08ac910fbede6f")
 }

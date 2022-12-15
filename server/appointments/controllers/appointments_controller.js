@@ -160,10 +160,37 @@ async function generateData(clinicID) {
     clinic.save()
 }
 
+async function sendAppointmentInformation(intermediary){
+
+    let ClinicTimeslots = {
+        timeslots: []
+    }
+    const timeslots = await timeslotModel.find({clinic: intermediary}).populate("patient").populate("dentist")
+    console.log(timeslots)
+    try {
+        timeslots.forEach(timeslot => {
+            ClinicTimeslots.timeslots.push({
+                patient: {
+                    name : timeslot.patient.name,
+                    text : timeslot.patient.text
+                },
+                dentist: {
+                    name: timeslot.dentist.name
+                },
+                timeslot: timeslot.startTime
+            })
+        })
+    } catch (e) {
+    console.log(e)
+    }
+    return ClinicTimeslots
+}
 const appointmentsController = {
     bookedMailingData,
     makeAppointment,
-    generateData
+    cancelAppointment,
+    generateData,
+    sendAppointmentInformation
 }
 
 module.exports = appointmentsController
