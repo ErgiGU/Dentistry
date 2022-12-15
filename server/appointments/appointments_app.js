@@ -25,50 +25,60 @@ mqttClient.subscribeTopic('bookTimeslot')
 mqttClient.subscribeTopic('generateData')
 
 // When a message arrives, respond to it or propagate it further
-mqttClient.mqttClient.on('message', function (topic, message) {
-    let intermediary = JSON.parse(message)
-    console.log(config.module_config.appointmentUser.handler + " service received MQTT message")
-    console.log(intermediary)
+try {
+    mqttClient.mqttClient.on('message', function (topic, message) {
+        let intermediary = JSON.parse(message)
+        console.log(config.module_config.appointmentUser.handler + " service received MQTT message")
+        console.log(intermediary)
 
-    switch (topic) {
-        case 'schema':
-            mqttClient.sendMessage('testAppointment', "newClinic")
-            break;
-        case 'appointment':
-            testAppointment(intermediary)
-            break;
-        case 'testingTestingRequest':
-            mqttClient.sendMessage('testingTesting', 'ToothyClinic')
-            break;
-        case 'generateData':
-            const dataResult = waitGenerateData()
-            break;
-        case 'bookTimeslot':
-            const bookTimeslotResult = bookAppointment(intermediary)
-            const bookingRes = {
-                body: {
-                    message: bookTimeslotResult //If the whole thing has succeeded or failed.
+        switch (topic) {
+            case 'schema':
+                mqttClient.sendMessage('testAppointment', "newClinic")
+                break;
+            case 'appointment':
+                testAppointment(intermediary)
+                break;
+            case 'testingTestingRequest':
+                const messageSending = {
+                    response: "ToothyClinic",
+                    additional: "WillIt"
                 }
-            }
-            mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(bookingRes))
-            break;
-        case 'cancelBookedTimeslot':
-            //Cancels the booked timeslot
-            const cancelTimeslotResult = cancelAppointment(intermediary)
-            mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(cancelRes))
-            break;
-        case 'test':
-            process.exit()
-            break;
-        case 'initiateTesting':
-            appointments_controller.reconnect(config.admin_config.database_tester.mongoURI)
-            break;
-        default:
-            console.log('topic: ' + topic)
-            console.log('message: ' + message)
-            break;
-    }
-});
+                mqttClient.sendMessage('testingTesting', JSON.stringify(messageSending))
+                break;
+            case 'generateData':
+                const dataResult = waitGenerateData()
+                break;
+            case 'bookTimeslot':
+                const bookTimeslotResult = bookAppointment(intermediary)
+                const bookingRes = {
+                    body: {
+                        message: bookTimeslotResult //If the whole thing has succeeded or failed.
+                    }
+                }
+                mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(bookingRes))
+                break;
+            case 'cancelBookedTimeslot':
+                //Cancels the booked timeslot
+                const cancelTimeslotResult = cancelAppointment(intermediary)
+                mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(cancelRes))
+                break;
+            case 'test':
+                process.exit()
+                break;
+            case 'initiateTesting':
+                appointments_controller.reconnect(config.admin_config.database_tester.mongoURI)
+                break;
+            default:
+                console.log('topic: ' + topic)
+                console.log('message: ' + message)
+                break;
+        }
+    });
+}catch (e) {
+    console.log(e)
+    console.log("Message was received but caused a crash.")
+}
+
 
 async function waitGenerateData() {
     await appointments_controller.generateData("6391e39a3e08ac910fbede6f")

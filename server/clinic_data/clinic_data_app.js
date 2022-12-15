@@ -17,31 +17,49 @@ mqttClient.subscribeTopic('test')
 mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('mapDataRequest')
 mqttClient.subscribeTopic('testingTestingRequest')
+mqttClient.subscribeTopic('clinicDataRequest')
 
 // When a message arrives, respond to it or propagate it further
-mqttClient.mqttClient.on('message', async function (topic, message) {
-    let intermediary = JSON.parse(message)
-    console.log(config.module_config.clinicUser.handler + " service received MQTT message")
-    console.log(intermediary);
+try {
+    mqttClient.mqttClient.on('message', async function (topic, message) {
+        let intermediary = JSON.parse(message)
+        console.log(config.module_config.clinicUser.handler + " service received MQTT message")
+        console.log(intermediary);
 
-    switch (topic) {
-        case 'firstTest':
-            mqttClient.sendMessage('testAppointment', 'Testing callback')
-            break;
-        case 'mapDataRequest':
-            const body = await clinic_data_controller.mapDataRequest()
-            mqttClient.sendMessage(intermediary.id + '/mapDataResponse', JSON.stringify(body))
-            break;
-        case 'testingTestingRequest':
-            mqttClient.sendMessage('testingTesting', 'ToothyClinic')
-            break;
-        case 'test':
-            process.exit()
-            break;
-        case 'initiateTesting':
-            clinic_data_controller.reconnect(config.admin_config.database_tester.mongoURI)
-            break;
-    }
-});
+        switch (topic) {
+            case 'firstTest':
+                mqttClient.sendMessage('testAppointment', 'Testing callback')
+                break;
+            case 'mapDataRequest':
+                const body = await clinic_data_controller.mapDataRequest()
+                mqttClient.sendMessage(intermediary.id + '/mapDataResponse', JSON.stringify(body))
+                break;
+            case 'clinicDataRequest':
+                let clinic = await clinic_data_controller.clinicData(intermediary.body.email)
+                clinic= JSON.stringify(clinic)
+                clinic = JSON.parse(clinic)
+                clinic.password = "password"
+                clinic._id = "id"
+                mqttClient.sendMessage(intermediary.id + '/clinicData', JSON.stringify(clinic))
+                break;
+            case 'testingTestingRequest':
+                const messageSending = {
+                    response: "ToothyClinic",
+                    additional: "WillIt"
+                }
+                mqttClient.sendMessage('testingTesting', JSON.stringify(messageSending))
+                break;
+            case 'test':
+                process.exit()
+                break;
+            case 'initiateTesting':
+                clinic_data_controller.reconnect(config.admin_config.database_tester.mongoURI)
+                break;
+        }
+    });
+} catch (e) {
+    console.log(e)
+    console.log("Message was received but caused a crash.")
+}
 
 module.exports = mqttClient;

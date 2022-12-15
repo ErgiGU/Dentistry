@@ -27,6 +27,10 @@ function createModels() {
     clinicModel = mongooseClient.model('clinic', clinicSchema)
 }
 
+async function clinicData(email) {
+    return await clinicModel.findOne({email: email})
+}
+
 async function mapDataRequest() {
 
     let clinicMapJSON = {
@@ -73,7 +77,8 @@ async function mapDataRequest() {
 
 const clinicController = {
     mapDataRequest,
-    reconnect
+    reconnect,
+    clinicData
 }
 
 module.exports = clinicController
