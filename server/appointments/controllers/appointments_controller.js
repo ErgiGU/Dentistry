@@ -99,6 +99,15 @@ async function makeAppointment(clinicID, dentistID, patientInfo, timeslotTime) {
     return timeslot
 }
 
+async function cancelAppointment(timeslotID){
+    let timeslot = await timeslotModel.findByIdAndDelete(timeslotID)
+    let patient = await patientModel.findByIdAndDelete(timeslot.patient)
+    const deleted = {
+        deletedTimeslot: timeslot,
+        deletedPatient: patient,
+    }
+    return deleted
+}
 // Generates dummy data into the given clinic ID.
 async function generateData(clinicID) {
 
@@ -151,9 +160,35 @@ async function generateData(clinicID) {
     clinic.save()
 }
 
+async function sendAppointmentInformation(intermediary){
+
+    let ClinicTimeslots = {
+        timeslots: []
+    }
+    const timeslots = await timeslotModel.find({clinic: intermediary}).populate("patient").populate("dentist")
+    console.log(timeslots)
+    try {
+        timeslots.forEach(timeslot => {
+            ClinicTimeslots.timeslots.push({
+                patient: {
+                    name : timeslot.patient.name,
+                    text : timeslot.patient.text
+                },
+                dentist: {
+                    name: timeslot.dentist.name
+                },
+                timeslot: timeslot.startTime
+            })
+        })
+    } catch (e) {
+    console.log(e)
+    }
+    return ClinicTimeslots
+}
 const appointmentsController = {
     bookedMailingData,
     makeAppointment,
+    cancelAppointment,
     generateData
 }
 
