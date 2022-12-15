@@ -9,6 +9,8 @@
     "bootstrap": "^5.2.3",
     "mapbox-gl": "^2.11.1",
     "mqtt": "^4.3.7",
+    "mdb-react-ui-kit": "^5.0.0",
+    "mongoose": "^6.8.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.6.0",
     "react-dom": "^18.2.0",
