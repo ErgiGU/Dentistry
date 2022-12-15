@@ -99,6 +99,15 @@ async function makeAppointment(clinicID, dentistID, patientInfo, timeslotTime) {
     return timeslot
 }
 
+async function cancelAppointment(timeslotID){
+    let timeslot = await timeslotModel.findByIdAndDelete(timeslotID)
+    let patient = await patientModel.findByIdAndDelete(timeslot.patient)
+    const deleted = {
+        deletedTimeslot: timeslot,
+        deletedPatient: patient,
+    }
+    return deleted
+}
 // Generates dummy data into the given clinic ID.
 async function generateData(clinicID) {
 
@@ -154,6 +163,7 @@ async function generateData(clinicID) {
 const appointmentsController = {
     bookedMailingData,
     makeAppointment,
+    cancelAppointment,
     generateData
 }
 

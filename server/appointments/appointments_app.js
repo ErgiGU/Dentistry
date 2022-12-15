@@ -22,6 +22,7 @@ mqttClient.subscribeTopic('appointment')
 mqttClient.subscribeTopic('testingTestingRequest')
 mqttClient.subscribeTopic('bookTimeslot')
 mqttClient.subscribeTopic('generateData')
+mqttClient.subscribeTopic('cancelBookedTimeslot')
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
@@ -54,7 +55,7 @@ mqttClient.mqttClient.on('message', function (topic, message) {
         case 'cancelBookedTimeslot':
             //Cancels the booked timeslot
             const cancelTimeslotResult = cancelAppointment(intermediary)
-            mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(cancelRes))
+            //mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(cancelRes))
             break;
         case 'test':
             process.exit()
@@ -93,7 +94,7 @@ async function waitPatientNotifMail(mailingData) {
 }
 
 async function waitDeleteTimeslot(message) {
-
+    return await appointments_controller.cancelAppointment(message.timeslotID)
 }
 
 // Function declaration
@@ -137,14 +138,14 @@ async function bookAppointment(intermediary) {
 function cancelAppointment(intermediary) {
     //METHOD CALL FOR DB MANIPULATION THAT DELETES THE TIMESLOT BUT RETURNS IT
     const canceledTimeslot = waitDeleteTimeslot(intermediary.body)
-    const mailCancelation = mailer.sendAppointmentCancelNotif(canceledTimeslot.patient.email, canceledTimeslot, intermediary.body.clinic, canceledTimeslot.dentist)
+    /*const mailCancelation = mailer.sendAppointmentCancelNotif(canceledTimeslot.patient.email, canceledTimeslot, intermediary.body.clinic, canceledTimeslot.dentist)
     if(mailCancelation === "Success"){
         console.log("Successful Email")
         return "Success"
     }else {
         console.log("Failure to Email")
         return "Fail"
-    }
+    }*/
 }
 
 module.exports = mqttClient;
