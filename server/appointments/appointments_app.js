@@ -23,6 +23,7 @@ mqttClient.subscribeTopic('testingTestingRequest')
 mqttClient.subscribeTopic('bookTimeslot')
 mqttClient.subscribeTopic('generateData')
 mqttClient.subscribeTopic('cancelBookedTimeslot')
+mqttClient.subscribeTopic('sendAppointmentInformation')
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
@@ -60,6 +61,11 @@ mqttClient.mqttClient.on('message', function (topic, message) {
         case 'test':
             process.exit()
             break;
+        case 'sendAppointmentInformation':
+            waitTimeslotData(intermediary).then(r => {
+                mqttClient.sendMessage(intermediary.client_id + "/sendAppointmentInformation", JSON.stringify(r))
+            })
+            break;
         default:
             console.log('topic: ' + topic)
             console.log('message: ' + message)
@@ -67,6 +73,9 @@ mqttClient.mqttClient.on('message', function (topic, message) {
     }
 });
 
+async function waitTimeslotData(intermediary){
+    return await appointments_controller.sendAppointmentInformation(intermediary.body.clinicID)
+}
 async function waitGenerateData() {
     await appointments_controller.generateData("6391e39a3e08ac910fbede6f")
 }
@@ -147,5 +156,7 @@ function cancelAppointment(intermediary) {
         return "Fail"
     }*/
 }
+
+
 
 module.exports = mqttClient;
