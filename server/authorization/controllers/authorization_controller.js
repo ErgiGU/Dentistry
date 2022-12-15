@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const mongooseHandler = require('../../helpers/mongoose_handler')
 const clinicSchema = require('../../helpers/schemas/clinic');
+const nodeGeocoder = require('node-geocoder')
 let config
 try {
     config = require('../../helpers/config-server');
@@ -43,13 +44,25 @@ function createModels() {
      console.log(req.body.address);
      console.log(req.body.email);
      console.log(hashedPassword);
+     let coordinates
+     try{
+         const geoData = await addressToCoordinates("Gothenburg ", req.body.address)
+         coordinates = {
+             longitude: geoData[0].longitude,
+             latitude: geoData[0].latitude
+         }
+     }catch (e) {
+         console.log(e)
+         console.log("The address could not be found.")
+     }
      const clinicAccount = new clinicModel(
         {
             name:req.body.clinicName ,
             address: req.body.address,
             email: req.body.email,
             password: hashedPassword,
-            city: "Göteborg"
+            city: "Göteborg",
+            coordinates: coordinates
         });
      try {
          await clinicAccount.save();
@@ -58,6 +71,16 @@ function createModels() {
          console.error(error);
          return error;
      }
+ }
+
+ async function addressToCoordinates(city, address) {
+    let options = {
+        provider: 'openstreetmap'
+    }
+
+    const geoCoder = nodeGeocoder(options);
+
+    return await geoCoder.geocode(city + address)
  }
 
 // Authenticate a clinic
