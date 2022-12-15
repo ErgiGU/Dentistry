@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const path = require('path');
 let config
 try {
-    config = require('../helpers/config');
+    config = require('../helpers/config-server');
 } catch (e) {
     config = require('../helpers/dummy_config')
 }

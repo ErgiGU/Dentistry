@@ -1,7 +1,9 @@
 const mqttHandler = require('../helpers/mqtt_handler');
+const registerClinic = require('./controllers/authorization_controller');
+
 let config
 try {
-    config = require('../helpers/config');
+    config = require('../helpers/config-server');
 } catch (e) {
     config = require('../helpers/dummy_config')
 }
@@ -11,22 +13,42 @@ const mqttClient = new mqttHandler(config.module_config.authorizationUser.name, 
 mqttClient.connect()
 
 // MQTT subscriptions
-mqttClient.subscribeTopic('auth')
-mqttClient.subscribeTopic('test')
-mqttClient.subscribeTopic('testingTestingRequest')
+mqttClient.subscribeTopic('auth');
+mqttClient.subscribeTopic('test');
+mqttClient.subscribeTopic('registration');
+mqttClient.subscribeTopic("checkIfEmailExists");
+mqttClient.subscribeTopic('testingTestingRequest');
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
-    let intermediary = JSON.parse(message)
+    let intermediary = JSON.parse(message);
     console.log(config.module_config.authorizationUser.handler + " service received MQTT message")
     console.log(intermediary);
 
     switch (topic) {
-        case "firstTest":
-            mqttClient.sendMessage('testAppointment', 'Testing callback')
-            break;
         case 'auth':
             mqttClient.sendMessage('authTest', 'Authorization confirmed')
+            break;
+        case 'registration':
+            registerClinic.register(intermediary).then(res=>{
+                console.log(res);
+                if(res==="success!"){
+                    //sends the ok to the client for the registration
+                    sendMessage(intermediary, "/register","registration successful");
+                }else{
+                    sendMessage(intermediary, "/register","registration failed");
+                }
+            });
+            break;
+        case 'checkIfEmailExists':
+            const email = intermediary.body.email;
+            registerClinic.emailExists(email).then(res=>{
+                console.log(res);
+
+                if (res === "email already exists") {
+                    sendMessage(intermediary,"/checkEmail","email already exists");
+                }
+            });
             break;
         case 'testingTestingRequest':
             mqttClient.sendMessage('testingTesting', 'ToothyClinic')
@@ -35,6 +57,7 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             process.exit()
             break;
     }
+
 });
 
 // Function declaration
@@ -42,8 +65,10 @@ mqttClient.mqttClient.on('message', function (topic, message) {
  * Test function
  * @param message MQTT message
  */
-function testMessage(message) {
-    mqttClient.sendMessage(message.id + '/appointmentResponse', JSON.stringify(newClinic))
+
+
+function sendMessage(intermediary,topic,message) {
+    mqttClient.sendMessage( intermediary.id + topic, message)
 }
 
 module.exports = mqttClient;

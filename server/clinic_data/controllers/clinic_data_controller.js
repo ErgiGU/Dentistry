@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const clinicSchema = require('../../helpers/schemas/clinic')
 let config
 try {
-    config = require('../../helpers/config');
+    config = require('../../helpers/config-server');
 } catch (e) {
     config = require('../../helpers/dummy_config')
 }

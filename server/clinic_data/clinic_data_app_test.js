@@ -2,7 +2,7 @@ const assert = require('assert')
 const mqttHandler = require('../helpers/mqtt_handler');
 let config
 try {
-    config = require('../helpers/config');
+    config = require('../helpers/config-server');
 } catch (e) {
     config = require('../helpers/dummy_config')
 }
@@ -32,7 +32,7 @@ function asyncMethod() {
 describe('Clinic_data Tests', function () {
     describe('Multiplication', function () {
         it('This is for testing purposes. Fifty times two should equal one hundred', function () {
-            var result = 50 * 2
+            let result = 50 * 2;
             assert.equal(result, 100)
         })
     })

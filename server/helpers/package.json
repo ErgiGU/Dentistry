@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "helpers",
   "version": "1.0.0",
   "description": "",
   "main": "mqtt_handler.js",

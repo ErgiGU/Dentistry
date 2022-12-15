@@ -1,9 +1,10 @@
 const mqttHandler = require('../helpers/mqtt_handler');
 const appointments_controller = require("./controllers/appointments_controller")
 const appointments_mailer = require("./controllers/appointments_mailer");
+
 let config
 try {
-    config = require('../helpers/config');
+    config = require('../helpers/config-server');
 } catch (e) {
     config = require('../helpers/dummy_config')
 }

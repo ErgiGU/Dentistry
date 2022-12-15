@@ -3,9 +3,10 @@ import mapboxgl from "mapbox-gl";
 import "./ClinicsMap.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mqttHandler from "../../common_components/MqttHandler";
+import config from "../../config-client"
 
 // Access token for API
-mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN;
+mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN || config.mapbox_access_token
 
 function asyncMethod(client) {
     return new Promise((resolve, reject) => {

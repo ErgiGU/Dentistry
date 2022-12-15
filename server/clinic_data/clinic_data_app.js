@@ -2,7 +2,7 @@ const mqttHandler = require('../helpers/mqtt_handler');
 const clinicData = require('./controllers/clinic_data_controller')
 let config
 try {
-    config = require('../helpers/config');
+    config = require('../helpers/config-server');
 } catch (e) {
     config = require('../helpers/dummy_config')
 }
