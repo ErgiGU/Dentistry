@@ -1,5 +1,5 @@
 const mqttHandler = require('../helpers/mqtt_handler');
-const appointments_controller = require("./controllers/appointments_controller")
+const appointments_controller = require("./controllers/appointments_controller");
 const appointments_mailer = require("./controllers/appointments_mailer");
 
 let config
@@ -18,6 +18,7 @@ const mailer = new appointments_mailer
 
 // MQTT subscriptions
 mqttClient.subscribeTopic('test')
+mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('appointment')
 mqttClient.subscribeTopic('testingTestingRequest')
 mqttClient.subscribeTopic('bookTimeslot')
@@ -58,6 +59,9 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             break;
         case 'test':
             process.exit()
+            break;
+        case 'initiateTesting':
+            appointments_controller.reconnect(config.admin_config.database_tester.mongoURI)
             break;
         default:
             console.log('topic: ' + topic)

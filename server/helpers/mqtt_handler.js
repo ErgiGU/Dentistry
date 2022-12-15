@@ -6,6 +6,9 @@ try {
     config = require('./dummy_config')
 }
 
+/**
+ * MQTT client creation class
+ */
 class MqttHandler {
     constructor(username, password, clientId) {
         this.mqttClient = null;
@@ -15,6 +18,9 @@ class MqttHandler {
         this.password = password;
     }
 
+    /**
+     * Establishes a connection to the MQTT broker with the current client instance
+     */
     connect() {
         // Connect mqtt with credentials
         console.log(this.host)
@@ -43,11 +49,21 @@ class MqttHandler {
         });
     }
 
-    // Sends a mqtt message
+    /**
+     * Sends a message via MQTT
+     *
+     * @param topic
+     * @param message
+     */
     sendMessage(topic, message) {
         this.mqttClient.publish(topic, message);
     }
 
+    /**
+     * Subscribes to an MQTT topic
+     *
+     * @param topic
+     */
     subscribeTopic(topic) {
         this.mqttClient.subscribe(topic);
         console.log('subscribed to: ' + topic)
