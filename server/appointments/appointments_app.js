@@ -55,8 +55,9 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             break;
         case 'cancelBookedTimeslot':
             //Cancels the booked timeslot
-            const cancelTimeslotResult = cancelAppointment(intermediary)
-            //mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(cancelRes))
+            cancelAppointment(intermediary).then(r => {
+                mqttClient.sendMessage(intermediary.client_id + "/cancelBookedTimeslot", JSON.stringify(r))
+            })
             break;
         case 'test':
             process.exit()
@@ -147,14 +148,15 @@ async function bookAppointment(intermediary) {
 async function cancelAppointment(intermediary) {
     //METHOD CALL FOR DB MANIPULATION THAT DELETES THE TIMESLOT BUT RETURNS IT
     const canceledTimeslot = await waitDeleteTimeslot(intermediary.body)
+    if(canceledTimeslot.result === "Failure") {
+        return "Failure"
+    }
     console.log(canceledTimeslot)
     const mailCancelation = mailer.sendAppointmentCancelNotif(canceledTimeslot.timeslot.patient.email, canceledTimeslot.timeslot.startTime, canceledTimeslot.timeslot.clinic, canceledTimeslot.timeslot.dentist)
     if (mailCancelation === "Success") {
-        console.log("Successful Email")
         return "Success"
     } else {
-        console.log("Failure to Email")
-        return "Fail"
+        return "Failure"
     }
 }
 
