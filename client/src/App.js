@@ -24,6 +24,7 @@ function App() {
             <Route path ="/login" element= {< Login />} />
             <Route path ="/Home" element= {< Home />} />
             <Route path ="/map" element = {< MapPage />} />
+            <Route path ="/appointments" element = {< ViewAppointments />} />
         </Routes>
         </>
     );
