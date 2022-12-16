@@ -184,6 +184,13 @@ const clinicController = {
     editInfo,
     changePassword
 }
+
+/**
+ * Finds the correct clinic provided in the body, then creates a new dentist with the data provided in the body
+ * Then adds the dentist to the clinic's dentists list.
+ * @param req the message from the frontend.
+ * @returns {Promise<string>} A status and a response text.
+ */
 async function addDentist(req) {
     const email = req.body.email
     console.log(email)
