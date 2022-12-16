@@ -47,11 +47,11 @@ async function mapDataRequest() {
 
             if(clinic.openingHours.monday.start) {
                 openingHourString = "Opening Hours: " +
-                    "\nMonday: " + clinic.openingHours.monday.start + " - " + clinic.openingHours.monday.end +
-                    "\nTuesday: " + clinic.openingHours.tuesday.start + " - " + clinic.openingHours.tuesday.end +
-                    "\nWednesday: " + clinic.openingHours.wednesday.start + " - " + clinic.openingHours.wednesday.end +
-                    "\nThursday: " + clinic.openingHours.thursday.start + " - " + clinic.openingHours.thursday.end +
-                    "\nFriday : " + clinic.openingHours.friday.start + " - " + clinic.openingHours.friday.end
+                    "Monday: " + clinic.openingHours.monday.start + " - " + clinic.openingHours.monday.end +
+                    "  Tuesday: " + clinic.openingHours.tuesday.start + " - " + clinic.openingHours.tuesday.end +
+                    "  Wednesday: " + clinic.openingHours.wednesday.start + " - " + clinic.openingHours.wednesday.end +
+                    "  Thursday: " + clinic.openingHours.thursday.start + " - " + clinic.openingHours.thursday.end +
+                    "  Friday : " + clinic.openingHours.friday.start + " - " + clinic.openingHours.friday.end
             }else {
                 openingHourString = "No opening hours given"
             }

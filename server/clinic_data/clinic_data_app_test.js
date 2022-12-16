@@ -56,16 +56,24 @@ describe("Tests to see if the tests are working", function () {
 })
 
 describe('ClinicDataTests. Runs tests that checks up on every backend endpoint belonging to the clinic_data service.', function () {
-    describe('ClinicDataTests. Runs tests that checks up on every backend endpoint belonging to the clinic_data service.', function () {
-        it('Is await working? We want back ToothyClinic',  async function () {
+    describe('mapDataRequest', function () {
+        it('Get all clinic information relating to coordinate, address, opening-hour and name.',  async function () {
             const messageSend = {
-                hello: "Hello!"
+                hello: "Give Data"
             }
             const expectedResult = {
-                additional: "WillIt",
-                response: "ToothyClinic"
+                clinics: [{
+                    coordinates: [11.943074635698956, 57.7057104],
+                    properties: {
+                        title: "Testing Clinic",
+                        address: "Address: Lindholmen",
+                        opening_hours:
+                            "Opening Hours: Monday: 8:00 - 17:00  Tuesday: 8:00 - 17:00  Wednesday: 8:00 - 17:00  Thursday: 8:00 - 17:00  Friday : 8:00 - 17:00"
+
+                    }
+                }]
             }
-            await asyncMethod("testingTestingRequest", "testingTesting", messageSend, expectedResult)
+            await asyncMethod("mapDataRequest", "mapDataResponse", messageSend, expectedResult)
         })
     })
 

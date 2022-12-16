@@ -65,7 +65,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
                 id: "123",
                 body: {
                     clinicName: "Testing Clinic",
-                    address: "Lindholmen 83",
+                    address: "Lindholmen",
                     email: "burakaskan2001@gmail.com",
                     password: "Team-7"
                 }
@@ -97,7 +97,11 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
                 email: 'burakaskan2001@gmail.se',
                 dentists: [],
                 timeslots: [],
-                address: 'Lindholmen 83',
+                coordinates: {
+                    longitude: 11.943074635698956,
+                    latitude: 57.7057104
+                },
+                address: 'Lindholmen',
                 city: 'Göteborg',
                 __v: 0
             }
