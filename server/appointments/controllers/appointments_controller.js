@@ -100,11 +100,18 @@ async function makeAppointment(clinicID, dentistID, patientInfo, timeslotTime) {
 }
 
 async function cancelAppointment(timeslotID){
-    let timeslot = await timeslotModel.findByIdAndDelete(timeslotID).populate("dentist").populate("patient").populate("clinic")
-    await patientModel.findByIdAndDelete(timeslot.patient)
-    return {
-        timeslot
+    try{
+        let timeslotReturn = await timeslotModel.findByIdAndDelete(timeslotID).populate("dentist").populate("patient").populate("clinic")
+        await patientModel.findByIdAndDelete(timeslotReturn.patient)
+
+        return {result: "Success", timeslot: timeslotReturn}
+
+    }catch (e) {
+        console.log(e)
+        console.log("The appointment cancellation has failed")
+        return  {result: "Failure"}
     }
+
 }
 // Generates dummy data into the given clinic ID.
 async function generateData(clinicID) {
@@ -124,7 +131,8 @@ async function generateData(clinicID) {
 
     const patient = new patientModel({
         name: "Mathias Hallander",
-        timeslot: timeslot._id
+        timeslot: timeslot._id,
+        email: "burakaskan2001@gmail.com"
     });
 
     const dentist = new dentistModel({
