@@ -71,9 +71,23 @@ async function mapDataRequest() {
     }
 }
 
+function getWorkweek() {
+
+}
+
+function setWorkweek() {
+    return {
+        "job" : "success"
+    }
+}
+
+
+
 const clinicController = {
     mapDataRequest,
-    reconnect
+    reconnect,
+    getWorkweek,
+    setWorkweek
 }
 
 module.exports = clinicController

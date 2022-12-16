@@ -1,6 +1,5 @@
 import React from 'react';
 import BootstrapSwitchButton from 'bootstrap-switch-button-react'
-import CloseButton from 'react-bootstrap/CloseButton';
 
 //in case needed bootstrap template
 
@@ -29,9 +28,7 @@ const Modal = ({ open, onClose }) => {
 
                     <div className='content'>
                         <h1>Working days</h1>
-                        <button className='btnOutline' onClick={onClose}>
-                            <CloseButton />
-                        </button>
+                        <button type={"button"} className='btn-close btnOutline' onClick={onClose}></button>
                     </div>
                     <div className='btnContainer'>
                         <h4>monday</h4>
@@ -40,6 +37,9 @@ const Modal = ({ open, onClose }) => {
                             onlabel='on duty'
                             offlabel='off duty'
                             width={100}  />
+                        <div className={'form-check form-switch'}>
+                            <input className={'form-check-input'} type={'checkbox'} role={'switch'}/>
+                        </div>
                         <h4>tuesday</h4>
                         <BootstrapSwitchButton
                             checked={true}

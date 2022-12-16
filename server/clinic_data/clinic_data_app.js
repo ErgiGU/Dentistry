@@ -41,6 +41,9 @@ mqttClient.mqttClient.on('message', async function (topic, message) {
         case 'initiateTesting':
             clinic_data_controller.reconnect(config.admin_config.database_tester.mongoURI)
             break;
+        case 'update':
+            mqttClient.sendMessage(intermediary.id + '/responseWeek', clinic_data_controller.setWorkweek(intermediary.body.dentist, intermediary.body.workweek))
+            break;
     }
 });
 

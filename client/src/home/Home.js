@@ -3,7 +3,7 @@ import "./Home.css";
 import {useState} from 'react'
 import EditEmployees from "../DentistTime/EditEmployee"
 
-export function Home(){
+export default function Home() {
 
     const [openModal, setOpenModal] = useState(false);
     return(
