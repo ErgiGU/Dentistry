@@ -56,16 +56,40 @@ describe("Tests to see if the tests are working", function () {
 })
 
 describe('AppointmentTests. Runs tests that checks up on every backend endpoint belonging to the appointments service.', function () {
-    describe('AppointmentTests. Runs tests that checks up on every backend endpoint belonging to the appointments service.', function () {
-        it('Is await working? We want back ToothyClinic',  async function () {
+    describe('sendAppointmentInformation', function () {
+        it('See if timeslot(s) can be recieved',  async function () {
             const messageSend = {
-                hello: "Hello!"
+                client_id: "123",
+                body: {
+                    clinicID: "XXX"///TODO: FIGURE THIS OUT
+                }
             }
             const expectedResult = {
-                additional: "WillIt",
-                response: "ToothyClinic"
+                    patient: {
+                        name : "John Jane",
+                        text : "Check-up"
+                    },
+                    dentist: {
+                        name: "William Bjorn"
+                    },
+                    timeslot: "9:30"
             }
-            await asyncMethod("testingTestingRequest", "testingTesting", messageSend, expectedResult)
+            await asyncMethod("sendAppointmentInformation", "sendAppointmentInformation", messageSend, expectedResult)
+        })
+    })
+
+    describe('cancelBookedTimeslot', function () {
+        it('See if timeslot is canceled',  async function () {
+            const messageSend = {
+                client_id: "123",
+                body: {
+                    timeslotID: "XXX"///TODO: FIGURE THIS OUT
+                }
+            }
+            const expectedResult = {
+                response: "Success"
+            }
+            await asyncMethod("cancelBookedTimeslot", "cancelBookedTimeslot", messageSend, expectedResult)
         })
     })
 
