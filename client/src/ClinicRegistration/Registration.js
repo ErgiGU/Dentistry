@@ -117,7 +117,6 @@ export default function Registration() {
                 }
         sendMessage('checkIfEmailExists',json);
 
-        console.log(email.checkValidity())
         checkIfPassMatches();
         if(clinicName.checkValidity() && address.checkValidity() && email.checkValidity() && pass.checkValidity() &&
             confPass.checkValidity()) {

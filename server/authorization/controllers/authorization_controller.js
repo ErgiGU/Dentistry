@@ -35,10 +35,10 @@ const clinicModel = mongooseClient.model('clinic', clinicSchema);
         if(clinic){
             return "email already exists"
         }
-
  }
  //Register new clinic
  async function register(req){
+     //hashes and salts the password that it receives
      const hashedPassword = await bcrypt.hash(req.body.password, 10);
      console.log(req.body.clinicName);
      console.log(req.body.address);
@@ -61,27 +61,18 @@ const clinicModel = mongooseClient.model('clinic', clinicSchema);
      }
  }
 
-
-
-// Authenticate a clinic
-const loginClinic = async (req, res) => {
-    const {email, password} = req.body
-
-    // should find if clinic is registered
-    const clinic = await clinicModel.find({email})
-
-    if (clinic && bcrypt.compare(password, clinic.password)){
-        res.json({
-            name: clinic.name,
-            email: clinic.email,
-            password: clinic.password
-        })
-    } else{
-        res.status(400)
-    throw new Error("incorrect credentials")
+// Login function
+async function loginClinic(email,password) {
+    const clinic = await clinicModel.findOne({email: email});
+    if (clinic && await bcrypt.compare(password, clinic.password)) {
+        //more code will be added here(for saving the token)
+        return "login successful"
+    }else{
+        console.log("failed");
+        return "login failed"
+    }
 }
-    res.json({message:'authenticate clinic'})
-}
-module.exports = {emailExists,register};
+
+module.exports = {emailExists,register,loginClinic};
 
 
