@@ -137,10 +137,10 @@ async function bookAppointment(intermediary) {
     const mailingClinic = await waitClinicNotifMail(mailingData)
     if (mailingPatient === "Success" && mailingClinic === "Success") {
         console.log("Successful Email")
-        return "Success"
+        return {response: "Success"}
     } else {
         console.log("Failure to Email")
-        return "Fail"
+        return {response: "Fail"}
     }
 
 }
