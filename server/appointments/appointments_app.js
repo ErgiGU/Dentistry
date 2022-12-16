@@ -45,14 +45,10 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             const dataResult = waitGenerateData()
             break;
         case 'bookTimeslot':
-            const bookTimeslotResult = bookAppointment(intermediary)
-            const bookingRes = {
-                body: {
-                    message: bookTimeslotResult //If the whole thing has succeeded or failed.
-                }
-            }
-            mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(bookingRes))
-            break;
+            bookAppointment(intermediary).then(r => {
+                mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(r))
+            })
+             break;
         case 'cancelBookedTimeslot':
             //Cancels the booked timeslot
             cancelAppointment(intermediary).then(r => {
@@ -140,7 +136,7 @@ async function bookAppointment(intermediary) {
         return {response: "Success"}
     } else {
         console.log("Failure to Email")
-        return {response: "Fail"}
+        return {response: "Failure"}
     }
 
 }
@@ -149,14 +145,14 @@ async function cancelAppointment(intermediary) {
     //METHOD CALL FOR DB MANIPULATION THAT DELETES THE TIMESLOT BUT RETURNS IT
     const canceledTimeslot = await waitDeleteTimeslot(intermediary.body)
     if(canceledTimeslot.result === "Failure") {
-        return "Failure"
+        return {response: "Failure"}
     }
     console.log(canceledTimeslot)
     const mailCancelation = mailer.sendAppointmentCancelNotif(canceledTimeslot.timeslot.patient.email, canceledTimeslot.timeslot.startTime, canceledTimeslot.timeslot.clinic, canceledTimeslot.timeslot.dentist)
     if (mailCancelation === "Success") {
-        return "Success"
+        return {response: "Success"}
     } else {
-        return "Failure"
+        return {response: "Failure"}
     }
 }
 
