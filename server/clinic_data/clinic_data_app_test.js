@@ -77,6 +77,56 @@ describe('ClinicDataTests. Runs tests that checks up on every backend endpoint b
         })
     })
 
+    describe('editInfo', function () {
+        it('Editing the info of a given clinic',  async function () {
+            const messageSend = {
+                id: "123",
+                body: {
+                    name: "Clinic Testing",
+                    owner: "Oscar Davidsson",
+                    email: "burakaskan2001@gmail.com",
+                }
+            }
+            const expectedResult = {
+                status: 200,
+                text: "Successfully updated!"
+            }
+            await asyncMethod("editInfo", "editInfoResponse", messageSend, expectedResult)
+        })
+        it('Checking if edits were successful',  async function () {
+            const messageSend = {
+                id: "123",
+                body: {
+                    email: "burakaskan2001@gmail.com"
+                }
+            }
+            const expectedResult = {
+                openingHours: {
+                    monday: { start: '8:00', end: '17:00' },
+                    tuesday: { start: '8:00', end: '17:00' },
+                    wednesday: { start: '8:00', end: '17:00' },
+                    thursday: { start: '8:00', end: '17:00' },
+                    friday: { start: '8:00', end: '17:00' }
+                },
+                _id: 'id',
+                name: 'Clinic Testing',
+                owner: "Oscar Davidsson",
+                password: 'password',
+                email: 'burakaskan2001@gmail.se',
+                dentists: [],
+                timeslots: [],
+                coordinates: {
+                    longitude: 11.943074635698956,
+                    latitude: 57.7057104
+                },
+                address: 'Lindholmen',
+                city: 'Göteborg',
+                __v: 0
+            }
+
+            await asyncMethod("clinicDataRequest", "clinicData", messageSend, expectedResult)
+        })
+    })
 
     //Is needed to close the runner in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
     /*describe('Closing runner', function () {
