@@ -42,6 +42,12 @@ try {
                 clinic._id = "id"
                 mqttClient.sendMessage(intermediary.id + '/clinicData', JSON.stringify(clinic))
                 break;
+            case 'getDentist':
+                let dentist = await clinic_data_controller.getDentist(intermediary.body.email)
+                dentist= JSON.stringify(dentist)
+                dentist = JSON.parse(dentist)
+                dentist._id = "id"
+                mqttClient.sendMessage(intermediary.id + '/giveDentist', JSON.stringify(dentist))
             case 'testingTestingRequest':
                 const messageSending = {
                     response: "ToothyClinic",

@@ -128,6 +128,40 @@ describe('ClinicDataTests. Runs tests that checks up on every backend endpoint b
         })
     })
 
+    describe('AddDentist', function () {
+        it('See if dentist is getting added',  async function () {
+            const messageSend = {
+                id: "123",
+                body: {
+                    name: "William Bjorn",
+                    email: "burakaskan2001@gmail.com",
+                    phoneNumber: "073213214",
+                    speciality: "Teeth"
+                }
+            }
+            const expectedResult = {
+                status: 200,
+                test: "Dentist Added!"
+            }
+            await asyncMethod("AddDentist", "addDentistResponse", messageSend, expectedResult)
+        })
+        it('See if dentist was added',  async function () {
+            const messageSend = {
+                id: "id",
+                clinic: "id",///TODO: FIX THIS
+                name: "William Bjorn",
+                email: "burakaskan2001@gmail.com",
+                phoneNumber: "073213214",
+                speciality: "Teeth"
+            }
+            const expectedResult = {
+                status: 200,
+                test: "Dentist Added!"
+            }
+            await asyncMethod("AddDentist", "addDentistResponse", messageSend, expectedResult)
+        })
+    })
+
     //Is needed to close the runner in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
     /*describe('Closing runner', function () {
         it('Is this closing the runner?',   function () {

@@ -1,5 +1,6 @@
 const mongooseHandler = require('../../helpers/mongoose_handler')
 const clinicSchema = require('../../helpers/schemas/clinic')
+const dentistSchema = require('../../helpers/schemas/dentist')
 let config
 try {
     config = require('../../helpers/config-server');
@@ -14,6 +15,7 @@ mongooseClient.connect().then(() => {
 }, null)
 
 let clinicModel
+let dentistModel
 
 function reconnect(mongoURI) {
     mongooseClient.close()
@@ -25,10 +27,15 @@ function reconnect(mongoURI) {
 
 function createModels() {
     clinicModel = mongooseClient.model('clinic', clinicSchema)
+    dentistModel = mongooseClient.model('dentist', dentistSchema)
 }
 
 async function clinicData(email) {
     return await clinicModel.findOne({email: email})
+}
+
+async function getDentist(email) {
+    return await dentistModel.findOne({email: email})
 }
 
 async function mapDataRequest() {
@@ -78,7 +85,8 @@ async function mapDataRequest() {
 const clinicController = {
     mapDataRequest,
     reconnect,
-    clinicData
+    clinicData,
+    getDentist
 }
 
 module.exports = clinicController
