@@ -158,7 +158,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend endpoint b
                 status: 200,
                 test: "Dentist Added!"
             }
-            await asyncMethod("AddDentist", "addDentistResponse", messageSend, expectedResult)
+            await asyncMethod("getDentist", "giveDentist", messageSend, expectedResult)
         })
     })
 
