@@ -66,6 +66,8 @@ async function editInfo(req) {
             clinic.openingHours.thursday.end = req.body.openingHours.thursday.end || clinic.openingHours.thursday.end;
             clinic.openingHours.friday.start = req.body.openingHours.friday.start || clinic.openingHours.friday.start;
             clinic.openingHours.friday.end = req.body.openingHours.friday.end || clinic.openingHours.friday.end;
+            clinic.fikaHour = req.body.fikaHour || clinic.fikaHour;
+            clinic.lunchHour = req.body.lunchHour || clinic.lunchHour;
             clinic.save();
             console.log("successfully updated")
             console.log(clinic)

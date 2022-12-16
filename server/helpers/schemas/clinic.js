@@ -38,7 +38,9 @@ const clinicSchema = new Schema({
             start: {type: String, default: "08:00"},
             end: {type: String, default: "17:00"}
         },
-    }
+    },
+    lunchHour: String,
+    fikaHour: String
 })
 
 module.exports = clinicSchema

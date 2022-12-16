@@ -22,6 +22,8 @@ export function MyInformation() {
     const [thursdayEnd, setThursdayEnd] = useState("");
     const [fridayStart, setFridayStart] = useState("");
     const [fridayEnd, setFridayEnd] = useState("");
+    const [fikaHour, setFikaHour] = useState("");
+    const [lunchHour, setLunchHour] = useState("");
 
     useEffect(() => {
         if (client === null) {
@@ -53,7 +55,7 @@ export function MyInformation() {
                 client.end()
             }
         }
-    }, [client])
+    }, [client]);
 
     /**
      * A custom alert, which receives a message to be alerted.
@@ -162,6 +164,15 @@ export function MyInformation() {
             theTime = value.toString();
             setFridayEnd(theTime)
         }
+        if (id === "fikaHour") {
+            theTime = value.toString();
+            setFikaHour(theTime)
+        }
+        if (id === "lunchHour") {
+            theTime = value.toString();
+            setLunchHour(theTime)
+        }
+
     }
     /**
      * Checks if the user's input is valid. E.g the email has a valid format and the opening hours are logical.
@@ -217,7 +228,9 @@ export function MyInformation() {
                                         start: fridayStart,
                                         end: fridayEnd
                                     },
-                                }
+                                },
+                                lunchHour: lunchHour,
+                                fikaHour: fikaHour
                             },
                         }
                     ))
@@ -406,10 +419,29 @@ export function MyInformation() {
                                 onChange={(e) => handleChanges(e)}
                             />
                         </label>
-                        <button id={"otherButton"} onClick={() => submit()}>
-                            Change info
-                        </button>
                     </form>
+                    <form className="breakHours">
+                        <h3> Break hours </h3>
+                        <label> Fika hour </label> <br/>
+                        <input
+                            type="time"
+                            name="fikaHour"
+                            id={"fikaHour"}
+                            value={fikaHour}
+                            onChange={(e) => handleChanges(e)}
+                        /> <br/>
+                        <label> Lunch hour </label> <br/>
+                        <input
+                            type="time"
+                            name="lunchHour"
+                            id={"lunchHour"}
+                            value={lunchHour}
+                            onChange={(e) => handleChanges(e)}
+                        />
+                    </form>
+                    <button id={"otherButton"} onClick={() => submit()}>
+                        Change info
+                    </button>
                 </div>
                 <form className="passwordChanging" id={"form2"}>
                     <h2> Change password </h2>
