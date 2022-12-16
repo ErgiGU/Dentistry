@@ -56,6 +56,28 @@ describe("Tests to see if the tests are working", function () {
 })
 
 describe('AppointmentTests. Runs tests that checks up on every backend endpoint belonging to the appointments service.', function () {
+    describe('bookAppointment', function () {
+        it('See if timeslot gets booked',  async function () {
+            const messageSend = {
+                clientID: "123",
+                body: {
+                    clinicID: "", ///TODO: These ID's have to be fixed.
+                    dentistID: "",
+                    patientInfo: {
+                        name: "John Jane",
+                        email: "burakaskan2001@gmail.com",
+                        dateOfBirth: "17/08/01",
+                        text: "My tooth aches"
+                    },
+                    timeslotTime: "9:30"
+                }
+            }
+            const expectedResult = {
+                response: "Success"
+            }
+            await asyncMethod("sendAppointmentInformation", "sendAppointmentInformation", messageSend, expectedResult)
+        })
+    })
     describe('sendAppointmentInformation', function () {
         it('See if timeslot(s) can be recieved',  async function () {
             const messageSend = {
@@ -67,7 +89,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
             const expectedResult = {
                     patient: {
                         name : "John Jane",
-                        text : "Check-up"
+                        text : "My tooth aches"
                     },
                     dentist: {
                         name: "William Bjorn"
@@ -91,8 +113,19 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
             }
             await asyncMethod("cancelBookedTimeslot", "cancelBookedTimeslot", messageSend, expectedResult)
         })
+        it('Check if timeslot was deleted',  async function () {
+            const messageSend = {
+                client_id: "123",
+                body: {
+                    clinicID: "XXX"///TODO: FIGURE THIS OUT
+                }
+            }
+            const expectedResult = {
+                response: "No timeslots"
+            }
+            await asyncMethod("sendAppointmentInformation", "sendAppointmentInformation", messageSend, expectedResult)
+        })
     })
-
 
     //Is needed to close the runner in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
     /*describe('Closing runner', function () {
