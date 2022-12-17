@@ -36,10 +36,12 @@ try {
                 break;
             case 'clinicDataRequest':
                 let clinic = await clinic_data_controller.clinicData(intermediary.body.email)
-                clinic= JSON.stringify(clinic)
-                clinic = JSON.parse(clinic)
-                clinic.password = "password"
-                clinic._id = "id"
+                if(intermediary.body.test) {
+                    clinic= JSON.stringify(clinic)
+                    clinic = JSON.parse(clinic)
+                    clinic._id = "id"
+                    clinic.password = "password"
+                }
                 mqttClient.sendMessage(intermediary.id + '/clinicData', JSON.stringify(clinic))
                 break;
             case 'getDentist':

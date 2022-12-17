@@ -80,7 +80,8 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
             const messageSend = {
                 id: "123",
                 body: {
-                    email: "burakaskan2001@gmail.com"
+                    email: "burakaskan2001@gmail.com",
+                    test: "this is for the test"
                 }
             }
             const expectedResult = {

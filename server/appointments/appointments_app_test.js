@@ -10,6 +10,7 @@ try {
 
 mqttClient = new mqttHandler(config.module_config.appointmentUser.test.name, config.module_config.appointmentUser.test.password, config.module_config.appointmentUser.test.handler)
 mqttClient.connect()
+let clinicStored
 
 function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
     return new Promise((resolve, reject) => {
@@ -43,14 +44,8 @@ describe("Tests to see if the tests are working", function () {
     // await attempt at async testing
     describe('Tests to see if MQTT is working', function () {
         it('Is MQTT working? We want back ToothyClinic',  async function () {
-            const messageSend = {
-                hello: "Hello!"
-            }
-            const expectedResult = {
-                additional: "WillIt",
-                response: "ToothyClinic"
-            }
-            await asyncMethod("testingTestingRequest", "testingTesting", messageSend, expectedResult)
+            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "burakaskan2001@gmail.com"}}, "This is for getting data for tests")
+
         })
     })
 })
@@ -61,8 +56,8 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
             const messageSend = {
                 clientID: "123",
                 body: {
-                    clinicID: "", ///TODO: These ID's have to be fixed.
-                    dentistID: "",
+                    clinicID: clinicStored._id,
+                    dentistID: clinicStored.dentists[0],
                     patientInfo: {
                         name: "John Jane",
                         email: "burakaskan2001@gmail.com",
@@ -83,7 +78,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
             const messageSend = {
                 client_id: "123",
                 body: {
-                    clinicID: "XXX"///TODO: FIGURE THIS OUT
+                    clinicID: clinicStored._id
                 }
             }
             const expectedResult = {
@@ -102,10 +97,11 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
 
     describe('cancelBookedTimeslot', function () {
         it('See if timeslot is canceled',  async function () {
+            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "burakaskan2001@gmail.com"}}, "This is for getting data for tests")
             const messageSend = {
                 client_id: "123",
                 body: {
-                    timeslotID: "XXX"///TODO: FIGURE THIS OUT
+                    timeslotID: clinicStored.timeslots[0]
                 }
             }
             const expectedResult = {
@@ -117,7 +113,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
             const messageSend = {
                 client_id: "123",
                 body: {
-                    clinicID: "XXX"///TODO: FIGURE THIS OUT
+                    clinicID: clinicStored._id
                 }
             }
             const expectedResult = {

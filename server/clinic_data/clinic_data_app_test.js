@@ -10,6 +10,7 @@ try {
 
 mqttClient = new mqttHandler(config.module_config.clinicUser.test.name, config.module_config.clinicUser.test.password, config.module_config.clinicUser.test.handler)
 mqttClient.connect()
+let clinicStored
 
 function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
     return new Promise((resolve, reject) => {
@@ -43,17 +44,11 @@ describe("Tests to see if the tests are working", function () {
     // await attempt at async testing
     describe('A test to see if MQTT is working.', function () {
         it('Is MQTT working? We want back ToothyClinic.',  async function () {
-            const messageSend = {
-                hello: "Hello!"
-            }
-            const expectedResult = {
-                additional: "WillIt",
-                response: "ToothyClinic"
-            }
-            await asyncMethod("testingTestingRequest", "testingTesting", messageSend, expectedResult)
+            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "burakaskan2001@gmail.com"}}, "This is for getting data for tests")
         })
     })
 })
+
 
 describe('ClinicDataTests. Runs tests that checks up on every backend endpoint belonging to the clinic_data service.', function () {
     describe('mapDataRequest', function () {
@@ -84,7 +79,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend endpoint b
                 body: {
                     name: "Clinic Testing",
                     owner: "Oscar Davidsson",
-                    email: "burakaskan2001@gmail.com",
+                    email: "gusaskbu@student.gu.se",
                 }
             }
             const expectedResult = {
@@ -97,7 +92,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend endpoint b
             const messageSend = {
                 id: "123",
                 body: {
-                    email: "burakaskan2001@gmail.com"
+                    email: "gusaskbu@student.gu.se"
                 }
             }
             const expectedResult = {
@@ -108,10 +103,10 @@ describe('ClinicDataTests. Runs tests that checks up on every backend endpoint b
                     thursday: { start: '8:00', end: '17:00' },
                     friday: { start: '8:00', end: '17:00' }
                 },
-                _id: 'id',
+                _id: clinicStored._id,
                 name: 'Clinic Testing',
                 owner: "Oscar Davidsson",
-                password: 'password',
+                password: clinicStored.password,
                 email: 'burakaskan2001@gmail.se',
                 dentists: [],
                 timeslots: [],
@@ -147,16 +142,21 @@ describe('ClinicDataTests. Runs tests that checks up on every backend endpoint b
         })
         it('See if dentist was added',  async function () {
             const messageSend = {
-                id: "id",
-                clinic: "id",///TODO: FIX THIS
-                name: "William Bjorn",
-                email: "burakaskan2001@gmail.com",
-                phoneNumber: "073213214",
-                speciality: "Teeth"
+                id: "123",
+                body: {
+                    email: "burakaskan2001@gmail.com"
+                }
             }
             const expectedResult = {
-                status: 200,
-                test: "Dentist Added!"
+                body: {
+                    clinic: clinicStored._id,
+                    timeslots: [],
+                    _id: "id",
+                    name: "William Bjorn",
+                    email: "burakaskan2001@gmail.com",
+                    phoneNumber: "073213214",
+                    speciality: "Teeth"
+                }
             }
             await asyncMethod("getDentist", "giveDentist", messageSend, expectedResult)
         })
