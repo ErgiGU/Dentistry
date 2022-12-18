@@ -107,7 +107,7 @@ class appointments_mailer {
         } catch (e) {
             console.log("Failed to send cancelation mail to patient")
             console.log(e)
-            return "Failed"
+            return "Failure"
         }
     }
 }
