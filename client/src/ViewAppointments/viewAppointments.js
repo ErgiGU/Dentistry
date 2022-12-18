@@ -1,9 +1,76 @@
 import './ViewAppointments.css'
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { MDBRow, MDBCol } from 'mdb-react-ui-kit';
+import TimeslotCard from './components/timeslotCard'
+import mqttHandler from "../common_components/MqttHandler";
 
-function WithHeaderExample(props) {
-    const text = "Hello"
+
+function asyncMethod(client,clinic) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (client !== null) {
+                client.subscribe(client.options.clientId + '/#')
+                client.publish('sendAppointmentInformation', JSON.stringify({
+                    id: client.options.clientId,
+                    body: {
+                       clinicID : clinic
+                    }
+                }))
+                client.on('message', function (topic, message) {
+                    switch (topic) {
+                        case client.options.clientId + '/sendAppointmentInformation':
+                            resolve(JSON.parse(message))
+                            break;
+                        default:
+                            reject(new Error("The wrong message is received"))
+                            break;
+                    }
+                })
+            }
+        }, 1000)
+    })
+}
+
+async function waitTimeslot(clinic,client) {
+    return await asyncMethod(client,clinic)
+}
+
+const timeslot =  async (clinic, client) => {
+    const appointments = await waitTimeslot(clinic, client)
+    return (
+        <div>
+            {appointments.timeslots.map(({patient, dentist, timeslot}) => (
+            <div>
+                <TimeslotCard patientName = {patient.name} timeslotStarttime = {timeslot.startTime} patientText = {patient.text} dentistName = {dentist.name}/>
+            </div>
+            ))}
+        </div>
+    );
+};
+
+
+function WithHeaderExample() {
+
+    const [client, setClient] = useState(null);
+
+// Primary client generating effect
+    useEffect(() => {
+        if (client === null) {
+            setClient(mqttHandler.getClient(client))
+        }
+    }, [client])
+
+// Secondary effect containing all message logic and closure state
+    useEffect(() => {
+
+        return () => {
+            if (client !== null) {
+                console.log('ending process')
+                client.end()
+            }
+        }
+    }, [client])
+
     return (
         <div id="ty">
         <div id="background">
@@ -20,66 +87,8 @@ function WithHeaderExample(props) {
             </MDBCol>
 
             <MDBCol md='8'>
-                <div className="card1" >
-
-                    <div className="card-body">
-                        <div className="row align-items-end">
-                            <div className="col">DATE<div className="text">{text}</div></div>
-                            <div className="col">TIME<div className="text">hello</div></div>
-                            <div className="col">LOCATION<div className="text">hello</div></div>
-                            <div className="col">PATIENT<div className="text">hello</div></div>
-                            <div className="col">DOCTOR<div className="text">hello</div></div>
-                        </div>
-                    </div>
-                </div>
-                <div className="card1" >
-
-                    <div className="card-body">
-                        <div className="row align-items-end">
-                            <div className="col">Date</div>
-                            <div className="col">Time</div>
-                            <div className="col">Location</div>
-                            <div className="col">Patient</div>
-                            <div className="col">Doctor</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="card1" >
-
-                    <div className="card-body">
-                        <div className="row align-items-end">
-                            <div className="col">Date</div>
-                            <div className="col">Time</div>
-                            <div className="col">Location</div>
-                            <div className="col">Patient</div>
-                            <div className="col">Doctor</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="card1" >
-
-                    <div className="card-body">
-                        <div className="row align-items-end">
-                            <div className="col">Date</div>
-                            <div className="col">Time</div>
-                            <div className="col">Location</div>
-                            <div className="col">Patient</div>
-                            <div className="col">Doctor</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="card1" >
-
-                    <div className="card-body">
-                        <div className="row align-items-end">
-                            <div className="col">Date</div>
-                            <div className="col">Time</div>
-                            <div className="col">Location</div>
-                            <div className="col">Patient</div>
-                            <div className="col">Doctor</div>
-                        </div>
-                    </div>
-                </div>
+                {console.log(client)}
+                {timeslot('6391e39a3e08ac910fbede6f', client)}
             </MDBCol>
         </MDBRow>
 
