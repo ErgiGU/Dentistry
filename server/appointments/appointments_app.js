@@ -61,6 +61,11 @@ mqttClient.mqttClient.on('message', function (topic, message) {
         case 'test':
             process.exit()
             break;
+        case 'sendAppointmentInformation':
+            waitTimeslotData(intermediary).then(r => {
+                mqttClient.sendMessage(intermediary.id + "/sendAppointmentInformation", JSON.stringify(r))
+            })
+            break;
         default:
             console.log('topic: ' + topic)
             console.log('message: ' + message)
@@ -152,5 +157,7 @@ async function cancelAppointment(intermediary) {
         return "Fail"
     }
 }
+
+
 
 module.exports = mqttClient;

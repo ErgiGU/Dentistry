@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 function Navbar() {
     return (
-        <body>
+        <div>
         <div className="header">
             <img className="logo" src="https://cdn-icons-png.flaticon.com/512/2035/2035058.png" alt="logo" />
             <h1>DENTAL CLINIC</h1>
@@ -17,7 +17,7 @@ function Navbar() {
         <a href="javascript:void(0)">Contact</a>
         <a href="javascript:void(0)">Contact</a>
     </div>
-        </body>
+        </div>
 );
 }
 
