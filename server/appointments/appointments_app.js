@@ -63,7 +63,7 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             break;
         case 'sendAppointmentInformation':
             waitTimeslotData(intermediary).then(r => {
-                mqttClient.sendMessage(intermediary.client_id + "/sendAppointmentInformation", JSON.stringify(r))
+                mqttClient.sendMessage(intermediary.id + "/sendAppointmentInformation", JSON.stringify(r))
             })
             break;
         default:
