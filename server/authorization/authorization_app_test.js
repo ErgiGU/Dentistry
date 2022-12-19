@@ -14,14 +14,15 @@ mqttClient.connect()
 function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
+            console.log(topicRequest + topicResponse + messageSend)
 
             mqttClient.subscribeTopic("123/" + topicResponse)
             mqttClient.sendMessage(topicRequest, JSON.stringify(messageSend))
             mqttClient.mqttClient.on('message', function (topic, message) {
-
+                console.log(topic + " : is the topic of this message")
                 console.log('Message is received: ' + message + ' ::: This was the expectation: ' + JSON.stringify(expectedResult))
 
-                if(topic === topicResponse) {
+                if(topic === ("123/" + topicResponse)) {
                     if(util.isDeepStrictEqual(JSON.parse(message), expectedResult) ){
                         resolve("Success");
                     }else {
@@ -30,7 +31,7 @@ function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
                     }
                 }
             });
-        }, 1000)
+        }, 500)
     })
 }
 
@@ -46,6 +47,7 @@ describe("Tests to see if the tests are working", function () {
     // await attempt at async testing
     describe('Test to see if MQTT is working.', function () {
         it('Is MQTT working?',  async function () {
+            this.timeout(10000)
             const messageSend = {
                 hello: "Hello!"
             }
@@ -61,6 +63,7 @@ describe("Tests to see if the tests are working", function () {
 describe('AuthorizationTests. Runs tests that checks up on every backend endpoint belonging to the authorization service.', function () {
     describe('registeration.', function () {
         it('Testing for a successful registeration',  async function () {
+            this.timeout(10000)
             const messageSend = {
                 id: "123",
                 body: {
@@ -77,6 +80,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
         })
 
         it('Testing registration content',  async function () {
+            this.timeout(10000)
             const messageSend = {
                 id: "123",
                 body: {
@@ -112,6 +116,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
     })
     describe('checkIfEmailExists.', function () {
         it('Checking to see if a successful attempt correct.',  async function () {
+            this.timeout(10000)
             const messageSend = {
                 id: "123",
                 body: {
@@ -121,9 +126,10 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
             const expectedResult = {
                 response: "email does not exist"
             }
-            await asyncMethod("checkIfEmailExists", "checkMail", messageSend, expectedResult)
+            await asyncMethod("checkIfEmailExists", "checkEmail", messageSend, expectedResult)
         })
         it('Checking to see if a unsuccessful attempt is correct.',  async function () {
+            this.timeout(10000)
             const messageSend = {
                 id: "123",
                 body: {
@@ -133,7 +139,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
             const expectedResult = {
                 response: "email already exists"
             }
-            await asyncMethod("checkIfEmailExists", "checkMail", messageSend, expectedResult)
+            await asyncMethod("checkIfEmailExists", "checkEmail", messageSend, expectedResult)
         })
     })
 

@@ -50,12 +50,13 @@ try {
                 dentist = JSON.parse(dentist)
                 dentist._id = "id"
                 mqttClient.sendMessage(intermediary.id + '/giveDentist', JSON.stringify(dentist))
+                break;
             case 'testingTestingRequest':
                 const messageSending = {
                     response: "ToothyClinic",
                     additional: "WillIt"
                 }
-                mqttClient.sendMessage('testingTesting', JSON.stringify(messageSending))
+                mqttClient.sendMessage('123/testingTesting', JSON.stringify(messageSending))
                 break;
             case 'test':
                 process.exit()

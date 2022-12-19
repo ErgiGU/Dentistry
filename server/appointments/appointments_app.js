@@ -43,7 +43,7 @@ try {
                     response: "ToothyClinic",
                     additional: "WillIt"
                 }
-                mqttClient.sendMessage('testingTesting', JSON.stringify(messageSending))
+                mqttClient.sendMessage('123/testingTesting', JSON.stringify(messageSending))
                 break;
             case 'generateData':
                 const dataResult = waitGenerateData()
