@@ -1,5 +1,5 @@
 import React from "react";
-
+import '../ViewAppointments.css'
 export default function BookedTimeslots(props) {
 
     const patientName = props.patientName
