@@ -17,6 +17,9 @@ mqttClient.subscribeTopic('test')
 mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('mapDataRequest')
 mqttClient.subscribeTopic('testingTestingRequest')
+mqttClient.subscribeTopic('editInfo')
+mqttClient.subscribeTopic('changePassword')
+
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', async function (topic, message) {
@@ -40,6 +43,16 @@ mqttClient.mqttClient.on('message', async function (topic, message) {
             break;
         case 'initiateTesting':
             clinic_data_controller.reconnect(config.admin_config.database_tester.mongoURI)
+            break;
+        case 'editInfo':
+            clinicData.editInfo(intermediary).then(res => {
+                mqttClient.sendMessage(intermediary.id + '/editInfoResponse', res)
+            })
+            break;
+        case 'changePassword':
+            clinicData.changePassword(intermediary).then(res => {
+                mqttClient.sendMessage(intermediary.id + '/changePasswordResponse', res)
+            })
             break;
     }
 });

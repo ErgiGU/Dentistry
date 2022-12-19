@@ -37,26 +37,28 @@ const clinicSchema = new Schema({
     },
     openingHours: {
         monday: {
-            start: { type: String, default: "8:00" },
-            end: { type: String, default: "17:00" },
+            start: {type: String, default: "08:00"},
+            end: {type: String, default: "17:00"}
         },
         tuesday: {
-            start: { type: String, default: "8:00" },
-            end: { type: String, default: "17:00" },
+            start: {type: String, default: "08:00"},
+            end: {type: String, default: "17:00"}
         },
         wednesday: {
-            start: { type: String, default: "8:00" },
-            end: { type: String, default: "17:00" },
+            start: {type: String, default: "08:00"},
+            end: {type: String, default: "17:00"}
         },
         thursday: {
-            start: { type: String, default: "8:00" },
-            end: { type: String, default: "17:00" },
+            start: {type: String, default: "08:00"},
+            end: {type: String, default: "17:00"}
         },
         friday: {
-            start: { type: String, default: "8:00" },
-            end: { type: String, default: "17:00" },
+            start: {type: String, default: "08:00"},
+            end: {type: String, default: "17:00"}
         },
-    }
+    },
+    lunchHour: String,
+    fikaHour: String
 })
 
 module.exports = clinicSchema
