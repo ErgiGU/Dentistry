@@ -49,6 +49,8 @@ try {
 
                     if (res === "email already exists") {
                         sendMessage(intermediary,"/checkEmail","email already exists");
+                    }else {
+                        sendMessage(intermediary,"/checkEmail","email does not exists");
                     }
                 });
                 break;

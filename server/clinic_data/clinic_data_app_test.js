@@ -9,26 +9,28 @@ try {
 }
 
 mqttClient = new mqttHandler(config.module_config.clinicUser.test.name, config.module_config.clinicUser.test.password, config.module_config.clinicUser.test.handler)
-mqttClient.connect()
 let clinicStored
 
 function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            mqttClient.subscribeTopic(topicResponse)
+            console.log(topicRequest + topicResponse + messageSend)
+            mqttClient.connect()
+            mqttClient.subscribeTopic("123/" + topicResponse)
             mqttClient.sendMessage(topicRequest, JSON.stringify(messageSend))
             mqttClient.mqttClient.on('message', function (topic, message) {
+                console.log(topic + " : is the topic of this message")
                 console.log('Message is received: ' + message + ' ::: This was the expectation: ' + JSON.stringify(expectedResult))
-                if(topic === topicResponse) {
-                    if(util.isDeepStrictEqual(JSON.parse(message), expectedResult) ){
-                        resolve("Success");
-                    }else {
+
+                if(topic === ("123/" + topicResponse)) {
+                    resolve(JSON.parse(message));
+                    if(!util.isDeepStrictEqual(JSON.parse(message), expectedResult) ){
                         reject(new Error(message + " is not the expected message. This is: " + JSON.stringify(expectedResult)
-                        + ". The listing topic in backend: " + topicRequest + ". The listening topic in testing: " + topicResponse))
+                            + ". The listing topic in backend: " + topicRequest + ". The listening topic in testing: " + topicResponse))
                     }
                 }
             });
-        }, 1000)
+        }, 100)
     })
 }
 
@@ -44,7 +46,30 @@ describe("Tests to see if the tests are working", function () {
     // await attempt at async testing
     describe('A test to see if MQTT is working.', function () {
         it('Is MQTT working? We want back ToothyClinic.',  async function () {
-            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "burakaskan2001@gmail.com"}}, "This is for getting data for tests")
+            this.timeout(10000)
+            const expectedResult = {
+                openingHours: {
+                    monday: {start: '8:00', end: '17:00'},
+                    tuesday: {start: '8:00', end: '17:00'},
+                    wednesday: {start: '8:00', end: '17:00'},
+                    thursday: {start: '8:00', end: '17:00'},
+                    friday: {start: '8:00', end: '17:00'}
+                },
+                _id: 'id',
+                name: 'Testing Clinic',
+                password: 'password',
+                email: 'burakaskan2001@gmail.se',
+                dentists: [],
+                timeslots: [],
+                /*coordinates: {
+                    longitude: 11.943074635698956,
+                    latitude: 57.7057104
+                },*/
+                address: 'Lindholmen',
+                city: 'Göteborg',
+                __v: 0
+            }
+            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "burakaskan2001@gmail.com"}}, expectedResult)
         })
     })
 })
@@ -53,7 +78,9 @@ describe("Tests to see if the tests are working", function () {
 describe('ClinicDataTests. Runs tests that checks up on every backend endpoint belonging to the clinic_data service.', function () {
     describe('mapDataRequest', function () {
         it('Get all clinic information relating to coordinate, address, opening-hour and name.',  async function () {
+            this.timeout(10000)
             const messageSend = {
+                id: "123",
                 hello: "Give Data"
             }
             const expectedResult = {
@@ -74,6 +101,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend endpoint b
 
     describe('editInfo', function () {
         it('Editing the info of a given clinic',  async function () {
+            this.timeout(10000)
             const messageSend = {
                 id: "123",
                 body: {
@@ -89,6 +117,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend endpoint b
             await asyncMethod("editInfo", "editInfoResponse", messageSend, expectedResult)
         })
         it('Checking if edits were successful',  async function () {
+            this.timeout(10000)
             const messageSend = {
                 id: "123",
                 body: {
@@ -125,6 +154,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend endpoint b
 
     describe('AddDentist', function () {
         it('See if dentist is getting added',  async function () {
+            this.timeout(10000)
             const messageSend = {
                 id: "123",
                 body: {
@@ -141,6 +171,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend endpoint b
             await asyncMethod("AddDentist", "addDentistResponse", messageSend, expectedResult)
         })
         it('See if dentist was added',  async function () {
+            this.timeout(10000)
             const messageSend = {
                 id: "123",
                 body: {

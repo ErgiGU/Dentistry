@@ -49,13 +49,13 @@ try {
                 const dataResult = waitGenerateData()
                 break;
             case 'bookTimeslot':
-                const bookTimeslotResult = bookAppointment(intermediary)
-                const bookingRes = {
-                    body: {
-                        message: bookTimeslotResult //If the whole thing has succeeded or failed.
+                waitBookAppointment(intermediary).then(r => {
+                    const bookingRes = {
+                        response: r //If the whole thing has succeeded or failed.
                     }
-                }
-                mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(bookingRes))
+                    mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(bookingRes))
+                })
+
                 break;
             case 'cancelBookedTimeslot':
                 //Cancels the booked timeslot
@@ -108,6 +108,10 @@ async function waitPatientNotifMail(mailingData) {
 
 async function waitDeleteTimeslot(message) {
 
+}
+
+async function waitBookAppointment(message) {
+    return await bookAppointment(message)
 }
 
 // Function declaration

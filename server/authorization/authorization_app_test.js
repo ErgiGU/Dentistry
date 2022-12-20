@@ -7,15 +7,14 @@ try {
 } catch (e) {
     config = require('../helpers/dummy_config')
 }
-
 mqttClient = new mqttHandler(config.module_config.authorizationUser.test.name, config.module_config.authorizationUser.test.password, config.module_config.authorizationUser.test.handler)
-mqttClient.connect()
+
 
 function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             console.log(topicRequest + topicResponse + messageSend)
-
+            mqttClient.connect()
             mqttClient.subscribeTopic("123/" + topicResponse)
             mqttClient.sendMessage(topicRequest, JSON.stringify(messageSend))
             mqttClient.mqttClient.on('message', function (topic, message) {
@@ -23,15 +22,14 @@ function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
                 console.log('Message is received: ' + message + ' ::: This was the expectation: ' + JSON.stringify(expectedResult))
 
                 if(topic === ("123/" + topicResponse)) {
-                    if(util.isDeepStrictEqual(JSON.parse(message), expectedResult) ){
-                        resolve("Success");
-                    }else {
+                    resolve(JSON.parse(message));
+                    if(!util.isDeepStrictEqual(JSON.parse(message), expectedResult) ){
                         reject(new Error(message + " is not the expected message. This is: " + JSON.stringify(expectedResult)
                             + ". The listing topic in backend: " + topicRequest + ". The listening topic in testing: " + topicResponse))
                     }
                 }
             });
-        }, 500)
+        }, 100)
     })
 }
 
@@ -77,6 +75,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
                 response: "registration successful"
             }
             await asyncMethod("registration", "register", messageSend, expectedResult)
+
         })
 
         it('Testing registration content',  async function () {
@@ -90,11 +89,11 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
             }
             const expectedResult = {
                 openingHours: {
-                    monday: { start: '8:00', end: '17:00' },
-                    tuesday: { start: '8:00', end: '17:00' },
-                    wednesday: { start: '8:00', end: '17:00' },
-                    thursday: { start: '8:00', end: '17:00' },
-                    friday: { start: '8:00', end: '17:00' }
+                    monday: {start: '8:00', end: '17:00'},
+                    tuesday: {start: '8:00', end: '17:00'},
+                    wednesday: {start: '8:00', end: '17:00'},
+                    thursday: {start: '8:00', end: '17:00'},
+                    friday: {start: '8:00', end: '17:00'}
                 },
                 _id: 'id',
                 name: 'Testing Clinic',
@@ -102,20 +101,21 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
                 email: 'burakaskan2001@gmail.se',
                 dentists: [],
                 timeslots: [],
-                coordinates: {
+                /*coordinates: {
                     longitude: 11.943074635698956,
                     latitude: 57.7057104
-                },
+                },*/
                 address: 'Lindholmen',
                 city: 'Göteborg',
                 __v: 0
             }
 
             await asyncMethod("clinicDataRequest", "clinicData", messageSend, expectedResult)
+
         })
     })
     describe('checkIfEmailExists.', function () {
-        it('Checking to see if a successful attempt correct.',  async function () {
+        it('Checking to see if a successful attempt correct.',   async function () {
             this.timeout(10000)
             const messageSend = {
                 id: "123",
@@ -127,8 +127,9 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
                 response: "email does not exist"
             }
             await asyncMethod("checkIfEmailExists", "checkEmail", messageSend, expectedResult)
+
         })
-        it('Checking to see if a unsuccessful attempt is correct.',  async function () {
+        it('Checking to see if a unsuccessful attempt is correct.',   async function () {
             this.timeout(10000)
             const messageSend = {
                 id: "123",
