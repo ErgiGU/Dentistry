@@ -7,6 +7,7 @@ const dentistSchema = new Schema({
     name: String,
     email: String,
     phoneNumber: String,
+    speciality: String,
     lunchHour: String,
     fikaHour: String,
 })

@@ -1,5 +1,6 @@
 const mongooseHandler = require('../../helpers/mongoose_handler')
 const clinicSchema = require('../../helpers/schemas/clinic')
+const dentistSchema = require('../../helpers/schemas/dentist')
 let config
 try {
     config = require('../../helpers/config-server');
@@ -16,6 +17,7 @@ mongooseClient.connect().then(() => {
 }, null)
 
 let clinicModel
+let dentistModel
 
 function reconnect(mongoURI) {
     mongooseClient.close()
@@ -27,6 +29,7 @@ function reconnect(mongoURI) {
 
 function createModels() {
     clinicModel = mongooseClient.model('clinic', clinicSchema)
+    dentistModel = mongooseClient.model('dentist', dentistSchema)
 }
 
 async function mapDataRequest() {
@@ -180,6 +183,36 @@ const clinicController = {
     reconnect,
     editInfo,
     changePassword
+}
+async function addDentist(req) {
+    const email = req.body.email
+    console.log(email)
+    const clinic = await clinicModel.findOne({email})
+    let message;
+    if (clinic) {
+        const dentist = new dentistModel({
+            clinic: clinic._id,
+            name: req.body.name,
+            email: req.body.dentistEmail,
+            phoneNumber: req.body.phoneNumber,
+            speciality: req.body.specialty
+        })
+        dentist.save()
+        console.log(dentist)
+        clinic.dentists.push(dentist)
+        clinic.save()
+        console.log(clinic.dentists)
+        message = {
+            status: 200,
+            text: 'Dentist Added!'
+        }
+    } else {
+        message = {
+            status: 404,
+            text: 'Clinic not found!'
+        }
+    }
+    return JSON.stringify(message);
 }
 
 module.exports = clinicController

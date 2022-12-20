@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './NewDentist.css';
 import mqttHandler from "../common_components/MqttHandler";
+import Navbar from '../common_components/navbar'
 
 export function NewDentist() {
     const [client, setClient] = useState(null);
@@ -23,7 +24,7 @@ export function NewDentist() {
 
             client.on('message', function (topic, message) {
                 switch (topic) {
-                    case client.options.clientId + '/AddDentistResponse':
+                    case client.options.clientId + '/addDentistResponse':
                         receivedMessage(message.toString())
                         break;
                     default:
@@ -69,7 +70,6 @@ export function NewDentist() {
             ...formData,
             [e.target.name]: e.target.value
         }))
-        console.log(formData);
     }
 
     const submit = (e) => {
@@ -80,9 +80,9 @@ export function NewDentist() {
         if (!/^[0-9]*$/.test(formData.phoneNumber)) {
             const phone = document.getElementById("phoneNumber")
             phone.setCustomValidity("Phone number must contain digits only!")
-        }
-        else if ((formData.dentistName && formData.email && formData.phoneNumber && formData.specialty)) {
+        } else {
             e.preventDefault();
+            console.log(formData)
             if (client !== null) {
                 client.publish('AddDentist', JSON.stringify(
                     {
@@ -90,7 +90,7 @@ export function NewDentist() {
                         body: {
                             email: "modify@hotmail.se",
                             name: formData.dentistName,
-                            dentistEmail: formData.dentistName,
+                            dentistEmail: formData.email,
                             phoneNumber: formData.phoneNumber,
                             speciality: formData.specialty
                         }
@@ -102,61 +102,65 @@ export function NewDentist() {
     }
 
     return (
-        <div className="container">
-            <div id="liveAlertPlaceholder"></div>
-            <form className="formBox">
-                <h2> Add a new dentist </h2>
-                <div className="form-floating">
-                    <input required
-                           type="text"
-                           className="form-control"
-                           placeholder="dentistName"
-                           name="dentistName"
-                           id={"dentistName"}
-                           value={formData.dentistName}
-                           onChange={(e) => handleChanges(e)}
-                    />
-                    <label htmlFor="name"> Dentist's name </label>
-                </div>
-                <div className="form-floating">
-                    <input required
-                           type="text"
-                           className="form-control"
-                           placeholder="email"
-                           name="email"
-                           id={"email"}
-                           value={formData.email}
-                           onChange={(e) => handleChanges(e)}
-                    />
-                    <label htmlFor="email"> Dentist's email </label>
-                </div>
-                <div className="form-floating">
-                    <input required
-                           type="tel"
-                           className="form-control"
-                           placeholder="phone number"
-                           name="phoneNumber"
-                           id={"phoneNumber"}
-                           value={formData.phoneNumber}
-                           onChange={(e) => handleChanges(e)}
-                    />
-                    <label htmlFor="phoneNumber"> Dentist's phone number </label>
-                </div>
-                <div className="form-floating">
-                    <select className="form-select" id="floatingSelect" aria-label="Floating label select example"
-                            name="specialty" onChange={(e) => handleChanges(e)} required>
-                        <option value="Endodontist">Endodontist</option>
-                        <option value="Orthodontist">Orthodontist</option>
-                        <option value="Periodontist">Periodontist</option>
-                        <option value="Prosthodontist">Prosthodontist</option>
-                        <option value="Pedodontist">Pedodontist</option>
-                    </select>
-                    <label htmlFor="floatingSelect"> Speciality </label>
-                </div>
-                <button className={"button"} onClick={(e) => submit(e)}>
-                    Add Dentist!
-                </button>
-            </form>
-        </div>
+        <>
+            <Navbar/>
+            <div className="container">
+                <div id="liveAlertPlaceholder"></div>
+                <form className="formBox">
+                    <h2> Add a new dentist </h2>
+                    <div className="form-floating">
+                        <input required
+                               type="text"
+                               className="form-control"
+                               placeholder="dentistName"
+                               name="dentistName"
+                               id={"dentistName"}
+                               value={formData.dentistName}
+                               onChange={(e) => handleChanges(e)}
+                        />
+                        <label htmlFor="name"> Dentist's name </label>
+                    </div>
+                    <div className="form-floating">
+                        <input required
+                               type="text"
+                               className="form-control"
+                               placeholder="email"
+                               name="email"
+                               id={"email"}
+                               value={formData.email}
+                               onChange={(e) => handleChanges(e)}
+                        />
+                        <label htmlFor="email"> Dentist's email </label>
+                    </div>
+                    <div className="form-floating">
+                        <input required
+                               type="tel"
+                               className="form-control"
+                               placeholder="phone number"
+                               name="phoneNumber"
+                               id={"phoneNumber"}
+                               value={formData.phoneNumber}
+                               onChange={(e) => handleChanges(e)}
+                        />
+                        <label htmlFor="phoneNumber"> Dentist's phone number </label>
+                    </div>
+                    <div className="form-floating">
+                        <select className="form-select" id="floatingSelect" aria-label="Floating label select example"
+                                name="specialty" onChange={(e) => handleChanges(e)} required>
+                            <option selected>Open this select menu</option>
+                            <option value="Endodontist">Endodontist</option>
+                            <option value="Orthodontist">Orthodontist</option>
+                            <option value="Periodontist">Periodontist</option>
+                            <option value="Prosthodontist">Prosthodontist</option>
+                            <option value="Pedodontist">Pedodontist</option>
+                        </select>
+                        <label htmlFor="floatingSelect"> Speciality </label>
+                    </div>
+                    <button className={"button"} onClick={(e) => submit(e)}>
+                        Add Dentist!
+                    </button>
+                </form>
+            </div>
+        </>
     )
 }

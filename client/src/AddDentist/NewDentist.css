@@ -1,15 +1,18 @@
 .container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items:center;
 }
 
 .formBox {
+    display: block;
     font-family: Inter;
     font-size: 18px;
     color: white;
     padding: 30px;
     height: 500px;
-    margin: 3%;
+    margin-top: 5%;
+    margin-bottom: 5%;
     background-color: steelblue;
     box-shadow: 10px 0px 15px #888888;
     border-radius: 5px;
