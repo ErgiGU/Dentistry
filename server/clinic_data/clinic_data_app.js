@@ -32,6 +32,7 @@ try {
                 break;
             case 'mapDataRequest':
                 const body = await clinic_data_controller.mapDataRequest()
+                console.log(body)
                 mqttClient.sendMessage(intermediary.id + '/mapDataResponse', JSON.stringify(body))
                 break;
             case 'clinicDataRequest':
