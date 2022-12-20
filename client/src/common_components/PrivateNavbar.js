@@ -17,19 +17,11 @@ function PrivateNavbar() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="justify-content-end">
-<<<<<<< HEAD
-                        <Link href="/appointments" >Schedule</Link>
-                        <Link href="/">Your information</Link>
-                        <Link href="/">Opening hours</Link>
-                        <Link href="/">Add a dentist</Link>
-                        <Link href="/">Log out</Link>
-=======
                         <Nav.Link href="#home" >Home</Nav.Link>
                         <Nav.Link href="#lik">Clinics map</Nav.Link>
                         <Nav.Link href="#link">Book appointment</Nav.Link>
                         <Nav.Link href="#link">Our clinics</Nav.Link>
                         <Nav.Link href="#link">Log out</Nav.Link>
->>>>>>> 24ae8f1 (Clinic home page)
                     </Nav>
                 </Navbar.Collapse>
             </Container>
