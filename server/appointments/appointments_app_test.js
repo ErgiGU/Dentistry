@@ -23,14 +23,16 @@ function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
                 console.log('Message is received: ' + message + ' ::: This was the expectation: ' + JSON.stringify(expectedResult))
 
                 if(topic === ("123/" + topicResponse)) {
-                    resolve(JSON.parse(message));
-                    if(!util.isDeepStrictEqual(JSON.parse(message), expectedResult) ){
-                        reject(new Error(message + " is not the expected message. This is: " + JSON.stringify(expectedResult)
-                            + ". The listing topic in backend: " + topicRequest + ". The listening topic in testing: " + topicResponse))
+                    if(topic !== "123/clinicData" || messageSend.body.test) {
+                        if (!util.isDeepStrictEqual(JSON.parse(message), expectedResult)) {
+                            reject(new Error(message + " is not the expected message. This is: " + JSON.stringify(expectedResult)
+                                + ". The listing topic in backend: " + topicRequest + ". The listening topic in testing: " + topicResponse))
+                        }
                     }
+                    resolve(JSON.parse(message));
                 }
             });
-        }, 100)
+        }, 500)
     })
 }
 
@@ -62,7 +64,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                 client_id: "123",
                 body: {
                     clinicID: clinicStored._id,
-                    //dentistID: clinicStored.dentists[0],
+                    dentistID: clinicStored.dentists[0],
                     patientInfo: {
                         name: "John Jane",
                         email: "burakaskan2001@gmail.com",

@@ -22,14 +22,16 @@ function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
                 console.log('Message is received: ' + message + ' ::: This was the expectation: ' + JSON.stringify(expectedResult))
 
                 if(topic === ("123/" + topicResponse)) {
-                    resolve(JSON.parse(message));
-                    if(!util.isDeepStrictEqual(JSON.parse(message), expectedResult) ){
-                        reject(new Error(message + " is not the expected message. This is: " + JSON.stringify(expectedResult)
-                            + ". The listing topic in backend: " + topicRequest + ". The listening topic in testing: " + topicResponse))
+                    if(topic !== "123/clinicData" || messageSend.body.test) {
+                        if (!util.isDeepStrictEqual(JSON.parse(message), expectedResult)) {
+                            reject(new Error(message + " is not the expected message. This is: " + JSON.stringify(expectedResult)
+                                + ". The listing topic in backend: " + topicRequest + ". The listening topic in testing: " + topicResponse))
+                        }
                     }
+                    resolve(JSON.parse(message));
                 }
             });
-        }, 100)
+        }, 500)
     })
 }
 
@@ -101,10 +103,10 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
                 email: 'burakaskan2001@gmail.se',
                 dentists: [],
                 timeslots: [],
-                /*coordinates: {
+                coordinates: {
                     longitude: 11.943074635698956,
                     latitude: 57.7057104
-                },*/
+                },
                 address: 'Lindholmen',
                 city: 'Göteborg',
                 __v: 0
