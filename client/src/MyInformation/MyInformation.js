@@ -481,7 +481,6 @@ export function MyInformation() {
                         />
                         <label for="confirmPassword"> Confirm password </label>
                     </div>
-                    <label id={"passwordError"}> </label> <br/>
                     <button className={"button"} onClick={(e) => changePassword(e)}>
                         Change password
                     </button>
