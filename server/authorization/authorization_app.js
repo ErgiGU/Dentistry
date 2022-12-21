@@ -56,7 +56,7 @@ mqttClient.mqttClient.on('message', function (topic, message) {
         case "login":
             const emailLogin = intermediary.body.email;
             const password = intermediary.body.password;
-            clinicFunctions.loginClinic(emailLogin,password).then(res=>{
+            authorization_controller.loginClinic(emailLogin,password).then(res=>{
 
                 if(res.message === "login successful"){
                     mqttClient.sendMessage(intermediary.client_id + "/loginClient",JSON.stringify(res));

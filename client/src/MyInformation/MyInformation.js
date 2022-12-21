@@ -1,4 +1,4 @@
-import './MyInformation.css'
+//import './MyInformation.css'
 import React, {useEffect, useState} from 'react';
 import Navbar from '../common_components/navbar';
 import mqttHandler from "../common_components/MqttHandler";
@@ -49,6 +49,17 @@ export function MyInformation() {
             })
         }
 
+        /**
+         * Receives a message from the backend, parses it and sends it further to be alerted.
+         * @param message response from backend
+         */
+        function receivedMessage(message) {
+            console.log(message)
+            const pMessage = JSON.parse(message)
+            console.log(pMessage.status)
+            alert(pMessage)
+        }
+
         return () => {
             if (client !== null) {
                 console.log('ending process')
@@ -76,16 +87,6 @@ export function MyInformation() {
         }
     }
 
-    /**
-     * Receives a message from the backend, parses it and sends it further to be alerted.
-     * @param message response from backend
-     */
-    function receivedMessage(message) {
-        console.log(message)
-        const pMessage = JSON.parse(message)
-        console.log(pMessage.status)
-        alert(pMessage)
-    }
 
     /**
      * This will be connected to the backend, to get the current state of the clinic's information
