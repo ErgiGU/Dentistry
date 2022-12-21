@@ -1,9 +1,10 @@
 const mqttHandler = require('../helpers/mqtt_handler');
-const clinicFunctions = require('./controllers/authorization_controller');
+
+const authorization_controller = require('./controllers/authorization_controller');
 
 let config
 try {
-    config = require('../helpers/config');
+    config = require('../helpers/config-server');
 } catch (e) {
     config = require('../helpers/dummy_config')
 }
@@ -15,6 +16,7 @@ mqttClient.connect()
 // MQTT subscriptions
 mqttClient.subscribeTopic('auth');
 mqttClient.subscribeTopic('test');
+mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('registration');
 mqttClient.subscribeTopic("checkIfEmailExists");
 mqttClient.subscribeTopic('testingTestingRequest');
@@ -32,7 +34,7 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             break;
         //topic for registration
         case 'registration':
-            clinicFunctions.register(intermediary).then(res=>{
+            authorization_controller.register(intermediary).then(res=>{
                 if(res === "success!"){
                     //sends the ok to the client for the registration
                     mqttClient.sendMessage(intermediary.client_id + "/register","registration successful");
@@ -44,8 +46,7 @@ mqttClient.mqttClient.on('message', function (topic, message) {
         //topic for checking if the email already exists in the DB(used for registration)
         case 'checkIfEmailExists':
             const email = intermediary.body.email;
-            clinicFunctions.emailExists(email).then(res=>{
-
+            authorization_controller.emailExists(email).then(res=>{
                 if (res === "email already exists") {
                     mqttClient.sendMessage(intermediary.client_id + "/checkEmail","email already exists");
                 }
@@ -72,10 +73,12 @@ mqttClient.mqttClient.on('message', function (topic, message) {
         case 'test':
             process.exit()
             break;
+        case 'initiateTesting':
+            authorization_controller.reconnect(config.admin_config.database_tester.mongoURI)
+            break;
     }
 
 });
-
 
 
 module.exports = mqttClient;

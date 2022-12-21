@@ -3,6 +3,14 @@ const Schema = mongoose.Schema
 const jwt = require("jsonwebtoken");
 
 const clinicSchema = new Schema({
+    dentists: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Dentist'
+    }],
+    timeslots: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Timeslot'
+    }],
     name: {
         type:String,
         required: true
@@ -16,8 +24,6 @@ const clinicSchema = new Schema({
         unique: true
     },
     owner: String,
-    dentists: [{ type: Schema.Types.ObjectId, ref: 'Dentist' }],
-    timeslots: [{ type: Schema.Types.ObjectId, ref: 'Timeslot' }],
     coordinates: {
         longitude: Number,
         latitude: Number,
@@ -32,26 +38,28 @@ const clinicSchema = new Schema({
     },
     openingHours: {
         monday: {
-            start: { type: String, default: "8:00" },
-            end: { type: String, default: "17:00" },
+            start: {type: String, default: "08:00"},
+            end: {type: String, default: "17:00"}
         },
         tuesday: {
-            start: { type: String, default: "8:00" },
-            end: { type: String, default: "17:00" },
+            start: {type: String, default: "08:00"},
+            end: {type: String, default: "17:00"}
         },
         wednesday: {
-            start: { type: String, default: "8:00" },
-            end: { type: String, default: "17:00" },
+            start: {type: String, default: "08:00"},
+            end: {type: String, default: "17:00"}
         },
         thursday: {
-            start: { type: String, default: "8:00" },
-            end: { type: String, default: "17:00" },
+            start: {type: String, default: "08:00"},
+            end: {type: String, default: "17:00"}
         },
         friday: {
-            start: { type: String, default: "8:00" },
-            end: { type: String, default: "17:00" },
+            start: {type: String, default: "08:00"},
+            end: {type: String, default: "17:00"}
         },
-    }
+    },
+    lunchHour: String,
+    fikaHour: String
 })
 
 clinicSchema.methods.generateToken = function () {
@@ -60,3 +68,4 @@ clinicSchema.methods.generateToken = function () {
 
 
 module.exports = clinicSchema
+

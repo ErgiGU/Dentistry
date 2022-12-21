@@ -1,11 +1,14 @@
 const mqtt = require('mqtt');
 let config
 try {
-    config = require('./config');
+    config = require('./config-server');
 } catch (e) {
     config = require('./dummy_config')
 }
 
+/**
+ * MQTT client creation class
+ */
 class MqttHandler {
     constructor(username, password, clientId) {
         this.mqttClient = null;
@@ -15,8 +18,12 @@ class MqttHandler {
         this.password = password;
     }
 
+    /**
+     * Establishes a connection to the MQTT broker with the current client instance
+     */
     connect() {
         // Connect mqtt with credentials
+        console.log(this.host)
         this.mqttClient = mqtt.connect(this.host,
             {
                 username: this.username,
@@ -27,7 +34,7 @@ class MqttHandler {
 
         // Mqtt error callback
         this.mqttClient.on('error', (err) => {
-            console.log('Error on client' + this.clientId);
+            console.log('Error on client ' + this.clientId);
             console.log(err);
             this.mqttClient.end();
         });
@@ -42,11 +49,21 @@ class MqttHandler {
         });
     }
 
-    // Sends a mqtt message
+    /**
+     * Sends a message via MQTT
+     *
+     * @param topic
+     * @param message
+     */
     sendMessage(topic, message) {
         this.mqttClient.publish(topic, message);
     }
 
+    /**
+     * Subscribes to an MQTT topic
+     *
+     * @param topic
+     */
     subscribeTopic(topic) {
         this.mqttClient.subscribe(topic);
         console.log('subscribed to: ' + topic)

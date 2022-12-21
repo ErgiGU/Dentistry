@@ -1,8 +1,9 @@
 const mqttHandler = require('../helpers/mqtt_handler');
-const clinicData = require('./controllers/clinic_data_controller')
+const clinic_data_controller = require('./controllers/clinic_data_controller');
+
 let config
 try {
-    config = require('../helpers/config');
+    config = require('../helpers/config-server');
 } catch (e) {
     config = require('../helpers/dummy_config')
 }
@@ -13,27 +14,45 @@ mqttClient.connect()
 
 // MQTT subscriptions
 mqttClient.subscribeTopic('test')
+mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('mapDataRequest')
 mqttClient.subscribeTopic('testingTestingRequest')
+mqttClient.subscribeTopic('editInfo')
+mqttClient.subscribeTopic('changePassword')
+
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', async function (topic, message) {
+    let intermediary = JSON.parse(message)
     console.log(config.module_config.clinicUser.handler + " service received MQTT message")
-    console.log(message.toString());
+    console.log(intermediary);
 
     switch (topic) {
         case 'firstTest':
             mqttClient.sendMessage('testAppointment', 'Testing callback')
             break;
         case 'mapDataRequest':
-            const body = await clinicData.mapDataRequest()
-            mqttClient.sendMessage(JSON.parse(message).id + '/mapDataResponse', JSON.stringify(body))
+            const body = await clinic_data_controller.mapDataRequest()
+            mqttClient.sendMessage(intermediary.id + '/mapDataResponse', JSON.stringify(body))
             break;
         case 'testingTestingRequest':
             mqttClient.sendMessage('testingTesting', 'ToothyClinic')
             break;
         case 'test':
             process.exit()
+            break;
+        case 'initiateTesting':
+            clinic_data_controller.reconnect(config.admin_config.database_tester.mongoURI)
+            break;
+        case 'editInfo':
+            clinicData.editInfo(intermediary).then(res => {
+                mqttClient.sendMessage(intermediary.id + '/editInfoResponse', res)
+            })
+            break;
+        case 'changePassword':
+            clinicData.changePassword(intermediary).then(res => {
+                mqttClient.sendMessage(intermediary.id + '/changePasswordResponse', res)
+            })
             break;
     }
 });
