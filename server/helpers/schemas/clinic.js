@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const jwt = require("jsonwebtoken");
 
 const clinicSchema = new Schema({
     dentists: [{
@@ -60,6 +61,11 @@ const clinicSchema = new Schema({
     lunchHour: String,
     fikaHour: String
 })
+
+clinicSchema.methods.generateToken = function () {
+    return jwt.sign(this.toJSON(), 'secret_key');
+}
+
 
 module.exports = clinicSchema
 

@@ -35,10 +35,10 @@ function createModels() {
         if(clinic){
             return "email already exists"
         }
-
  }
  //Register new clinic
  async function register(req){
+     //hashes and salts the password that it receives
      const hashedPassword = await bcrypt.hash(req.body.password, 10);
      console.log(req.body.clinicName);
      console.log(req.body.address);
@@ -73,6 +73,24 @@ function createModels() {
      }
  }
 
+// Login function
+async function loginClinic(email, password) {
+    const clinic = await clinicModel.findOne({email: email});
+    if (clinic && await bcrypt.compare(password, clinic.password)) {
+        const token = clinic.generateToken();
+        const payload = {
+            message: "login successful",
+            clinicAccount: clinic,
+            token: token
+        }
+
+        return payload;
+    }else{
+        console.log("failed");
+        return "Invalid email/password"
+    }
+}
+
  async function addressToCoordinates(city, address) {
     let options = {
         provider: 'openstreetmap'
@@ -83,30 +101,8 @@ function createModels() {
     return await geoCoder.geocode(city + address)
  }
 
-// Authenticate a clinic
-const loginClinic = async (req, res) => {
-    const {email, password} = req.body
 
-    // should find if clinic is registered
-    const clinic = await clinicModel.find({email})
+module.exports = {emailExists,register,loginClinic,reconnect};
 
-    if (clinic && bcrypt.compare(password, clinic.password)){
-        res.json({
-            name: clinic.name,
-            email: clinic.email,
-            password: clinic.password
-        })
-    } else{
-        res.status(400)
-    throw new Error("incorrect credentials")
-}
-    res.json({message:'authenticate clinic'})
-}
-
-module.exports = {
-    emailExists,
-    register,
-    reconnect
-};
 
 
