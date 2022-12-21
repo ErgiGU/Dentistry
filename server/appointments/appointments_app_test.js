@@ -23,7 +23,7 @@ function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
                 console.log('Message is received: ' + message + ' ::: This was the expectation: ' + JSON.stringify(expectedResult))
 
                 if(topic === ("123/" + topicResponse)) {
-                    if(topic !== "123/clinicData" || messageSend.body.test) {
+                    if(topic !== "123/clinicData" || messageSend.body !== undefined && messageSend.body.test) {
                         if (!util.isDeepStrictEqual(JSON.parse(message), expectedResult)) {
                             reject(new Error(message + " is not the expected message. This is: " + JSON.stringify(expectedResult)
                                 + ". The listing topic in backend: " + topicRequest + ". The listening topic in testing: " + topicResponse))

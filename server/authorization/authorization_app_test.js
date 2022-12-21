@@ -22,7 +22,7 @@ function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
                 console.log('Message is received: ' + message + ' ::: This was the expectation: ' + JSON.stringify(expectedResult))
 
                 if(topic === ("123/" + topicResponse)) {
-                    if(topic !== "123/clinicData" || messageSend.body.test) {
+                    if(topic !== "123/loginClient"  && messageSend.body !== undefined && messageSend.body.test !== undefined) {
                         if (!util.isDeepStrictEqual(JSON.parse(message), expectedResult)) {
                             reject(new Error(message + " is not the expected message. This is: " + JSON.stringify(expectedResult)
                                 + ". The listing topic in backend: " + topicRequest + ". The listening topic in testing: " + topicResponse))
@@ -98,20 +98,19 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
                     friday: {start: '8:00', end: '17:00'}
                 },
                 _id: 'id',
-                name: 'Testing Clinic',
-                password: 'password',
-                email: 'burakaskan2001@gmail.se',
                 dentists: [],
                 timeslots: [],
+                name: 'Testing Clinic',
+                password: 'password',
+                email: 'burakaskan2001@gmail.com',
                 coordinates: {
                     longitude: 11.943074635698956,
                     latitude: 57.7057104
                 },
                 address: 'Lindholmen',
                 city: 'Göteborg',
-                __v: 0
+                __v: 1
             }
-
             await asyncMethod("clinicDataRequest", "clinicData", messageSend, expectedResult)
 
         })
@@ -146,7 +145,47 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
         })
     })
 
+    describe('login', function () {
+        it('Checking to see if a successful attempt correct.',   async function () {
+            this.timeout(10000)
+            const messageSend = {
+                id: "123",
+                body: {
+                    email: "burakaskan2001@gmail.com",
+                    password: "Team-7Test"
+                }
+            }
+            const expectedResult = {
+                message: "login successful",
+                clinicAccount: "clinic"
+            }
+            const clinicStored = await asyncMethod("clinicDataRequest", "clinicData", messageSend, expectedResult)
+            const result = await asyncMethod("login", "loginClient", messageSend, expectedResult)
+            if (!util.isDeepStrictEqual(result.clinicAccount, clinicStored)) {
+                new Error(JSON.stringify(result.clinicAccount) + " is not the expected message. This is: " + JSON.stringify(expectedResult)
+                    + ". The listing topic in backend: " + "login" + ". The listening topic in testing: " + "123/loginClient")
+            }
 
+        })
+        it('Checking to see if a unsuccessful attempt correct.',   async function () {
+            this.timeout(10000)
+            const messageSend = {
+                id: "123",
+                body: {
+                    email: "burakaskan2001@gmail.com",
+                    password: "Team-7"
+                }
+            }
+            const expectedResult = {
+                message: "login successful",
+                clinicAccount: "clinic",
+                token: "token"
+            }
+            await asyncMethod("login", "loginClient", messageSend, expectedResult).then(r => {
+                assert.equal(r.message, "Invalid email/password")
+            })
+        })
+    })
     //Is needed to close the runner in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
     /*describe('Closing runner', function () {
         it('Is this closing the runner?',   function () {

@@ -23,7 +23,7 @@ function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
                 console.log('Message is received: ' + message + ' ::: This was the expectation: ' + JSON.stringify(expectedResult))
 
                 if(topic === ("123/" + topicResponse)) {
-                    if(topic !== "123/clinicData" || messageSend.body.test){
+                    if(topic !== "123/clinicData" || messageSend.body !== undefined && messageSend.body.test !== undefined){
                         if(!util.isDeepStrictEqual(JSON.parse(message), expectedResult) ){
                             reject(new Error(message + " is not the expected message. This is: " + JSON.stringify(expectedResult)
                                 + ". The listing topic in backend: " + topicRequest + ". The listening topic in testing: " + topicResponse))
@@ -109,7 +109,8 @@ describe('ClinicDataTests. Runs tests that checks up on every backend endpoint b
                 body: {
                     name: "Clinic Testing",
                     owner: "Oscar Davidsson",
-                    email: "gusaskbu@student.gu.se",
+                    email: "burakaskan2001@gmail.com",
+                    newEmail: "gusaskbu@student.gu.se",
                 }
             }
             const expectedResult = {
@@ -151,7 +152,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend endpoint b
                 __v: 0
             }
 
-            //await asyncMethod("clinicDataRequest", "clinicData", messageSend, expectedResult)
+            await asyncMethod("clinicDataRequest", "clinicData", messageSend, expectedResult)
         })
     })
 
@@ -162,7 +163,8 @@ describe('ClinicDataTests. Runs tests that checks up on every backend endpoint b
                 id: "123",
                 body: {
                     name: "William Bjorn",
-                    email: "burakaskan2001@gmail.com",
+                    email: "gusaskbu@student.gu.se",
+                    dentistEmail: "burakaskan2001@gmail.com",
                     phoneNumber: "073213214",
                     speciality: "Teeth"
                 }
