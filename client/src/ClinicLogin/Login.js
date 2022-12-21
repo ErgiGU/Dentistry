@@ -35,9 +35,11 @@ export default function Login() {
                 const intermediary = message.toString();
                 switch (topic) {
                     case client.options.clientId + "/loginClient":
-                        if(intermediary === "login successful"){
-
-
+                        const jsonRes = JSON.parse(intermediary);
+                        if(jsonRes.message === "login successful"){
+                            localStorage.token = jsonRes.token;
+                            console.log(jsonRes.token);
+                            //put the line that takes the clinic to the home page
                         }else{
                             setShowAlert(true);
                         }
@@ -81,7 +83,7 @@ export default function Login() {
         setShowAlert(false);
         if(email.checkValidity() && pass.checkValidity()){
             const json = {
-                "id": client.options.clientId,
+                "client_id": client.options.clientId,
                 "body": {
                     "email": loginData.email,
                     "password": loginData.password

@@ -36,7 +36,7 @@ export default function Registration() {
                 const intermediary = message.toString();
                 switch (topic) {
                     case client.options.clientId + "/checkEmail":
-                        if (intermediary==="email already exists"){
+                        if (intermediary === "email already exists"){
                             console.log(intermediary)
                             email.setCustomValidity("Email already exists");
                             email.reportValidity()
@@ -45,7 +45,7 @@ export default function Registration() {
                         }
                         break;
                     case client.options.clientId + "/register":
-                        if(intermediary==="registration successful"){
+                        if(intermediary === "registration successful"){
                             alert(" You've successfully registered your clinic!","success");
                             setTimeout(() => {
                                 navigate("/login");
@@ -110,11 +110,11 @@ export default function Registration() {
 
         //checks if email exists by sending it to the backend
         const json = {
-                    "id": client.options.clientId,
-                    "body": {
-                        "email": formData.email
-                    }
-                }
+            "client_id": client.options.clientId,
+            "body": {
+                "email": formData.email
+            }
+        }
         sendMessage('checkIfEmailExists',json);
 
         checkIfPassMatches();
@@ -122,7 +122,7 @@ export default function Registration() {
             confPass.checkValidity()) {
             event.preventDefault();
             let clinicAccount = {
-                    "id": client.options.clientId,
+                    "client_id": client.options.clientId,
                     "body": {
                         "clinicName": formData.clinicName,
                         "address": formData.address,

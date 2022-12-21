@@ -3,6 +3,7 @@
 const bcrypt = require("bcrypt");
 const clinicSchema = require('../../helpers/schemas/clinic');
 const mongoose = require("mongoose");
+const jwt = require('jsonwebtoken');
 let config
 try {
     config = require('../../helpers/config');
@@ -40,10 +41,6 @@ const clinicModel = mongooseClient.model('clinic', clinicSchema);
  async function register(req){
      //hashes and salts the password that it receives
      const hashedPassword = await bcrypt.hash(req.body.password, 10);
-     console.log(req.body.clinicName);
-     console.log(req.body.address);
-     console.log(req.body.email);
-     console.log(hashedPassword);
      const clinicAccount = new clinicModel(
         {
             name:req.body.clinicName ,
@@ -65,13 +62,22 @@ const clinicModel = mongooseClient.model('clinic', clinicSchema);
 async function loginClinic(email,password) {
     const clinic = await clinicModel.findOne({email: email});
     if (clinic && await bcrypt.compare(password, clinic.password)) {
-        //more code will be added here(for saving the token)
-        return "login successful"
+        const token = clinic.generateToken();
+        const payload = {
+            message: "login successful",
+            clinicAccount: clinic,
+            token: token
+        }
+
+        return payload;
     }else{
         console.log("failed");
-        return "login failed"
+        return "Invalid email/password"
     }
 }
+
+
+
 
 module.exports = {emailExists,register,loginClinic};
 

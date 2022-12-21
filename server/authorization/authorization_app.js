@@ -35,9 +35,9 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             clinicFunctions.register(intermediary).then(res=>{
                 if(res === "success!"){
                     //sends the ok to the client for the registration
-                    sendMessage(intermediary, "/register","registration successful");
+                    mqttClient.sendMessage(intermediary.client_id + "/register","registration successful");
                 }else{
-                    sendMessage(intermediary, "/register","registration failed");
+                    mqttClient.sendMessage(intermediary.client_id + "/register","registration failed");
                 }
             });
             break;
@@ -47,7 +47,7 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             clinicFunctions.emailExists(email).then(res=>{
 
                 if (res === "email already exists") {
-                    sendMessage(intermediary,"/checkEmail","email already exists");
+                    mqttClient.sendMessage(intermediary.client_id + "/checkEmail","email already exists");
                 }
             });
             break;
@@ -56,11 +56,12 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             const emailLogin = intermediary.body.email;
             const password = intermediary.body.password;
             clinicFunctions.loginClinic(emailLogin,password).then(res=>{
-                if(res === "login successful"){
-                    //
+
+                if(res.message === "login successful"){
+                    mqttClient.sendMessage(intermediary.client_id + "/loginClient",JSON.stringify(res));
                 }else{
                     console.log("sent");
-                    sendMessage(intermediary,"/loginClient", "Invalid email/password")
+                    mqttClient.sendMessage(intermediary.client_id + "/loginClient", "Invalid email/password")
                 }
             })
 
@@ -75,15 +76,6 @@ mqttClient.mqttClient.on('message', function (topic, message) {
 
 });
 
-/**
- * sends message to the frontend client
- * @param message MQTT message
- * @param intermediary This is used to extract the id so that it sends the message to the correct client page
- * @param topic this is the mqtt topic
- */
 
-function sendMessage(intermediary,topic,message) {
-    mqttClient.sendMessage( intermediary.id + topic, message)
-}
 
 module.exports = mqttClient;
