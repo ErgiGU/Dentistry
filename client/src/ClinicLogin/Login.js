@@ -39,6 +39,7 @@ export default function Login() {
                         if(jsonRes.message === "login successful"){
                             localStorage.token = jsonRes.token;
                             console.log(jsonRes.token);
+                            console.log(jsonRes.clinicAccount.clinicName);
                             //put the line that takes the clinic to the home page
                         }else{
                             setShowAlert(true);
@@ -57,7 +58,6 @@ export default function Login() {
             }
         }
     }, [client])
-
 
 
     // eslint-disable-next-line no-unused-vars

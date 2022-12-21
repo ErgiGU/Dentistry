@@ -45,6 +45,8 @@ export default function Registration() {
                         }
                         break;
                     case client.options.clientId + "/register":
+                        /*this code is for making the alert appear and redirecting
+                        the user to login(if the registration is successful)*/
                         if(intermediary === "registration successful"){
                             alert(" You've successfully registered your clinic!","success");
                             setTimeout(() => {
@@ -100,7 +102,7 @@ export default function Registration() {
     };
 
 
-    function registerClinic1(event){
+    function registerClinic1(event) {
         //event.preventDefault();
         clinicName.setCustomValidity("");
         address.setCustomValidity("");
@@ -115,22 +117,22 @@ export default function Registration() {
                 "email": formData.email
             }
         }
-        sendMessage('checkIfEmailExists',json);
+        sendMessage('checkIfEmailExists', json);
 
         checkIfPassMatches();
-        if(clinicName.checkValidity() && address.checkValidity() && email.checkValidity() && pass.checkValidity() &&
+        if (clinicName.checkValidity() && address.checkValidity() && email.checkValidity() && pass.checkValidity() &&
             confPass.checkValidity()) {
             event.preventDefault();
             let clinicAccount = {
-                    "client_id": client.options.clientId,
-                    "body": {
-                        "clinicName": formData.clinicName,
-                        "address": formData.address,
-                        "email": formData.email,
-                        "password": formData.password
-                    }
+                "client_id": client.options.clientId,
+                "body": {
+                    "clinicName": formData.clinicName,
+                    "address": formData.address,
+                    "email": formData.email,
+                    "password": formData.password
                 }
-            sendMessage('registration',clinicAccount);
+            }
+            sendMessage('registration', clinicAccount);
         }
     }
 
