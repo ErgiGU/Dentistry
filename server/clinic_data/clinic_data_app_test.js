@@ -196,7 +196,6 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
         })
         it('See if dentist was added in model',  async function () {
             this.timeout(10000)
-            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "gusaskbu@student.gu.se "}}, expectedResult)
             const messageSend = {
                 id: "123",
                 body: {
@@ -215,6 +214,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                 }
             }
             await asyncMethod("getDentist", "giveDentist", messageSend, expectedResult)
+            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "gusaskbu@student.gu.se "}}, expectedResult)
         })
     })
 
