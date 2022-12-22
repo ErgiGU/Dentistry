@@ -1,8 +1,6 @@
 // Example common component
 import React from 'react';
 import './Navbar.css'
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
 function Navbar() {
     return (
         <div>

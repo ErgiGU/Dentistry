@@ -20,7 +20,10 @@ const mongoURI = config.module_config.appointmentUser.mongoURI
 //const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
 
 // Connect to MongoDB
-const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, function (err) {
+const mongooseClient = mongoose.createConnection(mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}, function (err) {
     if (err) {
         console.error(`Failed to connect to MongoDB with URI: ${mongoURI}`);
         console.error(err.stack);
@@ -99,20 +102,21 @@ async function makeAppointment(clinicID, dentistID, patientInfo, timeslotTime) {
     return timeslot
 }
 
-async function cancelAppointment(timeslotID){
-    try{
+async function cancelAppointment(timeslotID) {
+    try {
         let timeslotReturn = await timeslotModel.findByIdAndDelete(timeslotID).populate("dentist").populate("patient").populate("clinic")
         await patientModel.findByIdAndDelete(timeslotReturn.patient)
 
         return {result: "Success", timeslot: timeslotReturn}
 
-    }catch (e) {
+    } catch (e) {
         console.log(e)
         console.log("The appointment cancellation has failed")
-        return  {result: "Failure"}
+        return {result: "Failure"}
     }
 
 }
+
 // Generates dummy data into the given clinic ID.
 async function generateData(clinicID) {
 
@@ -166,19 +170,17 @@ async function generateData(clinicID) {
     clinic.save()
 }
 
-async function sendAppointmentInformation(intermediary){
+async function sendAppointmentInformation(intermediary) {
+    let clinicTimeslots = new Array();
 
-    let ClinicTimeslots = {
-        timeslots: []
-    }
     const timeslots = await timeslotModel.find({clinic: intermediary}).populate("patient").populate("dentist")
     console.log(timeslots)
     try {
         timeslots.forEach(timeslot => {
-            ClinicTimeslots.timeslots.push({
+            clinicTimeslots.push({
                 patient: {
-                    name : timeslot.patient.name,
-                    text : timeslot.patient.text
+                    name: timeslot.patient.name,
+                    text: timeslot.patient.text
                 },
                 dentist: {
                     name: timeslot.dentist.name
@@ -187,10 +189,10 @@ async function sendAppointmentInformation(intermediary){
             })
         })
     } catch (e) {
-    console.log(e)
+        console.log(e)
     }
-    console.log(ClinicTimeslots)
-    return ClinicTimeslots
+    console.log(clinicTimeslots)
+    return clinicTimeslots
 }
 
 const appointmentsController = {

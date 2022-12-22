@@ -1,6 +1,6 @@
 import './ViewAppointments.css'
 import React, {useEffect, useState} from "react";
-import { MDBRow, MDBCol } from 'mdb-react-ui-kit';
+import {MDBRow, MDBCol} from 'mdb-react-ui-kit';
 import TimeslotCard from './components/timeslotCard'
 import mqttHandler from "../common_components/MqttHandler";
 
@@ -8,7 +8,7 @@ import mqttHandler from "../common_components/MqttHandler";
 export default function WithHeaderExample() {
 
     const [client, setClient] = useState(null);
-    const [appointments, setAppointments ] = useState();
+    const [appointments, setAppointments] = useState([]);
 // Primary client generating effect
     useEffect(() => {
         if (client === null) {
@@ -30,7 +30,7 @@ export default function WithHeaderExample() {
                 switch (topic) {
                     case client.options.clientId + '/appointmentInformationResponse':
                         console.log(JSON.parse(message))
-                        getInformation(JSON.parse(message).timeslots)
+                        getResponse(message)
                         break;
                     default:
                         (new Error("The wrong message is received"))
@@ -40,22 +40,30 @@ export default function WithHeaderExample() {
         }
         return () => {
 
-                if (client !== null) {
-                    console.log("ending process");
-                    client.end()
-                }
+            if (client !== null) {
+                console.log("ending process");
+                client.end()
             }
+        }
     }, [client])
 
-
-    function getInformation(message) {
-        setAppointments(appointments => ({
-            ...appointments, message
-        }));
+    function getResponse(message) {
+       const pMessage = JSON.parse(message)
+        pMessage.forEach(timeslot => {
+            appointments.push({
+                patient: {
+                    name: timeslot.patient.name,
+                    text: timeslot.patient.text
+                },
+                dentist: {
+                    name: timeslot.dentist.name
+                },
+                timeslot: timeslot.startTime
+            })
+        })
         console.log(appointments)
     }
-
-    function Timeslot(appointments) {
+    function Timeslot() {
         if (!appointments || appointments.length === 0) {
             return <h3> loading </h3>
         } else {
@@ -88,11 +96,11 @@ export default function WithHeaderExample() {
                         </div>
                     </MDBCol>
                     <MDBCol md='8'>
-                        <Timeslot appointments={appointments}/>
+                        <Timeslot/>
                     </MDBCol>
                 </MDBRow>
 
-        </div>
+            </div>
         </div>
     );
 }
