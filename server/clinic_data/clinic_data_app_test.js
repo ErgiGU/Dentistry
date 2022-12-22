@@ -174,6 +174,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
         })
     })
 
+
     describe('AddDentist', function () {
         it('See if dentist is getting added',  async function () {
             this.timeout(10000)
@@ -193,8 +194,9 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
             }
             await asyncMethod("AddDentist", "addDentistResponse", messageSend, expectedResult)
         })
-        it('See if dentist was added',  async function () {
+        it('See if dentist was added in model',  async function () {
             this.timeout(10000)
+            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "gusaskbu@student.gu.se "}}, expectedResult)
             const messageSend = {
                 id: "123",
                 body: {
@@ -213,6 +215,60 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                 }
             }
             await asyncMethod("getDentist", "giveDentist", messageSend, expectedResult)
+        })
+    })
+
+    describe('Dentists work schedule', function () {
+        it('See if work week can get changed',  async function () {
+            this.timeout(10000)
+            const messageSend = {
+                client_id: "123",
+                body: {
+                    dentist_id: clinicStored.dentist[0],
+                    workWeek: {
+                        monday: false,
+                        tuesday: true,
+                        wednesday: false,
+                        thursday: true,
+                        friday: false
+                    }
+                }
+            }
+            const expectedResult = {
+                dentistWork: {
+                    dentist_id: clinicStored.dentist[0],
+                    workWeek: {
+                        monday: false,
+                        tuesday: true,
+                        wednesday: false,
+                        thursday: true,
+                        friday: false
+                    }
+                }
+            }
+            await asyncMethod("setDentistSchedule", "updateDentistWeek", messageSend, expectedResult)
+        })
+        it('See if work week is getting received',  async function () {
+            this.timeout(10000)
+            const messageSend = {
+                client_id: "123",
+                body: {
+                    clinic_id: clinicStored._id
+                }
+            }
+            const expectedResult = {
+                dentistWork: [{
+                    dentist_id: clinicStored.dentist[0],
+                    workWeek: {
+                        monday: false,
+                        tuesday: true,
+                        wednesday: false,
+                        thursday: true,
+                        friday: false
+                    }
+                }]
+            }
+            await asyncMethod("getDentistSchedule", "getDentistWeek", messageSend, expectedResult)
         })
     })
 
