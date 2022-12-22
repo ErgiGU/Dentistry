@@ -55,7 +55,7 @@ export function MyInformation() {
                 client.end()
             }
         }
-    }, [client]);
+    }, [client])
 
     /**
      * A custom alert, which receives a message to be alerted.
@@ -191,7 +191,7 @@ export function MyInformation() {
             email.setCustomValidity("Invalid email format")
         } else {
             event.preventDefault();
-            if (!(name || owner || address || email || mondayStart || tuesdayStart || wednesdayStart || thursdayStart || fridayStart || lunchHour || fikaHour)) {
+            if (!(name || owner || address || email || mondayStart || tuesdayStart || wednesdayStart || thursdayStart || fridayStart)) {
                 const message = {
                     text: "Can not change empty fields!"
                 }
@@ -269,11 +269,11 @@ export function MyInformation() {
     return (
         <>
             <Navbar/>
-            <div className={"container"}>
+            <div className={"profileContainer"}>
                 <div id="liveAlertPlaceholder"></div>
                 <div className="leftBox">
                     <form className="clinicInfo">
-                        <h2> My Information </h2>
+                        <h2 id={"clinicHeader2"}> My Information </h2>
                         <div className="form-floating">
                             <input
                                 type="text"
@@ -328,7 +328,7 @@ export function MyInformation() {
                         </button>
                     </form>
                     <form className="openingHours">
-                        <h3 id={"openingHoursID"}> Opening hours </h3>
+                        <h3 id={"hoursHeader"}> Opening hours </h3>
                         <label className={"day"}> Monday <br/>
                             <label> Start: </label>
                             <input
@@ -419,32 +419,33 @@ export function MyInformation() {
                                 onChange={(e) => handleChanges(e)}
                             />
                         </label>
+                        <form className="breakHours">
+                            <label className="day"> <h3 id={"hoursHeader"}> Break Hours </h3>
+                                <label> Fika: </label>
+                                <input
+                                    type="time"
+                                    name="fikaHour"
+                                    id={"fikaHour"}
+                                    value={fikaHour}
+                                    onChange={(e) => handleChanges(e)}
+                                />
+                                <label> Lunch: </label>
+                                <input
+                                    type="time"
+                                    name="lunchHour"
+                                    id={"lunchHour"}
+                                    value={lunchHour}
+                                    onChange={(e) => handleChanges(e)}
+                                />
+                            </label>
+                        </form>
+                        <button id={"otherButton"} onClick={() => submit()}>
+                            Update information
+                        </button>
                     </form>
-                    <form className="breakHours">
-                        <h3> Break hours </h3>
-                        <label> Fika hour </label> <br/>
-                        <input
-                            type="time"
-                            name="fikaHour"
-                            id={"fikaHour"}
-                            value={fikaHour}
-                            onChange={(e) => handleChanges(e)}
-                        /> <br/>
-                        <label> Lunch hour </label> <br/>
-                        <input
-                            type="time"
-                            name="lunchHour"
-                            id={"lunchHour"}
-                            value={lunchHour}
-                            onChange={(e) => handleChanges(e)}
-                        />
-                    </form>
-                    <button id={"otherButton"} onClick={() => submit()}>
-                        Change info
-                    </button>
                 </div>
                 <form className="passwordChanging" id={"form2"}>
-                    <h2> Change password </h2>
+                    <h2 id={"clinicHeader2"}> Change password </h2>
                     <div className="form-floating">
                         <input required
                                type="password"
@@ -481,6 +482,7 @@ export function MyInformation() {
                         />
                         <label for="confirmPassword"> Confirm password </label>
                     </div>
+                    <label id={"passwordError"}> </label> <br/>
                     <button className={"button"} onClick={(e) => changePassword(e)}>
                         Change password
                     </button>

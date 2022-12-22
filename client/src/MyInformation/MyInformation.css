@@ -1,25 +1,19 @@
-* {
-    margin: 0px;
-}
-
-body {
+.profileContainer {
     background-color: whitesmoke;
 }
 
 .passwordChanging, .leftBox {
+    float: left;
     font-family: Inter;
     font-size: 18px;
     padding: 30px;
     color: white;
-    height: 530px;
+    height: 570px;
     margin-top: 3%;
     background-color: steelblue;
     box-shadow: 10px 0px 15px #888888;
     border-radius: 5px;
-}
-
-.passwordChanging {
-    height: 350px;
+    margin-bottom: 50px;
 }
 
 .form-floating {
@@ -32,39 +26,34 @@ body {
 }
 
 .clinicInfo {
-    width: 40%;
+    width: 47%;
     float: left;
     padding-right: 25px;
-    margin-right: 23px;
-    border-right: 0.5px solid #444444;
-}
-
-.openingHours {
-    width: 33%;
-    float: left;
-    padding: 5px;
-    padding-left: 20px;
     margin-right: 15px;
     border-right: 0.5px solid #444444;
 }
 
-.breakHours {
-    padding: 5px;
-    padding-left: 15px;
-    float: left;
-    width: 15%;
+#fikaHour {
+    border-right: 1px solid #444444;
 }
 
-h2 {
+.openingHours {
+    width: 47%;
+    float: left;
+    padding: 5px;
+    padding-left: 10px;
+}
+
+#clinicHeader2 {
     text-shadow: 4px 2px 4px #888888;
     margin-bottom: 18px;
 }
 
-h3 {
-    margin-right: 0px;
+#hoursHeader {
+    margin: 0px;
     font-size: 22px;
-    margin-bottom: 20px;
     text-shadow: 3px 2px 2px #888888;
+    margin-right: 2px;
 }
 
 input {
@@ -81,15 +70,22 @@ input {
 
 .passwordChanging > .form-floating {
     margin-right: 40px;
-    width: 45%;
-    float: left;
-    margin-top: 30px;
+    width: 95%;
+    margin-top: 55px;
+}
+
+.clinicInfo > .form-floating {
+    margin-top: 35px;
 }
 
 .day > input {
     width: 31%;
     margin-left: 6px;
     margin-right: 6px;
+}
+
+.breakHours > .day > input {
+    width: 25%;
 }
 
 .day {
@@ -114,10 +110,12 @@ input {
     color: black;
     border-radius: 5px;
 }
+
 .passwordChanging > .button {
     margin-top: 43px;
     padding: 13px;
 }
+
 .button:hover {
     background-color: lightgray;
 }
@@ -142,47 +140,57 @@ input {
 
 @media only screen and (min-width: 1400px) {
     .passwordChanging, .leftBox {
-        display: block;
-        margin-left: 1%;
+        margin-left: 6%;
     }
 
     .passwordChanging {
-        width: 70vw;
+        width: 30vw;
     }
 
     .leftBox {
-        width: 70vw;
+        width: 50vw;
+    }
+
+    .openingHours {
+        padding-left: 30px;
     }
 }
 
-@media only screen and (min-width: 992px) and (max-width: 1399px) {
+@media only screen and (min-width: 1018px) and (max-width: 1399px) {
     .passwordChanging {
-        width: 90vw;
+        margin-left: 7%;
+        width: 30vw;
     }
 
     .leftBox {
-        width: 90vw;
-    }
-}
-
-@media only screen and (max-width: 991px) {
-    .leftBox {
-        height: 980px;
-        padding-right: 10px;
-    }
-
-    .clinicInfo, .passwordChanging {
-        margin: 20px;
-        width: 100%;
-        display: block;
-        border-right: none;
-        padding-right: 60px;
+        margin-left: 3%;
+        width: 55vw;
     }
 
     .passwordChanging > .form-floating {
         width: 90%;
+    }
+}
+
+@media only screen and (max-width: 1017px) {
+    .leftBox, .passwordChanging {
         display: block;
-        margin-top: 30px;
+        width: 70vw;
+        height: 1100px;
+        margin-left: 18%;
+        padding-right: 10px;
+    }
+
+    .clinicInfo, .openingHours {
+        margin: 20px;
+        width: 90%;
+        display: block;
+        border-right: none;
+    }
+
+    .passwordChanging > .form-floating {
+        width: 90%;
+        margin-top: 40px;
     }
 
     .passwordChanging {
@@ -190,11 +198,7 @@ input {
     }
 
     .openingHours {
-        width: 65%;
-    }
-
-    .breakHour {
-        width: 25%;
+        width: 70%;
     }
 
     .clinicInfo > .button {
@@ -203,33 +207,34 @@ input {
 
     #otherButton {
         display: flex;
-        float: left;
-        margin-right: 23px;
+        margin-top: 20px;
         font-size: 18px;
-        margin-top: 170px;
         background-color: whitesmoke;
         border-radius: 5px;
         border: none;
-        padding: 6px;
+        padding: 10px;
     }
 }
 
-@media only screen and (max-width: 463px) {
+@media only screen and (max-width: 564px) {
+    .leftBox, .passwordChanging {
+        width: 75vw;
+        margin-left: 12%;
+    }
+
     .leftBox {
+        padding-left: 5px;
         height: 1170px;
     }
 
-    .clinicInfo, .openingHours, .breakHours {
+    .clinicInfo, .openingHours {
         display: block;
         width: 100%;
     }
 
     .openingHours {
+        margin-left: 5px;
         border-right: none;
     }
 
-    #otherButton {
-        float: none;
-        margin-top: 20px;
-    }
 }
