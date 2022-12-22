@@ -189,8 +189,10 @@ async function sendAppointmentInformation(intermediary){
     } catch (e) {
     console.log(e)
     }
+    console.log(ClinicTimeslots)
     return ClinicTimeslots
 }
+
 const appointmentsController = {
     bookedMailingData,
     makeAppointment,

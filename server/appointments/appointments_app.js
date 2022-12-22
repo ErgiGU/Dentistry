@@ -27,7 +27,7 @@ mqttClient.subscribeTopic('sendAppointmentInformation')
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
-    let intermediary = JSON.parse(message)
+    let intermediary = JSON.parse(message.toString())
     console.log(config.module_config.appointmentUser.handler + " service received MQTT message")
     console.log(intermediary)
 
@@ -72,6 +72,7 @@ mqttClient.mqttClient.on('message', function (topic, message) {
 
 async function waitTimeslotData(intermediary){
     return await appointments_controller.sendAppointmentInformation(intermediary.body.clinicID)
+    console.log("hahhahahaha")
 }
 async function waitGenerateData() {
     await appointments_controller.generateData("6391e39a3e08ac910fbede6f")
