@@ -1,3 +1,7 @@
+/**
+ * All mqtt related operations for the authorization component are done here
+ * @author
+ */
 const mqttHandler = require('../helpers/mqtt_handler');
 const authorization_controller = require('./controllers/authorization_controller');
 
@@ -22,6 +26,9 @@ mqttClient.subscribeTopic('testingTestingRequest');
 
 // When a message arrives, respond to it or propagate it further
 try {
+    /**
+     * The MQTT listener that receives incoming messages and sends back messages after data manipulation.
+     */
     mqttClient.mqttClient.on('message', function (topic, message) {
         let intermediary = JSON.parse(message);
         console.log(config.module_config.authorizationUser.handler + " service received MQTT message")

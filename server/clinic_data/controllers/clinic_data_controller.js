@@ -1,3 +1,7 @@
+/**
+ * All the mongoose manipulation for clinic_data component is contained here
+ * @author Burak Askan (@askan)
+ */
 const mongooseHandler = require('../../helpers/mongoose_handler')
 const clinicSchema = require('../../helpers/schemas/clinic')
 const dentistSchema = require('../../helpers/schemas/dentist')
@@ -30,14 +34,29 @@ function createModels() {
     dentistModel = mongooseClient.model('dentist', dentistSchema)
 }
 
+/**
+ * Does mongoose manipulation to get the dentist with the given email
+ * @param email the email of the individual clinic that is wanted
+ * @returns {Promise<*>} the JSON of the individual clinic
+ */
 async function clinicData(email) {
     return await clinicModel.findOne({email: email})
 }
 
+
+/**
+ * Does mongoose manipulation to get the dentist with the given email
+ * @param email email of the wanted dentist
+ * @returns {Promise<*>} the JSON of the individual dentist
+ */
 async function getDentist(email) {
     return await dentistModel.findOne({email: email})
 }
 
+/**
+ * Does mongoose manipulations to get all JSON coordinates, opening hours, name and address of all clinics.
+ * @returns {Promise<{clinics: *[]}|boolean>} JSON containing coordinates, opening hours, name and address of all clinics.
+ */
 async function mapDataRequest() {
 
     let clinicMapJSON = {

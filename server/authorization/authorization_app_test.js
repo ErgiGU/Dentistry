@@ -1,3 +1,9 @@
+/**
+ * A class purely for testing the backend MQTT endpoints that exist within the clinic_data component.
+ * Each describe and it has a description of what they do within their sting field.
+ *
+ * @author Burak Askan (@askan)
+ */
 const assert = require('assert')
 const mqttHandler = require('../helpers/mqtt_handler');
 const util = require('util')
@@ -9,7 +15,17 @@ try {
 }
 mqttClient = new mqttHandler(config.module_config.authorizationUser.test.name, config.module_config.authorizationUser.test.password, config.module_config.authorizationUser.test.handler)
 
-
+/**
+ * A method that sends mqtt message and listens for a response.
+ * When response arrives, it compares it to the value that was expected to be response.
+ * If they do not match it throws an error.
+ *
+ * @param topicRequest The topic that the message this method sends a message to
+ * @param topicResponse The topic that the listener within this method listens to
+ * @param messageSend The JSON message that is sent with the MQTT message
+ * @param expectedResult The JSON value that is expected as a response
+ * @returns {Promise<unknown>} Either an error or a JSON value that was received
+ */
 function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {

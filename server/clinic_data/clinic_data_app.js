@@ -1,3 +1,7 @@
+/**
+ * All mqtt related operations for the clinic_data component are done here
+ * @author Burak Askan (@askan)
+ */
 const mqttHandler = require('../helpers/mqtt_handler');
 const clinic_data_controller = require('./controllers/clinic_data_controller');
 
@@ -21,6 +25,9 @@ mqttClient.subscribeTopic('clinicDataRequest')
 
 // When a message arrives, respond to it or propagate it further
 try {
+    /**
+     * The MQTT listener that receives incoming messages and sends back messages after data manipulation.
+     */
     mqttClient.mqttClient.on('message', async function (topic, message) {
         let intermediary = JSON.parse(message)
         console.log(config.module_config.clinicUser.handler + " service received MQTT message")

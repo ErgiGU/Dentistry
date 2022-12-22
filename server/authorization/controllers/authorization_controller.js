@@ -1,3 +1,7 @@
+/**
+ * All the mongoose manipulation for authorization component is contained here
+ * @author Burak Askan (@askan)
+ */
 const bcrypt = require("bcrypt");
 const mongooseHandler = require('../../helpers/mongoose_handler')
 const clinicSchema = require('../../helpers/schemas/clinic');
