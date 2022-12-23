@@ -171,13 +171,14 @@ async function generateData(clinicID) {
 }
 
 async function sendAppointmentInformation(intermediary) {
-    let clinicTimeslots = new Array();
+    let clinicTimeslots = [];
 
     const timeslots = await timeslotModel.find({clinic: intermediary}).populate("patient").populate("dentist")
     console.log(timeslots)
     try {
         timeslots.forEach(timeslot => {
             clinicTimeslots.push({
+                id: timeslot._id,
                 patient: {
                     name: timeslot.patient.name,
                     text: timeslot.patient.text

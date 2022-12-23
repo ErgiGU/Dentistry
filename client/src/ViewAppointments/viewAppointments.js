@@ -1,5 +1,5 @@
 import './ViewAppointments.css'
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {MDBRow, MDBCol} from 'mdb-react-ui-kit';
 import TimeslotCard from './components/timeslotCard'
 import mqttHandler from "../common_components/MqttHandler";
@@ -30,7 +30,8 @@ export default function WithHeaderExample() {
                 switch (topic) {
                     case client.options.clientId + '/appointmentInformationResponse':
                         console.log(JSON.parse(message))
-                        getResponse(message)
+                        const pMessage = JSON.parse(message)
+                        setAppointments(pMessage)
                         break;
                     default:
                         (new Error("The wrong message is received"))
@@ -47,39 +48,6 @@ export default function WithHeaderExample() {
         }
     }, [client])
 
-    function getResponse(message) {
-       const pMessage = JSON.parse(message)
-        pMessage.forEach(timeslot => {
-            appointments.push({
-                patient: {
-                    name: timeslot.patient.name,
-                    text: timeslot.patient.text
-                },
-                dentist: {
-                    name: timeslot.dentist.name
-                },
-                timeslot: timeslot.startTime
-            })
-        })
-        console.log(appointments)
-    }
-    function Timeslot() {
-        if (!appointments || appointments.length === 0) {
-            return <h3> loading </h3>
-        } else {
-            return (
-                <div id={"timeslots"}>
-                    {Array.from(appointments).map(({patient, dentist, timeslot}) => (
-                        <div>
-                            <TimeslotCard patientName={patient.name} timeslotStarttime={timeslot.startTime}
-                                          patientText={patient.text} dentistName={dentist.name}/>
-                        </div>
-                    ))}
-                </div>
-            );
-        }
-    }
-
     return (
         <div id="ty">
             <div id="background">
@@ -87,19 +55,21 @@ export default function WithHeaderExample() {
                     <MDBCol md='3'>
                         <div className="card">
                             <div className="card-body">
-                                <img className="clinic" src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
+                                <h3 id={"currentAppointments"}> Current appointments </h3>
+                                <img className="clinic"
+                                     src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
                                      alt="clinic"/>
-                            </div>
-                            <div className="card-body">
-                                <button type="button" className="btn">LOG OUT</button>
                             </div>
                         </div>
                     </MDBCol>
                     <MDBCol md='8'>
-                        <Timeslot/>
+                        <div id={"timeslots"}>
+                            {Array.from(appointments).map((appointment) => (
+                                    <TimeslotCard key={appointment.id} appointment={appointment}/>
+                            ))}
+                        </div>
                     </MDBCol>
                 </MDBRow>
-
             </div>
         </div>
     );
