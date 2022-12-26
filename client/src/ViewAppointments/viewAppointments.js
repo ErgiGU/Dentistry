@@ -36,6 +36,9 @@ export default function ViewAppointments() {
                         const pMessage = JSON.parse(message)
                         setAppointments(pMessage)
                         break;
+                    case client.options.clientId + '/canceledAppointment':
+                        console.log(JSON.parse(message))
+                        alert(JSON.parse(message))
                     default:
                         (new Error("The wrong message is received"))
                         break;
@@ -48,7 +51,24 @@ export default function ViewAppointments() {
                 client.end()
             }
         }
-    }, [client])
+    }, [client]);
+
+
+    const handleChildClick = (id) => {
+        const timeslotID =id;
+        console.log(timeslotID)
+        if (client !== null) {
+            client.publish('cancelAppointment', JSON.stringify(
+                {
+                    id: client.options.clientId,
+                    body: {
+                        timeslotID: timeslotID
+                    }
+                }
+            ))
+        }
+    }
+
 
     return (
         <div id="ty">
@@ -67,7 +87,7 @@ export default function ViewAppointments() {
                     <MDBCol md='8'>
                         <div id={"timeslots"}>
                             {Array.from(appointments).map((appointment) => (
-                                    <TimeslotCard key={appointment.id} appointment={appointment}/>
+                                    <TimeslotCard key={appointment.id} appointment={appointment} parentCallback={handleChildClick}/>
                             ))}
                         </div>
                     </MDBCol>

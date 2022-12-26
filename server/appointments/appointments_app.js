@@ -24,6 +24,8 @@ mqttClient.subscribeTopic('bookTimeslot')
 mqttClient.subscribeTopic('generateData')
 mqttClient.subscribeTopic('cancelBookedTimeslot')
 mqttClient.subscribeTopic('sendAppointmentInformation')
+mqttClient.subscribeTopic('cancelAppointment')
+
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
@@ -61,6 +63,11 @@ mqttClient.mqttClient.on('message', function (topic, message) {
         case 'sendAppointmentInformation':
             waitTimeslotData(intermediary).then(r => {
                 mqttClient.sendMessage(intermediary.id + "/appointmentInformationResponse", JSON.stringify(r))
+            })
+            break;
+        case 'cancelAppointment':
+            cancelAppointment(intermediary).then(r => {
+                mqttClient.sendMessage(intermediary.id + "/canceledAppointment", JSON.stringify(r))
             })
             break;
         default:

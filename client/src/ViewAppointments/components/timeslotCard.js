@@ -1,6 +1,6 @@
 import React from "react";
 import '../ViewAppointments.css'
-export default function BookedTimeslots({appointment}) {
+export default function BookedTimeslots({appointment, parentCallback}) {
 
     const patientName = appointment.patient.name
     const dentistName = appointment.dentist.name
@@ -22,6 +22,9 @@ export default function BookedTimeslots({appointment}) {
                 <div className="col">DOCTOR
                     <div className="text">{dentistName}</div>
                 </div>
+                <button onClick={() => parentCallback(appointment.id)} >
+                    Canceeel
+                </button>
             </div>
         </div>
     </div>
