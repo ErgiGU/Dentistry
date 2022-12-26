@@ -53,7 +53,11 @@ export default function ViewAppointments() {
         }
     }, [client]);
 
-
+    /**
+     * Publishes a message to the backend to cancel & delete the timeslot
+     * with the provided ID.
+     * @param id the ID of the timeslot to be cancelled
+     */
     const handleChildClick = (id) => {
         const timeslotID =id;
         console.log(timeslotID)
