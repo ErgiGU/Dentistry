@@ -5,7 +5,7 @@ import TimeslotCard from './components/timeslotCard'
 import mqttHandler from "../common_components/MqttHandler";
 
 
-export default function WithHeaderExample() {
+export default function ViewAppointments() {
 
     const [client, setClient] = useState(null);
     const [appointments, setAppointments] = useState([]);
@@ -16,7 +16,10 @@ export default function WithHeaderExample() {
         }
     }, [client])
 
-// Secondary effect containing all message logic and closure state
+    /**
+     * Subscribes and publishes to the corresponding topic defined in backend.
+     * Thus is receives the information about patient, dentist and timeslot.
+     */
     useEffect(() => {
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#')
@@ -40,7 +43,6 @@ export default function WithHeaderExample() {
             })
         }
         return () => {
-
             if (client !== null) {
                 console.log("ending process");
                 client.end()

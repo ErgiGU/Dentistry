@@ -102,11 +102,13 @@ async function makeAppointment(clinicID, dentistID, patientInfo, timeslotTime) {
     return timeslot
 }
 
+/**
+ * Find the timeslot by the id and deletes it from the database.
+ */
 async function cancelAppointment(timeslotID) {
     try {
         let timeslotReturn = await timeslotModel.findByIdAndDelete(timeslotID).populate("dentist").populate("patient").populate("clinic")
         await patientModel.findByIdAndDelete(timeslotReturn.patient)
-
         return {result: "Success", timeslot: timeslotReturn}
 
     } catch (e) {
@@ -114,7 +116,6 @@ async function cancelAppointment(timeslotID) {
         console.log("The appointment cancellation has failed")
         return {result: "Failure"}
     }
-
 }
 
 // Generates dummy data into the given clinic ID.
@@ -169,7 +170,12 @@ async function generateData(clinicID) {
     clinic.dentists = thingDentists
     clinic.save()
 }
-
+/**
+ * Finds all the timeslots within a clinic together with the patient and dentist data
+ * Then for each timeslots it takes the patient name, text, dentist name and timeSlot time
+ * It stores it in the array.
+ * @returns the clinicTimeslots array
+ */
 async function sendAppointmentInformation(intermediary) {
     let clinicTimeslots = [];
 

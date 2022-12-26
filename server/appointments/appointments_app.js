@@ -69,10 +69,11 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             break;
     }
 });
-
+/**
+ * Returns the sendAppointmentInformation function called from the controller.
+ */
 async function waitTimeslotData(intermediary){
     return await appointments_controller.sendAppointmentInformation(intermediary.body.clinicID)
-    console.log("hahhahahaha")
 }
 async function waitGenerateData() {
     await appointments_controller.generateData("6391e39a3e08ac910fbede6f")
@@ -100,6 +101,9 @@ async function waitPatientNotifMail(mailingData) {
     return await mailer.sendAppointmentNotifPatient(mailingData.patientData.email, mailingData.timeslotTime, mailingData.clinicData, mailingData.dentistData)
 }
 
+/**
+ * Returns the cancelAppointment function called from the controller.
+ */
 async function waitDeleteTimeslot(message) {
     return await appointments_controller.cancelAppointment(message.timeslotID)
 }
