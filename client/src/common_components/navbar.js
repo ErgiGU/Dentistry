@@ -1,24 +1,34 @@
-// Example common component
+// That class should be probably deleted as it is no longer in use
 import React from 'react';
 import './Navbar.css'
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-function Navbar() {
+import { Link } from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import Logo from '../assets/logo.png'
+function Navbarr() {
     return (
-        <body>
+        <div>
         <div className="header">
-            <img className="logo" src="https://cdn-icons-png.flaticon.com/512/2035/2035058.png" alt="logo" />
+            <img className="logo" src={Logo} alt="logo" />
             <h1>DENTAL CLINIC</h1>
         </div>
-    <div id="navbar">
-        <a className="active" href="javascript:void(0)">Home</a>
-        <a href="javascript:void(0)">News</a>
-        <a href="javascript:void(0)">Contact</a>
-        <a href="javascript:void(0)">Contact</a>
-        <a href="javascript:void(0)">Contact</a>
-    </div>
-        </body>
-);
+        <Navbar id="navbar" expand="lg">
+            <Container id="me-auto">
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="justify-content-end">
+                        <Nav.Link href="#home" >Home</Nav.Link>
+                        <Nav.Link href="#link">Clinics map</Nav.Link>
+                        <Nav.Link href="#link">Book appointment</Nav.Link>
+                        <Nav.Link href="#link">Our clinics</Nav.Link>
+                    </Nav>
+                </Navbar.Collapse>
+            </Container>
+        </Navbar>
+            </div>
+    );
 }
 
-export default Navbar;
+export default Navbarr;
