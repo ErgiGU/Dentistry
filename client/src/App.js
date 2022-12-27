@@ -10,13 +10,12 @@ import React from 'react';
 import Login from "./ClinicLogin/Login";
 import Home from "./home/Home";
 import ViewAppointments from "./ViewAppointments/viewAppointments"
-import Navbar from './common_components/navbar'
+import ClinicHomePage from "./ClinicHomePage/ClinicHomePage";
 function App() {
 
     return(
         //you can add more routes here, just follow the same format
         <>
-            <Navbar/>
 
         <Routes>
             <Route path ="/" />
@@ -25,6 +24,7 @@ function App() {
             <Route path ="/Home" element= {< Home />} />
             <Route path ="/map" element = {< MapPage />} />
             <Route path ="/appointments" element = {< ViewAppointments />} />
+            <Route path ="/clinic" element = {< ClinicHomePage />} />
         </Routes>
         </>
     );
