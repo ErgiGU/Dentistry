@@ -5,6 +5,8 @@
 const mongooseHandler = require('../../helpers/mongoose_handler')
 const clinicSchema = require('../../helpers/schemas/clinic')
 const dentistSchema = require('../../helpers/schemas/dentist')
+const timeslotSchema = require('../../helpers/schemas/timeslot')
+const patientSchema = require('../../helpers/schemas/patient')
 let config
 try {
     config = require('../../helpers/config-server');
@@ -20,6 +22,8 @@ mongooseClient.connect().then(() => {
 
 let clinicModel
 let dentistModel
+let timeslotModel
+let patientModel
 
 function reconnect(mongoURI) {
     mongooseClient.close()
@@ -32,6 +36,8 @@ function reconnect(mongoURI) {
 function createModels() {
     clinicModel = mongooseClient.model('clinic', clinicSchema)
     dentistModel = mongooseClient.model('dentist', dentistSchema)
+    timeslotModel = mongooseClient.model('timeslot', timeslotSchema)
+    patientModel = mongooseClient.model('patent', patientSchema)
 }
 
 /**
@@ -101,7 +107,25 @@ async function mapDataRequest() {
     }
 }
 
+async function removeData() {
+    console.log("We are entering here")
+    try {
+        await clinicModel.deleteMany()
+        await timeslotModel.deleteMany()
+        await dentistModel.deleteMany()
+        await patientModel.deleteMany()
+    } catch (e) {
+        return {
+            response: "Failure"
+        }
+    }
+    return {
+        response: "Success"
+    }
+}
+
 const clinicController = {
+    removeData,
     mapDataRequest,
     reconnect,
     clinicData,

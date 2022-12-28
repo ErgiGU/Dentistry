@@ -22,6 +22,7 @@ mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('mapDataRequest')
 mqttClient.subscribeTopic('testingTestingRequest')
 mqttClient.subscribeTopic('clinicDataRequest')
+mqttClient.subscribeTopic('wipeTestData')
 
 // When a message arrives, respond to it or propagate it further
 try {
@@ -71,6 +72,12 @@ try {
                 break;
             case 'initiateTesting':
                 clinic_data_controller.reconnect(config.admin_config.database_tester.mongoURI)
+                break;
+                //THIS ENDPOINT SHOULD ONLY BE USED TO WIPE THE DATABASE
+            case 'wipeTestData':
+                console.log("Entered")
+                let response = await clinic_data_controller.removeData()
+                mqttClient.sendMessage('123/wipeTestData', JSON.stringify(response))
                 break;
         }
     });
