@@ -1,4 +1,5 @@
 const mqttHandler = require('../helpers/mqtt_handler');
+
 const authorization_controller = require('./controllers/authorization_controller');
 
 let config
@@ -19,6 +20,7 @@ mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('registration');
 mqttClient.subscribeTopic("checkIfEmailExists");
 mqttClient.subscribeTopic('testingTestingRequest');
+mqttClient.subscribeTopic("login");
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
@@ -30,26 +32,43 @@ mqttClient.mqttClient.on('message', function (topic, message) {
         case 'auth':
             mqttClient.sendMessage('authTest', 'Authorization confirmed')
             break;
+        //topic for registration
         case 'registration':
             authorization_controller.register(intermediary).then(res=>{
-                console.log(res);
-                if(res==="success!"){
+                if(res === "success!"){
                     //sends the ok to the client for the registration
-                    sendMessage(intermediary, "/register","registration successful");
+                    mqttClient.sendMessage(intermediary.client_id + "/register","registration successful");
                 }else{
-                    sendMessage(intermediary, "/register","registration failed");
+                    mqttClient.sendMessage(intermediary.client_id + "/register","registration failed");
                 }
             });
             break;
+        //topic for checking if the email already exists in the DB(used for registration)
         case 'checkIfEmailExists':
             const email = intermediary.body.email;
             authorization_controller.emailExists(email).then(res=>{
-                console.log(res);
-
                 if (res === "email already exists") {
-                    sendMessage(intermediary,"/checkEmail","email already exists");
+                    mqttClient.sendMessage(intermediary.client_id + "/checkEmail","email already exists");
                 }
             });
+            break;
+        //topic for login
+        case "login":
+            const emailLogin = intermediary.body.email;
+            const password = intermediary.body.password;
+            authorization_controller.loginClinic(emailLogin,password).then(res=>{
+
+                if(res.message === "login successful"){
+                    mqttClient.sendMessage(intermediary.client_id + "/loginClient",JSON.stringify(res));
+                }else{
+                    console.log("sent");
+                    const message = {
+                        message: "Invalid email/password"
+                    }
+                    mqttClient.sendMessage(intermediary.client_id + "/loginClient", JSON.stringify(message))
+                }
+            })
+
             break;
         case 'testingTestingRequest':
             mqttClient.sendMessage('testingTesting', 'ToothyClinic')
@@ -64,13 +83,5 @@ mqttClient.mqttClient.on('message', function (topic, message) {
 
 });
 
-// Function declaration
-/**
- * Test function
- * @param message MQTT message
- */
-function sendMessage(intermediary,topic,message) {
-    mqttClient.sendMessage( intermediary.id + topic, message)
-}
 
 module.exports = mqttClient;
