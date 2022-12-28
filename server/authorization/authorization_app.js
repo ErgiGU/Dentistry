@@ -3,6 +3,7 @@
  * @author
  */
 const mqttHandler = require('../helpers/mqtt_handler');
+
 const authorization_controller = require('./controllers/authorization_controller');
 
 let config
@@ -23,6 +24,7 @@ mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('registration');
 mqttClient.subscribeTopic("checkIfEmailExists");
 mqttClient.subscribeTopic('testingTestingRequest');
+mqttClient.subscribeTopic("login");
 
 // When a message arrives, respond to it or propagate it further
 try {
@@ -35,46 +37,61 @@ try {
         console.log(intermediary);
 
         switch (topic) {
-            case 'auth':
-                mqttClient.sendMessage('authTest', 'Authorization confirmed')
-                break;
-            case 'registration':
-                authorization_controller.register(intermediary).then(res=>{
-                    console.log(res);
-                    if(res==="success!") {
-                        //sends the ok to the client for the registration
-                        sendMessage(intermediary, "/register","registration successful");
-                    }else{
-                        sendMessage(intermediary, "/register","registration failed");
-                    }
-                });
-                break;
-            case 'checkIfEmailExists':
-                const email = intermediary.body.email;
-                authorization_controller.emailExists(email).then(res=>{
-                    console.log(res);
+        case 'auth':
+            mqttClient.sendMessage('authTest', 'Authorization confirmed')
+            break;
+        //topic for registration
+        case 'registration':
+            authorization_controller.register(intermediary).then(res=>{
+                if(res === "success!"){
+                    //sends the ok to the client for the registration
+                    mqttClient.sendMessage(intermediary.client_id + "/register","registration successful");
+                }else{
+                    mqttClient.sendMessage(intermediary.client_id + "/register","registration failed");
+                }
+            });
+            break;
+        //topic for checking if the email already exists in the DB(used for registration)
+        case 'checkIfEmailExists':
+            const email = intermediary.body.email;
+            authorization_controller.emailExists(email).then(res=>{
+                if (res === "email already exists") {
+                    mqttClient.sendMessage(intermediary.client_id + "/checkEmail","email already exists");
+                }
+            });
+            break;
+        //topic for login
+        case "login":
+            const emailLogin = intermediary.body.email;
+            const password = intermediary.body.password;
+            authorization_controller.loginClinic(emailLogin,password).then(res=>{
 
-                    if (res === "email already exists") {
-                        sendMessage(intermediary,"/checkEmail","email already exists");
-                    }else {
-                        sendMessage(intermediary,"/checkEmail","email does not exists");
+                if(res.message === "login successful"){
+                    mqttClient.sendMessage(intermediary.client_id + "/loginClient",JSON.stringify(res));
+                }else{
+                    console.log("sent");
+                    const message = {
+                        message: "Invalid email/password"
                     }
-                });
-                break;
-            case 'testingTestingRequest':
+                    mqttClient.sendMessage(intermediary.client_id + "/loginClient", JSON.stringify(message))
+                }
+            })
+
+            break;
+        case 'testingTestingRequest':
                 const messageSending = {
                     response: "ToothyClinic",
                     additional: "WillIt"
                 }
                 mqttClient.sendMessage('123/testingTesting', JSON.stringify(messageSending))
                 break;
-            case 'test':
-                process.exit()
-                break;
-            case 'initiateTesting':
-                authorization_controller.reconnect(config.admin_config.database_tester.mongoURI)
-                break;
-        }
+        case 'test':
+            process.exit()
+            break;
+        case 'initiateTesting':
+            authorization_controller.reconnect(config.admin_config.database_tester.mongoURI)
+            break;
+    }
 
     });
 }catch (e) {
@@ -83,13 +100,5 @@ try {
 }
 
 
-// Function declaration
-/**
- * Test function
- * @param message MQTT message
- */
-function sendMessage(intermediary,topic,message) {
-    mqttClient.sendMessage( intermediary.id + topic, message)
-}
 
 module.exports = mqttClient;

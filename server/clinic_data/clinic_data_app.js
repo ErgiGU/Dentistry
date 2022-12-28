@@ -23,6 +23,8 @@ mqttClient.subscribeTopic('mapDataRequest')
 mqttClient.subscribeTopic('testingTestingRequest')
 mqttClient.subscribeTopic('clinicDataRequest')
 mqttClient.subscribeTopic('wipeTestData')
+mqttClient.subscribeTopic('editInfo')
+mqttClient.subscribeTopic('changePassword')
 
 // When a message arrives, respond to it or propagate it further
 try {
@@ -53,6 +55,16 @@ try {
                 }
                 mqttClient.sendMessage(intermediary.id + '/clinicData', JSON.stringify(clinic))
                 break;
+            case 'editInfo':
+                clinicData.editInfo(intermediary).then(res => {
+                    mqttClient.sendMessage(intermediary.id + '/editInfoResponse', res)
+                })
+                break;
+            case 'changePassword':
+                clinicData.changePassword(intermediary).then(res => {
+                    mqttClient.sendMessage(intermediary.id + '/changePasswordResponse', res)
+                })
+                break;    
             case 'getDentist':
                 let dentist = await clinic_data_controller.getDentist(intermediary.body.email)
                 dentist= JSON.stringify(dentist)
