@@ -191,7 +191,7 @@ export function MyInformation() {
             email.setCustomValidity("Invalid email format")
         } else {
             event.preventDefault();
-            if (!(name || owner || address || email || mondayStart || tuesdayStart || wednesdayStart || thursdayStart || fridayStart)) {
+            if (!(name || owner || address || email || mondayStart || tuesdayStart || wednesdayStart || thursdayStart || fridayStart || lunchHour || fikaHour)) {
                 const message = {
                     text: "Can not change empty fields!"
                 }

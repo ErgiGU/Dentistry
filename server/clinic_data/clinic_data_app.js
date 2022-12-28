@@ -2,6 +2,7 @@ const mqttHandler = require('../helpers/mqtt_handler');
 const clinic_data_controller = require('./controllers/clinic_data_controller');
 const clinicData = require('./controllers/clinic_data_controller.js');
 
+
 let config
 try {
     config = require('../helpers/config-server');
@@ -20,7 +21,6 @@ mqttClient.subscribeTopic('mapDataRequest')
 mqttClient.subscribeTopic('testingTestingRequest')
 mqttClient.subscribeTopic('editInfo')
 mqttClient.subscribeTopic('changePassword')
-
 mqttClient.subscribeTopic('AddDentist')
 
 // When a message arrives, respond to it or propagate it further
@@ -46,6 +46,11 @@ mqttClient.mqttClient.on('message', async function (topic, message) {
         case 'initiateTesting':
             clinic_data_controller.reconnect(config.admin_config.database_tester.mongoURI)
             break;
+        case 'AddDentist':
+            clinicData.addDentist(intermediary).then(res => {
+                mqttClient.sendMessage(intermediary.id + '/addDentistResponse', res)
+            })
+            break;
         case 'editInfo':
             clinicData.editInfo(intermediary).then(res => {
                 mqttClient.sendMessage(intermediary.id + '/editInfoResponse', res)
@@ -54,11 +59,6 @@ mqttClient.mqttClient.on('message', async function (topic, message) {
         case 'changePassword':
             clinicData.changePassword(intermediary).then(res => {
                 mqttClient.sendMessage(intermediary.id + '/changePasswordResponse', res)
-            })
-            break;
-        case 'AddDentist':
-            clinicData.addDentist(intermediary).then(res => {
-                mqttClient.sendMessage(intermediary.id + '/addDentistResponse', res)
             })
             break;
     }
