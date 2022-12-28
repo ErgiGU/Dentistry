@@ -35,7 +35,7 @@ function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
             mqttClient.sendMessage(topicRequest, JSON.stringify(messageSend))
             mqttClient.mqttClient.on('message', function (topic, message) {
                 console.log(topic + " : is the topic of this message")
-                console.log('Message is received: ' + message + ' ::: This was the expectation: ' + JSON.stringify(expectedResult))
+                console.log('This was the expectation: ' + JSON.stringify(expectedResult) + ':::  Message is received: ' + message)
 
                 if(topic === ("123/" + topicResponse)) {
                     if(topic !== "123/loginClient"  && messageSend.body !== undefined && messageSend.body.test !== undefined) {
@@ -125,7 +125,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
                 },
                 address: 'Lindholmen',
                 city: 'Göteborg',
-                __v: 1
+                __v: 0
             }
             await asyncMethod("clinicDataRequest", "clinicData", messageSend, expectedResult)
 

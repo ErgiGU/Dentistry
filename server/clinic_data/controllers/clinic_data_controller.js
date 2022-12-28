@@ -37,7 +37,7 @@ function createModels() {
     clinicModel = mongooseClient.model('clinic', clinicSchema)
     dentistModel = mongooseClient.model('dentist', dentistSchema)
     timeslotModel = mongooseClient.model('timeslot', timeslotSchema)
-    patientModel = mongooseClient.model('patent', patientSchema)
+    patientModel = mongooseClient.model('patient', patientSchema)
 }
 
 /**
