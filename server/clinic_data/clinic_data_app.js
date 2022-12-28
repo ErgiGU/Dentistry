@@ -1,3 +1,7 @@
+/**
+ * All mqtt related operations for the clinic_data component are done here
+ * @author Burak Askan (@askan)
+ */
 const mqttHandler = require('../helpers/mqtt_handler');
 const clinic_data_controller = require('./controllers/clinic_data_controller');
 
@@ -17,44 +21,81 @@ mqttClient.subscribeTopic('test')
 mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('mapDataRequest')
 mqttClient.subscribeTopic('testingTestingRequest')
+mqttClient.subscribeTopic('clinicDataRequest')
+mqttClient.subscribeTopic('wipeTestData')
 mqttClient.subscribeTopic('editInfo')
 mqttClient.subscribeTopic('changePassword')
 
-
 // When a message arrives, respond to it or propagate it further
-mqttClient.mqttClient.on('message', async function (topic, message) {
-    let intermediary = JSON.parse(message)
-    console.log(config.module_config.clinicUser.handler + " service received MQTT message")
-    console.log(intermediary);
+try {
+    /**
+     * The MQTT listener that receives incoming messages and sends back messages after data manipulation.
+     */
+    mqttClient.mqttClient.on('message', async function (topic, message) {
+        let intermediary = JSON.parse(message)
+        console.log(config.module_config.clinicUser.handler + " service received MQTT message")
+        console.log(intermediary);
 
-    switch (topic) {
-        case 'firstTest':
-            mqttClient.sendMessage('testAppointment', 'Testing callback')
-            break;
-        case 'mapDataRequest':
-            const body = await clinic_data_controller.mapDataRequest()
-            mqttClient.sendMessage(intermediary.id + '/mapDataResponse', JSON.stringify(body))
-            break;
-        case 'testingTestingRequest':
-            mqttClient.sendMessage('testingTesting', 'ToothyClinic')
-            break;
-        case 'test':
-            process.exit()
-            break;
-        case 'initiateTesting':
-            clinic_data_controller.reconnect(config.admin_config.database_tester.mongoURI)
-            break;
-        case 'editInfo':
-            clinicData.editInfo(intermediary).then(res => {
-                mqttClient.sendMessage(intermediary.id + '/editInfoResponse', res)
-            })
-            break;
-        case 'changePassword':
-            clinicData.changePassword(intermediary).then(res => {
-                mqttClient.sendMessage(intermediary.id + '/changePasswordResponse', res)
-            })
-            break;
-    }
-});
+        switch (topic) {
+            case 'firstTest':
+                mqttClient.sendMessage('testAppointment', 'Testing callback')
+                break;
+            case 'mapDataRequest':
+                const body = await clinic_data_controller.mapDataRequest()
+                console.log(body)
+                mqttClient.sendMessage(intermediary.id + '/mapDataResponse', JSON.stringify(body))
+                break;
+            case 'clinicDataRequest':
+                let clinic = await clinic_data_controller.clinicData(intermediary.body.email)
+                if(intermediary.body.test) {
+                    clinic= JSON.stringify(clinic)
+                    clinic = JSON.parse(clinic)
+                    clinic._id = "id"
+                    clinic.password = "password"
+                }
+                mqttClient.sendMessage(intermediary.id + '/clinicData', JSON.stringify(clinic))
+                break;
+            case 'editInfo':
+                clinicData.editInfo(intermediary).then(res => {
+                    mqttClient.sendMessage(intermediary.id + '/editInfoResponse', res)
+                })
+                break;
+            case 'changePassword':
+                clinicData.changePassword(intermediary).then(res => {
+                    mqttClient.sendMessage(intermediary.id + '/changePasswordResponse', res)
+                })
+                break;    
+            case 'getDentist':
+                let dentist = await clinic_data_controller.getDentist(intermediary.body.email)
+                dentist= JSON.stringify(dentist)
+                dentist = JSON.parse(dentist)
+                dentist._id = "id"
+                mqttClient.sendMessage(intermediary.id + '/giveDentist', JSON.stringify(dentist))
+                break;
+            case 'testingTestingRequest':
+                const messageSending = {
+                    response: "ToothyClinic",
+                    additional: "WillIt"
+                }
+                mqttClient.sendMessage('123/testingTesting', JSON.stringify(messageSending))
+                break;
+            case 'test':
+                process.exit()
+                break;
+            case 'initiateTesting':
+                clinic_data_controller.reconnect(config.admin_config.database_tester.mongoURI)
+                break;
+                //THIS ENDPOINT SHOULD ONLY BE USED TO WIPE THE DATABASE
+            case 'wipeTestData':
+                console.log("Entered")
+                let response = await clinic_data_controller.removeData()
+                mqttClient.sendMessage('123/wipeTestData', JSON.stringify(response))
+                break;
+        }
+    });
+} catch (e) {
+    console.log(e)
+    console.log("Message was received but caused a crash.")
+}
 
 module.exports = mqttClient;

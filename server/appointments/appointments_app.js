@@ -1,3 +1,7 @@
+/**
+ * All mqtt related operations for the appointments component are done here
+ * @author Burak Askan (@askan)
+ */
 const mqttHandler = require('../helpers/mqtt_handler');
 const appointments_controller = require("./controllers/appointments_controller");
 const appointments_mailer = require("./controllers/appointments_mailer");
@@ -25,50 +29,67 @@ mqttClient.subscribeTopic('bookTimeslot')
 mqttClient.subscribeTopic('generateData')
 
 // When a message arrives, respond to it or propagate it further
-mqttClient.mqttClient.on('message', function (topic, message) {
-    let intermediary = JSON.parse(message)
-    console.log(config.module_config.appointmentUser.handler + " service received MQTT message")
-    console.log(intermediary)
+try {
+    /**
+     * The MQTT listener that receives incoming messages and sends back messages after data manipulation.
+     */
+    mqttClient.mqttClient.on('message', function (topic, message) {
+        let intermediary = JSON.parse(message)
+        console.log(config.module_config.appointmentUser.handler + " service received MQTT message")
+        console.log(intermediary)
 
-    switch (topic) {
-        case 'schema':
-            mqttClient.sendMessage('testAppointment', "newClinic")
-            break;
-        case 'appointment':
-            testAppointment(intermediary)
-            break;
-        case 'testingTestingRequest':
-            mqttClient.sendMessage('testingTesting', 'ToothyClinic')
-            break;
-        case 'generateData':
-            const dataResult = waitGenerateData()
-            break;
-        case 'bookTimeslot':
-            const bookTimeslotResult = bookAppointment(intermediary)
-            const bookingRes = {
-                body: {
-                    message: bookTimeslotResult //If the whole thing has succeeded or failed.
+        switch (topic) {
+            case 'schema':
+                mqttClient.sendMessage('testAppointment', "newClinic")
+                break;
+            case 'appointment':
+                testAppointment(intermediary)
+                break;
+            case 'testingTestingRequest':
+                const messageSending = {
+                    response: "ToothyClinic",
+                    additional: "WillIt"
                 }
-            }
-            mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(bookingRes))
-            break;
-        case 'cancelBookedTimeslot':
-            //Cancels the booked timeslot
-            const cancelTimeslotResult = cancelAppointment(intermediary)
-            mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(cancelRes))
-            break;
-        case 'test':
-            process.exit()
-            break;
-        case 'initiateTesting':
-            appointments_controller.reconnect(config.admin_config.database_tester.mongoURI)
-            break;
-        default:
-            console.log('topic: ' + topic)
-            console.log('message: ' + message)
-            break;
-    }
-});
+                mqttClient.sendMessage('123/testingTesting', JSON.stringify(messageSending))
+                break;
+            case 'generateData':
+                const dataResult = waitGenerateData()
+                break;
+            case 'bookTimeslot':
+                waitBookAppointment(intermediary).then(r => {
+                    const bookingRes = {
+                        response: r //If the whole thing has succeeded or failed.
+                    }
+                    mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(bookingRes))
+                })
+                break;
+            case 'cancelBookedTimeslot':
+                //Cancels the booked timeslot
+                const cancelTimeslotResult = cancelAppointment(intermediary)
+                mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(cancelRes))
+                break;
+            case 'test':
+                process.exit()
+                break;
+            case 'initiateTesting':
+                appointments_controller.reconnect(config.admin_config.database_tester.mongoURI)
+                break;
+            default:
+                console.log('topic: ' + topic)
+                console.log('message: ' + message)
+                break;
+        }
+    });
+}catch (e) {
+    console.log(e)
+    console.log("Message was received but caused a crash.")
+}
+
+/**
+ * Below are wrapper async functions to avoid making other function async when they don't need to be.
+ * @returns {Promise<void>} the result of mongoose manipulations
+ */
+
 
 async function waitGenerateData() {
     await appointments_controller.generateData("6391e39a3e08ac910fbede6f")
@@ -100,6 +121,10 @@ async function waitDeleteTimeslot(message) {
 
 }
 
+async function waitBookAppointment(message) {
+    return await bookAppointment(message)
+}
+
 // Function declaration
 /**
  * Test function extracted from topic switcher
@@ -119,7 +144,11 @@ function testAppointment(message) {
     mqttClient.sendMessage(message.id + '/appointmentResponse', JSON.stringify(newClinic))
 }
 
-
+/**
+ * A method which calls mongoose manipulation methods that all related to the process of booking an appointment
+ * @param intermediary The JSON which is received by the service
+ * @returns {Promise<string>} The success or failure message
+ */
 async function bookAppointment(intermediary) {
     //Creates a timeslot. Returns the timeslot JSON.
     const timeslot = await waitMakeTimeslots(intermediary.body)
@@ -138,6 +167,11 @@ async function bookAppointment(intermediary) {
 
 }
 
+/**
+ * A method which calls mongoose manipulation methods that all related to the process of canceling an appointment
+ * @param intermediary The JSON which is received by the service
+ * @returns {string} The success or failure string
+ */
 function cancelAppointment(intermediary) {
     //METHOD CALL FOR DB MANIPULATION THAT DELETES THE TIMESLOT BUT RETURNS IT
     const canceledTimeslot = waitDeleteTimeslot(intermediary.body)
