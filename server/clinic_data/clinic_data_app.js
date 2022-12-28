@@ -1,5 +1,6 @@
 const mqttHandler = require('../helpers/mqtt_handler');
 const clinic_data_controller = require('./controllers/clinic_data_controller');
+const clinicData = require('./controllers/clinic_data_controller.js');
 
 let config
 try {
@@ -20,6 +21,7 @@ mqttClient.subscribeTopic('testingTestingRequest')
 mqttClient.subscribeTopic('editInfo')
 mqttClient.subscribeTopic('changePassword')
 
+mqttClient.subscribeTopic('AddDentist')
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', async function (topic, message) {
@@ -52,6 +54,11 @@ mqttClient.mqttClient.on('message', async function (topic, message) {
         case 'changePassword':
             clinicData.changePassword(intermediary).then(res => {
                 mqttClient.sendMessage(intermediary.id + '/changePasswordResponse', res)
+            })
+            break;
+        case 'AddDentist':
+            clinicData.addDentist(intermediary).then(res => {
+                mqttClient.sendMessage(intermediary.id + '/addDentistResponse', res)
             })
             break;
     }
