@@ -9,7 +9,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Logo from '../assets/logo.png'
 function Navbarr() {
     return (
-        <body>
+        <div>
         <div className="header">
             <img className="logo" src={Logo} alt="logo" />
             <h1>DENTAL CLINIC</h1>
