@@ -46,14 +46,14 @@ async function mapDataRequest() {
 
             let openingHourString
 
-            if(clinic.openingHours.monday.start) {
+            if (clinic.openingHours.monday.start) {
                 openingHourString = "Opening Hours: " +
                     "\nMonday: " + clinic.openingHours.monday.start + " - " + clinic.openingHours.monday.end +
                     "\nTuesday: " + clinic.openingHours.tuesday.start + " - " + clinic.openingHours.tuesday.end +
                     "\nWednesday: " + clinic.openingHours.wednesday.start + " - " + clinic.openingHours.wednesday.end +
                     "\nThursday: " + clinic.openingHours.thursday.start + " - " + clinic.openingHours.thursday.end +
                     "\nFriday : " + clinic.openingHours.friday.start + " - " + clinic.openingHours.friday.end
-            }else {
+            } else {
                 openingHourString = "No opening hours given"
             }
             clinicMapJSON.clinics.push({
@@ -215,8 +215,23 @@ async function addDentist(req) {
     return JSON.stringify(message);
 }
 
-module.exports = {mapDataRequest,
+async function getCurrentClinic(req) {
+    const theID = req.body.clinicID
+    const clinic = await clinicModel.findById(theID)
+    if (clinic) {
+        return JSON.stringify(clinic)
+    } else {
+        console.log("failed")
+        return "failed"
+    }
+
+}
+
+module.exports = {
+    mapDataRequest,
     reconnect,
     editInfo,
     changePassword,
-    addDentist}
+    addDentist,
+    getCurrentClinic
+}

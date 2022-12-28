@@ -2,9 +2,11 @@ import React, {useEffect, useState} from 'react';
 import './NewDentist.css';
 import mqttHandler from "../common_components/MqttHandler";
 import Navbar from '../common_components/navbar'
+import jwt from "jsonwebtoken";
 
 export function NewDentist() {
     const [client, setClient] = useState(null);
+    const [currentClinic, setCurrentClinic] = useState("");
     const [formData, setFormData] = useState({
         dentistName: '',
         phoneNumber: '',
@@ -13,6 +15,8 @@ export function NewDentist() {
     })
 
     useEffect(() => {
+        const clinic = jwt.decode(localStorage.token, 'something');
+        setCurrentClinic(clinic)
         if (client === null) {
             setClient(mqttHandler.getClient(client))
         }
@@ -32,7 +36,16 @@ export function NewDentist() {
                 }
             })
         }
-
+        /**
+         * Recieves the response from backend, parses it and sends it over to be alerted.
+         * @param message the response from backend.
+         */
+        function receivedMessage(message) {
+            console.log(message)
+            const pMessage = JSON.parse(message)
+            console.log(pMessage.status)
+            alert(pMessage)
+        }
         return () => {
             if (client !== null) {
                 console.log('ending process')
@@ -58,17 +71,6 @@ export function NewDentist() {
             alertPlaceholder.style.borderColor = "#8b0000";
             alertPlaceholder.style.color = "#8b0000";
         }
-    }
-
-    /**
-     * Recieves the response from backend, parses it and sends it over to be alerted.
-     * @param message the response from backend.
-     */
-    function receivedMessage(message) {
-        console.log(message)
-        const pMessage = JSON.parse(message)
-        console.log(pMessage.status)
-        alert(pMessage)
     }
 
     /**
@@ -104,7 +106,7 @@ export function NewDentist() {
                     {
                         id: client.options.clientId,
                         body: {
-                            email: "modify@hotmail.se",
+                            email: currentClinic.email,
                             name: formData.dentistName,
                             dentistEmail: formData.email,
                             phoneNumber: formData.phoneNumber,

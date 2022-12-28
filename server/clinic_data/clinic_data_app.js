@@ -22,6 +22,8 @@ mqttClient.subscribeTopic('testingTestingRequest')
 mqttClient.subscribeTopic('editInfo')
 mqttClient.subscribeTopic('changePassword')
 mqttClient.subscribeTopic('AddDentist')
+mqttClient.subscribeTopic('getCurrentLoggedInClinic')
+
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', async function (topic, message) {
@@ -59,6 +61,11 @@ mqttClient.mqttClient.on('message', async function (topic, message) {
         case 'changePassword':
             clinicData.changePassword(intermediary).then(res => {
                 mqttClient.sendMessage(intermediary.id + '/changePasswordResponse', res)
+            })
+            break;
+        case 'getCurrentLoggedInClinic':
+            clinicData.getCurrentClinic(intermediary).then(res => {
+                mqttClient.sendMessage(intermediary.id + '/currentLoggedInClinicResponse', res)
             })
             break;
     }

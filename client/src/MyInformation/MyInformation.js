@@ -1,10 +1,12 @@
-//import './MyInformation.css'
+import './MyInformation.css'
 import React, {useEffect, useState} from 'react';
 import Navbar from '../common_components/navbar';
 import mqttHandler from "../common_components/MqttHandler";
+import jwt from "jsonwebtoken";
 
 export function MyInformation() {
     const [client, setClient] = useState(null);
+    const [currentClinic, setCurrentClinic] = useState("");
     const [name, setName] = useState("");
     const [owner, setOwner] = useState("");
     const [address, setAddress] = useState("");
@@ -32,6 +34,7 @@ export function MyInformation() {
     }, [client])
 
     useEffect(() => {
+        setInitialStates()
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#')
 
@@ -59,14 +62,24 @@ export function MyInformation() {
             console.log(pMessage.status)
             alert(pMessage)
         }
-
+        /**
+         * This will be connected to the backend, to get the current state of the clinic's information
+         * and display them in the form.
+         */
+        function setInitialStates() {
+            const clinic = jwt.decode(localStorage.token, 'something');
+            setCurrentClinic(clinic)
+            setName(currentClinic.name)
+            setOwner(currentClinic.owner)
+            setAddress(currentClinic.address)
+        }
         return () => {
             if (client !== null) {
                 console.log('ending process')
                 client.end()
             }
         }
-    }, [client])
+    }, [client, currentClinic.name, currentClinic.address, currentClinic.owner])
 
     /**
      * A custom alert, which receives a message to be alerted.
@@ -86,16 +99,6 @@ export function MyInformation() {
             alertPlaceholder.style.color = "#8b0000";
         }
     }
-
-
-    /**
-     * This will be connected to the backend, to get the current state of the clinic's information
-     * and display them in the form.
-     */
-        // eslint-disable-next-line no-unused-vars
-    const setInitialStates = () => {
-
-        }
     /**
      * Changes the initial state of the variables when the user types in something, in order to keep
      * track of the user's input.
@@ -206,7 +209,7 @@ export function MyInformation() {
                                 name: name,
                                 owner: owner,
                                 address: address,
-                                email: 's@hotmail.com',
+                                email: currentClinic.email,
                                 newEmail: email,
                                 openingHours: {
                                     monday: {
@@ -258,7 +261,7 @@ export function MyInformation() {
                     {
                         id: client.options.clientId,
                         body: {
-                            email: "s@hotmail.com",
+                            email: currentClinic.email,
                             password: password,
                             oldPassword: oldPassword
                         }
@@ -431,7 +434,7 @@ export function MyInformation() {
                             />
                         </label>
                         <form className="breakHours">
-                            <label className="day"> <h3 id={"hoursHeader"}> Break Hours </h3>
+                            <label className="day"><h3 id={"hoursHeader"}> Break Hours </h3>
                                 <label> Fika: </label>
                                 <input
                                     className="informationInput"
