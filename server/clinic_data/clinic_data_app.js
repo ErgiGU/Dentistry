@@ -1,5 +1,5 @@
 const mqttHandler = require('../helpers/mqtt_handler');
-const clinic_data_controller = require('./controllers/clinic_data_controller');
+const clinic_data_controller = require('./controllers/clinic_data_controller.js');
 const clinicData = require('./controllers/clinic_data_controller.js');
 
 

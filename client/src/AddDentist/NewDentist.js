@@ -46,7 +46,7 @@ export function NewDentist() {
      * @param message the response.
      */
     const alert = (message) => {
-        const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+        const alertPlaceholder = document.getElementById('dentistAlertPlaceholder')
         alertPlaceholder.style.display = "block"
         alertPlaceholder.innerHTML = message.text
         if (message.status === 200) {
@@ -120,11 +120,11 @@ export function NewDentist() {
     return (
         <>
             <Navbar/>
-            <div className="container">
-                <div id="liveAlertPlaceholder"></div>
-                <form className="formBox">
+            <div className="newDentistContainer">
+                <div id="dentistAlertPlaceholder"></div>
+                <form className="dentistFormBox">
                     <h2> Add a new dentist </h2>
-                    <div className="form-floating">
+                    <div className="form-floating dentistInputContainer">
                         <input required
                                type="text"
                                className="form-control"
@@ -136,7 +136,7 @@ export function NewDentist() {
                         />
                         <label htmlFor="name"> Dentist's name </label>
                     </div>
-                    <div className="form-floating">
+                    <div className="form-floating dentistInputContainer">
                         <input required
                                type="text"
                                className="form-control"
@@ -148,7 +148,7 @@ export function NewDentist() {
                         />
                         <label htmlFor="email"> Dentist's email </label>
                     </div>
-                    <div className="form-floating">
+                    <div className="form-floating dentistInputContainer">
                         <input required
                                type="tel"
                                className="form-control"
@@ -160,7 +160,7 @@ export function NewDentist() {
                         />
                         <label htmlFor="phoneNumber"> Dentist's phone number </label>
                     </div>
-                    <div className="form-floating">
+                    <div className="form-floating dentistInputContainer">
                         <select className="form-select" id="floatingSelect" aria-label="Floating label select example"
                                 name="specialty" onChange={(e) => handleChanges(e)} required>
                             <option selected>Open this select menu</option>
@@ -172,7 +172,7 @@ export function NewDentist() {
                         </select>
                         <label htmlFor="floatingSelect"> Speciality </label>
                     </div>
-                    <button className={"button"} onClick={(e) => submit(e)}>
+                    <button className={"dentistButton"} onClick={(e) => submit(e)}>
                         Add Dentist!
                     </button>
                 </form>

@@ -177,6 +177,7 @@ async function changePassword(req) {
     }
     return JSON.stringify(message);
 }
+
 /**
  * Finds the correct clinic provided in the body, then creates a new dentist with the data provided in the body
  * Then adds the dentist to the clinic's dentists list.
@@ -214,11 +215,8 @@ async function addDentist(req) {
     return JSON.stringify(message);
 }
 
-const clinicController = {
-    mapDataRequest,
+module.exports = {mapDataRequest,
     reconnect,
     editInfo,
     changePassword,
-    addDentist
-}
-module.exports = {clinicController}
+    addDentist}

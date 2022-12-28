@@ -62,7 +62,7 @@ export function MyInformation() {
      * @param message message to alert
      */
     const alert = (message) => {
-        const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+        const alertPlaceholder = document.getElementById('alertPlaceholder')
         alertPlaceholder.style.display = "block"
         alertPlaceholder.innerHTML = message.text
         if (message.status === 200) {
@@ -205,7 +205,7 @@ export function MyInformation() {
                                 name: name,
                                 owner: owner,
                                 address: address,
-                                email: 'modify@hotmail.se',
+                                email: 's@hotmail.com',
                                 newEmail: email,
                                 openingHours: {
                                     monday: {
@@ -257,7 +257,7 @@ export function MyInformation() {
                     {
                         id: client.options.clientId,
                         body: {
-                            email: "modify@hotmail.se",
+                            email: "s@hotmail.com",
                             password: password,
                             oldPassword: oldPassword
                         }
@@ -270,14 +270,14 @@ export function MyInformation() {
         <>
             <Navbar/>
             <div className={"profileContainer"}>
-                <div id="liveAlertPlaceholder"></div>
+                <div id="alertPlaceholder"></div>
                 <div className="leftBox">
                     <form className="clinicInfo">
                         <h2 id={"clinicHeader2"}> My Information </h2>
-                        <div className="form-floating">
+                        <div className="form-floating informationInputContainer">
                             <input
                                 type="text"
-                                className="form-control"
+                                className="form-control informationInput"
                                 placeholder="Name"
                                 name="name"
                                 id={"name"}
@@ -287,10 +287,10 @@ export function MyInformation() {
                             />
                             <label for="name"> Clinic's name </label>
                         </div>
-                        <div className="form-floating">
+                        <div className="form-floating informationInputContainer">
                             <input
                                 type="text"
-                                className="form-control"
+                                className="form-control informationInput"
                                 placeholder="Owner"
                                 name="owner"
                                 id={"owner"}
@@ -299,10 +299,10 @@ export function MyInformation() {
                             />
                             <label for="owner"> Clinic's owner </label>
                         </div>
-                        <div className="form-floating">
+                        <div className="form-floating informationInputContainer">
                             <input
                                 type="text"
-                                className="form-control"
+                                className="form-control informationInput"
                                 placeholder="Address"
                                 name="address"
                                 id={"address"}
@@ -311,10 +311,10 @@ export function MyInformation() {
                             />
                             <label for="address"> Clinic's Address </label>
                         </div>
-                        <div className="form-floating">
+                        <div className="form-floating informationInputContainer">
                             <input
                                 type="text"
-                                className="form-control"
+                                className="form-control informationInput"
                                 placeholder="name@example.com"
                                 name="email"
                                 id={"email"}
@@ -323,7 +323,7 @@ export function MyInformation() {
                             />
                             <label for="email"> Email address </label>
                         </div>
-                        <button className={"button"} onClick={(e) => submit(e)}>
+                        <button className={"informationButton"} onClick={(e) => submit(e)}>
                             Change info
                         </button>
                     </form>
@@ -332,6 +332,7 @@ export function MyInformation() {
                         <label className={"day"}> Monday <br/>
                             <label> Start: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="mondayStart"
                                 id={"mondayStart"}
@@ -340,6 +341,7 @@ export function MyInformation() {
                             />
                             <label> End: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="mondayEnd"
                                 id={"mondayEnd"}
@@ -350,6 +352,7 @@ export function MyInformation() {
                         <label className={"day"}> Tuesday <br/>
                             <label> Start: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="tuesdayStart"
                                 id={"tuesdayStart"}
@@ -358,6 +361,7 @@ export function MyInformation() {
                             />
                             <label> End: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="tuesdayEnd"
                                 id={"tuesdayEnd"}
@@ -368,6 +372,7 @@ export function MyInformation() {
                         <label className={"day"}> Wednesday <br/>
                             <label> Start: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="wednesdayStart"
                                 id={"wednesdayStart"}
@@ -376,6 +381,7 @@ export function MyInformation() {
                             />
                             <label> End: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="wednesdayEnd"
                                 id={"wednesdayEnd"}
@@ -386,6 +392,7 @@ export function MyInformation() {
                         <label className={"day"}> Thursday <br/>
                             <label> Start: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="thursdayStart"
                                 id={"thursdayStart"}
@@ -394,6 +401,7 @@ export function MyInformation() {
                             />
                             <label> End: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="thursdayEnd"
                                 id={"thursdayEnd"}
@@ -404,6 +412,7 @@ export function MyInformation() {
                         <label className={"day"}> Friday <br/>
                             <label> Start: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="fridayStart"
                                 id={"fridayStart"}
@@ -412,6 +421,7 @@ export function MyInformation() {
                             />
                             <label> End: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="fridayEnd"
                                 id={"fridayEnd"}
@@ -423,6 +433,7 @@ export function MyInformation() {
                             <label className="day"> <h3 id={"hoursHeader"}> Break Hours </h3>
                                 <label> Fika: </label>
                                 <input
+                                    className="informationInput"
                                     type="time"
                                     name="fikaHour"
                                     id={"fikaHour"}
@@ -431,6 +442,7 @@ export function MyInformation() {
                                 />
                                 <label> Lunch: </label>
                                 <input
+                                    className="informationInput"
                                     type="time"
                                     name="lunchHour"
                                     id={"lunchHour"}
@@ -446,10 +458,10 @@ export function MyInformation() {
                 </div>
                 <form className="passwordChanging" id={"form2"}>
                     <h2 id={"clinicHeader2"}> Change password </h2>
-                    <div className="form-floating">
+                    <div className="form-floating informationInputContainer">
                         <input required
                                type="password"
-                               className="form-control"
+                               className="form-control informationInput"
                                placeholder="Password"
                                name="password"
                                id={"oldPassword"}
@@ -458,10 +470,10 @@ export function MyInformation() {
                         />
                         <label for="oldPassword"> Old password </label>
                     </div>
-                    <div className="form-floating">
+                    <div className="form-floating informationInputContainer">
                         <input required
                                type="password"
-                               className="form-control"
+                               className="form-control informationInput"
                                placeholder="Password"
                                name="password"
                                id={"password"}
@@ -470,10 +482,10 @@ export function MyInformation() {
                         />
                         <label for="password"> New password </label>
                     </div>
-                    <div className="form-floating">
+                    <div className="form-floating informationInputContainer">
                         <input required
                                type="password"
-                               className="form-control"
+                               className="form-control informationInput"
                                placeholder="Password"
                                name="confirmPassword"
                                id={"confirmPassword"}
@@ -483,7 +495,7 @@ export function MyInformation() {
                         <label for="confirmPassword"> Confirm password </label>
                     </div>
                     <label id={"passwordError"}> </label> <br/>
-                    <button className={"button"} onClick={(e) => changePassword(e)}>
+                    <button className={"informationButton"} onClick={(e) => changePassword(e)}>
                         Change password
                     </button>
                 </form>

@@ -16,7 +16,7 @@
     margin-bottom: 50px;
 }
 
-.form-floating {
+.informationInputContainer {
     color: black;
     margin-top: 20px;
 }
@@ -56,35 +56,35 @@
     margin-right: 2px;
 }
 
-input {
+.informationInput {
     margin-top: 10px;
     margin-bottom: 10px;
     border-color: darkgray;
     border-radius: 5px;
 }
 
-.clinicInfo > input {
+.clinicInfo > .informationInput {
     width: 90%;
     display: block;
 }
 
-.passwordChanging > .form-floating {
+.passwordChanging > .informationInputContainer {
     margin-right: 40px;
     width: 95%;
     margin-top: 55px;
 }
 
-.clinicInfo > .form-floating {
+.clinicInfo > .informationInputContainer {
     margin-top: 35px;
 }
 
-.day > input {
+.day > .informationInput {
     width: 31%;
     margin-left: 6px;
     margin-right: 6px;
 }
 
-.breakHours > .day > input {
+.breakHours > .day > .informationInput {
     width: 25%;
 }
 
@@ -102,7 +102,7 @@ input {
     display: none;
 }
 
-.button {
+.informationButton {
     padding: 10px;
     font-size: 18px;
     margin-top: 20px;
@@ -111,12 +111,12 @@ input {
     border-radius: 5px;
 }
 
-.passwordChanging > .button {
+.passwordChanging > .informationButton {
     margin-top: 43px;
     padding: 13px;
 }
 
-.button:hover {
+.informationButton:hover {
     background-color: lightgray;
 }
 
@@ -124,7 +124,7 @@ input {
     background-color: lightgray;
 }
 
-#liveAlertPlaceholder {
+#alertPlaceholder {
     font-family: Inter;
     display: none;
     height: 60px;
@@ -167,7 +167,7 @@ input {
         width: 55vw;
     }
 
-    .passwordChanging > .form-floating {
+    .passwordChanging > .informationInputContainer {
         width: 90%;
     }
 }
@@ -188,7 +188,7 @@ input {
         border-right: none;
     }
 
-    .passwordChanging > .form-floating {
+    .passwordChanging > .informationInputContainer {
         width: 90%;
         margin-top: 40px;
     }
@@ -201,7 +201,7 @@ input {
         width: 70%;
     }
 
-    .clinicInfo > .button {
+    .clinicInfo > .informationButton {
         display: none;
     }
 

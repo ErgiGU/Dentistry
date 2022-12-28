@@ -1,10 +1,10 @@
-.container {
+.newDentistContainer {
     display: flex;
     flex-direction: column;
     align-items:center;
 }
 
-.formBox {
+.dentistFormBox {
     display: block;
     font-family: Inter;
     font-size: 18px;
@@ -19,13 +19,13 @@
     text-align: center;
 }
 
-.form-floating {
+.dentistInputContainer {
     color: gray;
     margin-top: 25px;
     width: 100%;
 }
 
-.button {
+.dentistButton {
     padding: 10px;
     font-size: 18px;
     margin-top: 30px;
@@ -36,11 +36,11 @@
     float: left;
 }
 
-.button:hover {
+.dentistButton:hover {
     background-color: lightgray;
 }
 
-#liveAlertPlaceholder {
+#dentistAlertPlaceholder {
     font-family: Inter;
     display: none;
     height: 60px;
@@ -52,18 +52,18 @@
     border-radius: 3px;
 }
 @media only screen and (min-width: 995px) {
-    .formBox {
+    .dentistFormBox {
         width: 50%;
     }
-    #liveAlertPlaceholder {
+    #dentistAlertPlaceholder {
         width: 50%;
     }
 }
 @media only screen and (max-width: 994px) {
-    .formBox {
+    .dentistFormBox {
         width: 80%;
     }
-    #liveAlertPlaceholder {
+    #dentistAlertPlaceholder {
         width: 80%;
     }
 }
