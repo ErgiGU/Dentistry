@@ -62,7 +62,10 @@ mqttClient.mqttClient.on('message', function (topic, message) {
                     mqttClient.sendMessage(intermediary.client_id + "/loginClient",JSON.stringify(res));
                 }else{
                     console.log("sent");
-                    mqttClient.sendMessage(intermediary.client_id + "/loginClient", "Invalid email/password")
+                    const message = {
+                        message: "Invalid email/password"
+                    }
+                    mqttClient.sendMessage(intermediary.client_id + "/loginClient", JSON.stringify(message))
                 }
             })
 
