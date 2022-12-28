@@ -41,7 +41,10 @@ export function NewDentist() {
         }
     }, [client])
 
-
+    /**
+     * Visually displays a response message to the user.
+     * @param message the response.
+     */
     const alert = (message) => {
         const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
         alertPlaceholder.style.display = "block"
@@ -57,6 +60,10 @@ export function NewDentist() {
         }
     }
 
+    /**
+     * Recieves the response from backend, parses it and sends it over to be alerted.
+     * @param message the response from backend.
+     */
     function receivedMessage(message) {
         console.log(message)
         const pMessage = JSON.parse(message)
@@ -64,6 +71,10 @@ export function NewDentist() {
         alert(pMessage)
     }
 
+    /**
+     * Chanegs the states of the variables whenever the user types in something, using the event.
+     * @param e event object
+     */
     const handleChanges = (e) => {
         e.persist();
         setFormData(formData => ({
@@ -72,6 +83,11 @@ export function NewDentist() {
         }))
     }
 
+    /**
+     * Validates that the email and phone number are in the correct format
+     * Then sends the data over to the backend to create the dentist.
+     * @param e event object.
+     */
     const submit = (e) => {
         if (!/\S+@\S+\.\S+/.test(formData.email) && formData.email) {
             const email = document.getElementById("email")
