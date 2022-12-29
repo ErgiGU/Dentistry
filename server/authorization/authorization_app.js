@@ -22,7 +22,6 @@ mqttClient.subscribeTopic('auth');
 mqttClient.subscribeTopic('test');
 mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('registration');
-mqttClient.subscribeTopic("checkIfEmailExists");
 mqttClient.subscribeTopic('testingTestingRequest');
 mqttClient.subscribeTopic("login");
 
@@ -37,44 +36,31 @@ try {
         console.log(intermediary);
 
         switch (topic) {
-        case 'auth':
-            mqttClient.sendMessage('authTest', 'Authorization confirmed')
-            break;
-        //topic for registration
-        case 'registration':
-            authorization_controller.register(intermediary).then(res=>{
-                let response = {
-                    response: ""
-                }
-                if(res === "success!"){
-                 response.response = "registration successful";
+            case 'auth':
+                mqttClient.sendMessage('authTest', 'Authorization confirmed')
+                break;
+            //topic for registration
+            case 'registration':
+                authorization_controller.register(intermediary).then(res=>{
+                    let response = {
+                        response: ""
+                    }
+                    if(res === "success!"){
+                    response.response = "registration successful";
 
-                }else{
-                    response.response = "registration failed";
-                }
-                mqttClient.sendMessage(intermediary.client_id + "/register",JSON.stringify(response));
-            });
-            break;
-        //topic for checking if the email already exists in the DB(used for registration)
-        case 'checkIfEmailExists':
-            const email = intermediary.body.email;
-            authorization_controller.emailExists(email).then(res=>{
-                let response = {
-                    response: ""
-                }
-                if (res === "email already exists") {
-                    response.response = "email already exists";
-                }else{
-                    response.response = "email does not exist"
-                }
-                mqttClient.sendMessage(intermediary.client_id + "/checkEmail",JSON.stringify(response));
-            });
-            break;
-        //topic for login
-        case "login":
-            const emailLogin = intermediary.body.email;
-            const password = intermediary.body.password;
-            authorization_controller.loginClinic(emailLogin,password).then(res=>{
+                    }else if(res === "email already exists"){
+                        response.response = "email already exists";
+                    }else{
+                        response.response = "registration failed";
+                    }
+                    mqttClient.sendMessage(intermediary.client_id + "/register",JSON.stringify(response));
+                });
+                break;
+            //topic for login
+            case "login":
+                const emailLogin = intermediary.body.email;
+                const password = intermediary.body.password;
+                authorization_controller.loginClinic(emailLogin,password).then(res =>{
 
                 if(res.response === "login successful"){
 
@@ -85,23 +71,22 @@ try {
                     }
                     mqttClient.sendMessage(intermediary.client_id + "/loginClient", JSON.stringify(response))
                 }
-            })
-
-            break;
-        case 'testingTestingRequest':
+                })
+                break;
+            case 'testingTestingRequest':
                 const messageSending = {
                     response: "ToothyClinic",
                     additional: "WillIt"
                 }
                 mqttClient.sendMessage('123/testingTesting', JSON.stringify(messageSending))
                 break;
-        case 'test':
-            process.exit()
-            break;
+            case 'test':
+                process.exit()
+                break;
         case 'initiateTesting':
             authorization_controller.reconnect(config.admin_config.database_tester.mongoURI)
             break;
-    }
+        }
 
     });
 }catch (e) {
