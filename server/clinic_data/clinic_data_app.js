@@ -56,12 +56,12 @@ try {
                 mqttClient.sendMessage(intermediary.id + '/clinicData', JSON.stringify(clinic))
                 break;
             case 'editInfo':
-                clinicData.editInfo(intermediary).then(res => {
+                clinic_data_controller.editInfo(intermediary).then(res => {
                     mqttClient.sendMessage(intermediary.id + '/editInfoResponse', res)
                 })
                 break;
             case 'changePassword':
-                clinicData.changePassword(intermediary).then(res => {
+                clinic_data_controller.changePassword(intermediary).then(res => {
                     mqttClient.sendMessage(intermediary.id + '/changePasswordResponse', res)
                 })
                 break;    

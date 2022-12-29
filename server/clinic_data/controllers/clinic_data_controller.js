@@ -162,16 +162,28 @@ async function editInfo(req) {
             clinic.owner = req.body.owner || clinic.owner;
             clinic.address = req.body.address || clinic.address;
             clinic.email = req.body.newEmail || clinic.email;
-            clinic.openingHours.monday.start = req.body.openingHours.monday.start || clinic.openingHours.monday.start;
-            clinic.openingHours.monday.end = req.body.openingHours.monday.end || clinic.openingHours.monday.end;
-            clinic.openingHours.tuesday.start = req.body.openingHours.tuesday.start || clinic.openingHours.tuesday.start;
-            clinic.openingHours.tuesday.end = req.body.openingHours.tuesday.end || clinic.openingHours.tuesday.end;
-            clinic.openingHours.wednesday.start = req.body.openingHours.wednesday.start || clinic.openingHours.wednesday.start;
-            clinic.openingHours.wednesday.end = req.body.openingHours.wednesday.end || clinic.openingHours.wednesday.end;
-            clinic.openingHours.thursday.start = req.body.openingHours.thursday.start || clinic.openingHours.thursday.start;
-            clinic.openingHours.thursday.end = req.body.openingHours.thursday.end || clinic.openingHours.thursday.end;
-            clinic.openingHours.friday.start = req.body.openingHours.friday.start || clinic.openingHours.friday.start;
-            clinic.openingHours.friday.end = req.body.openingHours.friday.end || clinic.openingHours.friday.end;
+            if(req.body.openingHours) {
+                if(req.body.openingHours.monday){
+                    clinic.openingHours.monday.start = req.body.openingHours.monday.start || clinic.openingHours.monday.start;
+                    clinic.openingHours.monday.end = req.body.openingHours.monday.end || clinic.openingHours.monday.end;
+                }
+                if(req.body.openingHours.tuesday) {
+                    clinic.openingHours.tuesday.start = req.body.openingHours.tuesday.start || clinic.openingHours.tuesday.start;
+                    clinic.openingHours.tuesday.end = req.body.openingHours.tuesday.end || clinic.openingHours.tuesday.end;
+                }
+                if(req.body.openingHours.wednesday) {
+                    clinic.openingHours.wednesday.start = req.body.openingHours.wednesday.start || clinic.openingHours.wednesday.start;
+                    clinic.openingHours.wednesday.end = req.body.openingHours.wednesday.end || clinic.openingHours.wednesday.end;
+                }
+                if(req.body.openingHours.thursday) {
+                    clinic.openingHours.thursday.start = req.body.openingHours.thursday.start || clinic.openingHours.thursday.start;
+                    clinic.openingHours.thursday.end = req.body.openingHours.thursday.end || clinic.openingHours.thursday.end;
+                }
+                if(req.body.openingHours.friday) {
+                    clinic.openingHours.friday.start = req.body.openingHours.friday.start || clinic.openingHours.friday.start;
+                    clinic.openingHours.friday.end = req.body.openingHours.friday.end || clinic.openingHours.friday.end;
+                }
+            }
             clinic.fikaHour = req.body.fikaHour || clinic.fikaHour;
             clinic.lunchHour = req.body.lunchHour || clinic.lunchHour;
             clinic.save();

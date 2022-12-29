@@ -104,15 +104,12 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                 hello: "Give Data"
             }
             const expectedResult = {
-                clinics: [{
-                    coordinates: [11.943074635698956, 57.7057104],
-                    properties: {
-                        title: "Testing Clinic",
-                        address: "Address: Lindholmen",
-                        opening_hours:
-                            "Opening Hours: Monday: 8:00 - 17:00  Tuesday: 8:00 - 17:00  Wednesday: 8:00 - 17:00  Thursday: 8:00 - 17:00  Friday : 8:00 - 17:00"
-
-                    }
+                clinics:[{
+                    coordinates:[11.943074635698956,57.7057104],
+                    properties:{
+                        title:"Testing Clinic",
+                        address:"Address: Lindholmen",
+                        opening_hours:"Opening Hours: Monday: 08:00 - 17:00  Tuesday: 08:00 - 17:00  Wednesday: 08:00 - 17:00  Thursday: 08:00 - 17:00  Friday : 08:00 - 17:00"}
                 }]
             }
             await asyncMethod("mapDataRequest", "mapDataResponse", messageSend, expectedResult)
@@ -146,6 +143,29 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                     test: "this is for the test"
                 }
             }
+            const newExpectedResult = {
+                openingHours:{
+                    monday:{start:"08:00",end:"17:00"},
+                    tuesday:{start:"08:00",end:"17:00"},
+                    wednesday:{start:"08:00",end:"17:00"},
+                    thursday:{start:"08:00",end:"17:00"},
+                    friday:{start:"08:00",end:"17:00"}
+                },
+                coordinates:{
+                    longitude:11.943074635698956,
+                    latitude:57.7057104
+                },
+                _id:"id",
+                dentists:[],
+                timeslots:[],
+                name:"Clinic Testing",
+                password:"password",
+                email:"gusaskbu@student.gu.se",
+                address:"Lindholmen",
+                city:"Göteborg",
+                __v:0,
+                owner:"Oscar Davidsson"
+            }
             const expectedResult = {
                 openingHours: {
                     monday: { start: '8:00', end: '17:00' },
@@ -170,7 +190,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                 __v: 0
             }
 
-            await asyncMethod("clinicDataRequest", "clinicData", messageSend, expectedResult)
+            await asyncMethod("clinicDataRequest", "clinicData", messageSend, newExpectedResult)
         })
     })
 
@@ -273,11 +293,11 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
     })
 
     //Is needed to close the runner in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
-    /*describe('Closing runner', function () {
+    describe('Closing runner', function () {
         it('Is this closing the runner?',   function () {
             mqttClient.sendMessage('test', JSON.stringify({message: 'someMsg'}))
         })
-    })*/
+    })
 })
 //Is needed to close the tester in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
 
