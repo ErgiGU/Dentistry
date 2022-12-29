@@ -43,21 +43,31 @@ try {
         //topic for registration
         case 'registration':
             authorization_controller.register(intermediary).then(res=>{
-                if(res === "success!"){
-                    //sends the ok to the client for the registration
-                    mqttClient.sendMessage(intermediary.client_id + "/register","registration successful");
-                }else{
-                    mqttClient.sendMessage(intermediary.client_id + "/register","registration failed");
+                let response = {
+                    response: ""
                 }
+                if(res === "success!"){
+                 response.response = "registration successful";
+
+                }else{
+                    response.response = "registration failed";
+                }
+                mqttClient.sendMessage(intermediary.client_id + "/register",JSON.stringify(response));
             });
             break;
         //topic for checking if the email already exists in the DB(used for registration)
         case 'checkIfEmailExists':
             const email = intermediary.body.email;
             authorization_controller.emailExists(email).then(res=>{
-                if (res === "email already exists") {
-                    mqttClient.sendMessage(intermediary.client_id + "/checkEmail","email already exists");
+                let response = {
+                    response: ""
                 }
+                if (res === "email already exists") {
+                    response.response = "email already exists";
+                }else{
+                    response.response = "email does not exist"
+                }
+                mqttClient.sendMessage(intermediary.client_id + "/checkEmail",JSON.stringify(response));
             });
             break;
         //topic for login
@@ -66,14 +76,14 @@ try {
             const password = intermediary.body.password;
             authorization_controller.loginClinic(emailLogin,password).then(res=>{
 
-                if(res.message === "login successful"){
+                if(res.response === "login successful"){
+
                     mqttClient.sendMessage(intermediary.client_id + "/loginClient",JSON.stringify(res));
                 }else{
-                    console.log("sent");
-                    const message = {
-                        message: "Invalid email/password"
+                    const response = {
+                        response: "Invalid email/password"
                     }
-                    mqttClient.sendMessage(intermediary.client_id + "/loginClient", JSON.stringify(message))
+                    mqttClient.sendMessage(intermediary.client_id + "/loginClient", JSON.stringify(response))
                 }
             })
 

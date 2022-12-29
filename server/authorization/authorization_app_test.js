@@ -200,7 +200,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
                 token: "token"
             }
             await asyncMethod("login", "loginClient", messageSend, expectedResult).then(r => {
-                assert.equal(r.message, "Invalid email/password")
+                assert.equal(r.response, "Invalid email/password")
             })
         })
     })

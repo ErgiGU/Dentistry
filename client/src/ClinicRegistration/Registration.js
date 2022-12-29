@@ -34,9 +34,10 @@ export default function Registration() {
             client.subscribe(client.options.clientId + '/#');
             client.on('message', function (topic, message) {
                 const intermediary = message.toString();
+                const jsonRes = JSON.parse(intermediary);
                 switch (topic) {
                     case client.options.clientId + "/checkEmail":
-                        if (intermediary === "email already exists"){
+                        if (jsonRes.response === "email already exists"){
                             console.log(intermediary)
                             email.setCustomValidity("Email already exists");
                             email.reportValidity()
@@ -47,7 +48,7 @@ export default function Registration() {
                     case client.options.clientId + "/register":
                         /*this code is for making the alert appear and redirecting
                         the user to login(if the registration is successful)*/
-                        if(intermediary === "registration successful"){
+                        if(jsonRes.response === "registration successful"){
                             alert(" You've successfully registered your clinic!","success");
                             setTimeout(() => {
                                 navigate("/login");

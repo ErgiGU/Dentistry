@@ -83,7 +83,7 @@ async function loginClinic(email, password) {
     if (clinic && await bcrypt.compare(password, clinic.password)) {
         const token = clinic.generateToken();
         const payload = {
-            message: "login successful",
+            response: "login successful",
             clinicAccount: clinic,
             token: token
         }
