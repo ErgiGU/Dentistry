@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import "./Login.css";
 import mqttHandler from "../common_components/MqttHandler";
 import {Link, useNavigate} from "react-router-dom";
-import jwt from "jsonwebtoken";
 
 export default function Login() {
     // eslint-disable-next-line no-unused-vars
