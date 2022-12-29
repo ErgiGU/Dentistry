@@ -12,7 +12,6 @@ import BootstrapSwitchButton from 'bootstrap-switch-button-react'
 //}}
 ///>
 
-//remove overlay and figure out how to gray out much code
 
 const Modal = ({ open, onClose }) => {
     if (!open) return null;
@@ -37,9 +36,6 @@ const Modal = ({ open, onClose }) => {
                             onlabel='on duty'
                             offlabel='off duty'
                             width={100}  />
-                        <div className={'form-check form-switch'}>
-                            <input className={'form-check-input'} type={'checkbox'} role={'switch'}/>
-                        </div>
                         <h4>tuesday</h4>
                         <BootstrapSwitchButton
                             checked={true}

@@ -14,6 +14,7 @@ mongooseClient.connect().then(() => {
 }, null)
 
 let clinicModel
+let dentistModel
 
 function reconnect(mongoURI) {
     mongooseClient.close()
@@ -71,16 +72,51 @@ async function mapDataRequest() {
     }
 }
 
-function getWorkweek() {
-
-}
-
-function setWorkweek() {
-    return {
-        "job" : "success"
+//gets dentist workweek
+async function getWorkweek(req) {
+    const clinicID = req.body.id
+    console.log(clinicID)
+    const dentists = await dentistModel.find({clinicID})
+    let message;
+    if (dentists){
+        message = {
+            dentistsID: dentists.id,
+            dentistsWork: dentists.workweek
+        }
+    } else {
+        message = {
+            status: 404,
+            text: 'Dentists is not registered'
+        }
     }
+    return JSON.stringify(message);
 }
 
+//updates dentist workweek
+async function setWorkweek(req) {
+    const email = req.body.email
+    console.log(email)
+    const dentist = await dentistModel.findOne({email})
+    let message;
+    if (dentist) {
+        {
+            dentist.monday = req.body.monday || dentist.monday,
+                dentist.tuesday = req.body.tuesday || dentist.tuesday,
+                dentist.wednesday = req.body.wednesday || dentist.wednesday,
+                dentist.thursday = req.body.thursday || dentist.thursday,
+                dentist.friday = req.body.friday || dentist.friday
+        }
+        dentist.save();
+        console.log("Workweek successfully updated")
+        console.log(clinic)
+    } else {
+        message = {
+            status: 404,
+            text: 'Dentist is not registered'
+        }
+    }
+    return JSON.stringify(message);
+}
 
 
 const clinicController = {

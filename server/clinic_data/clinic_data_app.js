@@ -44,6 +44,12 @@ mqttClient.mqttClient.on('message', async function (topic, message) {
         case 'update':
             mqttClient.sendMessage(intermediary.id + '/responseWeek', clinic_data_controller.setWorkweek(intermediary.body.dentist, intermediary.body.workweek))
             break;
+        case 'getWorkweek':
+            clinic_data_controller.setWorkweek(intermediary.body.id)
+            break
+        case 'setWorkweek':
+            clinic_data_controller.setWorkweek(intermediary.body.dentist.id, intermediary.body.workweek)
+            break
     }
 });
 
