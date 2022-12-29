@@ -81,7 +81,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
         it('Testing for a successful registeration',  async function () {
             this.timeout(10000)
             const messageSend = {
-                id: "123",
+                client_id: "123",
                 body: {
                     clinicName: "Testing Clinic",
                     address: "Lindholmen",
@@ -98,6 +98,25 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
 
         it('Testing registration content',  async function () {
             this.timeout(10000)
+            const expectedNew = {
+                openingHours:{
+                    monday:{start:"08:00",end:"17:00"},
+                    tuesday:{start:"08:00",end:"17:00"},
+                    wednesday:{start:"08:00",end:"17:00"},
+                    thursday:{start:"08:00",end:"17:00"},
+                    friday:{start:"08:00",end:"17:00"}
+                },
+                _id:"id",
+                dentists:[],
+                timeslots:[],
+                name:"Testing Clinic",
+                password:"password",
+                email:"burakaskan2001@gmail.com",
+                coordinates:{longitude:11.943074635698956,latitude:57.7057104},
+                address:"Lindholmen",
+                city:"Göteborg",
+                __v:0
+            }
             const messageSend = {
                 id: "123",
                 body: {
@@ -105,29 +124,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
                     test: "this is for the test"
                 }
             }
-            const expectedResult = {
-                openingHours: {
-                    monday: {start: '8:00', end: '17:00'},
-                    tuesday: {start: '8:00', end: '17:00'},
-                    wednesday: {start: '8:00', end: '17:00'},
-                    thursday: {start: '8:00', end: '17:00'},
-                    friday: {start: '8:00', end: '17:00'}
-                },
-                _id: 'id',
-                dentists: [],
-                timeslots: [],
-                name: 'Testing Clinic',
-                password: 'password',
-                email: 'burakaskan2001@gmail.com',
-                coordinates: {
-                    longitude: 11.943074635698956,
-                    latitude: 57.7057104
-                },
-                address: 'Lindholmen',
-                city: 'Göteborg',
-                __v: 0
-            }
-            await asyncMethod("clinicDataRequest", "clinicData", messageSend, expectedResult)
+            await asyncMethod("clinicDataRequest", "clinicData", messageSend, expectedNew)
 
         })
     })
@@ -135,7 +132,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
         it('Checking to see if a successful attempt correct.',   async function () {
             this.timeout(10000)
             const messageSend = {
-                id: "123",
+                client_id: "123",
                 body: {
                     email: "new@gmail.com"
                 }
@@ -149,7 +146,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
         it('Checking to see if a unsuccessful attempt is correct.',   async function () {
             this.timeout(10000)
             const messageSend = {
-                id: "123",
+                client_id: "123",
                 body: {
                     email: "burakaskan2001@gmail.com"
                 }
@@ -165,31 +162,36 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
         it('Checking to see if a successful attempt correct.',   async function () {
             this.timeout(10000)
             const messageSend = {
-                id: "123",
+                client_id: "123",
                 body: {
                     email: "burakaskan2001@gmail.com",
-                    password: "Team-7Test"
+                    password: "Team-7"
                 }
             }
             const expectedResult = {
                 message: "login successful",
                 clinicAccount: "clinic"
             }
-            const clinicStored = await asyncMethod("clinicDataRequest", "clinicData", messageSend, expectedResult)
+            const messageSendClient = {
+                id: "123",
+                body: {
+                    email: "burakaskan2001@gmail.com"
+                }
+            }
+            const clinicStored = await asyncMethod("clinicDataRequest", "clinicData", messageSendClient, expectedResult)
             const result = await asyncMethod("login", "loginClient", messageSend, expectedResult)
             if (!util.isDeepStrictEqual(result.clinicAccount, clinicStored)) {
                 new Error(JSON.stringify(result.clinicAccount) + " is not the expected message. This is: " + JSON.stringify(expectedResult)
                     + ". The listing topic in backend: " + "login" + ". The listening topic in testing: " + "123/loginClient")
             }
-
         })
         it('Checking to see if a unsuccessful attempt correct.',   async function () {
             this.timeout(10000)
             const messageSend = {
-                id: "123",
+                client_id: "123",
                 body: {
                     email: "burakaskan2001@gmail.com",
-                    password: "Team-7"
+                    password: "Team-7Test"
                 }
             }
             const expectedResult = {
@@ -198,7 +200,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
                 token: "token"
             }
             await asyncMethod("login", "loginClient", messageSend, expectedResult).then(r => {
-                assert.equal(r.message, "Invalid email/password")
+                assert.equal(r.response, "Invalid email/password")
             })
         })
     })

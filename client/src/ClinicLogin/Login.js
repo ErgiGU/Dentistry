@@ -36,7 +36,7 @@ export default function Login() {
                 switch (topic) {
                     case client.options.clientId + "/loginClient":
                         const jsonRes = JSON.parse(intermediary);
-                        if(jsonRes.message === "login successful"){
+                        if(jsonRes.response === "login successful"){
                             localStorage.token = jsonRes.token;
                             console.log(jsonRes.token);
                             console.log(jsonRes.clinicAccount.clinicName);
