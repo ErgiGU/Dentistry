@@ -36,15 +36,6 @@ export default function Registration() {
                 const intermediary = message.toString();
                 const jsonRes = JSON.parse(intermediary);
                 switch (topic) {
-                    case client.options.clientId + "/checkEmail":
-                        if (jsonRes.response === "email already exists"){
-                            console.log(intermediary)
-                            email.setCustomValidity("Email already exists");
-                            email.reportValidity()
-                        }else{
-                            email.setCustomValidity("");
-                        }
-                        break;
                     case client.options.clientId + "/register":
                         /*this code is for making the alert appear and redirecting
                         the user to login(if the registration is successful)*/
@@ -53,7 +44,11 @@ export default function Registration() {
                             setTimeout(() => {
                                 navigate("/login");
                             }, 3000);
+                        }else if(jsonRes.response === "email already exists"){
+                            email.setCustomValidity("Email already exists");
+                            email.reportValidity()
                         }else{
+
                             alert("Registration failed","danger");
                         }
                         break;
@@ -104,7 +99,6 @@ export default function Registration() {
 
 
     function registerClinic1(event) {
-        //event.preventDefault();
         clinicName.setCustomValidity("");
         address.setCustomValidity("");
         email.setCustomValidity("")
@@ -159,6 +153,7 @@ export default function Registration() {
                    <div className="col-md-4" id="parentContainer1" >
                        <form id="registrationForm" className='flex flex-column'  >
                            <h2 className="text-center text-white mb-3" style={{top: '100px'}} >Register your clinic</h2>
+
                            <div id='displayAlert'></div>
 
                            <div className="form-floating mb-4">
