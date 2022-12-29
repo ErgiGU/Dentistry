@@ -107,7 +107,7 @@ async function loginClinic(email, password) {
  }
 
 
-module.exports = {getClinic,register,loginClinic,reconnect};
+module.exports = {register,loginClinic,reconnect};
 
 
 
