@@ -1,3 +1,7 @@
+/**
+ * All the mongoose manipulation for authorization component is contained here
+ * @author Burak Askan (@askan)
+ */
 const bcrypt = require("bcrypt");
 const mongooseHandler = require('../../helpers/mongoose_handler')
 const clinicSchema = require('../../helpers/schemas/clinic');
@@ -79,7 +83,7 @@ async function loginClinic(email, password) {
     if (clinic && await bcrypt.compare(password, clinic.password)) {
         const token = clinic.generateToken();
         const payload = {
-            message: "login successful",
+            response: "login successful",
             clinicAccount: clinic,
             token: token
         }

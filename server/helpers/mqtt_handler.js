@@ -1,8 +1,11 @@
 const mqtt = require('mqtt');
 let config
+let configFileBoolean
 try {
+    configFileBoolean = false
     config = require('./config-server');
 } catch (e) {
+    configFileBoolean = true
     config = require('./dummy_config')
 }
 
@@ -23,13 +26,17 @@ class MqttHandler {
      */
     connect() {
         // Connect mqtt with credentials
+        let reconnectPeriodNumber = 1000
         console.log(this.host)
+        if(configFileBoolean){
+            reconnectPeriodNumber = 0
+        }
         this.mqttClient = mqtt.connect(this.host,
             {
                 username: this.username,
                 password: this.password,
                 clientId: this.clientId,
-                reconnectPeriod: 1000
+                reconnectPeriod: reconnectPeriodNumber
             });
 
         // Mqtt error callback

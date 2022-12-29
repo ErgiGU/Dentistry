@@ -1,5 +1,12 @@
+/**
+ * All the mongoose manipulation for clinic_data component is contained here
+ * @author Burak Askan (@askan)
+ */
 const mongooseHandler = require('../../helpers/mongoose_handler')
 const clinicSchema = require('../../helpers/schemas/clinic')
+const dentistSchema = require('../../helpers/schemas/dentist')
+const timeslotSchema = require('../../helpers/schemas/timeslot')
+const patientSchema = require('../../helpers/schemas/patient')
 let config
 try {
     config = require('../../helpers/config-server');
@@ -16,6 +23,9 @@ mongooseClient.connect().then(() => {
 }, null)
 
 let clinicModel
+let dentistModel
+let timeslotModel
+let patientModel
 
 function reconnect(mongoURI) {
     mongooseClient.close()
@@ -27,8 +37,34 @@ function reconnect(mongoURI) {
 
 function createModels() {
     clinicModel = mongooseClient.model('clinic', clinicSchema)
+    dentistModel = mongooseClient.model('dentist', dentistSchema)
+    timeslotModel = mongooseClient.model('timeslot', timeslotSchema)
+    patientModel = mongooseClient.model('patient', patientSchema)
 }
 
+/**
+ * Does mongoose manipulation to get the dentist with the given email
+ * @param email the email of the individual clinic that is wanted
+ * @returns {Promise<*>} the JSON of the individual clinic
+ */
+async function clinicData(email) {
+    return await clinicModel.findOne({email: email})
+}
+
+
+/**
+ * Does mongoose manipulation to get the dentist with the given email
+ * @param email email of the wanted dentist
+ * @returns {Promise<*>} the JSON of the individual dentist
+ */
+async function getDentist(email) {
+    return await dentistModel.findOne({email: email})
+}
+
+/**
+ * Does mongoose manipulations to get all JSON coordinates, opening hours, name and address of all clinics.
+ * @returns {Promise<{clinics: *[]}|boolean>} JSON containing coordinates, opening hours, name and address of all clinics.
+ */
 async function mapDataRequest() {
 
     let clinicMapJSON = {
@@ -45,11 +81,11 @@ async function mapDataRequest() {
 
             if(clinic.openingHours.monday.start) {
                 openingHourString = "Opening Hours: " +
-                    "\nMonday: " + clinic.openingHours.monday.start + " - " + clinic.openingHours.monday.end +
-                    "\nTuesday: " + clinic.openingHours.tuesday.start + " - " + clinic.openingHours.tuesday.end +
-                    "\nWednesday: " + clinic.openingHours.wednesday.start + " - " + clinic.openingHours.wednesday.end +
-                    "\nThursday: " + clinic.openingHours.thursday.start + " - " + clinic.openingHours.thursday.end +
-                    "\nFriday : " + clinic.openingHours.friday.start + " - " + clinic.openingHours.friday.end
+                    "Monday: " + clinic.openingHours.monday.start + " - " + clinic.openingHours.monday.end +
+                    "  Tuesday: " + clinic.openingHours.tuesday.start + " - " + clinic.openingHours.tuesday.end +
+                    "  Wednesday: " + clinic.openingHours.wednesday.start + " - " + clinic.openingHours.wednesday.end +
+                    "  Thursday: " + clinic.openingHours.thursday.start + " - " + clinic.openingHours.thursday.end +
+                    "  Friday : " + clinic.openingHours.friday.start + " - " + clinic.openingHours.friday.end
             }else {
                 openingHourString = "No opening hours given"
             }
@@ -72,7 +108,26 @@ async function mapDataRequest() {
         console.log(err)
     }
 }
-
+/**
+ * Removes all data from the database
+ * @returns {Promise<boolean>} returns success or failure
+ */
+async function removeData() {
+    console.log("We are entering here")
+    try {
+        await clinicModel.deleteMany()
+        await timeslotModel.deleteMany()
+        await dentistModel.deleteMany()
+        await patientModel.deleteMany()
+    } catch (e) {
+        return {
+            response: "Failure"
+        }
+    }
+    return {
+        response: "Success"
+    }
+}  
 /**
  * Checks if the email provided already exists in the database.
  * @param email The email provided
@@ -107,16 +162,28 @@ async function editInfo(req) {
             clinic.owner = req.body.owner || clinic.owner;
             clinic.address = req.body.address || clinic.address;
             clinic.email = req.body.newEmail || clinic.email;
-            clinic.openingHours.monday.start = req.body.openingHours.monday.start || clinic.openingHours.monday.start;
-            clinic.openingHours.monday.end = req.body.openingHours.monday.end || clinic.openingHours.monday.end;
-            clinic.openingHours.tuesday.start = req.body.openingHours.tuesday.start || clinic.openingHours.tuesday.start;
-            clinic.openingHours.tuesday.end = req.body.openingHours.tuesday.end || clinic.openingHours.tuesday.end;
-            clinic.openingHours.wednesday.start = req.body.openingHours.wednesday.start || clinic.openingHours.wednesday.start;
-            clinic.openingHours.wednesday.end = req.body.openingHours.wednesday.end || clinic.openingHours.wednesday.end;
-            clinic.openingHours.thursday.start = req.body.openingHours.thursday.start || clinic.openingHours.thursday.start;
-            clinic.openingHours.thursday.end = req.body.openingHours.thursday.end || clinic.openingHours.thursday.end;
-            clinic.openingHours.friday.start = req.body.openingHours.friday.start || clinic.openingHours.friday.start;
-            clinic.openingHours.friday.end = req.body.openingHours.friday.end || clinic.openingHours.friday.end;
+            if(req.body.openingHours) {
+                if(req.body.openingHours.monday){
+                    clinic.openingHours.monday.start = req.body.openingHours.monday.start || clinic.openingHours.monday.start;
+                    clinic.openingHours.monday.end = req.body.openingHours.monday.end || clinic.openingHours.monday.end;
+                }
+                if(req.body.openingHours.tuesday) {
+                    clinic.openingHours.tuesday.start = req.body.openingHours.tuesday.start || clinic.openingHours.tuesday.start;
+                    clinic.openingHours.tuesday.end = req.body.openingHours.tuesday.end || clinic.openingHours.tuesday.end;
+                }
+                if(req.body.openingHours.wednesday) {
+                    clinic.openingHours.wednesday.start = req.body.openingHours.wednesday.start || clinic.openingHours.wednesday.start;
+                    clinic.openingHours.wednesday.end = req.body.openingHours.wednesday.end || clinic.openingHours.wednesday.end;
+                }
+                if(req.body.openingHours.thursday) {
+                    clinic.openingHours.thursday.start = req.body.openingHours.thursday.start || clinic.openingHours.thursday.start;
+                    clinic.openingHours.thursday.end = req.body.openingHours.thursday.end || clinic.openingHours.thursday.end;
+                }
+                if(req.body.openingHours.friday) {
+                    clinic.openingHours.friday.start = req.body.openingHours.friday.start || clinic.openingHours.friday.start;
+                    clinic.openingHours.friday.end = req.body.openingHours.friday.end || clinic.openingHours.friday.end;
+                }
+            }
             clinic.fikaHour = req.body.fikaHour || clinic.fikaHour;
             clinic.lunchHour = req.body.lunchHour || clinic.lunchHour;
             clinic.save();
@@ -176,8 +243,11 @@ async function changePassword(req) {
 }
 
 const clinicController = {
+    removeData,
     mapDataRequest,
     reconnect,
+    clinicData,
+    getDentist,
     editInfo,
     changePassword
 }

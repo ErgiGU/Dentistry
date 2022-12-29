@@ -1,3 +1,7 @@
+/**
+ * All mqtt related operations for the authorization component are done here
+ * @author
+ */
 const mqttHandler = require('../helpers/mqtt_handler');
 
 const authorization_controller = require('./controllers/authorization_controller');
@@ -23,33 +27,47 @@ mqttClient.subscribeTopic('testingTestingRequest');
 mqttClient.subscribeTopic("login");
 
 // When a message arrives, respond to it or propagate it further
-mqttClient.mqttClient.on('message', function (topic, message) {
-    let intermediary = JSON.parse(message);
-    console.log(config.module_config.authorizationUser.handler + " service received MQTT message")
-    console.log(intermediary);
+try {
+    /**
+     * The MQTT listener that receives incoming messages and sends back messages after data manipulation.
+     */
+    mqttClient.mqttClient.on('message', function (topic, message) {
+        let intermediary = JSON.parse(message);
+        console.log(config.module_config.authorizationUser.handler + " service received MQTT message")
+        console.log(intermediary);
 
-    switch (topic) {
+        switch (topic) {
         case 'auth':
             mqttClient.sendMessage('authTest', 'Authorization confirmed')
             break;
         //topic for registration
         case 'registration':
             authorization_controller.register(intermediary).then(res=>{
-                if(res === "success!"){
-                    //sends the ok to the client for the registration
-                    mqttClient.sendMessage(intermediary.client_id + "/register","registration successful");
-                }else{
-                    mqttClient.sendMessage(intermediary.client_id + "/register","registration failed");
+                let response = {
+                    response: ""
                 }
+                if(res === "success!"){
+                 response.response = "registration successful";
+
+                }else{
+                    response.response = "registration failed";
+                }
+                mqttClient.sendMessage(intermediary.client_id + "/register",JSON.stringify(response));
             });
             break;
         //topic for checking if the email already exists in the DB(used for registration)
         case 'checkIfEmailExists':
             const email = intermediary.body.email;
             authorization_controller.emailExists(email).then(res=>{
-                if (res === "email already exists") {
-                    mqttClient.sendMessage(intermediary.client_id + "/checkEmail","email already exists");
+                let response = {
+                    response: ""
                 }
+                if (res === "email already exists") {
+                    response.response = "email already exists";
+                }else{
+                    response.response = "email does not exist"
+                }
+                mqttClient.sendMessage(intermediary.client_id + "/checkEmail",JSON.stringify(response));
             });
             break;
         //topic for login
@@ -58,21 +76,25 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             const password = intermediary.body.password;
             authorization_controller.loginClinic(emailLogin,password).then(res=>{
 
-                if(res.message === "login successful"){
+                if(res.response === "login successful"){
+
                     mqttClient.sendMessage(intermediary.client_id + "/loginClient",JSON.stringify(res));
                 }else{
-                    console.log("sent");
-                    const message = {
-                        message: "Invalid email/password"
+                    const response = {
+                        response: "Invalid email/password"
                     }
-                    mqttClient.sendMessage(intermediary.client_id + "/loginClient", JSON.stringify(message))
+                    mqttClient.sendMessage(intermediary.client_id + "/loginClient", JSON.stringify(response))
                 }
             })
 
             break;
         case 'testingTestingRequest':
-            mqttClient.sendMessage('testingTesting', 'ToothyClinic')
-            break;
+                const messageSending = {
+                    response: "ToothyClinic",
+                    additional: "WillIt"
+                }
+                mqttClient.sendMessage('123/testingTesting', JSON.stringify(messageSending))
+                break;
         case 'test':
             process.exit()
             break;
@@ -81,7 +103,12 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             break;
     }
 
-});
+    });
+}catch (e) {
+    console.log(e)
+    console.log("Message was received but caused a crash.")
+}
+
 
 
 module.exports = mqttClient;
