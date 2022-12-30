@@ -52,10 +52,13 @@ When you're ready to make this README your own, just edit this file and use the 
 Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
 
 ## Name
-Choose a self-explaining name for your project.
+Dentistry - For people who love to smile
 
 ## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+This web application is a platform to help you book a dentist appointment in Gothenburg for your desired clinic at your desired time. The application displays the clinic on a map using Google API, so the patients or users can get an exact idea of the clinic's location.
+Moreover, the highly interactive calendar displays all the available timeslots for a selected clinic in a weekly format. This system allows the patient to select his suitable time. 
+Our application also allows the dental clinic to create a secured account with us. The purpose of the account is to manage the clinic's opening hours, input how many dentists are available and also help the patients to cancel an appointment if needed. Once a patient successfully books an appointment, a confirmation email containing all the necessary details is sent to the provided email address.
+<!--Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors. -->
 
 ## Badges
 On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
