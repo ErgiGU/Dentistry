@@ -15,9 +15,10 @@ cache:
 
 stages:          # List of stages for jobs, and their order of execution
   - client.build
-  - appointments
-  - clinic_data
   - authorization
+  - clinic_data
+  - appointments
+
 
 variables:
   CLOUD_MQTT_HOST: $CLOUD_MQTT_HOST

@@ -24,6 +24,7 @@ mqttClient.subscribeTopic('testingTestingRequest')
 mqttClient.subscribeTopic('clinicDataRequest')
 mqttClient.subscribeTopic('wipeTestData')
 mqttClient.subscribeTopic('editInfo')
+mqttClient.subscribeTopic('getDentist')
 mqttClient.subscribeTopic('changePassword')
 
 // When a message arrives, respond to it or propagate it further

@@ -67,7 +67,7 @@ describe("Tests to see if the tests are working", function () {
         it('Is MQTT working? We want back ToothyClinic',  async function () {
             this.timeout(10000)
             const expectedResult = {openingHours:{monday:{start:"8:00",end:"17:00"},tuesday:{start:"8:00",end:"17:00"},wednesday:{start:"8:00",end:"17:00"},thursday:{start:"8:00",end:"17:00"},friday:{start:"8:00",end:"17:00"}},_id:"639f999b75948aaabf80d80f",dentists:[],timeslots:["63a1a393e2743de0e3b4845c"],name:"Testing Clinic",password:"$2b$10$WnpIf0U4aaTn9x2dHFUnvu4MdpVuHdzQr.eyMIPsxJ96Mx/risOuy",email:"burakaskan2001@gmail.com",address:"Lindholmen",city:"Göteborg",__v:1}
-            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "burakaskan2001@gmail.com"}}, expectedResult)
+            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "gusaskbu@student.gu.se"}}, expectedResult)
 
         })
     })
