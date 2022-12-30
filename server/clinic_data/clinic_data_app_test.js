@@ -208,10 +208,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                     speciality: "Teeth"
                 }
             }
-            const expectedResult = {
-                status: 200,
-                test: "Dentist Added!"
-            }
+            const expectedResult = {status:200,text:"Dentist Added!"}
             await asyncMethod("AddDentist", "addDentistResponse", messageSend, expectedResult)
         })
         it('See if dentist was added in model',  async function () {
@@ -222,18 +219,16 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                     email: "burakaskan2001@gmail.com"
                 }
             }
-            const expectedResult = {
-                body: {
-                    clinic: clinicStored._id,
-                    timeslots: [],
-                    _id: "id",
-                    name: "William Bjorn",
-                    email: "burakaskan2001@gmail.com",
-                    phoneNumber: "073213214",
-                    speciality: "Teeth"
-                }
+            const newExpected = {
+                _id:"id",
+                timeslot:[],
+                clinic:clinicStored._id,
+                name:"William Bjorn",
+                email:"burakaskan2001@gmail.com",
+                phoneNumber:"073213214",
+                __v:0
             }
-            await asyncMethod("getDentist", "giveDentist", messageSend, expectedResult)
+            await asyncMethod("getDentist", "giveDentist", messageSend, newExpected)
             clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "gusaskbu@student.gu.se "}}, expectedResult)
         })
     })
