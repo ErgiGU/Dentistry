@@ -63,7 +63,6 @@ export default function Login() {
     }, [client])
 
 
-    // eslint-disable-next-line no-unused-vars
     function sendMessage(topic,json) {
         if (client !== null) {
             client.publish(topic, JSON.stringify(json));

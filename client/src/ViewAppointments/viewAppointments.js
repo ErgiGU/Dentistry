@@ -39,6 +39,7 @@ export default function ViewAppointments() {
                     case client.options.clientId + '/canceledAppointment':
                         console.log(JSON.parse(message))
                         alert(JSON.parse(message))
+                        break;
                     default:
                         (new Error("The wrong message is received"))
                         break;

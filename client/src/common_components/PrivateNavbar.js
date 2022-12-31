@@ -1,13 +1,22 @@
 // Example common component
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Logo from '../assets/logo.png'
 function PrivateNavbar() {
+    const navigate = useNavigate();
+    function logout(){
+        const token = localStorage.getItem('token');
+        console.log(token);
+        if(token){
+            localStorage.removeItem('token');
+            navigate("/login");
+        }
+    }
     return (
-        <body>
+        <div>
         <div className="header">
             <img className="logo" src={Logo} alt="logo" />
             <h1>DENTAL CLINIC</h1>
@@ -18,11 +27,11 @@ function PrivateNavbar() {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="justify-content-end">
 
-                        <Link href="/appointments" >Schedule</Link>
-                        <Link href="/">Your information</Link>
-                        <Link href="/">Opening hours</Link>
-                        <Link href="/">Add a dentist</Link>
-                        <Link href="/">Log out</Link>
+                        <Link to={'/'}>Schedule</Link>
+                        <Link to={'/'} >Your information</Link>
+                        <Link to={'/'} >Opening hours</Link>
+                        <Link to={'/'}>Add a dentist</Link>
+                        <a onClick={logout} >Log out</a>
 
                     </Nav>
                 </Navbar.Collapse>
@@ -30,7 +39,7 @@ function PrivateNavbar() {
         </Navbar>
 
 
-        </body>
+        </div>
 
     );
 }

@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import mqttHandler from "../common_components/MqttHandler";
 import {useNavigate} from "react-router-dom";
 import Card from './Card';
-import Navbar from '../common_components/navbar'
+import PatientNavbar from "../common_components/PatientNavbar";
 
 export default function Home() {
     const navigate = useNavigate()
@@ -68,7 +68,7 @@ export default function Home() {
 
     return (
         <>
-            <Navbar/>
+            <PatientNavbar/>
             <Card />
             <div className="footer">
                 <a id="clinic" href="url">link text</a>

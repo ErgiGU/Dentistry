@@ -1,7 +1,7 @@
 //import './MyInformation.css'
 import React, {useEffect, useState} from 'react';
-import Navbar from '../common_components/navbar';
 import mqttHandler from "../common_components/MqttHandler";
+import PrivateNavbar from "../common_components/PrivateNavbar";
 
 export function MyInformation() {
     const [client, setClient] = useState(null);
@@ -269,7 +269,7 @@ export function MyInformation() {
     }
     return (
         <>
-            <Navbar/>
+            <PrivateNavbar/>
             <div className={"container"}>
                 <div id="liveAlertPlaceholder"></div>
                 <div className="leftBox">
