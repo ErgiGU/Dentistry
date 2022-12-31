@@ -1,4 +1,9 @@
+/**
+ * All the mongoose manipulation for appointments component is contained here
+ * @author Burak Askan (@askan)
+ */
 const mongoose = require('mongoose');
+const mongooseHandler = require('../../helpers/mongoose_handler')
 const timeslotSchema = require('../../helpers/schemas/timeslot')
 const dentistSchema = require('../../helpers/schemas/dentist')
 const patientSchema = require('../../helpers/schemas/patient')
@@ -34,7 +39,12 @@ const clinicModel = mongooseClient.model('Clinic', clinicSchema)
 const patientModel = mongooseClient.model('Patient', patientSchema)
 const dentistModel = mongooseClient.model('Dentist', dentistSchema)
 
-//save timeslots
+/**
+ * The mongoose manipulations to get data required for emailing about the booked timeslot
+ * @param clinicID the id of clinic which the timeslot belongs to
+ * @param timeslotID the id of the timeslot just booked
+ * @returns {Promise<{patientData: {name: string, text: string, email}, dentistData: {name: string, email}, timeslotTime, clinicData: {address, name, email}}>} JSON required for the emails
+ */
 async function bookedMailingData(clinicID, timeslotID) {
     let clinic = await clinicModel.findById(clinicID)
     let timeslot = await timeslotModel.findById(timeslotID).populate('dentist').populate('patient')
@@ -61,6 +71,14 @@ async function bookedMailingData(clinicID, timeslotID) {
     }
 }
 
+/**
+ * The method required for making an appointment
+ * @param clinicID the id of the clinic that is getting a timeslot booked
+ * @param dentistID the id of the dentist that is getting a timeslot booked
+ * @param patientInfo the info of the patient that booked the timeslot
+ * @param timeslotTime the time of the timeslot
+ * @returns {Promise<*>} the timeslot JSON
+ */
 async function makeAppointment(clinicID, dentistID, patientInfo, timeslotTime) {
     let clinic = await clinicModel.findById(clinicID)
     let dentist = await dentistModel.findById(dentistID)
@@ -99,7 +117,10 @@ async function makeAppointment(clinicID, dentistID, patientInfo, timeslotTime) {
     return timeslot
 }
 
-// Generates dummy data into the given clinic ID.
+/**
+ * Generating dentist, timeslot and patient to fill up the db.
+ * @param clinicID the id of clinic which will have the data generated in
+ */
 async function generateData(clinicID) {
 
     let clinic = await clinicModel.findById(clinicID).populate('timeslots')

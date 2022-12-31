@@ -33,10 +33,10 @@ export default function Login() {
             client.on('message', function (topic, message) {
                 // eslint-disable-next-line no-unused-vars
                 const intermediary = message.toString();
+                const jsonRes = JSON.parse(intermediary);
                 switch (topic) {
                     case client.options.clientId + "/loginClient":
-                        const jsonRes = JSON.parse(intermediary);
-                        if(jsonRes.message === "login successful"){
+                        if(jsonRes.response === "login successful"){
                             localStorage.token = jsonRes.token;
                             console.log(jsonRes.token);
                             console.log(jsonRes.clinicAccount.clinicName);
@@ -44,6 +44,9 @@ export default function Login() {
                         }else{
                             setShowAlert(true);
                         }
+                        break;
+                    case client.options.clientId + "/getClinic":
+                        console.log(jsonRes);
                         break;
                     default:
                         break;

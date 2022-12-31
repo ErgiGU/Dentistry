@@ -1,3 +1,7 @@
+/**
+ * All mqtt related operations for the appointments component are done here
+ * @author Burak Askan (@askan)
+ */
 const mqttHandler = require('../helpers/mqtt_handler');
 const appointments_controller = require("./controllers/appointments_controller")
 const appointments_mailer = require("./controllers/appointments_mailer");
@@ -103,6 +107,10 @@ async function waitDeleteTimeslot(message) {
     return await appointments_controller.cancelAppointment(message.timeslotID)
 }
 
+async function waitBookAppointment(message) {
+    return await bookAppointment(message)
+}
+
 // Function declaration
 /**
  * Test function extracted from topic switcher
@@ -122,7 +130,11 @@ function testAppointment(message) {
     mqttClient.sendMessage(message.id + '/appointmentResponse', JSON.stringify(newClinic))
 }
 
-
+/**
+ * A method which calls mongoose manipulation methods that all related to the process of booking an appointment
+ * @param intermediary The JSON which is received by the service
+ * @returns {Promise<string>} The success or failure message
+ */
 async function bookAppointment(intermediary) {
     //Creates a timeslot. Returns the timeslot JSON.
     const timeslot = await waitMakeTimeslots(intermediary.body)
@@ -141,6 +153,11 @@ async function bookAppointment(intermediary) {
 
 }
 
+/**
+ * A method which calls mongoose manipulation methods that all related to the process of canceling an appointment
+ * @param intermediary The JSON which is received by the service
+ * @returns {string} The success or failure string
+ */
 async function cancelAppointment(intermediary) {
     //METHOD CALL FOR DB MANIPULATION THAT DELETES THE TIMESLOT BUT RETURNS IT
     const canceledTimeslot = await waitDeleteTimeslot(intermediary.body)
