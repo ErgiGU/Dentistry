@@ -28,8 +28,8 @@ function PrivateNavbar() {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="justify-content-end">
 
-                        <Link  >Schedule</Link>
-                        <Link  >Your information</Link>
+                        <Link to={'/clinic/schedule'} >Schedule</Link>
+                        <Link to={'/clinic/editInfo'} >Your information</Link>
                         <Link  >Opening hours</Link>
                         <Link >Add a dentist</Link>
                         <a onClick={logout} >Log out</a>
