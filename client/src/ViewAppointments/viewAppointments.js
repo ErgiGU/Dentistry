@@ -26,7 +26,7 @@ export default function ViewAppointments() {
             client.publish('sendAppointmentInformation', JSON.stringify({
                 id: client.options.clientId,
                 body: {
-                    clinicID: "63966898665335eb08ee8c18"
+                    clinicID: "63b05a5be1d0b48afd51c525"
                 }
             }))
             client.on('message', function (topic, message) {
@@ -38,7 +38,7 @@ export default function ViewAppointments() {
                         break;
                     case client.options.clientId + '/canceledAppointment':
                         console.log(JSON.parse(message))
-                        alert(JSON.parse(message))
+                        //alert(JSON.parse(message))
                         break;
                     default:
                         (new Error("The wrong message is received"))
