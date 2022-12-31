@@ -1,5 +1,12 @@
+/**
+ * All logic retaining to emailing is contained here
+ * @author Burak Askan (@askan)
+ */
 const nodemailer = require('nodemailer')
 
+/**
+ * The transporter which sends the emails using the given email and password
+ */
 const transporter = nodemailer.createTransport({
     service: "hotmail",
     auth: {
@@ -9,6 +16,14 @@ const transporter = nodemailer.createTransport({
 });
 
 class appointments_mailer {
+    /**
+     * Sends email to patient about the appointment that they just booked.
+     * @param recipient the patient email that will receive this email
+     * @param timeslot the timeslot JSON
+     * @param clinic the clinic JSON for the timeslot
+     * @param dentist the dentist JSON for the timeslot
+     * @returns {Promise<string>} whether the operation is successful or failure
+     */
     async sendAppointmentNotifPatient (recipient, timeslot, clinic, dentist) {
         try{
             const option = {
@@ -45,6 +60,14 @@ class appointments_mailer {
         }
     }
 
+    /**
+     * Sends email to clinic about the appointment that just got booked.
+     * @param patient the patient JSON
+     * @param timeslot the timeslot JSON
+     * @param clinic the clinic email that will receive is this email
+     * @param dentist the dentist JSON for the timeslot
+     * @returns {Promise<string>} whether the operation is successful or failure
+     */
     async sendAppointmentNotifClinic (patient, timeslot, clinic, dentist) {
         try {
             const option = {
@@ -75,6 +98,14 @@ class appointments_mailer {
         }
     }
 
+    /**
+     * Sends email to patient about the appointment that they just canceled by the clinic.
+     * @param recipient the patient email that will receive this email
+     * @param timeslot the timeslot JSON
+     * @param clinic the clinic JSON for the timeslot
+     * @param dentist the dentist JSON for the timeslot
+     * @returns {Promise<string>} whether the operation is successful or failure
+     */
     sendAppointmentCancelNotif (recipient, timeslot, clinic, dentist) {
         try {
             const option = {
@@ -107,7 +138,7 @@ class appointments_mailer {
         } catch (e) {
             console.log("Failed to send cancelation mail to patient")
             console.log(e)
-            return "Failed"
+            return "Failure"
         }
     }
 }

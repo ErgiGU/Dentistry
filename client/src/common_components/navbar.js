@@ -1,1 +1,0 @@
-// Example common component

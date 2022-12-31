@@ -1,5 +1,9 @@
+/**
+ * All mqtt related operations for the appointments component are done here
+ * @author Burak Askan (@askan)
+ */
 const mqttHandler = require('../helpers/mqtt_handler');
-const appointments_controller = require("./controllers/appointments_controller");
+const appointments_controller = require("./controllers/appointments_controller")
 const appointments_mailer = require("./controllers/appointments_mailer");
 
 let config
@@ -18,11 +22,12 @@ const mailer = new appointments_mailer
 
 // MQTT subscriptions
 mqttClient.subscribeTopic('test')
-mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('appointment')
 mqttClient.subscribeTopic('testingTestingRequest')
 mqttClient.subscribeTopic('bookTimeslot')
 mqttClient.subscribeTopic('generateData')
+mqttClient.subscribeTopic('cancelBookedTimeslot')
+mqttClient.subscribeTopic('sendAppointmentInformation')
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
@@ -44,24 +49,23 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             const dataResult = waitGenerateData()
             break;
         case 'bookTimeslot':
-            const bookTimeslotResult = bookAppointment(intermediary)
-            const bookingRes = {
-                body: {
-                    message: bookTimeslotResult //If the whole thing has succeeded or failed.
-                }
-            }
-            mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(bookingRes))
-            break;
+            bookAppointment(intermediary).then(r => {
+                mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(r))
+            })
+             break;
         case 'cancelBookedTimeslot':
             //Cancels the booked timeslot
-            const cancelTimeslotResult = cancelAppointment(intermediary)
-            mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(cancelRes))
+            cancelAppointment(intermediary).then(r => {
+                mqttClient.sendMessage(intermediary.client_id + "/cancelBookedTimeslot", JSON.stringify(r))
+            })
             break;
         case 'test':
             process.exit()
             break;
-        case 'initiateTesting':
-            appointments_controller.reconnect(config.admin_config.database_tester.mongoURI)
+        case 'sendAppointmentInformation':
+            waitTimeslotData(intermediary).then(r => {
+                mqttClient.sendMessage(intermediary.id + "/sendAppointmentInformation", JSON.stringify(r))
+            })
             break;
         default:
             console.log('topic: ' + topic)
@@ -70,6 +74,9 @@ mqttClient.mqttClient.on('message', function (topic, message) {
     }
 });
 
+async function waitTimeslotData(intermediary){
+    return await appointments_controller.sendAppointmentInformation(intermediary.body.clinicID)
+}
 async function waitGenerateData() {
     await appointments_controller.generateData("6391e39a3e08ac910fbede6f")
 }
@@ -97,7 +104,11 @@ async function waitPatientNotifMail(mailingData) {
 }
 
 async function waitDeleteTimeslot(message) {
+    return await appointments_controller.cancelAppointment(message.timeslotID)
+}
 
+async function waitBookAppointment(message) {
+    return await bookAppointment(message)
 }
 
 // Function declaration
@@ -119,7 +130,11 @@ function testAppointment(message) {
     mqttClient.sendMessage(message.id + '/appointmentResponse', JSON.stringify(newClinic))
 }
 
-
+/**
+ * A method which calls mongoose manipulation methods that all related to the process of booking an appointment
+ * @param intermediary The JSON which is received by the service
+ * @returns {Promise<string>} The success or failure message
+ */
 async function bookAppointment(intermediary) {
     //Creates a timeslot. Returns the timeslot JSON.
     const timeslot = await waitMakeTimeslots(intermediary.body)
@@ -130,25 +145,34 @@ async function bookAppointment(intermediary) {
     const mailingClinic = await waitClinicNotifMail(mailingData)
     if (mailingPatient === "Success" && mailingClinic === "Success") {
         console.log("Successful Email")
-        return "Success"
+        return {response: "Success"}
     } else {
         console.log("Failure to Email")
-        return "Fail"
+        return {response: "Failure"}
     }
 
 }
 
-function cancelAppointment(intermediary) {
+/**
+ * A method which calls mongoose manipulation methods that all related to the process of canceling an appointment
+ * @param intermediary The JSON which is received by the service
+ * @returns {string} The success or failure string
+ */
+async function cancelAppointment(intermediary) {
     //METHOD CALL FOR DB MANIPULATION THAT DELETES THE TIMESLOT BUT RETURNS IT
-    const canceledTimeslot = waitDeleteTimeslot(intermediary.body)
-    const mailCancelation = mailer.sendAppointmentCancelNotif(canceledTimeslot.patient.email, canceledTimeslot, intermediary.body.clinic, canceledTimeslot.dentist)
-    if(mailCancelation === "Success"){
-        console.log("Successful Email")
-        return "Success"
-    }else {
-        console.log("Failure to Email")
-        return "Fail"
+    const canceledTimeslot = await waitDeleteTimeslot(intermediary.body)
+    if(canceledTimeslot.result === "Failure") {
+        return {response: "Failure"}
+    }
+    console.log(canceledTimeslot)
+    const mailCancelation = mailer.sendAppointmentCancelNotif(canceledTimeslot.timeslot.patient.email, canceledTimeslot.timeslot.startTime, canceledTimeslot.timeslot.clinic, canceledTimeslot.timeslot.dentist)
+    if (mailCancelation === "Success") {
+        return {response: "Success"}
+    } else {
+        return {response: "Failure"}
     }
 }
+
+
 
 module.exports = mqttClient;

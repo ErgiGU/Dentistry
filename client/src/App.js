@@ -8,7 +8,10 @@ import Registration from "./ClinicRegistration/Registration";
 import MapPage from "./clinics/MapPage"
 import React from 'react';
 import Login from "./ClinicLogin/Login";
+import {MyInformation} from "./MyInformation/MyInformation"
 import Home from "./home/Home";
+import ClinicHomePage from "./ClinicHomePage/ClinicHomePage";
+import ViewAppointments from "./ViewAppointments/viewAppointments";
 
 
 function App() {
@@ -20,7 +23,10 @@ function App() {
             <Route path ="/registration" element= {< Registration />} />
             <Route path ="/login" element= {< Login />} />
             <Route path ="/Home" element= {< Home />} />
-            <Route path ="/map" element = {< MapPage />} />
+            <Route path ="/home/map" element = {< MapPage />} />
+            <Route path ="/clinic" element = {< ClinicHomePage />} />
+            <Route path ="/clinic/editInfo" element = {< MyInformation />} />
+            <Route path ="/clinic/schedule" element = {< ViewAppointments />} />
         </Routes>
     );
 }

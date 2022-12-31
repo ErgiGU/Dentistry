@@ -7,7 +7,7 @@ function getClient(prevClient) {
         return prevClient;
     }
 
-    const client = mqtt.connect('ws://localhost:1884/mqtt',
+    const client = mqtt.connect('ws://127.0.0.1:1884/mqtt',
         {
             clientId: 'webclient/' + uuid.v4({stringify: true}),
             reconnectPeriod: 1000

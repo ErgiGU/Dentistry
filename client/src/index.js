@@ -5,7 +5,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min'
 import './index.css';
 import App from './App';
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from "react-dom/client";
 import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -14,3 +14,4 @@ root.render(
       <App />
   </BrowserRouter>
 );
+
