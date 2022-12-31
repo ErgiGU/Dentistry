@@ -32,7 +32,7 @@ function PrivateNavbar() {
                         <Link to={'/clinic/editInfo'} >Your information</Link>
                         <Link  >Opening hours</Link>
                         <Link >Add a dentist</Link>
-                        <a onClick={logout} >Log out</a>
+                        <Link onClick={logout} >Log out</Link>
 
                     </Nav>
                 </Navbar.Collapse>
