@@ -22,9 +22,11 @@ export default function BookedTimeslots({appointment, parentCallback}) {
                 <div className="col">DOCTOR
                     <div className="text">{dentistName}</div>
                 </div>
-                <button onClick={() => parentCallback(appointment.id)} >
-                    Canceeel
+                <div>
+                <button className="col dentistButton" onClick={() => parentCallback(appointment.id)} >
+                    Cancel
                 </button>
+                </div>
             </div>
         </div>
     </div>

@@ -46,3 +46,13 @@
     font-family: "Trebuchet MS", sans-serif;
     color: white;
 }
+.cancelButton {
+    padding: 10px;
+    font-size: 18px;
+    margin-top: 30px;
+    background-color: whitesmoke;
+    color: black;
+    border: 1px darkgray;
+    border-radius: 5px;
+    float: left;
+}
