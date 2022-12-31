@@ -40,7 +40,7 @@ export default function Login() {
                             localStorage.token = jsonRes.token;
                             console.log(jsonRes.token);
                             console.log(jsonRes.clinicAccount.clinicName);
-                            //put the line that takes the clinic to the home page
+                            navigate("/clinic")
                         }else{
                             setShowAlert(true);
                         }

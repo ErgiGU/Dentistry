@@ -1,65 +1,14 @@
 import './ViewAppointments.css'
-import React, {useEffect, useState} from "react";
-import { MDBRow, MDBCol } from 'mdb-react-ui-kit';
+import React, {useEffect, useRef, useState} from "react";
+import {MDBRow, MDBCol} from 'mdb-react-ui-kit';
 import TimeslotCard from './components/timeslotCard'
 import mqttHandler from "../common_components/MqttHandler";
 
 
-<<<<<<< HEAD
-function asyncMethod(client,clinic) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            if (client !== null) {
-                client.subscribe(client.options.clientId + '/#')
-                client.publish('sendAppointmentInformation', JSON.stringify({
-                    id: client.options.clientId,
-                    body: {
-                       clinicID : clinic
-                    }
-                }))
-                client.on('message', function (topic, message) {
-                    switch (topic) {
-                        case client.options.clientId + '/sendAppointmentInformation':
-                            resolve(JSON.parse(message))
-                            break;
-                        default:
-                            reject(new Error("The wrong message is received"))
-                            break;
-                    }
-                })
-            }
-        }, 1000)
-    })
-}
-
-async function waitTimeslot(clinic,client) {
-    return await asyncMethod(client,clinic)
-}
-
-const timeslot =  async (clinic, client) => {
-    const appointments = await waitTimeslot(clinic, client)
-    return (
-        <div>
-            {appointments.timeslots.map(({patient, dentist, timeslot}) => (
-            <div>
-                <TimeslotCard patientName = {patient.name} timeslotStarttime = {timeslot.startTime} patientText = {patient.text} dentistName = {dentist.name}/>
-            </div>
-            ))}
-        </div>
-    );
-};
-
-
-function WithHeaderExample() {
+export default function ViewAppointments() {
 
     const [client, setClient] = useState(null);
-
-=======
-export default function WithHeaderExample() {
-
-    const [client, setClient] = useState(null);
-    const [appointments, setAppointments ] = useState();
->>>>>>> origin/ClinicHomePage
+    const [appointments, setAppointments] = useState([]);
 // Primary client generating effect
     useEffect(() => {
         if (client === null) {
@@ -67,105 +16,88 @@ export default function WithHeaderExample() {
         }
     }, [client])
 
-// Secondary effect containing all message logic and closure state
+    /**
+     * Subscribes and publishes to the corresponding topic defined in backend.
+     * Thus is receives the information about patient, dentist and timeslot.
+     */
     useEffect(() => {
-
-<<<<<<< HEAD
+        if (client !== null) {
+            client.subscribe(client.options.clientId + '/#')
+            client.publish('sendAppointmentInformation', JSON.stringify({
+                id: client.options.clientId,
+                body: {
+                    clinicID: "6391e39a3e08ac910fbede6f"
+                }
+            }))
+            client.on('message', function (topic, message) {
+                switch (topic) {
+                    case client.options.clientId + '/appointmentInformationResponse':
+                        console.log(JSON.parse(message))
+                        const pMessage = JSON.parse(message)
+                        setAppointments(pMessage)
+                        break;
+                    case client.options.clientId + '/canceledAppointment':
+                        console.log(JSON.parse(message))
+                        alert(JSON.parse(message))
+                    default:
+                        (new Error("The wrong message is received"))
+                        break;
+                }
+            })
+        }
         return () => {
             if (client !== null) {
-                console.log('ending process')
+                console.log("ending process");
                 client.end()
             }
         }
-    }, [client])
+    }, [client]);
 
-    return (
-        <div id="ty">
-        <div id="background">
-=======
-            if (client !== null) {
-                client.subscribe(client.options.clientId + '/#')
-
-                client.on('message', function (topic, message) {
-                    switch (topic) {
-                        case client.options.clientId + '/sendAppointmentInformation':
-                            setAppointments(JSON.parse(message).timeslots)
-                            break;
-                        default:
-                            (new Error("The wrong message is received"))
-                            break;
+    /**
+     * Publishes a message to the backend to cancel & delete the timeslot
+     * with the provided ID.
+     * @param id the ID of the timeslot to be cancelled
+     */
+    const handleChildClick = (id) => {
+        const timeslotID =id;
+        console.log(timeslotID)
+        if (client !== null) {
+            client.publish('cancelAppointment', JSON.stringify(
+                {
+                    id: client.options.clientId,
+                    body: {
+                        timeslotID: timeslotID
                     }
-                })
-            }
-            return () => {
-
-                if (client !== null) {
-                    console.log("ending process");
-                    client.end()
                 }
-            }
-    }, [client])
+            ))
+        }
+    }
 
-   function sendAppointmentInformation(clinic){
-        if(!client){
-            return null
-        }
-        client.publish('sendAppointmentInformation', JSON.stringify({
-            id: client.options.clientId,
-            body: {
-                clinicID : clinic
-            }
-        }))
-       return null
-    }
-    function Timeslot({appointments}) {
-        if(!appointments || appointments.length === 0){
-            return null
-        }
-        return (
-            <div>
-                {appointments.timeslots.map(({patient, dentist, timeslot}) => (
-                    <div>
-                        <TimeslotCard patientName = {patient.name} timeslotStarttime = {timeslot.startTime} patientText = {patient.text} dentistName = {dentist.name}/>
-                    </div>
-                ))}
-            </div>
-        );
-    }
+
     return (
         <div id="ty">
-        <div id="background">
-            <div className="btn btn-primary" onClick={sendAppointmentInformation("6391e39a3e08ac910fbede6f")}>Refresh </div>
->>>>>>> origin/ClinicHomePage
-        <MDBRow>
-            <MDBCol md='3'>
-                <div className="card" >
-                    <div className="card-body">
-                        <img className="clinic" src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png" alt="clinic" />
-                    </div>
-                    <div className="card-body">
-                        <button type="button" className="btn">LOG OUT</button>
-                    </div>
-                </div>
-            </MDBCol>
-<<<<<<< HEAD
-
-            <MDBCol md='8'>
-                {console.log(client)}
-                {timeslot('6391e39a3e08ac910fbede6f', client)}
-=======
-            <MDBCol md='8'>
-                <Timeslot appointments={appointments}/>
->>>>>>> origin/ClinicHomePage
-            </MDBCol>
-        </MDBRow>
-
-        </div>
+            <div id="background">
+                <MDBRow>
+                    <MDBCol md='3'>
+                        <div className="card">
+                            <div className="card-body">
+                                <h3 id={"currentAppointments"}> Current appointments </h3>
+                                <img className="clinic"
+                                     src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
+                                     alt="clinic"/>
+                            </div>
+                        </div>
+                    </MDBCol>
+                    <MDBCol md='8'>
+                        <div id={"timeslots"}>
+                            {Array.from(appointments).map((appointment) => (
+                                <TimeslotCard key={appointment.id} appointment={appointment} parentCallback={handleChildClick}/>
+                            ))}
+                        </div>
+                    </MDBCol>
+                </MDBRow>
+            </div>
         </div>
     );
 }
-<<<<<<< HEAD
 
-export default WithHeaderExample;
-=======
->>>>>>> origin/ClinicHomePage

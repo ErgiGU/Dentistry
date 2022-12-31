@@ -1,13 +1,13 @@
 import React from "react";
+import '../ViewAppointments.css'
+export default function BookedTimeslots({appointment, parentCallback}) {
 
-export default function BookedTimeslots(props) {
-
-    const patientName = props.patientName
-    const dentistName = props.dentistName
-    const timeslotTime = props.timeslotStarttime
-    const text = props.patient.text
+    const patientName = appointment.patient.name
+    const dentistName = appointment.dentist.name
+    const timeslotTime = appointment.timeslot
+    const text = appointment.patient.text
     return (
-    <div key={patientName + dentistName + timeslotTime} className="card1">
+    <div className="card1">
         <div className="card-body">
             <div className="row align-items-end">
                 <div className="col">TIME
@@ -22,6 +22,9 @@ export default function BookedTimeslots(props) {
                 <div className="col">DOCTOR
                     <div className="text">{dentistName}</div>
                 </div>
+                <button  onClick={() => parentCallback(appointment.id)} >
+                    Cancel
+                </button>
             </div>
         </div>
     </div>
