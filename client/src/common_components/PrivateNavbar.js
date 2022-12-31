@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Logo from '../assets/logo.png'
+import './Navbar.css'
 function PrivateNavbar() {
     const navigate = useNavigate();
     function logout(){
@@ -27,10 +28,10 @@ function PrivateNavbar() {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="justify-content-end">
 
-                        <Link to={'/'}>Schedule</Link>
-                        <Link to={'/'} >Your information</Link>
-                        <Link to={'/'} >Opening hours</Link>
-                        <Link to={'/'}>Add a dentist</Link>
+                        <Link  >Schedule</Link>
+                        <Link  >Your information</Link>
+                        <Link  >Opening hours</Link>
+                        <Link >Add a dentist</Link>
                         <a onClick={logout} >Log out</a>
 
                     </Nav>

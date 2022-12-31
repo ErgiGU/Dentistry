@@ -8,7 +8,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import logo from '../assets/logo.png'
 function PatientNavbar() {
     return (
-        <body>
+        <div>
         <div className="header">
             <img className="logo" src={logo}alt="logo" />
             <h1>DENTAL CLINIC</h1>
@@ -27,7 +27,7 @@ function PatientNavbar() {
             </Container>
         </Navbar>
 
-        </body>
+        </div>
 
     );
 }
