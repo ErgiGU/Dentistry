@@ -12,10 +12,9 @@ export default function Login() {
         email: '',
         password: '',
     });
-
+    let authBackendFlag
     const email = document.getElementById('email');
     const pass = document.getElementById('password');
-
 
 
     // Primary client generating effect
@@ -36,6 +35,7 @@ export default function Login() {
                 const jsonRes = JSON.parse(intermediary);
                 switch (topic) {
                     case client.options.clientId + "/loginClient":
+                        authBackendFlag = false
                         if(jsonRes.response === "login successful"){
                             localStorage.token = jsonRes.token;
                             console.log(jsonRes.token);
@@ -44,6 +44,7 @@ export default function Login() {
                         }
                         break;
                     case client.options.clientId + "/getClinic":
+                        authBackendFlag = false
                         console.log(jsonRes);
                         break;
                     default:
@@ -64,10 +65,13 @@ export default function Login() {
     // eslint-disable-next-line no-unused-vars
     function sendMessage(topic,json) {
         if (client !== null) {
-            client.publish(topic, JSON.stringify(json));
+            setTimeout(() => client.publish(topic, JSON.stringify(json)), 3000);
+            authBackendFlag = true
+            if(authBackendFlag) {
+                navigate("/error");
+            }
         }
     }
-
 
     const handleInputChange = (event) => {
         event.persist();

@@ -4,6 +4,7 @@ import "./ClinicsMap.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mqttHandler from "../../common_components/MqttHandler";
 import config from "../../config-client"
+import {useNavigate} from "react-router-dom";
 
 // Access token for API
 mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN || config.mapbox_access_token
@@ -42,6 +43,7 @@ async function waitMap(client) {
 }*/
 
 export default function Maps() {
+    const navigate = useNavigate();
 
     const [client, setClient] = useState(null);
 
@@ -69,6 +71,9 @@ export default function Maps() {
     useEffect(() => {
         waitMap(client).then(r => {
             //Actual map
+            if(!r) {
+                navigate("/error");
+            }
             const map = new mapboxgl.Map({
                 container: mapContainerRef.current,
                 style: "mapbox://styles/mapbox/streets-v11",
