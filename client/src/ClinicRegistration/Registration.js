@@ -18,6 +18,7 @@ export default function Registration() {
     const email = document.getElementById('email');
     const pass = document.getElementById('password');
     const confPass = document.getElementById('confirmPassword');
+    let authBackendFlag
     
     const alertPlaceholder = document.getElementById("displayAlert");
 
@@ -37,6 +38,7 @@ export default function Registration() {
                 const jsonRes = JSON.parse(intermediary);
                 switch (topic) {
                     case client.options.clientId + "/register":
+                        authBackendFlag = false
                         /*this code is for making the alert appear and redirecting
                         the user to login(if the registration is successful)*/
                         if(jsonRes.response === "registration successful"){
@@ -79,8 +81,16 @@ export default function Registration() {
 
 
     function sendMessage(topic,json) {
-        if (client !== null) {
-            client.publish(topic, JSON.stringify(json));
+        console.log("Entering ehre")
+        authBackendFlag = true
+        if (client === null) {
+            setTimeout(()=> {
+                console.log("Entering ::::::::::::")
+                client.publish(topic, JSON.stringify(json));
+            }, 2000)
+            if(authBackendFlag) {
+                navigate("/error");
+            }
         }
     }
 
