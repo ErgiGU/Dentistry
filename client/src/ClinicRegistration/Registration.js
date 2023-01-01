@@ -81,13 +81,9 @@ export default function Registration() {
 
 
     function sendMessage(topic,json) {
-        console.log("Entering ehre")
-        authBackendFlag = true
-        if (client === null) {
-            setTimeout(()=> {
-                console.log("Entering ::::::::::::")
-                client.publish(topic, JSON.stringify(json));
-            }, 2000)
+        if (client !== null) {
+            setTimeout(() => client.publish(topic, JSON.stringify(json)), 3000);
+            authBackendFlag = true
             if(authBackendFlag) {
                 navigate("/error");
             }
