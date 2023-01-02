@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import "./Login.css";
 import mqttHandler from "../common_components/MqttHandler";
 import {Link, useNavigate} from "react-router-dom";
@@ -12,7 +12,7 @@ export default function Login() {
         email: '',
         password: '',
     });
-    let authBackendFlag
+    let authBackendFlag = useRef(true)
     const email = document.getElementById('email');
     const pass = document.getElementById('password');
 
@@ -26,16 +26,15 @@ export default function Login() {
 
     // Secondary effect containing all message logic and closure state
     useEffect(() => {
-
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#');
             client.on('message', function (topic, message) {
                 // eslint-disable-next-line no-unused-vars
                 const intermediary = message.toString();
                 const jsonRes = JSON.parse(intermediary);
+                authBackendFlag.current = false
                 switch (topic) {
                     case client.options.clientId + "/loginClient":
-                        authBackendFlag = false
                         if(jsonRes.response === "login successful"){
                             localStorage.token = jsonRes.token;
                             console.log(jsonRes.token);
@@ -44,7 +43,6 @@ export default function Login() {
                         }
                         break;
                     case client.options.clientId + "/getClinic":
-                        authBackendFlag = false
                         console.log(jsonRes);
                         break;
                     default:
@@ -65,11 +63,14 @@ export default function Login() {
     // eslint-disable-next-line no-unused-vars
     function sendMessage(topic,json) {
         if (client !== null) {
-            setTimeout(() => client.publish(topic, JSON.stringify(json)), 3000);
-            authBackendFlag = true
-            if(authBackendFlag) {
-                navigate("/error");
-            }
+            authBackendFlag.current = true
+            client.publish(topic, JSON.stringify(json))
+            setTimeout(() => {
+                if (authBackendFlag.current) {
+                    navigate("/error");
+                }
+            }, 3000);
+
         }
     }
 

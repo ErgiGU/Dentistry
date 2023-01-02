@@ -61,7 +61,6 @@ export default function Maps() {
 
     // Secondary effect containing all message logic and closure state
     useEffect(() => {
-
         return () => {
             if (client !== null) {
                 console.log('ending process')
