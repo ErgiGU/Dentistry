@@ -33,6 +33,10 @@ function asyncMethod(client) {
     })
 }
 
+const timeout = new Promise((_ , reject) => {
+    setTimeout(() => reject("Timed Out"), 3000)
+})
+
 async function waitMap(client) {
     return await asyncMethod(client)
 }
@@ -44,6 +48,7 @@ async function waitMap(client) {
 
 export default function Maps() {
     const navigate = useNavigate();
+    let clinicData = useRef(null);
 
     const [client, setClient] = useState(null);
 
@@ -69,11 +74,11 @@ export default function Maps() {
 
     // Initialize map when component mounts
     useEffect(() => {
-        waitMap(client).then(r => {
-            //Actual map
-            if(!r) {
-                navigate("/error");
+        Promise.race([timeout, asyncMethod(client)]).then(r => {
+            if(!clinicData.current && r !== "Timed Out") {
+                clinicData.current = r
             }
+            //Actual map
             const map = new mapboxgl.Map({
                 container: mapContainerRef.current,
                 style: "mapbox://styles/mapbox/streets-v11",
@@ -82,7 +87,7 @@ export default function Maps() {
             });
 
             // add markers to map
-            for (const clinic of r.clinics) {
+            for (const clinic of clinicData.current.clinics) {
                 // make a marker for each clinic and add to the map
                 new mapboxgl.Marker().setLngLat(clinic.coordinates).setPopup(
                     new mapboxgl.Popup({offset: 25}) // add popups
@@ -91,12 +96,16 @@ export default function Maps() {
                          <p>${clinic.properties.address}</p>
                          <p>${clinic.properties.opening_hours}</p>
                          <button type="button" class="btn btn-primary" onclick="selectAppointment(${clinic.properties.title})">Book Appointment</button>`
-                        )
-                ).addTo(map);
+                            )
+                    ).addTo(map);
+                }
+                return () => map.remove();
+        }).catch(() => {
+            if(!clinicData.current) {
+                navigate("/error")
             }
-            return () => map.remove();
         })
-    }, [client]);
+    }, [client, navigate]);
 
     return (
         <div id="map-wrapper">
