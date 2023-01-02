@@ -4,6 +4,7 @@ export function YourDentist(){
     return (
         <>
             <div id="main">
+                <h1 id="heading">About Us</h1>
                 <div id="info">
                     <p id="intro-text">
                             <br /><span style={{color: "#003d80"}}>YOUR DENTIST </span>   <br/> <br/>
@@ -12,6 +13,9 @@ export function YourDentist(){
                             possible. <br/>
                             Following are our opening hours for the respective days, feel free to book your desired
                             timeslot by going to the Appointments section.
+                        <div id="image" style={{textAlign: "center", float: "right"}}>
+                            <img alt="locationOnMap" style={{width: "90%"}} />
+                        </div>
                         <div id="table">
                         <table id="opening-hours">
                             <tr><th> Days </th>
