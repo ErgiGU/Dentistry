@@ -23,11 +23,8 @@ function App() {
             <Route path ="/login" element= {< Login />} />
             <Route path ="/Home" element= {< Home />} />
             <Route path ="/map" element = {< MapPage />} />
-<<<<<<< HEAD
             <Route path ="/appointments" element = {< ViewAppointments />} />
-=======
             <Route path ="/profile" element = {< MyInformation />} />
->>>>>>> origin/main
         </Routes>
         </>
     );
