@@ -4,7 +4,6 @@ import mqttHandler from "../common_components/MqttHandler";
 import {useNavigate} from "react-router-dom";
 import Card from './Card';
 import PatientNavbar from "../common_components/PatientNavbar";
-
 export default function Home() {
     const navigate = useNavigate()
     const [client, setClient] = useState(null);
@@ -68,10 +67,10 @@ export default function Home() {
 
     return (
         <>
-            <PatientNavbar/>
+            <PatientNavbar />
             <Card />
             <div className="footer">
-                <a id="clinic" href="/login">Are you a clinic? Click here!</a>
+                <a id="clinic" href="/clinic">Are you a clinic? Click here!</a>
             </div>
             <h1>Testing</h1>
             <div className={"btn btn-primary"} onClick={handleClick}>Test</div>

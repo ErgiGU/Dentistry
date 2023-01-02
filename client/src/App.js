@@ -8,26 +8,25 @@ import Registration from "./ClinicRegistration/Registration";
 import MapPage from "./clinics/MapPage"
 import React from 'react';
 import Login from "./ClinicLogin/Login";
-import {MyInformation} from "./MyInformation/MyInformation"
 import Home from "./home/Home";
+import ViewAppointments from "./ViewAppointments/viewAppointments"
 import ClinicHomePage from "./ClinicHomePage/ClinicHomePage";
-import ViewAppointments from "./ViewAppointments/viewAppointments";
-
-
 function App() {
 
     return(
         //you can add more routes here, just follow the same format
+        <>
+
         <Routes>
             <Route path ="/" />
             <Route path ="/registration" element= {< Registration />} />
             <Route path ="/login" element= {< Login />} />
             <Route path ="/Home" element= {< Home />} />
-            <Route path ="/home/map" element = {< MapPage />} />
-            <Route path ="/clinic" element = {< ClinicHomePage />} />
-            <Route path ="/clinic/editInfo" element = {< MyInformation />} />
-            <Route path ="/clinic/schedule" element = {< ViewAppointments />} />
+            <Route path ="/map" element = {< MapPage />} />
+            <Route path ="/appointments" element = {< ViewAppointments />} />
+            <Route path ="/clinic" element = {< ClinicHomePage/>} />
         </Routes>
+        </>
     );
 }
 
