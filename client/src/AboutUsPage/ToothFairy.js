@@ -4,6 +4,7 @@ export function ToothFairy(){
     return (
         <>
             <div id="main">
+                <h1 id="heading">About Us</h1>
                 <div id="info">
                     <p id="intro-text">
                         <br /><span style={{color: "#003d80"}}>TOOTH FAIRY</span>   <br/> <br/>
@@ -11,6 +12,9 @@ export function ToothFairy(){
                         Our central location makes it perfectly convenient for all the Gothenburg residents
                         to contact us.<br/> Following are our opening hours for the respective days,
                         feel free to book your desired timeslot by going to the Appointments section.
+                        <div id="image" style={{textAlign: "center", float: "right"}}>
+                            <img alt="locationOnMap" style={{width: "90%"}} />
+                        </div>
                         <div id="table">
                             <table id="opening-hours">
                                 <tr><th> Days </th>
