@@ -59,7 +59,7 @@ export default function Login() {
                 client.end()
             }
         }
-    }, [client, navigate])
+    }, [client, navigate ])
 
 
     function sendMessage(topic,json) {
