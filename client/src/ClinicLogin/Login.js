@@ -4,7 +4,6 @@ import mqttHandler from "../common_components/MqttHandler";
 import {Link, useNavigate} from "react-router-dom";
 
 export default function Login() {
-    // eslint-disable-next-line no-unused-vars
     const navigate = useNavigate();
     const [client, setClient] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
@@ -40,9 +39,7 @@ export default function Login() {
                             localStorage.token = jsonRes.token;
                             console.log(jsonRes.token);
                             console.log(jsonRes.clinicAccount.clinicName);
-                            setTimeout(() => {
-                                navigate("/clinic");
-                            }, 2000);
+                            navigate("/clinic");
                         }else{
                             setShowAlert(true);
                         }
@@ -62,7 +59,7 @@ export default function Login() {
                 client.end()
             }
         }
-    }, [client])
+    }, [client, navigate])
 
 
     function sendMessage(topic,json) {
