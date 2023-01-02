@@ -52,7 +52,7 @@
     #image{
         width: 100%;
     }
-    #clinicText{
+    #text{
         width: 100%;
     }
     #intro-text{
@@ -62,7 +62,7 @@
         margin-top: 10%;
         margin-left: 12%;
     }
-
+    
     #opening-hours{
         width: 70%;
         text-align: center;
