@@ -34,23 +34,21 @@ export default function Registration() {
             client.subscribe(client.options.clientId + '/#');
             client.on('message', function (topic, message) {
                 const intermediary = message.toString();
+                const jsonRes = JSON.parse(intermediary);
                 switch (topic) {
-                    case client.options.clientId + "/checkEmail":
-                        if (intermediary==="email already exists"){
-                            console.log(intermediary)
-                            email.setCustomValidity("Email already exists");
-                            email.reportValidity()
-                        }else{
-                            email.setCustomValidity("");
-                        }
-                        break;
                     case client.options.clientId + "/register":
-                        if(intermediary==="registration successful"){
+                        /*this code is for making the alert appear and redirecting
+                        the user to login(if the registration is successful)*/
+                        if(jsonRes.response === "registration successful"){
                             alert(" You've successfully registered your clinic!","success");
                             setTimeout(() => {
                                 navigate("/login");
                             }, 3000);
+                        }else if(jsonRes.response === "email already exists"){
+                            email.setCustomValidity("Email already exists");
+                            email.reportValidity()
                         }else{
+
                             alert("Registration failed","danger");
                         }
                         break;
@@ -100,8 +98,7 @@ export default function Registration() {
     };
 
 
-    function registerClinic1(event){
-        //event.preventDefault();
+    function registerClinic1(event) {
         clinicName.setCustomValidity("");
         address.setCustomValidity("");
         email.setCustomValidity("")
@@ -110,28 +107,27 @@ export default function Registration() {
 
         //checks if email exists by sending it to the backend
         const json = {
-                    "id": client.options.clientId,
-                    "body": {
-                        "email": formData.email
-                    }
-                }
-        sendMessage('checkIfEmailExists',json);
+            "client_id": client.options.clientId,
+            "body": {
+                "email": formData.email
+            }
+        }
+        sendMessage('checkIfEmailExists', json);
 
-        console.log(email.checkValidity())
         checkIfPassMatches();
-        if(clinicName.checkValidity() && address.checkValidity() && email.checkValidity() && pass.checkValidity() &&
+        if (clinicName.checkValidity() && address.checkValidity() && email.checkValidity() && pass.checkValidity() &&
             confPass.checkValidity()) {
             event.preventDefault();
             let clinicAccount = {
-                    "id": client.options.clientId,
-                    "body": {
-                        "clinicName": formData.clinicName,
-                        "address": formData.address,
-                        "email": formData.email,
-                        "password": formData.password
-                    }
+                "client_id": client.options.clientId,
+                "body": {
+                    "clinicName": formData.clinicName,
+                    "address": formData.address,
+                    "email": formData.email,
+                    "password": formData.password
                 }
-            sendMessage('registration',clinicAccount);
+            }
+            sendMessage('registration', clinicAccount);
         }
     }
 
@@ -157,6 +153,7 @@ export default function Registration() {
                    <div className="col-md-4" id="parentContainer1" >
                        <form id="registrationForm" className='flex flex-column'  >
                            <h2 className="text-center text-white mb-3" style={{top: '100px'}} >Register your clinic</h2>
+
                            <div id='displayAlert'></div>
 
                            <div className="form-floating mb-4">

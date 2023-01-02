@@ -1,5 +1,9 @@
+/**
+ * All mqtt related operations for the appointments component are done here
+ * @author Burak Askan (@askan)
+ */
 const mqttHandler = require('../helpers/mqtt_handler');
-const appointments_controller = require("./controllers/appointments_controller")
+const appointments_controller = require("./controllers/appointments_controller");
 const appointments_mailer = require("./controllers/appointments_mailer");
 
 let config
@@ -18,6 +22,7 @@ const mailer = new appointments_mailer
 
 // MQTT subscriptions
 mqttClient.subscribeTopic('test')
+mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('appointment')
 mqttClient.subscribeTopic('testingTestingRequest')
 mqttClient.subscribeTopic('bookTimeslot')
@@ -29,7 +34,7 @@ mqttClient.subscribeTopic('cancelAppointment')
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
-    let intermediary = JSON.parse(message.toString())
+    let intermediary = JSON.parse(message)
     console.log(config.module_config.appointmentUser.handler + " service received MQTT message")
     console.log(intermediary)
 
@@ -47,28 +52,21 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             const dataResult = waitGenerateData()
             break;
         case 'bookTimeslot':
-            bookAppointment(intermediary).then(r => {
-                mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(r))
-            })
-             break;
+            const bookTimeslotResult = bookAppointment(intermediary)
+            const bookingRes = {
+                body: {
+                    message: bookTimeslotResult //If the whole thing has succeeded or failed.
+                }
+            }
+            mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(bookingRes))
+            break;
         case 'cancelBookedTimeslot':
             //Cancels the booked timeslot
-            cancelAppointment(intermediary).then(r => {
-                mqttClient.sendMessage(intermediary.client_id + "/cancelBookedTimeslot", JSON.stringify(r))
-            })
+            const cancelTimeslotResult = cancelAppointment(intermediary)
+            mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(cancelRes))
             break;
         case 'test':
             process.exit()
-            break;
-        case 'sendAppointmentInformation':
-            waitTimeslotData(intermediary).then(r => {
-                mqttClient.sendMessage(intermediary.id + "/appointmentInformationResponse", JSON.stringify(r))
-            })
-            break;
-        case 'cancelAppointment':
-            cancelAppointment(intermediary).then(r => {
-                mqttClient.sendMessage(intermediary.id + "/canceledAppointment", JSON.stringify(r))
-            })
             break;
         default:
             console.log('topic: ' + topic)
@@ -76,12 +74,7 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             break;
     }
 });
-/**
- * Returns the sendAppointmentInformation function called from the controller.
- */
-async function waitTimeslotData(intermediary){
-    return await appointments_controller.sendAppointmentInformation(intermediary.body.clinicID)
-}
+
 async function waitGenerateData() {
     await appointments_controller.generateData("6391e39a3e08ac910fbede6f")
 }
@@ -115,6 +108,10 @@ async function waitDeleteTimeslot(message) {
     return await appointments_controller.cancelAppointment(message.timeslotID)
 }
 
+async function waitBookAppointment(message) {
+    return await bookAppointment(message)
+}
+
 // Function declaration
 /**
  * Test function extracted from topic switcher
@@ -134,7 +131,11 @@ function testAppointment(message) {
     mqttClient.sendMessage(message.id + '/appointmentResponse', JSON.stringify(newClinic))
 }
 
-
+/**
+ * A method which calls mongoose manipulation methods that all related to the process of booking an appointment
+ * @param intermediary The JSON which is received by the service
+ * @returns {Promise<string>} The success or failure message
+ */
 async function bookAppointment(intermediary) {
     //Creates a timeslot. Returns the timeslot JSON.
     const timeslot = await waitMakeTimeslots(intermediary.body)
