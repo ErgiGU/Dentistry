@@ -1,16 +1,14 @@
 // Example common component
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import logo from '../assets/logo.png'
 function PatientNavbar() {
     return (
         <div>
         <div className="header">
-            <img className="logo" src={logo}alt="logo" />
+            <img className="logo" src={logo} alt="logo" />
             <h1>DENTAL CLINIC</h1>
         </div>
         <Navbar id="navbar" expand="lg">

@@ -70,7 +70,7 @@ export default function Home() {
             <PatientNavbar />
             <Card />
             <div className="footer">
-                <a id="clinic" href="/clinic">Are you a clinic? Click here!</a>
+                <a id="clinic" href="/login">Are you a clinic? Click here!</a>
             </div>
             <h1>Testing</h1>
             <div className={"btn btn-primary"} onClick={handleClick}>Test</div>
