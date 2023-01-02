@@ -2,11 +2,16 @@ const cors = require('cors');
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
-const config = require('../helpers/config');
+let config
+try {
+    config = require('../helpers/config-server');
+} catch (e) {
+    config = require('../helpers/dummy_config')
+}
 
 // Variables
-const port = process.env.PORT || config.admin.port;
-const version = config.version
+const port = process.env.PORT || config.admin_config.admin_runner.port;
+const version = config.module_config.version
 
 // Create Express app
 let app = express();
@@ -26,7 +31,7 @@ app.get('/api/' + version, function (req, res) {
 });
 
 // Catch all non-error handler for api (i.e., 404 Not Found)
-app.use('/api/' + config.version + '/*', function (req, res) {
+app.use('/api/' + config.module_config.version + '/*', function (req, res) {
     res.status(404).json({'message': 'Not Found'});
 });
 
