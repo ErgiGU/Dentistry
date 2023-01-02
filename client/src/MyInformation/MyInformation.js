@@ -1,6 +1,5 @@
 //import './MyInformation.css'
 import React, {useEffect, useState} from 'react';
-import Navbar from '../common_components/navbar';
 import mqttHandler from "../common_components/MqttHandler";
 
 export function MyInformation() {
@@ -269,7 +268,7 @@ export function MyInformation() {
     }
     return (
         <>
-            <Navbar/>
+        
             <div className={"container"}>
                 <div id="liveAlertPlaceholder"></div>
                 <div className="leftBox">
