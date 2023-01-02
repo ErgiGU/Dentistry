@@ -10,6 +10,7 @@ import {MyInformation} from "./MyInformation/MyInformation"
 import React from 'react';
 import Login from "./ClinicLogin/Login";
 import Home from "./home/Home";
+import ErrorPage from "./ErrorPage";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
             <Route path ="/Home" element= {< Home />} />
             <Route path ="/map" element = {< MapPage />} />
             <Route path ="/profile" element = {< MyInformation />} />
+            <Route path ="/error" element = {< ErrorPage />} />
         </Routes>
     );
 }
