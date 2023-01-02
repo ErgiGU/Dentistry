@@ -10,7 +10,6 @@ import {YourDentist} from "./AboutUsPage/YourDentist";
 import {LisebergDentist} from "./AboutUsPage/LisebergDentist";
 import {ToothFairy} from "./AboutUsPage/ToothFairy";
 import {TheCrown} from "./AboutUsPage/TheCrown";
-import {AboutUsSkeleton} from "./AboutUsPage/AboutUsSkeleton";
 
 
 function App() {
@@ -19,7 +18,11 @@ function App() {
         //you can add more routes here, just follow the same format
         <Routes>
             <Route path = "/" element = {< Registration />} />
-            <Route path = "/aboutUs" element = {< AboutUsSkeleton />} />
+            <Route path = "/aboutUs" element = {< AboutUs />} />
+            <Route path = "/aboutUs/yourDentist" element = {< YourDentist />} />
+            <Route path = "/aboutUs/lisebergDentist" element = {< LisebergDentist />} />
+            <Route path = "/aboutUs/toothFairy" element = {< ToothFairy />} />
+            <Route path = "/aboutUs/theCrown" element = {< TheCrown />} />
             <Route />
         </Routes>
     );
