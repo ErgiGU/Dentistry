@@ -1,27 +1,26 @@
 import React from 'react';
 import Card from "react-bootstrap/Card";
 import dentistImg from "./Assets/DentistImage.png";
-import "./AboutUs.css";
 export function AboutUs(){
     return (
         <>
-            <div id="main">
-            <h1 id="heading">About Us</h1>
-            <div id="info">
-                <div id="image">
-                    <img src={dentistImg} alt="dentistImg" style={{width: "90%"}} />
+            <div style={{backgroundColor: "#e6f2ff"}}>
+            <h1 style={{color: "#003d80"}}>About Us</h1>
+            <div style={{width: "100%"}}>
+                <div style={{width: "40%", float: "right", marginRight: "0px"}}>
+                    <img src={dentistImg} alt="dentistImg" style={{height: "400px", width: "550px"}}/>
                 </div>
-               <div id="text">
-                   <p id="intro-text">
-                   <span style={{color: "#003d80"}}> OUR STORY </span>   <br/>
+               <div style={{width: "60%", float: "left"}}>
+                   <p style={{textAlign: "center", fontSize: 20, fontFamily: "Helvetica"}}>
+                   <span style={{color: "#003d80"}}> OUR STORY </span>   <br />
                    Dentistry is an online dental care booking application for clinics all over Gothenburg  <br/>
                    Through our very flexible booking time slots specially adapted to the patients needs, <br/>
                    We aim to help you book your desired clinic at your desired time and location in Gothenburg! </p>
                </div>
             </div>
             <br/>
-            <div id="b-row" class="row" style={{}}>
-                <p id="clinic-name" >OUR CLINICS </p>
+            <div class="row" style={{marginTop: "20px", width: "100%"}}>
+                <p style={{textAlign: "center", color: "#003d80", fontSize: 20}}>OUR CLINICS </p>
             <div class="col-lg-3 mb-4">
             <Card style={{ width: "20rem"}}>
                 <Card.Body>
@@ -68,7 +67,7 @@ export function AboutUs(){
             </Card>
             </div>
             <div class="col-lg-3 mb-4">
-            <Card style={{ width: "20rem"}}>
+            <Card style={{ width: "20rem", marginRight: "0px" }}>
                 <Card.Body>
                     <Card.Title style={{ color: "#003d80" }}>LISEBERGS DENTISTS</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">
