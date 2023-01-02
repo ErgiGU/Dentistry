@@ -10,7 +10,7 @@ import {MyInformation} from "./MyInformation/MyInformation"
 import React from 'react';
 import Login from "./ClinicLogin/Login";
 import Home from "./home/Home";
-import ErrorPage from "./ErrorPage";
+import {AboutUsSkeleton} from "./AboutUsPage/AboutUsSkeleton";
 
 
 function App() {
@@ -24,9 +24,12 @@ function App() {
             <Route path ="/Home" element= {< Home />} />
             <Route path ="/map" element = {< MapPage />} />
             <Route path ="/profile" element = {< MyInformation />} />
-            <Route path ="/error" element = {< ErrorPage />} />
+            <Route path = "/" element = {< Registration />} />
+            <Route path = "/aboutUs" element = {< AboutUsSkeleton />} />
+            <Route />
         </Routes>
     );
+
 }
 
 export default App;
