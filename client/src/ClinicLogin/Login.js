@@ -40,7 +40,9 @@ export default function Login() {
                             localStorage.token = jsonRes.token;
                             console.log(jsonRes.token);
                             console.log(jsonRes.clinicAccount.clinicName);
-                            navigate("/clinic")
+                            setTimeout(() => {
+                                navigate("/clinic");
+                            }, 2000);
                         }else{
                             setShowAlert(true);
                         }
