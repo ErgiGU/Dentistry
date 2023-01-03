@@ -60,10 +60,15 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             }
             mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(bookingRes))
             break;
-        case 'cancelBookedTimeslot':
-            //Cancels the booked timeslot
-            const cancelTimeslotResult = cancelAppointment(intermediary)
-            mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(cancelRes))
+        case 'sendAppointmentInformation':
+            waitTimeslotData(intermediary).then(r => {
+                mqttClient.sendMessage(intermediary.id + "/appointmentInformationResponse", JSON.stringify(r))
+            })
+            break;
+        case 'cancelAppointment':
+            cancelAppointment(intermediary).then(r => {
+                mqttClient.sendMessage(intermediary.id + "/canceledAppointment", JSON.stringify(r))
+            })
             break;
         case 'test':
             process.exit()
@@ -75,8 +80,13 @@ mqttClient.mqttClient.on('message', function (topic, message) {
     }
 });
 
+async function waitTimeslotData(intermediary){
+    console.log(JSON.stringify(intermediary.body))
+    return await appointments_controller.sendAppointmentInformation(intermediary.body.clinicID)
+}
+
 async function waitGenerateData() {
-    await appointments_controller.generateData("6391e39a3e08ac910fbede6f")
+    await appointments_controller.generateData("63b04caa3e18b4b9b8cd257f")
 }
 
 async function waitMakeTimeslots(message) {

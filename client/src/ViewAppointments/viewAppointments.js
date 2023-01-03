@@ -1,5 +1,6 @@
+
 import './ViewAppointments.css'
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {MDBRow, MDBCol} from 'mdb-react-ui-kit';
 import TimeslotCard from './components/timeslotCard'
 import mqttHandler from "../common_components/MqttHandler";
@@ -11,7 +12,7 @@ export default function ViewAppointments() {
     const [client, setClient] = useState(null);
     const [appointments, setAppointments] = useState([]);
     const navigate = useNavigate();
-    let appointmentsFlag = true;
+    let appointmentsFlag = useRef(true)
 // Primary client generating effect
     useEffect(() => {
         if (client === null) {
@@ -33,17 +34,15 @@ export default function ViewAppointments() {
                 }
             }))
             client.on('message', function (topic, message) {
+                appointmentsFlag.current = false
                 switch (topic) {
                     case client.options.clientId + '/appointmentInformationResponse':
-                        appointmentsFlag = false;
                         console.log(JSON.parse(message))
                         const pMessage = JSON.parse(message)
                         setAppointments(pMessage)
                         break;
                     case client.options.clientId + '/canceledAppointment':
-                        appointmentsFlag = false;
                         console.log(JSON.parse(message))
-                        //alert(JSON.parse(message))
                         break;
                     default:
                         (new Error("The wrong message is received"))
@@ -57,18 +56,22 @@ export default function ViewAppointments() {
                 client.end()
             }
         }
-    }, [client]);
+    }, [client, ]);
 
 
-    function sendMessage(topic, json){
+    function sendMessage(topic,json) {
         if (client !== null) {
-            setTimeout(() => client.publish(topic, JSON.stringify(json)), 3000);
-            appointmentsFlag = true
-            if(appointmentsFlag) {
-                navigate("/error");
-            }
+            appointmentsFlag.current = true
+            client.publish(topic, JSON.stringify(json))
+            setTimeout(() => {
+                if (appointmentsFlag.current) {
+                    navigate("/error");
+                }
+            }, 3000);
+
         }
     }
+
 
     /**
      * Publishes a message to the backend to cancel & delete the timeslot
