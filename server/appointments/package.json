@@ -6,7 +6,7 @@
   "author": "",
   "license": "MIT",
   "engines": {
-    "node": "16.x"
+    "node": "18.x"
   },
   "dependencies": {
     "chai": "^4.3.7",

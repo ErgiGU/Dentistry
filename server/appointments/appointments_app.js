@@ -28,6 +28,8 @@ mqttClient.subscribeTopic('bookTimeslot')
 mqttClient.subscribeTopic('generateData')
 mqttClient.subscribeTopic('cancelBookedTimeslot')
 mqttClient.subscribeTopic('sendAppointmentInformation')
+mqttClient.subscribeTopic('cancelAppointment')
+
 
 // When a message arrives, respond to it or propagate it further
 mqttClient.mqttClient.on('message', function (topic, message) {
@@ -49,23 +51,26 @@ mqttClient.mqttClient.on('message', function (topic, message) {
             const dataResult = waitGenerateData()
             break;
         case 'bookTimeslot':
-            bookAppointment(intermediary).then(r => {
-                mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(r))
+            const bookTimeslotResult = bookAppointment(intermediary)
+            const bookingRes = {
+                body: {
+                    message: bookTimeslotResult //If the whole thing has succeeded or failed.
+                }
+            }
+            mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(bookingRes))
+            break;
+        case 'sendAppointmentInformation':
+            waitTimeslotData(intermediary).then(r => {
+                mqttClient.sendMessage(intermediary.id + "/appointmentInformationResponse", JSON.stringify(r))
             })
-             break;
-        case 'cancelBookedTimeslot':
-            //Cancels the booked timeslot
+            break;
+        case 'cancelAppointment':
             cancelAppointment(intermediary).then(r => {
-                mqttClient.sendMessage(intermediary.client_id + "/cancelBookedTimeslot", JSON.stringify(r))
+                mqttClient.sendMessage(intermediary.id + "/canceledAppointment", JSON.stringify(r))
             })
             break;
         case 'test':
             process.exit()
-            break;
-        case 'sendAppointmentInformation':
-            waitTimeslotData(intermediary).then(r => {
-                mqttClient.sendMessage(intermediary.id + "/sendAppointmentInformation", JSON.stringify(r))
-            })
             break;
         default:
             console.log('topic: ' + topic)
@@ -75,10 +80,12 @@ mqttClient.mqttClient.on('message', function (topic, message) {
 });
 
 async function waitTimeslotData(intermediary){
+    console.log(JSON.stringify(intermediary.body))
     return await appointments_controller.sendAppointmentInformation(intermediary.body.clinicID)
 }
+
 async function waitGenerateData() {
-    await appointments_controller.generateData("6391e39a3e08ac910fbede6f")
+    await appointments_controller.generateData("63b04caa3e18b4b9b8cd257f")
 }
 
 async function waitMakeTimeslots(message) {
@@ -103,6 +110,9 @@ async function waitPatientNotifMail(mailingData) {
     return await mailer.sendAppointmentNotifPatient(mailingData.patientData.email, mailingData.timeslotTime, mailingData.clinicData, mailingData.dentistData)
 }
 
+/**
+ * Returns the cancelAppointment function called from the controller.
+ */
 async function waitDeleteTimeslot(message) {
     return await appointments_controller.cancelAppointment(message.timeslotID)
 }

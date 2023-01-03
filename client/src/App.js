@@ -11,10 +11,9 @@ import Login from "./ClinicLogin/Login";
 import Home from "./home/Home";
 import ViewAppointments from "./ViewAppointments/viewAppointments"
 import ClinicHomePage from "./ClinicHomePage/ClinicHomePage";
-import {NewDentist} from "./AddDentist/NewDentist";
+import {MyInformation} from "./MyInformation/MyInformation";
 import {AboutUsSkeleton} from "./AboutUsPage/AboutUsSkeleton";
-
-
+import {NewDentist} from "./AddDentist/NewDentist";
 function App() {
 
     return(

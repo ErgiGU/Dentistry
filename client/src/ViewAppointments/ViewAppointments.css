@@ -26,8 +26,8 @@
 .clinic{
     width: 150px;
     height:150px;
-    margin-top: 40%;
-    margin-left: 25%;
+    margin-top: 20%;
+    margin-left: 30%;
 }
 
 .col{
@@ -40,4 +40,19 @@
     float: bottom;
     margin-top: 10%;
     font-family: "Trebuchet MS", sans-serif;
+}
+#currentAppointments{
+    text-align: center;
+    font-family: "Trebuchet MS", sans-serif;
+    color: white;
+}
+.cancelButton {
+    padding: 10px;
+    font-size: 18px;
+    margin-top: 30px;
+    background-color: whitesmoke;
+    color: black;
+    border: 1px darkgray;
+    border-radius: 5px;
+    float: left;
 }
