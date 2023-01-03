@@ -1,7 +1,7 @@
 import './MyInformation.css'
 import React, {useEffect, useState} from 'react';
-import Navbar from '../common_components/navbar';
 import mqttHandler from "../common_components/MqttHandler";
+import PrivateNavbar from "../common_components/PrivateNavbar";
 import jwt from "jsonwebtoken";
 
 export function MyInformation() {
@@ -274,7 +274,7 @@ export function MyInformation() {
     }
     return (
         <>
-            <Navbar/>
+            <PrivateNavbar/>
             <div className={"profileContainer"}>
                 <div id="alertPlaceholder"></div>
                 <div className="leftBox">
