@@ -127,22 +127,6 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
             await asyncMethod("clinicDataRequest", "clinicData", messageSend, expectedNew)
 
         })
-    })
-    describe('checkIfEmailExists.', function () {
-        it('Checking to see if a successful attempt correct.',   async function () {
-            this.timeout(10000)
-            const messageSend = {
-                client_id: "123",
-                body: {
-                    email: "new@gmail.com"
-                }
-            }
-            const expectedResult = {
-                response: "email does not exist"
-            }
-            await asyncMethod("checkIfEmailExists", "checkEmail", messageSend, expectedResult)
-
-        })
         it('Checking to see if a unsuccessful attempt is correct.',   async function () {
             this.timeout(10000)
             const messageSend = {
@@ -154,7 +138,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
             const expectedResult = {
                 response: "email already exists"
             }
-            await asyncMethod("checkIfEmailExists", "checkEmail", messageSend, expectedResult)
+            await asyncMethod("registration", "register", messageSend, expectedResult)
         })
     })
 
