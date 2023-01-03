@@ -1,0 +1,29 @@
+#main{
+    background-color: #ADD8E6;
+    height: max-content;
+}
+#oops{
+    font-size: 45px;
+    text-align: center;
+    font-style: oblique;
+}
+#content{
+    text-align: justify;
+    margin: 10%;
+    margin-left: 25%;
+    margin-right: 25%;
+    border-style: groove;
+}
+
+@media only screen and (max-width: 500px) {
+    #oops{
+        font-size: 35px;
+    }
+    #content{
+        text-align: justify;
+        margin: 10%;
+        border-style: groove;
+    }
+
+
+}

@@ -6,7 +6,6 @@ import {
 
 import Registration from "./ClinicRegistration/Registration";
 import MapPage from "./clinics/MapPage"
-import {MyInformation} from "./MyInformation/MyInformation"
 import React from 'react';
 import Login from "./ClinicLogin/Login";
 import Home from "./home/Home";
@@ -18,13 +17,17 @@ function App() {
         <>
 
         <Routes>
-            <Route path ="/" />
+           {/* <Route path ="/addDentist" element={<NewDentist/>}/ */}
             <Route path ="/registration" element= {< Registration />} />
             <Route path ="/login" element= {< Login />} />
             <Route path ="/Home" element= {< Home />} />
             <Route path ="/map" element = {< MapPage />} />
-            <Route path ="/appointments" element = {< ViewAppointments />} />
-            <Route path ="/profile" element = {< MyInformation />} />
+            <Route path ="/appointments" element = {< ViewAppointments />} /> 
+           {/* <Route path ="/clinic" element = {< ClinicHomePage/>} />
+            <Route path ="/profile" element = {< MyInformation />} /> */}
+            <Route path = "/" element = {< Registration />} />
+           {/* <Route path = "/aboutUs" element = {< AboutUsSkeleton />} /> */}
+            <Route />
         </Routes>
         </>
     );

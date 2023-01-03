@@ -2,6 +2,7 @@
  * All the mongoose manipulation for appointments component is contained here
  * @author Burak Askan (@askan)
  */
+const mongoose = require('mongoose');
 const mongooseHandler = require('../../helpers/mongoose_handler')
 const timeslotSchema = require('../../helpers/schemas/timeslot')
 const dentistSchema = require('../../helpers/schemas/dentist')
@@ -19,31 +20,24 @@ let timeslotJSON = {
     clinics: []
 }
 
+// Variables
+const mongoURI = config.module_config.appointmentUser.mongoURI
+//const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
+
 // Connect to MongoDB
-let mongooseClient = new mongooseHandler(config.module_config.appointmentUser.mongoURI)
-mongooseClient.connect().then(() => {
-    createModels()
-}, null)
+const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, function (err) {
+    if (err) {
+        console.error(`Failed to connect to MongoDB with URI: ${mongoURI}`);
+        console.error(err.stack);
+        process.exit(1);
+    }
+    console.log(`Connected to MongoDB with URI: ${mongoURI}`);
+})
 
-let timeslotModel;
-let clinicModel;
-let patientModel;
-let dentistModel;
-
-function reconnect(mongoURI) {
-    mongooseClient.close()
-    mongooseClient = new mongooseHandler(mongoURI)
-    mongooseClient.connect().then(() => {
-        createModels()
-    }, null)
-}
-
-function createModels() {
-    timeslotModel = mongooseClient.model('Timeslot', timeslotSchema)
-    clinicModel = mongooseClient.model('Clinic', clinicSchema)
-    patientModel = mongooseClient.model('Patient', patientSchema)
-    dentistModel = mongooseClient.model('Dentist', dentistSchema)
-}
+const timeslotModel = mongooseClient.model('Timeslot', timeslotSchema)
+const clinicModel = mongooseClient.model('Clinic', clinicSchema)
+const patientModel = mongooseClient.model('Patient', patientSchema)
+const dentistModel = mongooseClient.model('Dentist', dentistSchema)
 
 /**
  * The mongoose manipulations to get data required for emailing about the booked timeslot
@@ -160,8 +154,7 @@ async function generateData(clinicID) {
 
     const patient = new patientModel({
         name: "Mathias Hallander",
-        timeslot: timeslot._id,
-        email: "burakaskan2001@gmail.com"
+        timeslot: timeslot._id
     });
 
     const dentist = new dentistModel({

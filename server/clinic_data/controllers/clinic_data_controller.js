@@ -1,6 +1,7 @@
 /**
  * All the mongoose manipulation for clinic_data component is contained here
  * @author Burak Askan (@askan)
+ * @author Aieh Eissa (@aieh)
  */
 const mongooseHandler = require('../../helpers/mongoose_handler')
 const clinicSchema = require('../../helpers/schemas/clinic')
@@ -79,14 +80,14 @@ async function mapDataRequest() {
 
             let openingHourString
 
-            if(clinic.openingHours.monday.start) {
+            if (clinic.openingHours.monday.start) {
                 openingHourString = "Opening Hours: " +
                     "Monday: " + clinic.openingHours.monday.start + " - " + clinic.openingHours.monday.end +
                     "  Tuesday: " + clinic.openingHours.tuesday.start + " - " + clinic.openingHours.tuesday.end +
                     "  Wednesday: " + clinic.openingHours.wednesday.start + " - " + clinic.openingHours.wednesday.end +
                     "  Thursday: " + clinic.openingHours.thursday.start + " - " + clinic.openingHours.thursday.end +
                     "  Friday : " + clinic.openingHours.friday.start + " - " + clinic.openingHours.friday.end
-            }else {
+            } else {
                 openingHourString = "No opening hours given"
             }
             clinicMapJSON.clinics.push({
@@ -108,6 +109,7 @@ async function mapDataRequest() {
         console.log(err)
     }
 }
+
 /**
  * Removes all data from the database
  * @returns {Promise<boolean>} returns success or failure
@@ -127,7 +129,8 @@ async function removeData() {
     return {
         response: "Success"
     }
-}  
+}
+
 /**
  * Checks if the email provided already exists in the database.
  * @param email The email provided
@@ -162,24 +165,24 @@ async function editInfo(req) {
             clinic.owner = req.body.owner || clinic.owner;
             clinic.address = req.body.address || clinic.address;
             clinic.email = req.body.newEmail || clinic.email;
-            if(req.body.openingHours) {
-                if(req.body.openingHours.monday){
+            if (req.body.openingHours) {
+                if (req.body.openingHours.monday) {
                     clinic.openingHours.monday.start = req.body.openingHours.monday.start || clinic.openingHours.monday.start;
                     clinic.openingHours.monday.end = req.body.openingHours.monday.end || clinic.openingHours.monday.end;
                 }
-                if(req.body.openingHours.tuesday) {
+                if (req.body.openingHours.tuesday) {
                     clinic.openingHours.tuesday.start = req.body.openingHours.tuesday.start || clinic.openingHours.tuesday.start;
                     clinic.openingHours.tuesday.end = req.body.openingHours.tuesday.end || clinic.openingHours.tuesday.end;
                 }
-                if(req.body.openingHours.wednesday) {
+                if (req.body.openingHours.wednesday) {
                     clinic.openingHours.wednesday.start = req.body.openingHours.wednesday.start || clinic.openingHours.wednesday.start;
                     clinic.openingHours.wednesday.end = req.body.openingHours.wednesday.end || clinic.openingHours.wednesday.end;
                 }
-                if(req.body.openingHours.thursday) {
+                if (req.body.openingHours.thursday) {
                     clinic.openingHours.thursday.start = req.body.openingHours.thursday.start || clinic.openingHours.thursday.start;
                     clinic.openingHours.thursday.end = req.body.openingHours.thursday.end || clinic.openingHours.thursday.end;
                 }
-                if(req.body.openingHours.friday) {
+                if (req.body.openingHours.friday) {
                     clinic.openingHours.friday.start = req.body.openingHours.friday.start || clinic.openingHours.friday.start;
                     clinic.openingHours.friday.end = req.body.openingHours.friday.end || clinic.openingHours.friday.end;
                 }
@@ -242,14 +245,65 @@ async function changePassword(req) {
     return JSON.stringify(message);
 }
 
+/**
+ * Finds the correct clinic provided in the body, then creates a new dentist with the data provided in the body
+ * Then adds the dentist to the clinic's dentists list.
+ * @param req the message from the frontend.
+ * @returns {Promise<string>} A status and a response text.
+ */
+async function addDentist(req) {
+    const email = req.body.email
+    console.log(email)
+    const clinic = await clinicModel.findOne({email})
+    let message;
+    if (clinic) {
+        const dentist = new dentistModel({
+            clinic: clinic._id,
+            name: req.body.name,
+            email: req.body.dentistEmail,
+            phoneNumber: req.body.phoneNumber,
+            speciality: req.body.specialty
+        })
+        dentist.save()
+        console.log(dentist)
+        clinic.dentists.push(dentist)
+        clinic.save()
+        console.log(clinic.dentists)
+        message = {
+            status: 200,
+            text: 'Dentist Added!'
+        }
+    } else {
+        message = {
+            status: 404,
+            text: 'Clinic not found!'
+        }
+    }
+    return JSON.stringify(message);
+}
+
+async function getCurrentClinic(req) {
+    const theID = req.body.clinicID
+    const clinic = await clinicModel.findById(theID)
+    if (clinic) {
+        return JSON.stringify(clinic)
+    } else {
+        console.log("failed")
+        return "failed"
+    }
+
+}
+
 const clinicController = {
     removeData,
     mapDataRequest,
     reconnect,
     clinicData,
-    getDentist,
-    editInfo,
-    changePassword
 }
 
-module.exports = clinicController
+module.exports = {
+    editInfo,
+    changePassword,
+    addDentist,
+    clinicController
+}

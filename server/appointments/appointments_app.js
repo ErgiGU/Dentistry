@@ -3,7 +3,7 @@
  * @author Burak Askan (@askan)
  */
 const mqttHandler = require('../helpers/mqtt_handler');
-const appointments_controller = require("./controllers/appointments_controller");
+const appointments_controller = require("./controllers/appointments_controller")
 const appointments_mailer = require("./controllers/appointments_mailer");
 
 let config
@@ -22,7 +22,6 @@ const mailer = new appointments_mailer
 
 // MQTT subscriptions
 mqttClient.subscribeTopic('test')
-mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('appointment')
 mqttClient.subscribeTopic('testingTestingRequest')
 mqttClient.subscribeTopic('bookTimeslot')
