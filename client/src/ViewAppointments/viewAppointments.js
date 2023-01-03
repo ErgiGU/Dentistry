@@ -27,12 +27,12 @@ export default function ViewAppointments() {
     useEffect(() => {
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#')
-            sendMessage('sendAppointmentInformation', JSON.stringify({
+            sendMessage('sendAppointmentInformation', {
                 id: client.options.clientId,
                 body: {
                     clinicID: "63b05a5be1d0b48afd51c525"
                 }
-            }))
+            })
             client.on('message', function (topic, message) {
                 appointmentsFlag.current = false
                 switch (topic) {
