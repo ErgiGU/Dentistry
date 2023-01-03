@@ -10,6 +10,7 @@ import {MyInformation} from "./MyInformation/MyInformation"
 import React from 'react';
 import Login from "./ClinicLogin/Login";
 import Home from "./home/Home";
+import {NewDentist} from "./AddDentist/NewDentist";
 import {AboutUsSkeleton} from "./AboutUsPage/AboutUsSkeleton";
 
 
@@ -18,7 +19,7 @@ function App() {
     return(
         //you can add more routes here, just follow the same format
         <Routes>
-            <Route path ="/" />
+            <Route path ="/addDentist" element={<NewDentist/>}/>
             <Route path ="/registration" element= {< Registration />} />
             <Route path ="/login" element= {< Login />} />
             <Route path ="/Home" element= {< Home />} />
@@ -29,7 +30,6 @@ function App() {
             <Route />
         </Routes>
     );
-
 }
 
 export default App;
