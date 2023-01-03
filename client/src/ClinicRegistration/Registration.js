@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import mqttHandler from "../common_components/MqttHandler";
 import {Link, useNavigate} from "react-router-dom";
 import './Registration.css';
 
 export default function Registration() {
     const navigate = useNavigate();
+    let authBackendFlag = useRef(true)
     const [client, setClient] = useState(null);
     const [formData, setFormData] = useState({
         clinicName: '',
@@ -18,6 +19,7 @@ export default function Registration() {
     const email = document.getElementById('email');
     const pass = document.getElementById('password');
     const confPass = document.getElementById('confirmPassword');
+
     
     const alertPlaceholder = document.getElementById("displayAlert");
 
@@ -35,6 +37,7 @@ export default function Registration() {
             client.on('message', function (topic, message) {
                 const intermediary = message.toString();
                 const jsonRes = JSON.parse(intermediary);
+                authBackendFlag.current = false
                 switch (topic) {
                     case client.options.clientId + "/register":
                         /*this code is for making the alert appear and redirecting
@@ -80,7 +83,14 @@ export default function Registration() {
 
     function sendMessage(topic,json) {
         if (client !== null) {
-            client.publish(topic, JSON.stringify(json));
+            authBackendFlag.current = true
+            client.publish(topic, JSON.stringify(json))
+            setTimeout(() => {
+                if (authBackendFlag.current) {
+                    navigate("/error");
+                }
+            }, 3000);
+
         }
     }
 

@@ -1,10 +1,12 @@
-//import './MyInformation.css'
+import './MyInformation.css'
 import React, {useEffect, useState} from 'react';
 import mqttHandler from "../common_components/MqttHandler";
 import PrivateNavbar from "../common_components/PrivateNavbar";
+import jwt from "jsonwebtoken";
 
 export function MyInformation() {
     const [client, setClient] = useState(null);
+    const [currentClinic, setCurrentClinic] = useState("");
     const [name, setName] = useState("");
     const [owner, setOwner] = useState("");
     const [address, setAddress] = useState("");
@@ -32,6 +34,7 @@ export function MyInformation() {
     }, [client])
 
     useEffect(() => {
+        setInitialStates()
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#')
 
@@ -60,20 +63,32 @@ export function MyInformation() {
             alert(pMessage)
         }
 
+        /**
+         * This will be connected to the backend, to get the current state of the clinic's information
+         * and display them in the form.
+         */
+        function setInitialStates() {
+            const clinic = jwt.decode(localStorage.token, 'something');
+            setCurrentClinic(clinic)
+            setName(currentClinic.name)
+            setOwner(currentClinic.owner)
+            setAddress(currentClinic.address)
+        }
+
         return () => {
             if (client !== null) {
                 console.log('ending process')
                 client.end()
             }
         }
-    }, [client]);
+    }, [client, currentClinic.name, currentClinic.address, currentClinic.owner])
 
     /**
      * A custom alert, which receives a message to be alerted.
      * @param message message to alert
      */
     const alert = (message) => {
-        const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+        const alertPlaceholder = document.getElementById('alertPlaceholder')
         alertPlaceholder.style.display = "block"
         alertPlaceholder.innerHTML = message.text
         if (message.status === 200) {
@@ -86,16 +101,6 @@ export function MyInformation() {
             alertPlaceholder.style.color = "#8b0000";
         }
     }
-
-
-    /**
-     * This will be connected to the backend, to get the current state of the clinic's information
-     * and display them in the form.
-     */
-        // eslint-disable-next-line no-unused-vars
-    const setInitialStates = () => {
-
-        }
     /**
      * Changes the initial state of the variables when the user types in something, in order to keep
      * track of the user's input.
@@ -206,7 +211,7 @@ export function MyInformation() {
                                 name: name,
                                 owner: owner,
                                 address: address,
-                                email: 'modify@hotmail.se',
+                                email: currentClinic.email,
                                 newEmail: email,
                                 openingHours: {
                                     monday: {
@@ -258,7 +263,7 @@ export function MyInformation() {
                     {
                         id: client.options.clientId,
                         body: {
-                            email: "modify@hotmail.se",
+                            email: currentClinic.email,
                             password: password,
                             oldPassword: oldPassword
                         }
@@ -270,15 +275,15 @@ export function MyInformation() {
     return (
         <>
             <PrivateNavbar/>
-            <div className={"container"}>
-                <div id="liveAlertPlaceholder"></div>
+            <div className={"profileContainer"}>
+                <div id="alertPlaceholder"></div>
                 <div className="leftBox">
                     <form className="clinicInfo">
-                        <h2> My Information </h2>
-                        <div className="form-floating">
+                        <h2 id={"clinicHeader2"}> My Information </h2>
+                        <div className="form-floating informationInputContainer">
                             <input
                                 type="text"
-                                className="form-control"
+                                className="form-control informationInput"
                                 placeholder="Name"
                                 name="name"
                                 id={"name"}
@@ -288,10 +293,10 @@ export function MyInformation() {
                             />
                             <label for="name"> Clinic's name </label>
                         </div>
-                        <div className="form-floating">
+                        <div className="form-floating informationInputContainer">
                             <input
                                 type="text"
-                                className="form-control"
+                                className="form-control informationInput"
                                 placeholder="Owner"
                                 name="owner"
                                 id={"owner"}
@@ -300,10 +305,10 @@ export function MyInformation() {
                             />
                             <label for="owner"> Clinic's owner </label>
                         </div>
-                        <div className="form-floating">
+                        <div className="form-floating informationInputContainer">
                             <input
                                 type="text"
-                                className="form-control"
+                                className="form-control informationInput"
                                 placeholder="Address"
                                 name="address"
                                 id={"address"}
@@ -312,10 +317,10 @@ export function MyInformation() {
                             />
                             <label for="address"> Clinic's Address </label>
                         </div>
-                        <div className="form-floating">
+                        <div className="form-floating informationInputContainer">
                             <input
                                 type="text"
-                                className="form-control"
+                                className="form-control informationInput"
                                 placeholder="name@example.com"
                                 name="email"
                                 id={"email"}
@@ -324,15 +329,16 @@ export function MyInformation() {
                             />
                             <label for="email"> Email address </label>
                         </div>
-                        <button className={"button"} onClick={(e) => submit(e)}>
+                        <button className={"informationButton"} onClick={(e) => submit(e)}>
                             Change info
                         </button>
                     </form>
                     <form className="openingHours">
-                        <h3 id={"openingHoursID"}> Opening hours </h3>
+                        <h3 id={"hoursHeader"}> Opening hours </h3>
                         <label className={"day"}> Monday <br/>
                             <label> Start: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="mondayStart"
                                 id={"mondayStart"}
@@ -341,6 +347,7 @@ export function MyInformation() {
                             />
                             <label> End: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="mondayEnd"
                                 id={"mondayEnd"}
@@ -351,6 +358,7 @@ export function MyInformation() {
                         <label className={"day"}> Tuesday <br/>
                             <label> Start: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="tuesdayStart"
                                 id={"tuesdayStart"}
@@ -359,6 +367,7 @@ export function MyInformation() {
                             />
                             <label> End: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="tuesdayEnd"
                                 id={"tuesdayEnd"}
@@ -369,6 +378,7 @@ export function MyInformation() {
                         <label className={"day"}> Wednesday <br/>
                             <label> Start: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="wednesdayStart"
                                 id={"wednesdayStart"}
@@ -377,6 +387,7 @@ export function MyInformation() {
                             />
                             <label> End: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="wednesdayEnd"
                                 id={"wednesdayEnd"}
@@ -387,6 +398,7 @@ export function MyInformation() {
                         <label className={"day"}> Thursday <br/>
                             <label> Start: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="thursdayStart"
                                 id={"thursdayStart"}
@@ -395,6 +407,7 @@ export function MyInformation() {
                             />
                             <label> End: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="thursdayEnd"
                                 id={"thursdayEnd"}
@@ -405,6 +418,7 @@ export function MyInformation() {
                         <label className={"day"}> Friday <br/>
                             <label> Start: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="fridayStart"
                                 id={"fridayStart"}
@@ -413,6 +427,7 @@ export function MyInformation() {
                             />
                             <label> End: </label>
                             <input
+                                className="informationInput"
                                 type="time"
                                 name="fridayEnd"
                                 id={"fridayEnd"}
@@ -420,36 +435,39 @@ export function MyInformation() {
                                 onChange={(e) => handleChanges(e)}
                             />
                         </label>
+                        <form className="breakHours">
+                            <label className="day"><h3 id={"hoursHeader"}> Break Hours </h3>
+                                <label> Fika: </label>
+                                <input
+                                    className="informationInput"
+                                    type="time"
+                                    name="fikaHour"
+                                    id={"fikaHour"}
+                                    value={fikaHour}
+                                    onChange={(e) => handleChanges(e)}
+                                />
+                                <label> Lunch: </label>
+                                <input
+                                    className="informationInput"
+                                    type="time"
+                                    name="lunchHour"
+                                    id={"lunchHour"}
+                                    value={lunchHour}
+                                    onChange={(e) => handleChanges(e)}
+                                />
+                            </label>
+                        </form>
+                        <button id={"otherButton"} onClick={() => submit()}>
+                            Update information
+                        </button>
                     </form>
-                    <form className="breakHours">
-                        <h3> Break hours </h3>
-                        <label> Fika hour </label> <br/>
-                        <input
-                            type="time"
-                            name="fikaHour"
-                            id={"fikaHour"}
-                            value={fikaHour}
-                            onChange={(e) => handleChanges(e)}
-                        /> <br/>
-                        <label> Lunch hour </label> <br/>
-                        <input
-                            type="time"
-                            name="lunchHour"
-                            id={"lunchHour"}
-                            value={lunchHour}
-                            onChange={(e) => handleChanges(e)}
-                        />
-                    </form>
-                    <button id={"otherButton"} onClick={() => submit()}>
-                        Change info
-                    </button>
                 </div>
                 <form className="passwordChanging" id={"form2"}>
-                    <h2> Change password </h2>
-                    <div className="form-floating">
+                    <h2 id={"clinicHeader2"}> Change password </h2>
+                    <div className="form-floating informationInputContainer">
                         <input required
                                type="password"
-                               className="form-control"
+                               className="form-control informationInput"
                                placeholder="Password"
                                name="password"
                                id={"oldPassword"}
@@ -458,10 +476,10 @@ export function MyInformation() {
                         />
                         <label for="oldPassword"> Old password </label>
                     </div>
-                    <div className="form-floating">
+                    <div className="form-floating informationInputContainer">
                         <input required
                                type="password"
-                               className="form-control"
+                               className="form-control informationInput"
                                placeholder="Password"
                                name="password"
                                id={"password"}
@@ -470,10 +488,10 @@ export function MyInformation() {
                         />
                         <label for="password"> New password </label>
                     </div>
-                    <div className="form-floating">
+                    <div className="form-floating informationInputContainer">
                         <input required
                                type="password"
-                               className="form-control"
+                               className="form-control informationInput"
                                placeholder="Password"
                                name="confirmPassword"
                                id={"confirmPassword"}
@@ -483,7 +501,7 @@ export function MyInformation() {
                         <label for="confirmPassword"> Confirm password </label>
                     </div>
                     <label id={"passwordError"}> </label> <br/>
-                    <button className={"button"} onClick={(e) => changePassword(e)}>
+                    <button className={"informationButton"} onClick={(e) => changePassword(e)}>
                         Change password
                     </button>
                 </form>

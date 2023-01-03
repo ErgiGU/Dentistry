@@ -1,8 +1,8 @@
 import React from 'react';
 import '../home/Card.css';
 import CardItem from './CardItem';
-import Tips from '../home/assets/tips.png'
-import TeethCare from '../home/assets/toothcare.png'
+import Tips from '../assets/tips.png'
+import TeethCare from '../assets/toothcare.png'
     function Card() {
         return (
             <div className='cards'>
