@@ -6,26 +6,28 @@ import jwt from "jsonwebtoken";
 
 export function MyInformation() {
     const [client, setClient] = useState(null);
-    const [currentClinic, setCurrentClinic] = useState("");
-    const [name, setName] = useState("");
-    const [owner, setOwner] = useState("");
-    const [address, setAddress] = useState("");
-    const [email, setEmail] = useState("");
+    const [currentClinic, setCurrentClinic] = useState({
+        name: '',
+        owner: '',
+        address: '',
+        email: '',
+        newEmail: '',
+        mondayStart: '',
+        mondayEnd: '',
+        tuesdayStart: '',
+        tuesdayEnd: '',
+        wednesdayStart: '',
+        wednesdayEnd: '',
+        thursdayStart: '',
+        thursdayEnd: '',
+        fridayStart: '',
+        fridayEnd: '',
+        fikaHour: '',
+        lunchHour: ''
+    });
     const [oldPassword, setOldPassword] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [mondayStart, setMondayStart] = useState("");
-    const [mondayEnd, setMondayEnd] = useState("");
-    const [tuesdayStart, setTuesdayStart] = useState("");
-    const [tuesdayEnd, setTuesdayEnd] = useState("");
-    const [wednesdayStart, setWednesdayStart] = useState("");
-    const [wednesdayEnd, setWednesdayEnd] = useState("");
-    const [thursdayStart, setThursdayStart] = useState("");
-    const [thursdayEnd, setThursdayEnd] = useState("");
-    const [fridayStart, setFridayStart] = useState("");
-    const [fridayEnd, setFridayEnd] = useState("");
-    const [fikaHour, setFikaHour] = useState("");
-    const [lunchHour, setLunchHour] = useState("");
 
     useEffect(() => {
         if (client === null) {
@@ -34,17 +36,50 @@ export function MyInformation() {
     }, [client])
 
     useEffect(() => {
-        setInitialStates()
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#')
+            const theClinic = jwt.decode(localStorage.token, 'something');
+            client.publish('getCurrentLoggedInClinic', JSON.stringify(
+                {
+                    id: client.options.clientId,
+                    body: {
+                        clinicID: theClinic._id
+                    }
+                }
+            ))
 
-            client.on('message', function (topic, message) {
+            client.on('message', async function (topic, message) {
                 switch (topic) {
                     case client.options.clientId + '/editInfoResponse':
                         receivedMessage(message.toString())
                         break;
                     case client.options.clientId + '/changePasswordResponse':
                         receivedMessage(message.toString())
+                        break;
+                    case client.options.clientId + '/currentLoggedInClinicResponse':
+                        console.log(JSON.parse(message))
+                        const pmessage = JSON.parse(message)
+                        setCurrentClinic(JSON.parse(message))
+                        setCurrentClinic(formData => ({
+                            ...currentClinic,
+                            name: pmessage.name,
+                            owner: pmessage.owner,
+                            address: pmessage.address,
+                            email: pmessage.email,
+                            newEmail: pmessage.email,
+                            mondayStart: pmessage.openingHours.monday.start,
+                            mondayEnd: pmessage.openingHours.monday.end,
+                            tuesdayStart: pmessage.openingHours.tuesday.start,
+                            tuesdayEnd: pmessage.openingHours.tuesday.end,
+                            wednesdayStart: pmessage.openingHours.wednesday.start,
+                            wednesdayEnd: pmessage.openingHours.wednesday.end,
+                            thursdayStart: pmessage.openingHours.thursday.start,
+                            thursdayEnd: pmessage.openingHours.thursday.end,
+                            fridayStart: pmessage.openingHours.friday.start,
+                            fridayEnd: pmessage.openingHours.friday.end,
+                            fikaHour: pmessage.fikaHour,
+                            lunchHour: pmessage.lunchHour
+                        }))
                         break;
                     default:
                         break;
@@ -62,26 +97,25 @@ export function MyInformation() {
             console.log(pMessage.status)
             alert(pMessage)
         }
-
-        /**
-         * This will be connected to the backend, to get the current state of the clinic's information
-         * and display them in the form.
-         */
-        function setInitialStates() {
-            const clinic = jwt.decode(localStorage.token, 'something');
-            setCurrentClinic(clinic)
-            setName(currentClinic.name)
-            setOwner(currentClinic.owner)
-            setAddress(currentClinic.address)
-        }
-
         return () => {
             if (client !== null) {
                 console.log('ending process')
                 client.end()
             }
         }
-    }, [client, currentClinic.name, currentClinic.address, currentClinic.owner])
+    }, [client])
+
+    useEffect(() => {
+        console.log(currentClinic)
+        console.log(currentClinic.name)
+    }, [currentClinic])
+
+    /**
+     * This will be connected to the backend, to get the current state of the clinic's information
+     * and display them in the form.
+     */
+    function setInitialStates() {
+    }
 
     /**
      * A custom alert, which receives a message to be alerted.
@@ -109,18 +143,10 @@ export function MyInformation() {
     const handleChanges = (e) => {
         let theTime = String;
         const {id, value} = e.target;
-        if (id === "name") {
-            setName(value);
-        }
-        if (id === "owner") {
-            setOwner(value);
-        }
-        if (id === "address") {
-            setAddress(value);
-        }
-        if (id === "email") {
-            setEmail(value);
-        }
+        setCurrentClinic(currentClinic => ({
+            ...currentClinic,
+            [e.target.id]: e.target.value
+        }))
         if (id === "oldPassword") {
             setOldPassword(value);
         }
@@ -130,55 +156,6 @@ export function MyInformation() {
         if (id === "confirmPassword") {
             setConfirmPassword(value)
         }
-        if (id === "mondayStart") {
-            theTime = value.toString();
-            setMondayStart(theTime);
-        }
-        if (id === "mondayEnd") {
-            theTime = value.toString();
-            setMondayEnd(theTime);
-        }
-        if (id === "tuesdayStart") {
-            theTime = value.toString();
-            setTuesdayStart(theTime);
-        }
-        if (id === "tuesdayEnd") {
-            theTime = value.toString();
-            setTuesdayEnd(theTime);
-        }
-        if (id === "wednesdayStart") {
-            theTime = value.toString();
-            setWednesdayStart(theTime);
-        }
-        if (id === "wednesdayEnd") {
-            theTime = value.toString();
-            setWednesdayEnd(theTime);
-        }
-        if (id === "thursdayStart") {
-            theTime = value.toString();
-            setThursdayStart(theTime)
-        }
-        if (id === "thursdayEnd") {
-            theTime = value.toString();
-            setThursdayEnd(theTime)
-        }
-        if (id === "fridayStart") {
-            theTime = value.toString();
-            setFridayStart(theTime)
-        }
-        if (id === "fridayEnd") {
-            theTime = value.toString();
-            setFridayEnd(theTime)
-        }
-        if (id === "fikaHour") {
-            theTime = value.toString();
-            setFikaHour(theTime)
-        }
-        if (id === "lunchHour") {
-            theTime = value.toString();
-            setLunchHour(theTime)
-        }
-
     }
     /**
      * Checks if the user's input is valid. E.g the email has a valid format and the opening hours are logical.
@@ -186,62 +163,56 @@ export function MyInformation() {
      * @param event event object.
      */
     const submit = (event) => {
-        if (mondayStart > mondayEnd || tuesdayStart > tuesdayEnd || wednesdayStart > wednesdayEnd || thursdayStart > thursdayEnd || fridayStart > fridayEnd) {
+        if (currentClinic.mondayStart > currentClinic.mondayEnd || currentClinic.tuesdayStart > currentClinic.tuesdayEnd
+            || currentClinic.wednesdayStart > currentClinic.wednesdayEnd || currentClinic.thursdayStart > currentClinic.thursdayEnd || currentClinic.fridayStart > currentClinic.fridayEnd) {
             event.preventDefault();
             const message = {
                 text: "Start time should be before the end time in the opening hours."
             }
             alert(message);
-        } else if (!/\S+@\S+\.\S+/.test(email) && email) {
+        } else if (!/\S+@\S+\.\S+/.test(currentClinic.email) && currentClinic.email) {
             const email = document.getElementById("email");
             email.setCustomValidity("Invalid email format")
         } else {
             event.preventDefault();
-            if (!(name || owner || address || email || mondayStart || tuesdayStart || wednesdayStart || thursdayStart || fridayStart)) {
-                const message = {
-                    text: "Can not change empty fields!"
-                }
-                alert(message)
-            } else {
                 if (client !== null) {
                     client.publish('editInfo', JSON.stringify(
                         {
                             id: client.options.clientId,
                             body: {
-                                name: name,
-                                owner: owner,
-                                address: address,
+                                name: currentClinic.name,
+                                owner: currentClinic.owner,
+                                address: currentClinic.address,
                                 email: currentClinic.email,
-                                newEmail: email,
+                                newEmail: currentClinic.newEmail,
                                 openingHours: {
                                     monday: {
-                                        start: mondayStart,
-                                        end: mondayEnd
+                                        start: currentClinic.mondayStart,
+                                        end: currentClinic.mondayEnd
                                     },
                                     tuesday: {
-                                        start: tuesdayStart,
-                                        end: tuesdayEnd
+                                        start: currentClinic.tuesdayStart,
+                                        end: currentClinic.tuesdayEnd
                                     },
                                     wednesday: {
-                                        start: wednesdayStart,
-                                        end: wednesdayEnd
+                                        start: currentClinic.wednesdayStart,
+                                        end: currentClinic.wednesdayEnd
                                     },
                                     thursday: {
-                                        start: thursdayStart,
-                                        end: thursdayEnd
+                                        start: currentClinic.thursdayStart,
+                                        end: currentClinic.thursdayEnd
                                     },
                                     friday: {
-                                        start: fridayStart,
-                                        end: fridayEnd
+                                        start: currentClinic.fridayStart,
+                                        end: currentClinic.fridayEnd
                                     },
                                 },
-                                lunchHour: lunchHour,
-                                fikaHour: fikaHour
+                                lunchHour: currentClinic.lunchHour,
+                                fikaHour: currentClinic.fikaHour
                             },
                         }
                     ))
                 }
-            }
         }
     }
     /**
@@ -287,7 +258,7 @@ export function MyInformation() {
                                 placeholder="Name"
                                 name="name"
                                 id={"name"}
-                                value={name}
+                                value={currentClinic.name}
                                 style={{color: "black"}}
                                 onChange={(e) => handleChanges(e)}
                             />
@@ -300,7 +271,7 @@ export function MyInformation() {
                                 placeholder="Owner"
                                 name="owner"
                                 id={"owner"}
-                                value={owner}
+                                value={currentClinic.owner}
                                 onChange={(e) => handleChanges(e)}
                             />
                             <label for="owner"> Clinic's owner </label>
@@ -312,7 +283,7 @@ export function MyInformation() {
                                 placeholder="Address"
                                 name="address"
                                 id={"address"}
-                                value={address}
+                                value={currentClinic.address}
                                 onChange={(e) => handleChanges(e)}
                             />
                             <label for="address"> Clinic's Address </label>
@@ -323,8 +294,8 @@ export function MyInformation() {
                                 className="form-control informationInput"
                                 placeholder="name@example.com"
                                 name="email"
-                                id={"email"}
-                                value={email}
+                                id={"newEmail"}
+                                value={currentClinic.newEmail}
                                 onChange={(e) => handleChanges(e)}
                             />
                             <label for="email"> Email address </label>
@@ -342,7 +313,7 @@ export function MyInformation() {
                                 type="time"
                                 name="mondayStart"
                                 id={"mondayStart"}
-                                value={mondayStart}
+                                value={currentClinic.mondayStart}
                                 onChange={(e) => handleChanges(e)}
                             />
                             <label> End: </label>
@@ -351,7 +322,7 @@ export function MyInformation() {
                                 type="time"
                                 name="mondayEnd"
                                 id={"mondayEnd"}
-                                value={mondayEnd}
+                                value={currentClinic.mondayEnd}
                                 onChange={(e) => handleChanges(e)}
                             />
                         </label>
@@ -362,7 +333,7 @@ export function MyInformation() {
                                 type="time"
                                 name="tuesdayStart"
                                 id={"tuesdayStart"}
-                                value={tuesdayStart}
+                                value={currentClinic.tuesdayStart}
                                 onChange={(e) => handleChanges(e)}
                             />
                             <label> End: </label>
@@ -371,7 +342,7 @@ export function MyInformation() {
                                 type="time"
                                 name="tuesdayEnd"
                                 id={"tuesdayEnd"}
-                                value={tuesdayEnd}
+                                value={currentClinic.tuesdayEnd}
                                 onChange={(e) => handleChanges(e)}
                             />
                         </label>
@@ -382,7 +353,7 @@ export function MyInformation() {
                                 type="time"
                                 name="wednesdayStart"
                                 id={"wednesdayStart"}
-                                value={wednesdayStart}
+                                value={currentClinic.wednesdayStart}
                                 onChange={(e) => handleChanges(e)}
                             />
                             <label> End: </label>
@@ -391,7 +362,7 @@ export function MyInformation() {
                                 type="time"
                                 name="wednesdayEnd"
                                 id={"wednesdayEnd"}
-                                value={wednesdayEnd}
+                                value={currentClinic.wednesdayEnd}
                                 onChange={(e) => handleChanges(e)}
                             />
                         </label>
@@ -402,7 +373,7 @@ export function MyInformation() {
                                 type="time"
                                 name="thursdayStart"
                                 id={"thursdayStart"}
-                                value={thursdayStart}
+                                value={currentClinic.thursdayStart}
                                 onChange={(e) => handleChanges(e)}
                             />
                             <label> End: </label>
@@ -411,7 +382,7 @@ export function MyInformation() {
                                 type="time"
                                 name="thursdayEnd"
                                 id={"thursdayEnd"}
-                                value={thursdayEnd}
+                                value={currentClinic.thursdayEnd}
                                 onChange={(e) => handleChanges(e)}
                             />
                         </label>
@@ -422,7 +393,7 @@ export function MyInformation() {
                                 type="time"
                                 name="fridayStart"
                                 id={"fridayStart"}
-                                value={fridayStart}
+                                value={currentClinic.fridayStart}
                                 onChange={(e) => handleChanges(e)}
                             />
                             <label> End: </label>
@@ -431,7 +402,7 @@ export function MyInformation() {
                                 type="time"
                                 name="fridayEnd"
                                 id={"fridayEnd"}
-                                value={fridayEnd}
+                                value={currentClinic.fridayEnd}
                                 onChange={(e) => handleChanges(e)}
                             />
                         </label>
@@ -443,7 +414,7 @@ export function MyInformation() {
                                     type="time"
                                     name="fikaHour"
                                     id={"fikaHour"}
-                                    value={fikaHour}
+                                    value={currentClinic.fikaHour}
                                     onChange={(e) => handleChanges(e)}
                                 />
                                 <label> Lunch: </label>
@@ -452,7 +423,7 @@ export function MyInformation() {
                                     type="time"
                                     name="lunchHour"
                                     id={"lunchHour"}
-                                    value={lunchHour}
+                                    value={currentClinic.lunchHour}
                                     onChange={(e) => handleChanges(e)}
                                 />
                             </label>

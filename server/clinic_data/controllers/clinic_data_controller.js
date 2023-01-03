@@ -305,5 +305,6 @@ module.exports = {
     editInfo,
     changePassword,
     addDentist,
+    getCurrentClinic,
     clinicController
 }
