@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './NewDentist.css';
 import mqttHandler from "../common_components/MqttHandler";
-import Navbar from '../common_components/navbar'
+import NavigationBar from '../common_components/navigationBar'
 import jwt from "jsonwebtoken";
 
 export function NewDentist() {
@@ -123,7 +123,7 @@ export function NewDentist() {
 
     return (
         <>
-            <Navbar/>
+            <NavigationBar/>
             <div className="newDentistContainer">
                 <div id="dentistAlertPlaceholder"></div>
                 <form className="dentistFormBox">

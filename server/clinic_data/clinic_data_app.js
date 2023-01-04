@@ -31,6 +31,7 @@ mqttClient.subscribeTopic('getDentist')
 mqttClient.subscribeTopic('changePassword')
 mqttClient.subscribeTopic('AddDentist')
 mqttClient.subscribeTopic('getCurrentLoggedInClinic')
+mqttClient.subscribeTopic('getClinics')
 
 // When a message arrives, respond to it or propagate it further
 try {
@@ -97,6 +98,10 @@ try {
                 let response = await clinic_data_controller.removeData()
                 mqttClient.sendMessage('123/wipeTestData', JSON.stringify(response))
                 break;
+            case 'getClinics':
+                let clinics = await clinic_data_controller.getClinics()
+                mqttClient.sendMessage(intermediary.id + '/clinics', JSON.stringify(clinics))
+                break
             case 'AddDentist':
                 clinicData.addDentist(intermediary).then(res => {
                     mqttClient.sendMessage(intermediary.id + '/addDentistResponse', res)

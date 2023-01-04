@@ -8,8 +8,19 @@ const clinicSchema = new Schema({
         ref: 'Dentist'
     }],
     timeslots: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Timeslot'
+        year: {
+            type: Number,
+            week: {
+                type: Number,
+                day: {
+                    type: Number,
+                    timeslot: {
+                        type: Schema.Types.ObjectId,
+                        ref: 'Timeslot'
+                    }
+                }
+            }
+        }
     }],
     name: {
         type:String,
@@ -58,14 +69,18 @@ const clinicSchema = new Schema({
             end: {type: String, default: "17:00"}
         },
     },
-    lunchHour: String,
-    fikaHour: String
+    lunchHour: {
+        type: String,
+        default: "12:00"
+    },
+    fikaHour: {
+        type: String,
+        default: "14:00"
+    }
 })
 
 clinicSchema.methods.generateToken = function () {
     return jwt.sign(this.toJSON(), 'secret_key');
 }
 
-
 module.exports = clinicSchema
-

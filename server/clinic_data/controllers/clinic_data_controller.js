@@ -18,7 +18,7 @@ const bcrypt = require('bcrypt');
 const {compare} = require("bcrypt");
 
 // Connect to MongoDB
-let mongooseClient = new mongooseHandler(config.module_config.clinicUser.mongoURI)
+let mongooseClient = new mongooseHandler(config.admin_config.database_tester.mongoURI)
 mongooseClient.connect().then(() => {
     createModels()
 }, null)
@@ -37,10 +37,10 @@ function reconnect(mongoURI) {
 }
 
 function createModels() {
-    clinicModel = mongooseClient.model('clinic', clinicSchema)
-    dentistModel = mongooseClient.model('dentist', dentistSchema)
-    timeslotModel = mongooseClient.model('timeslot', timeslotSchema)
-    patientModel = mongooseClient.model('patient', patientSchema)
+    clinicModel = mongooseClient.model('Clinic', clinicSchema)
+    dentistModel = mongooseClient.model('Dentist', dentistSchema)
+    timeslotModel = mongooseClient.model('Timeslot', timeslotSchema)
+    patientModel = mongooseClient.model('Patient', patientSchema)
 }
 
 /**
@@ -62,9 +62,14 @@ async function getDentist(email) {
     return await dentistModel.findOne({email: email})
 }
 
+//TODO documentation
+async function getClinics() {
+    return await clinicModel.find({}).populate('timeslots').populate('dentists')
+}
+
 /**
- * Does mongoose manipulations to get all JSON coordinates, opening hours, name and address of all clinics.
- * @returns {Promise<{clinics: *[]}|boolean>} JSON containing coordinates, opening hours, name and address of all clinics.
+ * Does mongoose manipulations to get all JSON coordinates, opening hours, name and address of all clinic_map.
+ * @returns {Promise<{clinic_map: *[]}|boolean>} JSON containing coordinates, opening hours, name and address of all clinic_map.
  */
 async function mapDataRequest() {
 
@@ -305,5 +310,6 @@ module.exports = {
     editInfo,
     changePassword,
     addDentist,
-    clinicController
+    clinicController,
+    getClinics
 }

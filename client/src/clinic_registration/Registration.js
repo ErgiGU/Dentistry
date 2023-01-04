@@ -229,7 +229,7 @@ export default function Registration() {
                                <input className="form-check-input me-2"
                                       type="checkbox" checked={checked}
                                       onChange={handleChange} id="tosCheckbox"/>
-                               <label className="form-check-label text-white">I accept the <a href="#!"
+                               <label className="form-check-label text-white">I accept the <a href="src/clinic_registration/Registration#!"
                                className="text-body "><u>Terms of Service</u></a>
                                </label>
                            </div>

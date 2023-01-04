@@ -224,15 +224,62 @@ async function sendAppointmentInformation(intermediary) {
     return clinicTimeslots
 }
 
+async function generateTimeslots(clinicID, dentistID, patientID) {
+    let clinic = await clinicModel.findById(clinicID).populate('timeslots').populate('dentists')
+
+    const timeslot = new timeslotModel({
+        startTime: "09:30",
+        dentist: dentistID,
+        patient: patientID,
+        clinic: clinicID // <-- The ID of the clinic goes here
+    });
+    timeslot.save()
+
+    const timeslot2 = new timeslotModel({
+        startTime: "11:30",
+        dentist: dentistID,
+        patient: patientID,
+        clinic: clinicID // <-- The ID of the clinic goes here
+    });
+    timeslot2.save()
+
+    const timeslot3 = new timeslotModel({
+        startTime: "13:00",
+        dentist: dentistID,
+        patient: patientID,
+        clinic: clinicID // <-- The ID of the clinic goes here
+    });
+    timeslot3.save()
+
+    console.log(clinic.timeslots)
+
+    let intermediaryTimeslots = {
+        2022: {
+            1: {
+                1: [
+                    timeslot,
+                    timeslot2,
+                    timeslot3
+                ]
+            }
+        }
+    }
+
+    console.log(intermediaryTimeslots)
+
+    //clinic.timeslots = intermediaryTimeslots
+
+    clinic.save();
+}
+
 const appointmentsController = {
     bookedMailingData,
     makeAppointment,
     cancelAppointment,
     generateData,
     sendAppointmentInformation,
-    reconnect
+    reconnect,
+    generateTimeslots
 }
 
 module.exports = appointmentsController
-
-// Model creation

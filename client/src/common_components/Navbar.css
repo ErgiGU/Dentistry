@@ -1,16 +1,16 @@
-
 .header {
     padding: 30px;
     text-align: left;
     color: white;
     background-color: steelblue;
-    font-family: 'Verdana', Serif;
+    font-family: 'Verdana', serif;
 }
 
 #navbar {
     overflow: hidden;
     background-color: #295D8A;
 }
+
 #name{
     font-family: "Trebuchet MS", sans-serif;
     color: white;
@@ -28,7 +28,6 @@
     margin-left: 30px;
     margin-right: 30px;
     position: relative;
-    right: -15%;
 }
 
 #navbar a:hover {
@@ -57,7 +56,8 @@
 
 .logo{
     width: 60px;
-    height:60px;
-    margin-bottom: 0%;
+    height: 60px;
+    margin-bottom: 0;
+    margin-right: -60px;
     float: left;
 }

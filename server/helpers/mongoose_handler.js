@@ -24,6 +24,8 @@ class mongooseHandler {
                         useUnifiedTopology: true
                     });
 
+                this.mongooseClient.set('debug', true)
+
                 this.mongooseClient.on('error', (error) => {
                     console.error(`Failed to connect to MongoDB with URI: ${logURI}`);
                     console.error(error.stack);

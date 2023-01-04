@@ -29,6 +29,7 @@ mqttClient.subscribeTopic('generateData')
 mqttClient.subscribeTopic('cancelBookedTimeslot')
 mqttClient.subscribeTopic('sendAppointmentInformation')
 mqttClient.subscribeTopic('cancelAppointment')
+mqttClient.subscribeTopic('generateTimeSlots')
 
 
 // When a message arrives, respond to it or propagate it further
