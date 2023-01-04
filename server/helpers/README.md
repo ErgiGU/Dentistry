@@ -9,5 +9,5 @@ User needs to have a mongoose server and a hiveMQ server installed on the local 
 
 ## Diagram
 The Entity- Relation diagram
-![ER Diagram](./helpers/ER_diagram.png)
+![ER Diagram](.server/helpers/ER_diagram.png)
 
