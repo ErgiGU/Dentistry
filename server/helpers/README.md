@@ -8,6 +8,6 @@ There is also a schema directory which create mongoose schemas for clinic, denti
 User needs to have a mongoose server and a hiveMQ server installed on the local machine.
 
 ## Diagram
-Add the ER diagram to get better understanding of the schemas. MAybe write a couple of lines if something is unclear in the diagram
-
+The Entity- Relation diagram
+![ER Diagram](./helpers/ER_diagram.png)
 
