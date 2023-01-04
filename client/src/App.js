@@ -13,6 +13,7 @@ import ViewAppointments from "./ViewAppointments/viewAppointments"
 import ClinicHomePage from "./ClinicHomePage/ClinicHomePage";
 import {NewDentist} from "./AddDentist/NewDentist";
 import {AboutUsSkeleton} from "./AboutUsPage/AboutUsSkeleton";
+import {MyInformation} from "./MyInformation/MyInformation";
 
 
 function App() {
