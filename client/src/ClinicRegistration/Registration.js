@@ -50,9 +50,8 @@ export default function Registration() {
                         } else if (jsonRes.response === "email already exists") {
                             email.setCustomValidity("Email already exists");
                             email.reportValidity()
-                        } else {
-
-                            alert("Registration failed", "danger");
+                        }else{
+                            alert("Registration failed","danger");
                         }
                         break;
                     default:
@@ -115,15 +114,6 @@ export default function Registration() {
         pass.setCustomValidity("");
         confPass.setCustomValidity("");
 
-        //checks if email exists by sending it to the backend
-        const json = {
-            "client_id": client.options.clientId,
-            "body": {
-                "email": formData.email
-            }
-        }
-        sendMessage('checkIfEmailExists', json);
-
         checkIfPassMatches();
         if (clinicName.checkValidity() && address.checkValidity() && email.checkValidity() && pass.checkValidity() &&
             confPass.checkValidity()) {
@@ -178,17 +168,17 @@ export default function Registration() {
                                 <label>Clinic Name</label>
                             </div>
 
-                            <div className="form-floating mb-4">
-                                <input type="text"
-                                       className="form-control form-control-lg"
-                                       id="address"
-                                       name="address"
-                                       title="Invalid address format"
-                                       placeholder="a"
-                                       onChange={handleInputChange}
-                                       required pattern="^([a-zA-Z]+\s){0,2}\d+$"/>
-                                <label>Address</label>
-                            </div>
+                           <div className="form-floating mb-4">
+                               <input type="text"
+                                      className="form-control form-control-lg"
+                                      id="address"
+                                      name="address"
+                                      title="Invalid address format"
+                                      placeholder="a"
+                                      onChange={handleInputChange}
+                                      required pattern="^[\p{L}]+(\s+[\p{L}]+)*\s+[\d]+$" />
+                               <label>Address</label>
+                           </div>
 
                             <div className="form-floating mb-4">
                                 <input type="email"
