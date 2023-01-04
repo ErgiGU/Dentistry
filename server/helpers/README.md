@@ -1,19 +1,13 @@
-# Helpers Backend
+# Helpers and Schemas
 
 ## Description 
-Here you should mention what is the purpose this specific folder. 
+The helpers directory acts as a medium to help interact to different servies. It contains a file to establish a mongoose client connection and a mongoose model on a connection instance. It also contains MQTT client creation class to connect to the MQTT broker and also send messages and subscribe to topics via the MQTT connection.
+There is also a schema directory which create mongoose schemas for clinic, dentist, patient and timeslots. 
 
 ## Installation
-Here you should mention what installation is required to run this directory. Include MQTT connection and npm install step wise.
+User needs to have a mongoose server and a hiveMQ server installed on the local machine.
 
-## Interaction
-Maybe the title can be changed but mention how this directory interacts with the broker, client and the database(if there is no interaction with the below mentioned sections, remove them).
+## Diagram
+Add the ER diagram to get better understanding of the schemas. MAybe write a couple of lines if something is unclear in the diagram
 
-### MQTT
 
-### Front-end side (React)
-
-### MongoDB 
-
-## Contributors
-Mention who contributed here. TBD can be removed if its repeatative or unnecessary.
