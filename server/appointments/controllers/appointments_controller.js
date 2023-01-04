@@ -20,7 +20,7 @@ let timeslotJSON = {
 }
 
 // Connect to MongoDB
-let mongooseClient = new mongooseHandler(config.admin_config.database_tester.mongoURI)
+let mongooseClient = new mongooseHandler(config.module_config.appointmentUser.mongoURI)
 mongooseClient.connect().then(() => {
     createModels()
 }, null)
