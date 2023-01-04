@@ -306,12 +306,11 @@ const clinicController = {
     mapDataRequest,
     reconnect,
     clinicData,
-}
-
-module.exports = {
     editInfo,
     changePassword,
     addDentist,
     getCurrentClinic,
-    clinicController
 }
+
+module.exports = clinicController
+
