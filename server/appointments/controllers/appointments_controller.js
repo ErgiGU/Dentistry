@@ -25,7 +25,7 @@ const mongoURI = config.module_config.appointmentUser.mongoURI
 //const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/UserDB';
 
 // Connect to MongoDB
-const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, function (err) {
+let mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}, function (err) {
     if (err) {
         console.error(`Failed to connect to MongoDB with URI: ${mongoURI}`);
         console.error(err.stack);
@@ -34,10 +34,27 @@ const mongooseClient = mongoose.createConnection(mongoURI, {useNewUrlParser: tru
     console.log(`Connected to MongoDB with URI: ${mongoURI}`);
 })
 
-const timeslotModel = mongooseClient.model('Timeslot', timeslotSchema)
-const clinicModel = mongooseClient.model('Clinic', clinicSchema)
-const patientModel = mongooseClient.model('Patient', patientSchema)
-const dentistModel = mongooseClient.model('Dentist', dentistSchema)
+function reconnect(mongoURI) {
+    mongooseClient.close()
+    mongooseClient = new mongooseHandler(mongoURI)
+    mongooseClient.connect().then(() => {
+        createModels()
+    }, null)
+}
+let timeslotModel
+let clinicModel
+let patientModel
+let dentistModel
+
+
+function createModels() {
+    timeslotModel = mongooseClient.model('Timeslot', timeslotSchema)
+    clinicModel = mongooseClient.model('Clinic', clinicSchema)
+    patientModel = mongooseClient.model('Patient', patientSchema)
+    dentistModel = mongooseClient.model('Dentist', dentistSchema)
+}
+
+
 
 /**
  * The mongoose manipulations to get data required for emailing about the booked timeslot
@@ -175,7 +192,8 @@ async function generateData(clinicID) {
 const appointmentsController = {
     bookedMailingData,
     makeAppointment,
-    generateData
+    generateData,
+    reconnect
 }
 
 module.exports = appointmentsController

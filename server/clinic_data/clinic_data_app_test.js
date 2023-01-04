@@ -229,7 +229,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                 __v:0
             }
             await asyncMethod("getDentist", "giveDentist", messageSend, newExpected)
-            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "gusaskbu@student.gu.se "}}, expectedResult)
+            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "gusaskbu@student.gu.se "}}, newExpected)
         })
     })
 

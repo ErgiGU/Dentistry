@@ -299,11 +299,11 @@ const clinicController = {
     mapDataRequest,
     reconnect,
     clinicData,
-}
-
-module.exports = {
     editInfo,
     changePassword,
     addDentist,
-    clinicController
+    getCurrentClinic,
+    getDentist
 }
+
+module.exports = clinicController

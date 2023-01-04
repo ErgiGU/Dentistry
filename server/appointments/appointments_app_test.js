@@ -161,11 +161,17 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
     //Is needed to close the runner in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
     describe('Closing runner', function () {
         it('Is this closing the runner?',   function () {
-            mqttClient.sendMessage('test', JSON.stringify({message: 'no expectation'}))
+
+            setTimeout(() => {
+                mqttClient.sendMessage('test', JSON.stringify({message: 'no expectation'}))
+            }, 3000)
         })
     })
 })
 //Is needed to close the tester in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
 after(function () {
-    process.exit()
+    setTimeout(() => {
+        process.exit()
+    }, 5000)
+
 });

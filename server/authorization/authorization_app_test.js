@@ -132,7 +132,10 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
             const messageSend = {
                 client_id: "123",
                 body: {
-                    email: "burakaskan2001@gmail.com"
+                    clinicName: "Testing Clinic",
+                    address: "Lindholmen",
+                    email: "burakaskan2001@gmail.com",
+                    password: "Team-7"
                 }
             }
             const expectedResult = {

@@ -25,6 +25,7 @@ mqttClient.subscribeTopic('test')
 mqttClient.subscribeTopic('appointment')
 mqttClient.subscribeTopic('testingTestingRequest')
 mqttClient.subscribeTopic('bookTimeslot')
+mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('generateData')
 mqttClient.subscribeTopic('cancelBookedTimeslot')
 mqttClient.subscribeTopic('sendAppointmentInformation')
@@ -36,6 +37,9 @@ mqttClient.mqttClient.on('message', function (topic, message) {
     console.log(intermediary)
 
     switch (topic) {
+        case 'initiateTesting':
+            appointments_controller.reconnect(config.admin_config.database_tester.mongoURI)
+            break;
         case 'schema':
             mqttClient.sendMessage('testAppointment', "newClinic")
             break;
