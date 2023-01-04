@@ -33,7 +33,7 @@ function asyncMethod(client) {
     })
 }
 
-const timeout = new Promise((_ , reject) => {
+const timeout = new Promise((_, reject) => {
     setTimeout(() => reject("Timed Out"), 3000)
 })
 
@@ -74,7 +74,7 @@ export default function Maps() {
     // Initialize map when component mounts
     useEffect(() => {
         Promise.race([timeout, asyncMethod(client)]).then(r => {
-            if(!clinicData.current && r !== "Timed Out") {
+            if (!clinicData.current && r !== "Timed Out") {
                 clinicData.current = r
             }
             //Actual map
@@ -95,12 +95,12 @@ export default function Maps() {
                          <p>${clinic.properties.address}</p>
                          <p>${clinic.properties.opening_hours}</p>
                          <button type="button" class="btn btn-primary" onclick="selectAppointment(${clinic.properties.title})">Book Appointment</button>`
-                            )
-                    ).addTo(map);
-                }
-                return () => map.remove();
+                        )
+                ).addTo(map);
+            }
+            return () => map.remove();
         }).catch(() => {
-            if(!clinicData.current) {
+            if (!clinicData.current) {
                 navigate("/error")
             }
         })

@@ -23,11 +23,11 @@ const clinicSchema = new Schema({
         }
     }],
     name: {
-        type:String,
+        type: String,
         required: true
     },
     password: {
-        type:String,
+        type: String,
         required: true
     },
     email: {
@@ -40,11 +40,11 @@ const clinicSchema = new Schema({
         latitude: Number,
     },
     address: {
-        type:String,
+        type: String,
         required: true
     },
     city: {
-        type:String,
+        type: String,
         required: true
     },
     openingHours: {

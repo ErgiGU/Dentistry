@@ -97,7 +97,7 @@ try {
                 break;
         }
     });
-}catch (e) {
+} catch (e) {
     console.log(e)
     console.log("Message was received but caused a crash.")
 }
@@ -196,7 +196,7 @@ async function bookAppointment(intermediary) {
 async function cancelAppointment(intermediary) {
     //METHOD CALL FOR DB MANIPULATION THAT DELETES THE TIMESLOT BUT RETURNS IT
     const canceledTimeslot = await waitDeleteTimeslot(intermediary.body)
-    if(canceledTimeslot.result === "Failure") {
+    if (canceledTimeslot.result === "Failure") {
         return {response: "Failure"}
     }
     console.log(canceledTimeslot)
@@ -207,7 +207,6 @@ async function cancelAppointment(intermediary) {
         return {response: "Failure"}
     }
 }
-
 
 
 module.exports = mqttClient;

@@ -20,7 +20,7 @@ export default function Registration() {
     const pass = document.getElementById('password');
     const confPass = document.getElementById('confirmPassword');
 
-    
+
     const alertPlaceholder = document.getElementById("displayAlert");
 
     // Primary client generating effect
@@ -42,16 +42,15 @@ export default function Registration() {
                     case client.options.clientId + "/register":
                         /*this code is for making the alert appear and redirecting
                         the user to login(if the registration is successful)*/
-                        if(jsonRes.response === "registration successful"){
-                            alert(" You've successfully registered your clinic!","success");
+                        if (jsonRes.response === "registration successful") {
+                            alert(" You've successfully registered your clinic!", "success");
                             setTimeout(() => {
                                 navigate("/login");
                             }, 3000);
-                        }else if(jsonRes.response === "email already exists"){
+                        } else if (jsonRes.response === "email already exists") {
                             email.setCustomValidity("Email already exists");
                             email.reportValidity()
                         }else{
-
                             alert("Registration failed","danger");
                         }
                         break;
@@ -81,7 +80,7 @@ export default function Registration() {
     }, [alertPlaceholder, client, email, navigate])
 
 
-    function sendMessage(topic,json) {
+    function sendMessage(topic, json) {
         if (client !== null) {
             authBackendFlag.current = true
             client.publish(topic, JSON.stringify(json))
@@ -100,9 +99,9 @@ export default function Registration() {
     const handleChange = () => {
         setChecked(!checked);
         const okButton = document.getElementById("btn1");
-        if(checked){
+        if (checked) {
             okButton.classList.add("disabled");
-        }else{
+        } else {
             okButton.classList.remove("disabled");
         }
     };
@@ -114,15 +113,6 @@ export default function Registration() {
         email.setCustomValidity("")
         pass.setCustomValidity("");
         confPass.setCustomValidity("");
-
-        //checks if email exists by sending it to the backend
-        const json = {
-            "client_id": client.options.clientId,
-            "body": {
-                "email": formData.email
-            }
-        }
-        sendMessage('checkIfEmailExists', json);
 
         checkIfPassMatches();
         if (clinicName.checkValidity() && address.checkValidity() && email.checkValidity() && pass.checkValidity() &&
@@ -157,26 +147,26 @@ export default function Registration() {
     };
 
     return (
-       <>
-           <div className="registrationBody">
-               <div className="row needs-validation justify-content-center" id="rowContainer1">
-                   <div className="col-md-4" id="parentContainer1" >
-                       <form id="registrationForm" className='flex flex-column'  >
-                           <h2 className="text-center text-white mb-3" style={{top: '100px'}} >Register your clinic</h2>
+        <>
+            <div className="registrationBody">
+                <div className="row needs-validation justify-content-center" id="rowContainer1">
+                    <div className="col-md-4" id="parentContainer1">
+                        <form id="registrationForm" className='flex flex-column'>
+                            <h2 className="text-center text-white mb-3" style={{top: '100px'}}>Register your clinic</h2>
 
-                           <div id='displayAlert'></div>
+                            <div id='displayAlert'></div>
 
-                           <div className="form-floating mb-4">
-                               <input type="text"
-                                      className="form-control form-control-lg"
-                                      id="clinicName"
-                                      name="clinicName"
-                                      value = {formData.clinicName}
-                                      onChange={handleInputChange}
-                                      placeholder="a"
-                                      required />
-                                   <label>Clinic Name</label>
-                           </div>
+                            <div className="form-floating mb-4">
+                                <input type="text"
+                                       className="form-control form-control-lg"
+                                       id="clinicName"
+                                       name="clinicName"
+                                       value={formData.clinicName}
+                                       onChange={handleInputChange}
+                                       placeholder="a"
+                                       required/>
+                                <label>Clinic Name</label>
+                            </div>
 
                            <div className="form-floating mb-4">
                                <input type="text"
@@ -186,67 +176,68 @@ export default function Registration() {
                                       title="Invalid address format"
                                       placeholder="a"
                                       onChange={handleInputChange}
-                                      required pattern="^([a-zA-Z]+\s){0,2}\d+$" />
+                                      required pattern="^[\p{L}]+(\s+[\p{L}]+)*\s+[\d]+$" />
                                <label>Address</label>
                            </div>
 
-                           <div className="form-floating mb-4">
-                               <input type="email"
-                                      className="form-control form-control-lg"
-                                      id="email"
-                                      name="email"
-                                      placeholder="a"
-                                      onChange={handleInputChange}
-                                      required   />
-                                   <label >Email</label>
-                           </div>
+                            <div className="form-floating mb-4">
+                                <input type="email"
+                                       className="form-control form-control-lg"
+                                       id="email"
+                                       name="email"
+                                       placeholder="a"
+                                       onChange={handleInputChange}
+                                       required/>
+                                <label>Email</label>
+                            </div>
 
-                           <div className="form-floating mb-4">
-                               <input type="password"
-                                      className="form-control form-control-lg"
-                                      id="password"
-                                      name="password"
-                                      title="Password must contain: Minimum 8 characters at least 1 alphabetic character and 1 number"
-                                      placeholder="b"
-                                      onChange={handleInputChange}
-                                      required
-                                      pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"/>
-                                   <label>Password</label>
-                           </div>
+                            <div className="form-floating mb-4">
+                                <input type="password"
+                                       className="form-control form-control-lg"
+                                       id="password"
+                                       name="password"
+                                       title="Password must contain: Minimum 8 characters at least 1 alphabetic character and 1 number"
+                                       placeholder="b"
+                                       onChange={handleInputChange}
+                                       required
+                                       pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"/>
+                                <label>Password</label>
+                            </div>
 
-                           <div className="form-floating mb-4">
-                               <input type="password"
-                                      className="form-control form-control-lg"
-                                      id="confirmPassword"
-                                      placeholder="b"
-                                      name="confirmPassword"
-                                      onChange={handleInputChange}
-                               />
-                                   <label>Confirm Password</label>
-                           </div>
+                            <div className="form-floating mb-4">
+                                <input type="password"
+                                       className="form-control form-control-lg"
+                                       id="confirmPassword"
+                                       placeholder="b"
+                                       name="confirmPassword"
+                                       onChange={handleInputChange}
+                                />
+                                <label>Confirm Password</label>
+                            </div>
 
-                           <div className="form-check d-flex mb-2">
-                               <input className="form-check-input me-2"
-                                      type="checkbox" checked={checked}
-                                      onChange={handleChange} id="tosCheckbox"/>
-                               <label className="form-check-label text-white">I accept the <a href="src/clinic_registration/Registration#!"
-                               className="text-body "><u>Terms of Service</u></a>
-                               </label>
-                           </div>
+                            <div className="form-check d-flex mb-2">
+                                <input className="form-check-input me-2"
+                                       type="checkbox" checked={checked}
+                                       onChange={handleChange} id="tosCheckbox"/>
+                                <label className="form-check-label text-white">I accept the <a href="#!"
+                                                                                               className="text-body "><u>Terms
+                                    of Service</u></a>
+                                </label>
+                            </div>
 
-                           <button className="btn btn-primary text-white sign-up disabled"
-                                   id="btn1"
-                                   onClick={registerClinic1}
-                                   style={{width: '150px', height: '50px', alignSelf: "center"}} >Sign Up
-                           </button>
+                            <button className="btn btn-primary text-white sign-up disabled"
+                                    id="btn1"
+                                    onClick={registerClinic1}
+                                    style={{width: '150px', height: '50px', alignSelf: "center"}}>Sign Up
+                            </button>
 
-                           <p className="text-center mt-1 mb-2 text-white">Already have an account?
-                               <Link to="/login" style={{color: 'black'}}>Login here </Link>
-                           </p>
-                       </form>
-                   </div>
-               </div>
+                            <p className="text-center mt-1 mb-2 text-white">Already have an account?
+                                <Link to="/login" style={{color: 'black'}}>Login here </Link>
+                            </p>
+                        </form>
+                    </div>
+                </div>
             </div>
-       </>
+        </>
     )
 }

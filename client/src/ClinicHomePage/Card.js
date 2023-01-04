@@ -2,6 +2,7 @@ import React from 'react';
 import '../home/Card.css';
 import CardItem from './CardItem';
 import Services from '../assets/services.png'
+
 function Card() {
     return (
         <div className='cards'>
