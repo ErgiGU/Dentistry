@@ -13,11 +13,9 @@ cache:
     - server/appointments/node_modules
     - server/authorization/node_modules
 
-stages:          # List of stages for jobs, and their order of execution
+stages:         
   - client.build
-  - authorization
-  - clinic_data
-  - appointments
+  - backend_service_checks
 
 
 variables:
@@ -35,7 +33,7 @@ helper-run-job:
     - cd server/helpers
     - npm install
 
-client-build-job:       # This job runs in the build stage, which runs first.
+client-build-job:     
   stage: client.build
   tags:
     - docker
@@ -44,16 +42,17 @@ client-build-job:       # This job runs in the build stage, which runs first.
     - npm install
     - npm run build
 
-appointments-build-job:       # This job runs in the build stage, which runs first.
-  stage: appointments
+appointments-build-job:       
+  stage: backend_service_checks
+  needs: ["clinic_data-unit-test-job"]
   tags:
     - docker
   script:
     - cd server/appointments
     - npm install
 
-appointments-unit-test-job:   # This job runs in the test stage.
-  stage: appointments         # It only starts when the job in the build stage completes successfully.
+appointments-unit-test-job:  
+  stage: backend_service_checks        
   needs: ["appointments-build-job"]
   when: delayed
   start_in: 100 seconds
@@ -66,8 +65,8 @@ appointments-unit-test-job:   # This job runs in the test stage.
     - npm install
     - npx mocha appointments_app_test.js
 
-appointments-unit-run-job:   # This job runs in the test stage.
-  stage: appointments         # It only starts when the job in the build stage completes successfully.
+appointments-unit-run-job:   
+  stage: backend_service_checks        
   needs: ["appointments-build-job"]
   tags:
     - docker
@@ -75,16 +74,17 @@ appointments-unit-run-job:   # This job runs in the test stage.
     - cd server/appointments
     - node appointments_app.js
 
-clinic_data-build-job:       # This job runs in the build stage, which runs first.
-  stage: clinic_data
+clinic_data-build-job:       
+  stage: backend_service_checks
+  needs: ["authorization-unit-test-job"]
   tags:
     - docker
   script:
     - cd server/clinic_data
     - npm install
 
-clinic_data-unit-test-job:   # This job runs in the test stage.
-  stage: clinic_data         # It only starts when the job in the build stage completes successfully.
+clinic_data-unit-test-job:   
+  stage: backend_service_checks        
   needs: ["clinic_data-build-job"]
   when: delayed
   start_in: 100 seconds
@@ -97,8 +97,8 @@ clinic_data-unit-test-job:   # This job runs in the test stage.
     - npm install
     - npx mocha clinic_data_app_test.js
 
-clinic_data-unit-run-job:   # This job runs in the test stage.
-  stage: clinic_data         # It only starts when the job in the build stage completes successfully.
+clinic_data-unit-run-job:   
+  stage: backend_service_checks        
   needs: ["clinic_data-build-job"]
   tags:
     - docker
@@ -106,16 +106,16 @@ clinic_data-unit-run-job:   # This job runs in the test stage.
     - cd server/clinic_data
     - node clinic_data_app.js
 
-authorization-build-job:       # This job runs in the build stage, which runs first.
-  stage: authorization
+authorization-build-job:     
+  stage: backend_service_checks
   tags:
     - docker
   script:
     - cd server/authorization
     - npm install
 
-authorization-unit-test-job:   # This job runs in the test stage.
-  stage: authorization         # It only starts when the job in the build stage completes successfully.
+authorization-unit-test-job:  
+  stage: backend_service_checks        
   needs: ["authorization-build-job"]
   when: delayed
   start_in: 100 seconds
@@ -128,8 +128,8 @@ authorization-unit-test-job:   # This job runs in the test stage.
     - npm install
     - npx mocha authorization_app_test.js
 
-authorization-unit-run-job:   # This job runs in the test stage.
-  stage: authorization         # It only starts when the job in the build stage completes successfully.
+authorization-unit-run-job:   
+  stage: backend_service_checks       
   needs: ["authorization-build-job"]
   tags:
     - docker
