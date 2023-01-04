@@ -6,7 +6,9 @@ import jwt from "jsonwebtoken";
 
 export function NewDentist() {
     const [client, setClient] = useState(null);
-    const [currentClinic, setCurrentClinic] = useState("");
+    const [currentClinic, setCurrentClinic] = useState({
+        email: ''
+    });
     const [formData, setFormData] = useState({
         dentistName: '',
         phoneNumber: '',
@@ -15,8 +17,6 @@ export function NewDentist() {
     })
 
     useEffect(() => {
-        const clinic = jwt.decode(localStorage.token, 'something');
-        setCurrentClinic(clinic)
         if (client === null) {
             setClient(mqttHandler.getClient(client))
         }
@@ -25,11 +25,28 @@ export function NewDentist() {
     useEffect(() => {
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#')
+            const theClinic = jwt.decode(localStorage.token, 'something');
+            client.publish('getCurrentLoggedInClinic', JSON.stringify(
+                {
+                    id: client.options.clientId,
+                    body: {
+                        clinicID: theClinic._id
+                    }
+                }
+            ))
 
             client.on('message', function (topic, message) {
                 switch (topic) {
                     case client.options.clientId + '/addDentistResponse':
                         receivedMessage(message.toString())
+                        break;
+                    case client.options.clientId + '/currentLoggedInClinicResponse':
+                        console.log(JSON.parse(message))
+                        const pmessage = JSON.parse(message)
+                        setCurrentClinic(formData => ({
+                            ...currentClinic,
+                            email: pmessage.email,
+                        }))
                         break;
                     default:
                         break;

@@ -155,10 +155,12 @@ async function editInfo(req) {
     const clinic = await clinicModel.findOne({email})
     let message;
     if (clinic) {
-        if (await emailExists(req.body.newEmail)) {
-            message = {
-                status: 400,
-                text: 'Email is already used!'
+        if (!req.body.newEmail === req.body.email) {
+            if (await emailExists(req.body.newEmail)) {
+                message = {
+                    status: 400,
+                    text: 'Email is already used!'
+                }
             }
         } else {
             clinic.name = req.body.name || clinic.name;
@@ -282,6 +284,11 @@ async function addDentist(req) {
     return JSON.stringify(message);
 }
 
+/**
+ * Retrieves a clinic by the ID provided in the request body.
+ * @param req the request body from the frontend, including the clinic's ID
+ * @returns {Promise<string>} Returns the clinic object as string.
+ */
 async function getCurrentClinic(req) {
     const theID = req.body.clinicID
     const clinic = await clinicModel.findById(theID)

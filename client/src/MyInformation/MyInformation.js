@@ -5,6 +5,7 @@ import mqttHandler from "../common_components/MqttHandler";
 import jwt from "jsonwebtoken";
 
 export function MyInformation() {
+    const [changedValue, setChangedValue] = useState(false);
     const [client, setClient] = useState(null);
     const [currentClinic, setCurrentClinic] = useState({
         name: '',
@@ -59,7 +60,6 @@ export function MyInformation() {
                     case client.options.clientId + '/currentLoggedInClinicResponse':
                         console.log(JSON.parse(message))
                         const pmessage = JSON.parse(message)
-                        setCurrentClinic(JSON.parse(message))
                         setCurrentClinic(formData => ({
                             ...currentClinic,
                             name: pmessage.name,
@@ -97,6 +97,7 @@ export function MyInformation() {
             console.log(pMessage.status)
             alert(pMessage)
         }
+
         return () => {
             if (client !== null) {
                 console.log('ending process')
@@ -109,13 +110,6 @@ export function MyInformation() {
         console.log(currentClinic)
         console.log(currentClinic.name)
     }, [currentClinic])
-
-    /**
-     * This will be connected to the backend, to get the current state of the clinic's information
-     * and display them in the form.
-     */
-    function setInitialStates() {
-    }
 
     /**
      * A custom alert, which receives a message to be alerted.
@@ -143,10 +137,6 @@ export function MyInformation() {
     const handleChanges = (e) => {
         let theTime = String;
         const {id, value} = e.target;
-        setCurrentClinic(currentClinic => ({
-            ...currentClinic,
-            [e.target.id]: e.target.value
-        }))
         if (id === "oldPassword") {
             setOldPassword(value);
         }
@@ -155,6 +145,12 @@ export function MyInformation() {
         }
         if (id === "confirmPassword") {
             setConfirmPassword(value)
+        } else {
+            setChangedValue(true)
+            setCurrentClinic(currentClinic => ({
+                ...currentClinic,
+                [e.target.id]: e.target.value
+            }))
         }
     }
     /**
@@ -170,49 +166,55 @@ export function MyInformation() {
                 text: "Start time should be before the end time in the opening hours."
             }
             alert(message);
-        } else if (!/\S+@\S+\.\S+/.test(currentClinic.email) && currentClinic.email) {
-            const email = document.getElementById("email");
+        } else if (!/\S+@\S+\.\S+/.test(currentClinic.newEmail) && currentClinic.newEmail) {
+            const email = document.getElementById("newEmail");
             email.setCustomValidity("Invalid email format")
+        } else if (!changedValue) {
+            event.preventDefault();
+            const message = {
+                text: "Nothing was changed!"
+            }
+            alert(message)
         } else {
             event.preventDefault();
-                if (client !== null) {
-                    client.publish('editInfo', JSON.stringify(
-                        {
-                            id: client.options.clientId,
-                            body: {
-                                name: currentClinic.name,
-                                owner: currentClinic.owner,
-                                address: currentClinic.address,
-                                email: currentClinic.email,
-                                newEmail: currentClinic.newEmail,
-                                openingHours: {
-                                    monday: {
-                                        start: currentClinic.mondayStart,
-                                        end: currentClinic.mondayEnd
-                                    },
-                                    tuesday: {
-                                        start: currentClinic.tuesdayStart,
-                                        end: currentClinic.tuesdayEnd
-                                    },
-                                    wednesday: {
-                                        start: currentClinic.wednesdayStart,
-                                        end: currentClinic.wednesdayEnd
-                                    },
-                                    thursday: {
-                                        start: currentClinic.thursdayStart,
-                                        end: currentClinic.thursdayEnd
-                                    },
-                                    friday: {
-                                        start: currentClinic.fridayStart,
-                                        end: currentClinic.fridayEnd
-                                    },
+            if (client !== null) {
+                client.publish('editInfo', JSON.stringify(
+                    {
+                        id: client.options.clientId,
+                        body: {
+                            name: currentClinic.name,
+                            owner: currentClinic.owner,
+                            address: currentClinic.address,
+                            email: currentClinic.email,
+                            newEmail: currentClinic.newEmail,
+                            openingHours: {
+                                monday: {
+                                    start: currentClinic.mondayStart,
+                                    end: currentClinic.mondayEnd
                                 },
-                                lunchHour: currentClinic.lunchHour,
-                                fikaHour: currentClinic.fikaHour
+                                tuesday: {
+                                    start: currentClinic.tuesdayStart,
+                                    end: currentClinic.tuesdayEnd
+                                },
+                                wednesday: {
+                                    start: currentClinic.wednesdayStart,
+                                    end: currentClinic.wednesdayEnd
+                                },
+                                thursday: {
+                                    start: currentClinic.thursdayStart,
+                                    end: currentClinic.thursdayEnd
+                                },
+                                friday: {
+                                    start: currentClinic.fridayStart,
+                                    end: currentClinic.fridayEnd
+                                },
                             },
-                        }
-                    ))
-                }
+                            lunchHour: currentClinic.lunchHour,
+                            fikaHour: currentClinic.fikaHour
+                        },
+                    }
+                ))
+            }
         }
     }
     /**
@@ -259,7 +261,7 @@ export function MyInformation() {
                                 name="name"
                                 id={"name"}
                                 value={currentClinic.name}
-                                style={{color: "black"}}
+                                style={{color: "black", letterSpacing: "normal", fontFamily: "intel"}}
                                 onChange={(e) => handleChanges(e)}
                             />
                             <label for="name"> Clinic's name </label>
