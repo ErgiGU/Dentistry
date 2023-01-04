@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import mqttHandler from "../common_components/MqttHandler";
 import PrivateNavbar from "../common_components/PrivateNavbar";
 import jwt from "jsonwebtoken";
+import {useNavigate} from "react-router-dom";
 
 export function MyInformation() {
     const [changedValue, setChangedValue] = useState(false);
@@ -29,12 +30,26 @@ export function MyInformation() {
     const [oldPassword, setOldPassword] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (client === null) {
             setClient(mqttHandler.getClient(client))
         }
     }, [client])
+
+    /**
+     * Navigates the user to the log in page in case the user is not
+     * authenticated to be on this page
+     */
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/login");
+        }
+        return () => {
+        };
+    }, []);
 
     useEffect(() => {
         if (client !== null) {

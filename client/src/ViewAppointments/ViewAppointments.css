@@ -1,21 +1,25 @@
-#appointments{
+#appointments {
     background-color: whitesmoke;
     width: 20px;
 }
-.card{
+
+.card {
     background-color: steelblue;
     margin-top: 20%;
 }
-.card1{
+
+.card1 {
     height: 130px;
     margin-top: 7%;
     margin-left: 2%;
     background-color: white;
 }
-#background{
+
+#background {
     background-color: whitesmoke;
 }
-.btn{
+
+.btn {
     color: white;
     font-family: "Trebuchet MS", sans-serif;
     margin-left: 35%;
@@ -23,29 +27,33 @@
     background-color: #295D8A;
 
 }
-.clinic{
+
+.clinic {
     width: 150px;
-    height:150px;
+    height: 150px;
     margin-top: 20%;
     margin-left: 30%;
 }
 
-.col{
+.col {
     text-align: center;
     font-family: "Trebuchet MS", sans-serif;
     margin-top: 1%;
 }
-.text{
+
+.text {
     text-align: center;
     float: bottom;
     margin-top: 10%;
     font-family: "Trebuchet MS", sans-serif;
 }
-#currentAppointments{
+
+#currentAppointments {
     text-align: center;
     font-family: "Trebuchet MS", sans-serif;
     color: white;
 }
+
 .cancelButton {
     padding: 10px;
     font-size: 18px;

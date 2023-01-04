@@ -34,49 +34,48 @@ function createModels() {
 }
 
 
- //Register new clinic
- async function register(req){
-     //hashes and salts the password that it receives
-     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-     console.log(req.body.clinicName);
-     console.log(req.body.address);
-     console.log(req.body.email);
-     console.log(hashedPassword);
-     //Checks to see if the email exists in the DB
-     if(await clinicModel.findOne({email:req.body.email})){
-         return "email already exists"
-     }else{
+//Register new clinic
+async function register(req) {
+    //hashes and salts the password that it receives
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    console.log(req.body.clinicName);
+    console.log(req.body.address);
+    console.log(req.body.email);
+    console.log(hashedPassword);
+    //Checks to see if the email exists in the DB
+    if (await clinicModel.findOne({email: req.body.email})) {
+        return "email already exists"
+    } else {
 
-         let coordinates
-         try{
-             const geoData = await addressToCoordinates("Gothenburg ", req.body.address)
-             coordinates = {
-                 longitude: geoData[0].longitude,
-                 latitude: geoData[0].latitude
-             }
-         }catch (e) {
-             console.log(e)
-             console.log("The address could not be found.")
-         }
-         const clinicAccount = new clinicModel(
-             {
-                 name:req.body.clinicName ,
-                 address: req.body.address,
-                 email: req.body.email,
-                 password: hashedPassword,
-                 city: "Göteborg",
-                 coordinates: coordinates
-             });
-         try {
-             await clinicAccount.save();
-             return "success!"
-         } catch (error) {
-             console.error(error);
-             return error;
-         }
-     }
- }
-
+        let coordinates
+        try {
+            const geoData = await addressToCoordinates("Gothenburg ", req.body.address)
+            coordinates = {
+                longitude: geoData[0].longitude,
+                latitude: geoData[0].latitude
+            }
+        } catch (e) {
+            console.log(e)
+            console.log("The address could not be found.")
+        }
+        const clinicAccount = new clinicModel(
+            {
+                name: req.body.clinicName,
+                address: req.body.address,
+                email: req.body.email,
+                password: hashedPassword,
+                city: "Göteborg",
+                coordinates: coordinates
+            });
+        try {
+            await clinicAccount.save();
+            return "success!"
+        } catch (error) {
+            console.error(error);
+            return error;
+        }
+    }
+}
 
 
 // Login function
@@ -90,13 +89,13 @@ async function loginClinic(email, password) {
             token: token
         }
         return payload;
-    }else{
+    } else {
         console.log("failed");
         return "Invalid email/password"
     }
 }
 
- async function addressToCoordinates(city, address) {
+async function addressToCoordinates(city, address) {
     let options = {
         provider: 'openstreetmap'
     }
@@ -104,10 +103,10 @@ async function loginClinic(email, password) {
     const geoCoder = nodeGeocoder(options);
 
     return await geoCoder.geocode(city + address)
- }
+}
 
 
-module.exports = {register,loginClinic,reconnect};
+module.exports = {register, loginClinic, reconnect};
 
 
 

@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import './NewDentist.css';
 import mqttHandler from "../common_components/MqttHandler";
-import Navbar from '../common_components/navbar'
+import PrivateNavbar from "../common_components/PrivateNavbar";
 import jwt from "jsonwebtoken";
+import {useNavigate} from "react-router-dom";
 
 export function NewDentist() {
     const [client, setClient] = useState(null);
@@ -14,13 +15,27 @@ export function NewDentist() {
         phoneNumber: '',
         email: '',
         specialty: ''
-    })
+    });
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (client === null) {
             setClient(mqttHandler.getClient(client))
         }
     }, [client])
+
+    /**
+     * Navigates the user to the log in page in case the user is not
+     * authenticated to be on this page
+     */
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/login");
+        }
+        return () => {
+        };
+    }, []);
 
     useEffect(() => {
         if (client !== null) {
@@ -140,7 +155,7 @@ export function NewDentist() {
 
     return (
         <>
-            <Navbar/>
+            <PrivateNavbar/>
             <div className="newDentistContainer">
                 <div id="dentistAlertPlaceholder"></div>
                 <form className="dentistFormBox">

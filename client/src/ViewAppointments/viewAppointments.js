@@ -1,10 +1,10 @@
-
 import './ViewAppointments.css'
 import React, {useEffect, useRef, useState} from "react";
 import {MDBRow, MDBCol} from 'mdb-react-ui-kit';
 import TimeslotCard from './components/timeslotCard'
 import mqttHandler from "../common_components/MqttHandler";
 import {useNavigate} from "react-router-dom";
+import PrivateNavbar from "../common_components/PrivateNavbar";
 import jwt from "jsonwebtoken";
 
 
@@ -20,6 +20,19 @@ export default function ViewAppointments() {
             setClient(mqttHandler.getClient(client))
         }
     }, [client])
+
+    /**
+     * Navigates the user to the log in page in case the user is not
+     * authenticated to be on this page
+     */
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/login");
+        }
+        return () => {
+        };
+    }, []);
 
     /**
      * Subscribes and publishes to the corresponding topic defined in backend.
@@ -63,9 +76,9 @@ export default function ViewAppointments() {
                 client.end()
             }
         }
-    }, [client, ]);
+    }, [client,]);
 
-    function sendMessage(topic,json) {
+    function sendMessage(topic, json) {
         if (client !== null) {
             appointmentsFlag.current = true
             client.publish(topic, JSON.stringify(json))
@@ -85,7 +98,7 @@ export default function ViewAppointments() {
      * @param id the ID of the timeslot to be cancelled
      */
     const handleChildClick = (id) => {
-        const timeslotID =id;
+        const timeslotID = id;
         console.log(timeslotID)
         if (client !== null) {
             client.publish('cancelAppointment', JSON.stringify(
@@ -102,6 +115,7 @@ export default function ViewAppointments() {
 
     return (
         <div id="ty">
+            <PrivateNavbar/>
             <div id="background">
                 <MDBRow>
                     <MDBCol md='3'>
@@ -118,7 +132,8 @@ export default function ViewAppointments() {
                     <MDBCol md='8'>
                         <div id={"timeslots"}>
                             {Array.from(appointments).map((appointment) => (
-                                    <TimeslotCard key={appointment.id} appointment={appointment} parentCallback={handleChildClick}/>
+                                <TimeslotCard key={appointment.id} appointment={appointment}
+                                              parentCallback={handleChildClick}/>
                             ))}
                         </div>
                     </MDBCol>
