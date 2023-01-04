@@ -1,14 +1,15 @@
 # T7 Project
+## Dentistry - For people who love to smile. 😀
 
-# Editing this README
+## Table of Contents
+| Title                                                                                                                       | Description |
+| ------                                                                                                                      | ------ |
+| [Appointments Service](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/server/appointments)   | Directory that handles booking appointment from the MQTT side of the application.     |
+| [Authorization Service](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/server/authorization) | Directory that handles succeful log in and authorization of a Clinic.       |
+| [Clinic Data Service](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/server/clinic_data)     | Directory that helps interact with Clinic data stored in the database via MQTT broker.     |
+| [Helpers and Schemas](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/server/helpers)         | A helpers directory which also includes schemas for each entity.       |
+| [Front-end side](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/client)                      | The Client side react based application that runs on a local host       |
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Dentistry - For people who love to smile. 😀
 
 ## Description
 This web application is a platform to help you book a dentist appointment in Gothenburg for your desired clinic at your desired time. The application displays the clinic on a map using Google API, so the patients or users can get an exact idea of the clinic's location.
@@ -25,9 +26,6 @@ Depending on what you are making, it can be a good idea to include screenshots o
 
 ## Installation
 Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Table of Contents
-this will be a number list linked to each directory.
 
 ## Usage
 Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
