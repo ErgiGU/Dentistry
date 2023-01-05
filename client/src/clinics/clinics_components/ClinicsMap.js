@@ -37,10 +37,6 @@ const timeout = new Promise((_, reject) => {
     setTimeout(() => reject("Timed Out"), 3000)
 })
 
-async function waitMap(client) {
-    return await asyncMethod(client)
-}
-
 //Method which routes to timetable page with selected clinicTitle
 /*function selectAppointment(title) {
 

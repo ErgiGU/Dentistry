@@ -49,7 +49,7 @@ export function MyInformation() {
         }
         return () => {
         };
-    }, []);
+    }, [navigate]);
 
     useEffect(() => {
         if (client !== null) {
@@ -119,7 +119,7 @@ export function MyInformation() {
                 client.end()
             }
         }
-    }, [client])
+    }, [client, currentClinic])
 
     useEffect(() => {
         console.log(currentClinic)
@@ -150,7 +150,7 @@ export function MyInformation() {
      * @param e Event object which contains the user input and field id.
      */
     const handleChanges = (e) => {
-        let theTime = String;
+        //let theTime = String; Was not used so I commented it out to stop lint complaint - Askan
         const {id, value} = e.target;
         if (id === "oldPassword") {
             setOldPassword(value);

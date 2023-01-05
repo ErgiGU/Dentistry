@@ -35,7 +35,7 @@ export function NewDentist() {
         }
         return () => {
         };
-    }, []);
+    }, [navigate]);
 
     useEffect(() => {
         if (client !== null) {
@@ -86,7 +86,7 @@ export function NewDentist() {
                 client.end()
             }
         }
-    }, [client])
+    }, [client, currentClinic])
 
     /**
      * Visually displays a response message to the user.

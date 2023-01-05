@@ -32,7 +32,7 @@ export default function ViewAppointments() {
         }
         return () => {
         };
-    }, []);
+    }, [navigate]);
 
     /**
      * Subscribes and publishes to the corresponding topic defined in backend.
@@ -76,20 +76,20 @@ export default function ViewAppointments() {
                 client.end()
             }
         }
-    }, [client,]);
+//Placed the sendMessage function within the useEffect hook to stop complaint. -Askan
+        function sendMessage(topic, json) {
+            if (client !== null) {
+                appointmentsFlag.current = true
+                client.publish(topic, JSON.stringify(json))
+                setTimeout(() => {
+                    if (appointmentsFlag.current) {
+                        navigate("/error");
+                    }
+                }, 3000);
 
-    function sendMessage(topic, json) {
-        if (client !== null) {
-            appointmentsFlag.current = true
-            client.publish(topic, JSON.stringify(json))
-            setTimeout(() => {
-                if (appointmentsFlag.current) {
-                    navigate("/error");
-                }
-            }, 3000);
-
+            }
         }
-    }
+    }, [client, navigate]);
 
 
     /**
@@ -112,7 +112,7 @@ export default function ViewAppointments() {
         }
     }
 
-
+//Line 125 with empty h2 I added a empty space to stop the empty header complaint -Askan
     return (
         <div id="ty">
             <PrivateNavbar/>
@@ -122,7 +122,7 @@ export default function ViewAppointments() {
                         <div className="card">
                             <div className="card-body">
                                 <h3 id={"currentAppointments"}> Current appointments </h3>
-                                <h2 id={"currentAppointments"}></h2>
+                                <h2 id={"currentAppointments"}> </h2>
                                 <img className="clinic"
                                      src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
                                      alt="clinic"/>
