@@ -168,7 +168,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
             const clinicStored = await asyncMethod("clinicDataRequest", "clinicData", messageSendClient, expectedResult)
             const result = await asyncMethod("login", "loginClient", messageSend, expectedResult)
             if (!util.isDeepStrictEqual(result.clinicAccount, clinicStored)) {
-                new Error(JSON.stringify(result.clinicAccount) + " is not the expected message. This is: " + JSON.stringify(expectedResult)
+                throw new Error(JSON.stringify(result.clinicAccount) + " is not the expected message. This is: " + JSON.stringify(clinicStored)
                     + ". The listing topic in backend: " + "login" + ". The listening topic in testing: " + "123/loginClient")
             }
         })
