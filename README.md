@@ -25,7 +25,40 @@ On some READMEs, you may see small images that convey metadata, such as whether 
 Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Here are the installation steps in order to run the project and import it in your IDE:
+
+### Steps
+
+1. Clone the repository
+2. Run "npm install" on all the package files that are in the folders.
+3. For the HiveMQ broker to work, a network and an account has to be set up. The account information must be placed in a config file called "config-server" within the helpers folder.
+4. The MQTT broker must also be installed in the device. The communication network host HiveMQ broker is required.
+5. After that, the batch file within the bin folder of the downloaded HiveMQ must be run as administrator. That opens and runs the local broker.
+6. A connection to a MongoDB database is also required. That is also done by putting relevant MongoDB connection information in the "config-server" config file within the helpers folder.
+7. After completing the steps above, run these backend components by navigating to their respective folder:
+   ```
+   clinic_data_app.js
+   appointments_app.js
+   authorization_app.js
+   ```
+8. Finally, in order to run the client, navigate to the client directory and do "npm start":
+   ```
+   cd client
+   npm start
+   ```
+   Those are all the steps, you're all set!
+
+
+
+### Links
+
+- HiveMQ getting started page: https://www.hivemq.com/docs/hivemq/4.10/user-guide/getting-started.html#get-started.
+
+- Installation of local HiveMQ broker: https://www.hivemq.com/docs/hivemq/4.10/user-guide/install-hivemq.html.
+
+- Setting up MongoDB database: https://www.mongodb.com/basics/create-database
+
+
 
 ## Usage
 Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
@@ -38,7 +71,14 @@ If you have ideas for releases in the future, it is a good idea to list them in 
 **Maybe remove this (idk).**
 
 ## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+
+- Agata Ciuchta
+- Aieh Eissa
+- Burak Askan
+- Ergi Senja
+- Mathias Hallander
+- Ossian Ålund
+- Sejal Ulhas Kanaskar
 
 ## License
 For open source projects, say how it is licensed.
