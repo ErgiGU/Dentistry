@@ -32,6 +32,7 @@ function PrivateNavbar() {
                         <Link to={'/clinic/editInfo'} >Your information</Link>
                         <Link  >Opening hours</Link>
                         <Link >Add a dentist</Link>
+                        <Link to={'/clinic/dentists'}>Dentist's scheduel</Link>
                         <Link onClick={logout} >Log out</Link>
 
                     </Nav>

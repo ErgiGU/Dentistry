@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import BootstrapSwitchButton from 'bootstrap-switch-button-react'
+import "./EditEmployee.css"
 
 //in case needed bootstrap template
 
@@ -13,7 +14,7 @@ import BootstrapSwitchButton from 'bootstrap-switch-button-react'
 ///>
 
 
-const Modal = ({ open, onClose }) => {
+const Modal = ({ open, onClose, dentist }) => {
     if (!open) return null;
     return (
         <div onClick={onClose} className='overlay'>

@@ -242,6 +242,67 @@ async function changePassword(req) {
     return JSON.stringify(message);
 }
 
+/**
+ * Finds the correct clinic using the clinic ID provided in the body.
+ * Then fetches all dentists registered at said clinic.
+ * If none are found an error is sent.
+ * @param req the message from the frontend, that being the body containing the clinics ID.
+ * @returns {Promise<string>} A status and a response text.
+ * @author Ossian Ålund (@ossiana)
+ */
+async function getWorkweek(req) {
+    const clinicID = req.body.id
+    console.log(clinicID)
+    const dentists = await dentistModel.find({clinicID})
+    let message;
+    if (dentists){
+        message = {
+            dentistsID: dentists.id,
+            dentistsWork: dentists.workweek
+        }
+    } else {
+        message = {
+            status: 404,
+            text: 'Dentists is not registered'
+        }
+    }
+    return JSON.stringify(message);
+}
+
+/**
+ * Finds the correct dentist the email provided in the body.
+ * Then checks a matching dentist was found.
+ * If no dentist is found matching an error is sent.
+ * @param req the message from the frontend, that being the body containing the dentist email.
+ * @returns {Promise<string>} A status and a response text.
+ * @author Ossian Ålund (@ossiana)
+ */
+async function setWorkweek(req) {
+    const email = req.body.email
+    console.log(email)
+    const dentist = await dentistModel.findOne({email})
+    let message;
+    if (dentist) {
+        {
+            dentist.monday = req.body.monday || dentist.monday,
+                dentist.tuesday = req.body.tuesday || dentist.tuesday,
+                dentist.wednesday = req.body.wednesday || dentist.wednesday,
+                dentist.thursday = req.body.thursday || dentist.thursday,
+                dentist.friday = req.body.friday || dentist.friday
+        }
+        dentist.save();
+        console.log("Workweek successfully updated")
+        console.log(clinic)
+    } else {
+        message = {
+            status: 404,
+            text: 'Dentist is not registered'
+        }
+    }
+    return JSON.stringify(message);
+}
+
+
 const clinicController = {
     removeData,
     mapDataRequest,

@@ -12,6 +12,7 @@ import {MyInformation} from "./MyInformation/MyInformation"
 import Home from "./home/Home";
 import ClinicHomePage from "./ClinicHomePage/ClinicHomePage";
 import ViewAppointments from "./ViewAppointments/viewAppointments";
+import ViewDentists from "./EditDentists/EditDentists"
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
             <Route path ="/clinic" element = {< ClinicHomePage />} />
             <Route path ="/clinic/editInfo" element = {< MyInformation />} />
             <Route path ="/clinic/schedule" element = {< ViewAppointments />} />
+            <Route path ="/clinic/dentists" element = {< ViewDentists />} />
         </Routes>
     );
 }
