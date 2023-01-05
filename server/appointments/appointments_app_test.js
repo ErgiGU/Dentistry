@@ -194,7 +194,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
 
     describe('wipeTestData', function () {
         it('Is this wiping test database?', async function () {
-            mqttClient.sendMessage('wipeTestData', JSON.stringify({id: "123", message: "no expectation"}))
+            await asyncMethod('wipeTestData', 'wipeTestData', {id: 123, body: 'no expectation'}, {response: "Success"})
         })
     })
 
