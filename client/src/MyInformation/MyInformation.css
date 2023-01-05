@@ -85,7 +85,7 @@
 }
 
 .breakHours > .day > .informationInput {
-    width: 25%;
+    width: 30%;
 }
 
 .day {
@@ -128,11 +128,11 @@
     font-family: Inter;
     display: none;
     height: 60px;
+    width: 70%;
     padding: 10px;
     padding-left: 13px;
     margin-top: 30px;
     margin-bottom: 0px;
-    margin-left: 3%;
     font-size: 23px;
     border: 1px solid black;
     border-radius: 3px;
@@ -154,6 +154,10 @@
     .openingHours {
         padding-left: 30px;
     }
+
+    #alertPlaceholder {
+        margin-left: 6%;
+    }
 }
 
 @media only screen and (min-width: 1018px) and (max-width: 1399px) {
@@ -169,6 +173,10 @@
 
     .passwordChanging > .informationInputContainer {
         width: 90%;
+    }
+
+    #alertPlaceholder {
+        margin-left: 3%;
     }
 }
 
@@ -214,6 +222,10 @@
         border: none;
         padding: 10px;
     }
+
+    #alertPlaceholder {
+        margin-left: 18%;
+    }
 }
 
 @media only screen and (max-width: 564px) {
@@ -235,6 +247,10 @@
     .openingHours {
         margin-left: 5px;
         border-right: none;
+    }
+
+    #alertPlaceholder {
+        margin-left: 12%;
     }
 
 }

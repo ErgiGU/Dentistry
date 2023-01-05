@@ -40,9 +40,9 @@ function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
                 console.log(topic + " : is the topic of this message")
                 console.log('Message is received: ' + message + ' ::: This was the expectation: ' + JSON.stringify(expectedResult))
 
-                if(topic === ("123/" + topicResponse)) {
-                    if(topic !== "123/clinicData" || messageSend.body !== undefined && messageSend.body.test !== undefined){
-                        if(!util.isDeepStrictEqual(JSON.parse(message), expectedResult) ){
+                if (topic === ("123/" + topicResponse)) {
+                    if (topic !== "123/clinicData" || messageSend.body !== undefined && messageSend.body.test !== undefined) {
+                        if (!util.isDeepStrictEqual(JSON.parse(message), expectedResult)) {
                             reject(new Error(message + " is not the expected message. This is: " + JSON.stringify(expectedResult)
                                 + ". The listing topic in backend: " + topicRequest + ". The listening topic in testing: " + topicResponse))
                         }
@@ -65,7 +65,7 @@ describe("Tests to see if the tests are working", function () {
 
     // await attempt at async testing
     describe('A test to see if MQTT & mongoose is working', function () {
-        it('We want to receive data of a clinic',  async function () {
+        it('We want to receive data of a clinic', async function () {
             this.timeout(10000)
             const expectedResult = {
                 openingHours: {
@@ -89,7 +89,10 @@ describe("Tests to see if the tests are working", function () {
                 city: 'Göteborg',
                 __v: 0
             }
-            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "burakaskan2001@gmail.com"}}, expectedResult)
+            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {
+                id: "123",
+                body: {email: "burakaskan2001@gmail.com"}
+            }, expectedResult)
         })
     })
 })
@@ -97,19 +100,20 @@ describe("Tests to see if the tests are working", function () {
 
 describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpoint belonging to the clinic_data service.', function () {
     describe('mapDataRequest', function () {
-        it('Get all clinic information relating to coordinate, address, opening-hour and name.',  async function () {
+        it('Get all clinic information relating to coordinate, address, opening-hour and name.', async function () {
             this.timeout(10000)
             const messageSend = {
                 id: "123",
                 hello: "Give Data"
             }
             const expectedResult = {
-                clinics:[{
-                    coordinates:[11.943074635698956,57.7057104],
-                    properties:{
-                        title:"Testing Clinic",
-                        address:"Address: Lindholmen",
-                        opening_hours:"Opening Hours: Monday: 08:00 - 17:00  Tuesday: 08:00 - 17:00  Wednesday: 08:00 - 17:00  Thursday: 08:00 - 17:00  Friday : 08:00 - 17:00"}
+                clinics: [{
+                    coordinates: [11.943074635698956, 57.7057104],
+                    properties: {
+                        title: "Testing Clinic",
+                        address: "Address: Lindholmen",
+                        opening_hours: "Opening Hours: Monday: 08:00 - 17:00  Tuesday: 08:00 - 17:00  Wednesday: 08:00 - 17:00  Thursday: 08:00 - 17:00  Friday : 08:00 - 17:00"
+                    }
                 }]
             }
             await asyncMethod("mapDataRequest", "mapDataResponse", messageSend, expectedResult)
@@ -117,7 +121,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
     })
 
     describe('editInfo', function () {
-        it('Editing the info of a given clinic',  async function () {
+        it('Editing the info of a given clinic', async function () {
             this.timeout(10000)
             const messageSend = {
                 id: "123",
@@ -134,7 +138,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
             }
             await asyncMethod("editInfo", "editInfoResponse", messageSend, expectedResult)
         })
-        it('Checking if edits were successful',  async function () {
+        it('Checking if edits were successful', async function () {
             this.timeout(10000)
             const messageSend = {
                 id: "123",
@@ -144,35 +148,35 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                 }
             }
             const newExpectedResult = {
-                openingHours:{
-                    monday:{start:"08:00",end:"17:00"},
-                    tuesday:{start:"08:00",end:"17:00"},
-                    wednesday:{start:"08:00",end:"17:00"},
-                    thursday:{start:"08:00",end:"17:00"},
-                    friday:{start:"08:00",end:"17:00"}
+                openingHours: {
+                    monday: {start: "08:00", end: "17:00"},
+                    tuesday: {start: "08:00", end: "17:00"},
+                    wednesday: {start: "08:00", end: "17:00"},
+                    thursday: {start: "08:00", end: "17:00"},
+                    friday: {start: "08:00", end: "17:00"}
                 },
-                coordinates:{
-                    longitude:11.943074635698956,
-                    latitude:57.7057104
+                coordinates: {
+                    longitude: 11.943074635698956,
+                    latitude: 57.7057104
                 },
-                _id:"id",
-                dentists:[],
-                timeslots:[],
-                name:"Clinic Testing",
-                password:"password",
-                email:"gusaskbu@student.gu.se",
-                address:"Lindholmen",
-                city:"Göteborg",
-                __v:0,
-                owner:"Oscar Davidsson"
+                _id: "id",
+                dentists: [],
+                timeslots: [],
+                name: "Clinic Testing",
+                password: "password",
+                email: "gusaskbu@student.gu.se",
+                address: "Lindholmen",
+                city: "Göteborg",
+                __v: 0,
+                owner: "Oscar Davidsson"
             }
             const expectedResult = {
                 openingHours: {
-                    monday: { start: '8:00', end: '17:00' },
-                    tuesday: { start: '8:00', end: '17:00' },
-                    wednesday: { start: '8:00', end: '17:00' },
-                    thursday: { start: '8:00', end: '17:00' },
-                    friday: { start: '8:00', end: '17:00' }
+                    monday: {start: '8:00', end: '17:00'},
+                    tuesday: {start: '8:00', end: '17:00'},
+                    wednesday: {start: '8:00', end: '17:00'},
+                    thursday: {start: '8:00', end: '17:00'},
+                    friday: {start: '8:00', end: '17:00'}
                 },
                 _id: clinicStored._id,
                 name: 'Clinic Testing',
@@ -196,7 +200,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
 
 
     describe('AddDentist', function () {
-        it('See if dentist is getting added',  async function () {
+        it('See if dentist is getting added', async function () {
             this.timeout(10000)
             const messageSend = {
                 id: "123",
@@ -208,10 +212,10 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                     speciality: "Teeth"
                 }
             }
-            const expectedResult = {status:200,text:"Dentist Added!"}
+            const expectedResult = {status: 200, text: "Dentist Added!"}
             await asyncMethod("AddDentist", "addDentistResponse", messageSend, expectedResult)
         })
-        it('See if dentist was added in model',  async function () {
+        it('See if dentist was added in model', async function () {
             this.timeout(10000)
             const messageSend = {
                 id: "123",
@@ -220,13 +224,13 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                 }
             }
             const newExpected = {
-                _id:"id",
-                timeslot:[],
-                clinic:clinicStored._id,
-                name:"William Bjorn",
-                email:"burakaskan2001@gmail.com",
-                phoneNumber:"073213214",
-                __v:0
+                _id: "id",
+                timeslot: [],
+                clinic: clinicStored._id,
+                name: "William Bjorn",
+                email: "burakaskan2001@gmail.com",
+                phoneNumber: "073213214",
+                __v: 0
             }
             await asyncMethod("getDentist", "giveDentist", messageSend, newExpected)
             clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "gusaskbu@student.gu.se "}}, newExpected)
@@ -234,7 +238,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
     })
 
     describe('Dentists work schedule', function () {
-        it('See if work week can get changed',  async function () {
+        it('See if work week can get changed', async function () {
             this.timeout(10000)
             const messageSend = {
                 client_id: "123",
@@ -263,7 +267,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
             }
             await asyncMethod("setDentistSchedule", "updateDentistWeek", messageSend, expectedResult)
         })
-        it('See if work week is getting received',  async function () {
+        it('See if work week is getting received', async function () {
             this.timeout(10000)
             const messageSend = {
                 client_id: "123",

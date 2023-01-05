@@ -13,8 +13,8 @@
     "chai": "^4.3.7",
     "dotenv": "^16.0.3",
     "jsonwebtoken": "^8.5.1",
-    "mocha": "^10.1.0",
-    "mongoose": "^6.8.0",
+    "mocha": "^10.2.0",
+    "mongoose": "^6.8.2",
     "mqtt": "^4.3.7",
     "node-geocoder": "^4.2.0"
   }

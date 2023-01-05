@@ -37,8 +37,8 @@ function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
                 console.log(topic + " : is the topic of this message")
                 console.log('This was the expectation: ' + JSON.stringify(expectedResult) + ':::  Message is received: ' + message)
 
-                if(topic === ("123/" + topicResponse)) {
-                    if(topic !== "123/loginClient"  && messageSend.body !== undefined && messageSend.body.test !== undefined) {
+                if (topic === ("123/" + topicResponse)) {
+                    if (topic !== "123/loginClient" && messageSend.body !== undefined && messageSend.body.test !== undefined) {
                         if (!util.isDeepStrictEqual(JSON.parse(message), expectedResult)) {
                             reject(new Error(message + " is not the expected message. This is: " + JSON.stringify(expectedResult)
                                 + ". The listing topic in backend: " + topicRequest + ". The listening topic in testing: " + topicResponse))
@@ -62,7 +62,7 @@ describe("Tests to see if the tests are working", function () {
 
     // await attempt at async testing
     describe('Test to see if MQTT is working.', function () {
-        it('Is MQTT working?',  async function () {
+        it('Is MQTT working?', async function () {
             this.timeout(10000)
             const messageSend = {
                 hello: "Hello!"
@@ -78,7 +78,7 @@ describe("Tests to see if the tests are working", function () {
 
 describe('AuthorizationTests. Runs tests that checks up on every backend endpoint belonging to the authorization service.', function () {
     describe('registeration.', function () {
-        it('Testing for a successful registeration',  async function () {
+        it('Testing for a successful registeration', async function () {
             this.timeout(10000)
             const messageSend = {
                 client_id: "123",
@@ -96,26 +96,26 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
 
         })
 
-        it('Testing registration content',  async function () {
+        it('Testing registration content', async function () {
             this.timeout(10000)
             const expectedNew = {
-                openingHours:{
-                    monday:{start:"08:00",end:"17:00"},
-                    tuesday:{start:"08:00",end:"17:00"},
-                    wednesday:{start:"08:00",end:"17:00"},
-                    thursday:{start:"08:00",end:"17:00"},
-                    friday:{start:"08:00",end:"17:00"}
+                openingHours: {
+                    monday: {start: "08:00", end: "17:00"},
+                    tuesday: {start: "08:00", end: "17:00"},
+                    wednesday: {start: "08:00", end: "17:00"},
+                    thursday: {start: "08:00", end: "17:00"},
+                    friday: {start: "08:00", end: "17:00"}
                 },
-                _id:"id",
-                dentists:[],
-                timeslots:[],
-                name:"Testing Clinic",
-                password:"password",
-                email:"burakaskan2001@gmail.com",
-                coordinates:{longitude:11.943074635698956,latitude:57.7057104},
-                address:"Lindholmen",
-                city:"Göteborg",
-                __v:0
+                _id: "id",
+                dentists: [],
+                timeslots: [],
+                name: "Testing Clinic",
+                password: "password",
+                email: "burakaskan2001@gmail.com",
+                coordinates: {longitude: 11.943074635698956, latitude: 57.7057104},
+                address: "Lindholmen",
+                city: "Göteborg",
+                __v: 0
             }
             const messageSend = {
                 id: "123",
@@ -127,7 +127,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
             await asyncMethod("clinicDataRequest", "clinicData", messageSend, expectedNew)
 
         })
-        it('Checking to see if a unsuccessful attempt is correct.',   async function () {
+        it('Checking to see if a unsuccessful attempt is correct.', async function () {
             this.timeout(10000)
             const messageSend = {
                 client_id: "123",
@@ -146,7 +146,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
     })
 
     describe('login', function () {
-        it('Checking to see if a successful attempt correct.',   async function () {
+        it('Checking to see if a successful attempt correct.', async function () {
             this.timeout(10000)
             const messageSend = {
                 client_id: "123",
@@ -172,7 +172,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
                     + ". The listing topic in backend: " + "login" + ". The listening topic in testing: " + "123/loginClient")
             }
         })
-        it('Checking to see if a unsuccessful attempt correct.',   async function () {
+        it('Checking to see if a unsuccessful attempt correct.', async function () {
             this.timeout(10000)
             const messageSend = {
                 client_id: "123",

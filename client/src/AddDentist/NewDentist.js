@@ -1,35 +1,67 @@
 import React, {useEffect, useState} from 'react';
 import './NewDentist.css';
 import mqttHandler from "../common_components/MqttHandler";
-import Navbar from '../common_components/navbar'
+import PrivateNavbar from "../common_components/PrivateNavbar";
 import jwt from "jsonwebtoken";
+import {useNavigate} from "react-router-dom";
 
 export function NewDentist() {
     const [client, setClient] = useState(null);
-    const [currentClinic, setCurrentClinic] = useState("");
+    const [currentClinic, setCurrentClinic] = useState({
+        email: ''
+    });
     const [formData, setFormData] = useState({
         dentistName: '',
         phoneNumber: '',
         email: '',
         specialty: ''
-    })
+    });
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const clinic = jwt.decode(localStorage.token, 'something');
-        setCurrentClinic(clinic)
         if (client === null) {
             setClient(mqttHandler.getClient(client))
         }
     }, [client])
 
+    /**
+     * Navigates the user to the log in page in case the user is not
+     * authenticated to be on this page
+     */
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/login");
+        }
+        return () => {
+        };
+    }, []);
+
     useEffect(() => {
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#')
+            const theClinic = jwt.decode(localStorage.token, 'something');
+            client.publish('getCurrentLoggedInClinic', JSON.stringify(
+                {
+                    id: client.options.clientId,
+                    body: {
+                        clinicID: theClinic._id
+                    }
+                }
+            ))
 
             client.on('message', function (topic, message) {
                 switch (topic) {
                     case client.options.clientId + '/addDentistResponse':
                         receivedMessage(message.toString())
+                        break;
+                    case client.options.clientId + '/currentLoggedInClinicResponse':
+                        console.log(JSON.parse(message))
+                        const pmessage = JSON.parse(message)
+                        setCurrentClinic(formData => ({
+                            ...currentClinic,
+                            email: pmessage.email,
+                        }))
                         break;
                     default:
                         break;
@@ -123,7 +155,7 @@ export function NewDentist() {
 
     return (
         <>
-            <Navbar/>
+            <PrivateNavbar/>
             <div className="newDentistContainer">
                 <div id="dentistAlertPlaceholder"></div>
                 <form className="dentistFormBox">
