@@ -71,6 +71,7 @@ appointments-unit-run-job:
     - docker
   script:
     - cd server/appointments
+    - npm install
     - node appointments_app.js
 
 clinic_data-build-job:       
@@ -102,6 +103,7 @@ clinic_data-unit-run-job:
     - docker
   script:
     - cd server/clinic_data
+    - npm install
     - node clinic_data_app.js
 
 authorization-build-job:     
@@ -133,4 +135,5 @@ authorization-unit-run-job:
     - docker
   script:
     - cd server/authorization
+    - npm install
     - node authorization_app.js
