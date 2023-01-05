@@ -1,5 +1,6 @@
 /**
  * All the mongoose manipulation for authorization component is contained here
+ * @author Ergi Senja (@ergi)
  * @author Burak Askan (@askan)
  */
 const bcrypt = require("bcrypt");
@@ -34,7 +35,12 @@ function createModels() {
 }
 
 
-//Register new clinic
+/**
+ * Registers the clinic and saves it in the DB via mongoose(if the email that it took doesn't exist)
+ * @param req is the request that the method receives, it contains the input that the user
+ * entered in the registration page
+ * @returns a string that indicates success or failure.
+ */
 async function register(req) {
     //hashes and salts the password that it receives
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -77,8 +83,13 @@ async function register(req) {
     }
 }
 
-
-// Login function
+/**
+ * The login function checks the if the clinic's credentials are correct. If that's the case,
+ * it sends a payload that contains a success message along with the token and clinic account, otherwise
+ * it sends an "Invalid email/password" message.
+ * @param email
+ * @param password
+ */
 async function loginClinic(email, password) {
     const clinic = await clinicModel.findOne({email: email});
     if (clinic && await bcrypt.compare(password, clinic.password)) {
