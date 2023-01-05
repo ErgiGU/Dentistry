@@ -3,7 +3,7 @@
 ## Description 
 This is a component service that is a part of Dentistry project.
 
-Appointments service handles and contains all backend logic pertaining to booking and canceling appointments. 
+Appointments service handles and contains all backend logic pertaining to booking and canceling appointments.
 
 It is built upon a custom, HiveMQ based, MQTT backend implementation which handles inputs from various clients and sends a response message. It does so after either completing or failing operations that pretain to appointments. These operations are mongoose database manipulations. It also emailing logic. During booking and canceling of appointments emails are sent out to relevant patients/clinics using NodeMailer. 
 
@@ -21,9 +21,23 @@ Maybe the title can be changed but mention how this directory interacts with the
 
 ### MQTT
 
+The service uses MQTT to communicate with the front-end client service. It contains a MQTT listener which contains the various MQTT topic endpoints. Depending on the topic of the recieved message a certain logic will be excecuted and result sent back as message to the client.
+
+The following are the topic endpoints that is used by the client within this component:
+
+bookTimeslot: Books a certain timeslot by taking in a stringified JSON which contains a client_id object and body object. The body object further contains clinicID, dentistID, patientInfo and timeslotTime.
+
+cancelBookedTimeslot: Deletes a certain timeslot by taking in a stringified JSON which contains a client_id object and body object. The body object further contains timeslotID.
+
+sendAppointmentInformation: Sends a stringified JSON which contains array which includes: id, patient, patient.name, patient.text, dentist, dentist.name, timeslot. 
+
+
+
 ### Front-end side (React)
 
 ### MongoDB 
+
+Using the Schemas that are stored within a external [helpers folder](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/server/helpers). The schemas that this component creates and deletes are the timeslot and patient schemas. It does make use of the clinic and dentist schema to extract information. 
 
 ## Contributors
 Mention who contributed here. TBD can be removed if its repitative or unnecessary.
