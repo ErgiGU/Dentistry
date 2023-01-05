@@ -7,6 +7,7 @@
 const assert = require('assert')
 const mqttHandler = require('../helpers/mqtt_handler');
 const util = require("util");
+const {MqttClient} = require("mqtt");
 let config
 try {
     config = require('../helpers/config-server');
@@ -200,8 +201,8 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
 
     //Is needed to close the runner in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
     describe('Closing runner', function () {
-        it('Is this wiping test database?', async function () {
-            await asyncMethod('wipeTestData', 'wipeTestData', {id: 123, body: 'no expectation'}, {response: "Success"})
+        it('Is this closing the runner?', function () {
+            mqttClient.sendMessage('test', JSON.stringify({message: 'no expectation'}))
         })
     })
 })
