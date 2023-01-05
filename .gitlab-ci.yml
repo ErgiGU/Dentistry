@@ -44,7 +44,6 @@ client-build-job:
 
 appointments-build-job:       
   stage: backend_service_checks
-  needs: ["clinic_data-unit-test-job"]
   tags:
     - docker
   script:
@@ -53,7 +52,7 @@ appointments-build-job:
 
 appointments-unit-test-job:  
   stage: backend_service_checks        
-  needs: ["appointments-build-job"]
+  needs: ["appointments-build-job", "clinic_data-unit-test-job"]
   when: delayed
   start_in: 100 seconds
   tags:
@@ -76,7 +75,6 @@ appointments-unit-run-job:
 
 clinic_data-build-job:       
   stage: backend_service_checks
-  needs: ["authorization-unit-test-job"]
   tags:
     - docker
   script:
@@ -85,7 +83,7 @@ clinic_data-build-job:
 
 clinic_data-unit-test-job:   
   stage: backend_service_checks        
-  needs: ["clinic_data-build-job"]
+  needs: ["clinic_data-build-job", "authorization-unit-test-job"]
   when: delayed
   start_in: 100 seconds
   tags:
