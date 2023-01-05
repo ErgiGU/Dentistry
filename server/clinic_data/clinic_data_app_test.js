@@ -294,5 +294,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
 //Is needed to close the tester in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
 
 after(function () {
-    process.exit()
+    setTimeout(() => {
+        process.exit()
+    }, 5000)
 });

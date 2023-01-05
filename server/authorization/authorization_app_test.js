@@ -194,5 +194,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
 })
 //Is needed to close the tester in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
 after(function () {
-    process.exit()
+    setTimeout(() => {
+        process.exit()
+    }, 5000)
 });
