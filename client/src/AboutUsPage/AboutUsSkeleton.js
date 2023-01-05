@@ -49,13 +49,13 @@ export function AboutUsSkeleton() {
 
     return (
         <>
-            <div id="main">
-                <h1 id="heading">About Us</h1>
+            <div id="aboutUs-main">
+                <h1 id="aboutUs-heading">About Us</h1>
                 <div id="info">
-                    <div id="image">
+                    <div id="aboutUs-image">
                         <img src={dentistImg} alt="dentist" style={{width: "90%"}}/>
                     </div>
-                    <div id="clinicText">
+                    <div id="aboutUs-clinicText">
                         {showClinic1 && <YourDentist/>}
                         {showClinic2 && <ToothFairy/>}
                         {showClinic3 && <TheCrown/>}
@@ -65,10 +65,10 @@ export function AboutUsSkeleton() {
 
                 </div>
                 <br/>
-                <div id="b-row" class="row">
-                    <p id="clinic-name">OUR CLINICS <hr/></p>
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <Card style={{width: "20rem"}}>
+                <div id="aboutUs-b-row" className="row">
+                    <p id="aboutUs-clinic-name">OUR CLINICS <hr/></p>
+                    <div className="col-lg-4 col-md-6 mb-4">
+                        <Card style={{width: "20rem", backgroundColor:"whitesmoke"}}>
                             <Card.Body>
                                 <Card.Title style={{color: "#003d80"}}>YOUR DENTIST</Card.Title>
                                 <Card.Subtitle className="mb-2 text-muted">
@@ -78,12 +78,12 @@ export function AboutUsSkeleton() {
                                     Owner: Dan Tist <br/>
                                     Address: Spannmålsgatan 20
                                 </Card.Text>
-                                <Button variant="primary" onClick={clinic1Click}> More Info </Button>
+                                <Button variant="primary" onClick={clinic1Click} style={{backgroundColor: "steelblue"}}> More Info </Button>
                             </Card.Body>
                         </Card>
                     </div>
                     <div class="col-lg-4 col-md-6 mb-4">
-                        <Card style={{width: "20rem"}}>
+                        <Card style={{width: "20rem", backgroundColor:"whitesmoke"}}>
                             <Card.Body>
                                 <Card.Title style={{color: "#003d80"}}>TOOTH FAIR DENTIST</Card.Title>
                                 <Card.Subtitle className="mb-2 text-muted">
@@ -93,12 +93,12 @@ export function AboutUsSkeleton() {
                                     Owner: Tooth Fairy <br/>
                                     Address: Slottskogen
                                 </Card.Text>
-                                <Button variant="primary" onClick={clinic2Click}>More Info</Button>
+                                <Button variant="primary" onClick={clinic2Click} style={{backgroundColor: "steelblue"}}>More Info</Button>
                             </Card.Body>
                         </Card>
                     </div>
                     <div class="col-lg-4 col-md-6 mb-4">
-                        <Card style={{width: "20rem"}}>
+                        <Card style={{width: "20rem", backgroundColor:"whitesmoke"}}>
                             <Card.Body>
                                 <Card.Title style={{color: "#003d80"}}>THE CROWN</Card.Title>
                                 <Card.Subtitle className="mb-2 text-muted">
@@ -108,12 +108,12 @@ export function AboutUsSkeleton() {
                                     Owner: Carmen Crown <br/>
                                     Address: Lindholmsallén 19
                                 </Card.Text>
-                                <Button variant="primary" onClick={clinic3Click}>More Info</Button>
+                                <Button variant="primary" onClick={clinic3Click} style={{backgroundColor: "steelblue"}}>More Info</Button>
                             </Card.Body>
                         </Card>
                     </div>
                     <div class="col-lg-4 col-md-6">
-                        <Card style={{width: "20rem"}}>
+                        <Card style={{width: "20rem", backgroundColor:"whitesmoke"}}>
                             <Card.Body>
                                 <Card.Title style={{color: "#003d80"}}>LISEBERGS DENTISTS</Card.Title>
                                 <Card.Subtitle className="mb-2 text-muted">
@@ -123,7 +123,7 @@ export function AboutUsSkeleton() {
                                     Owner: Glen Hysén <br/>
                                     Address: Liseberg
                                 </Card.Text>
-                                <Button variant="primary" onClick={clinic4Click}>More Info</Button>
+                                <Button variant="primary" onClick={clinic4Click} style={{backgroundColor: "steelblue"}}>More Info</Button>
                             </Card.Body>
                         </Card>
                     </div>

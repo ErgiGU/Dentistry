@@ -4,17 +4,17 @@ import "./AboutUs.css";
 export function YourDentist() {
     return (
         <>
-            <div id="main">
-                <div id="info">
-                    <p id="intro-text">
+            <div id="aboutUs-main">
+                <div id="aboutUs-info">
+                    <p id="aboutUs-intro-text">
                         <br/><span style={{color: "#003d80"}}>YOUR DENTIST </span> <br/> <br/>
                         We are located at <i> Spannmålsgatan 20, Gothenburg. </i> <br/>
                         Our highly specialised dentists aim to help you fix your teeth problems in the simplest way
                         possible. <br/>
                         Following are our opening hours for the respective days, feel free to book your desired
                         timeslot by going to the Appointments section.
-                        <div id="table">
-                            <table id="opening-hours">
+                        <div id="aboutUs-table">
+                            <table id="aboutUs-opening-hours">
                                 <tr>
                                     <th> Days</th>
                                     <th> Opening hours</th>

@@ -1,80 +1,80 @@
 
-#main {
+#aboutUs-main {
     background-color: #e6f2ff;
     height: fit-content;
     width: 100%;
 }
 
-#heading {
-    color: #003d80;
+#aboutUs-heading {
+    color: steelblue;
 }
 
-#info {
+#aboutUs-info {
     width: 100%;
 }
 
-#image {
+#aboutUs-image {
     width: 40%;
     float: right;
 }
 
-#text {
+#aboutUs-text {
     width: 60%;
     float: left;
 }
 
-#intro-text {
+#aboutUs-intro-text {
     text-align: center;
     font-size: 20px;
     font-family: Helvetica, serif;
 }
 
-#b-row {
+#aboutUs-b-row {
     margin-top: 20px;
     width: 100%;
 }
 
-#clinic-name {
+#aboutUs-clinic-name {
     text-align: center;
-    color: #003d80;
+    color: steelblue;
     font-size: 20px;
 }
 
-#table {
+#aboutUs-table {
     margin-top: 10%;
     margin-left: 10%;
 }
 
-#opening-hours {
+#aboutUs-opening-hours {
     width: 40%;
     text-align: center;
 }
 
 @media only screen and (max-device-width: 600px) {
-    #main {
+    #aboutUs-main {
         background-color: #e6f2ff;
         height: fit-content;
         width: fit-content;
     }
 
-    #image {
+    #aboutUs-image {
         width: 100%;
     }
 
-    #clinicText {
+    #aboutUs-clinicText {
         width: 100%;
     }
 
-    #intro-text {
+    #aboutUs-intro-text {
         font-size: 15px;
     }
 
-    #table {
+    #aboutUs-table {
         margin-top: 10%;
         margin-left: 12%;
     }
 
-    #opening-hours {
+    #aboutUs-opening-hours {
         width: 70%;
         text-align: center;
     }
