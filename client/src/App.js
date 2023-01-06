@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 import Registration from "./ClinicRegistration/Registration";
-import MapPage from "./clinics/MapPage"
+import MapPage from "./ClinicsMap/MapParent"
 import React from 'react';
 import Login from "./ClinicLogin/Login";
 import Home from "./home/Home";
