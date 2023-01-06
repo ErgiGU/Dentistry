@@ -4,7 +4,6 @@
  */
 import './ViewAppointments.css'
 import React, {useEffect, useRef, useState} from "react";
-import {MDBRow, MDBCol} from 'mdb-react-ui-kit';
 import TimeslotCard from './components/timeslotCard'
 import mqttHandler from "../common_components/MqttHandler";
 import {useNavigate} from "react-router-dom";
@@ -121,32 +120,32 @@ export default function ViewAppointments() {
     return (
         <>
         <PrivateNavbar/>
-        <div id="ty">
-            <div id="backgroundAppointments">
-                <MDBRow>
-                    <MDBCol md='3'>
-                        <div className="cardAppointment">
-                            <div className="card-body">
-                                <h3 id={"currentAppointments"}> Current appointments </h3>
-                                <h2 id={"currentAppointments"}></h2>
-                                <img className="clinic"
-                                     src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
-                                     alt="clinic"/>
-                            </div>
+    <div id="ty">
+        <div id="background">
+            <div className="row">
+                <div className="col-3">
+                    <div className="card">
+                        <div className="card-body">
+                            <h3 id={"currentAppointments"}> Current appointments </h3>
+                            <h2 id={"currentAppointments"}></h2>
+                            <img className="clinic"
+                                 src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
+                                 alt="clinic"/>
                         </div>
-                    </MDBCol>
-                    <MDBCol md='8'>
-                        <div id={"timeslots"}>
-                            {Array.from(appointments).map((appointment) => (
-                                <TimeslotCard key={appointment.id} appointment={appointment}
-                                              parentCallback={handleChildClick}/>
-                            ))}
-                        </div>
-                    </MDBCol>
-                </MDBRow>
+                    </div>
+                </div>
+                <div className='col-8'>
+                    <div id={"timeslots"}>
+                        {Array.from(appointments).map((appointment) => (
+                            <TimeslotCard key={appointment.id} appointment={appointment}
+                                          parentCallback={handleChildClick}/>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
-        </>
+    </div>
+</>
     );
 }
 

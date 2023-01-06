@@ -36,9 +36,8 @@ function PrivateNavbar() {
 
                             <Link to={'/appointments'}>Schedule</Link>
                             <Link to={'/profile'}>Your information</Link>
-                            <Link>Opening hours</Link>
                             <Link to={'/addDentist'}>Add a dentist</Link>
-                            <Link onClick={logout}>Log out</Link>
+                            <Link onClick={logout} to={'/login'}>Log out</Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
