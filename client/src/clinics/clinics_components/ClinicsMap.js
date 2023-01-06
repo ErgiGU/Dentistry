@@ -9,6 +9,8 @@ import {useNavigate} from "react-router-dom";
 // Access token for API
 mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN || config.mapbox_access_token
 
+let navigate
+
 function asyncMethod(client) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -28,6 +30,8 @@ function asyncMethod(client) {
                             break;
                     }
                 })
+            }else {
+                navigate("/error")
             }
         }, 1000)
     })
@@ -43,7 +47,7 @@ const timeout = new Promise((_, reject) => {
 }*/
 
 export default function Maps() {
-    const navigate = useNavigate();
+    navigate = useNavigate()
     let clinicData = useRef(null);
 
     const [client, setClient] = useState(null);
