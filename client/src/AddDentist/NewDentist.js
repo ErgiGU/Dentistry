@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useRef, useEffect, useState, useCallback} from 'react';
 import './NewDentist.css';
 import mqttHandler from "../common_components/MqttHandler";
 import PrivateNavbar from "../common_components/PrivateNavbar";
@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import {useNavigate} from "react-router-dom";
 
 export function NewDentist() {
+    let clinicDataFlag = useRef(true)
     const [client, setClient] = useState(null);
     const [currentClinic, setCurrentClinic] = useState({
         email: ''
@@ -17,6 +18,21 @@ export function NewDentist() {
         specialty: ''
     });
     const navigate = useNavigate();
+
+    const sendMessage = useCallback((topic, json) => {
+        if (client !== null) {
+            clinicDataFlag.current = true
+            client.publish(topic, JSON.stringify(json))
+            setTimeout(() => {
+                if (clinicDataFlag.current) {
+                    navigate("/error");
+                }
+            }, 3000);
+
+        } else {
+            navigate("/error")
+        }
+    }, [client, navigate])
 
     useEffect(() => {
         if (client === null) {
@@ -41,16 +57,16 @@ export function NewDentist() {
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#')
             const theClinic = jwt.decode(localStorage.token, 'something');
-            client.publish('getCurrentLoggedInClinic', JSON.stringify(
+            sendMessage('getCurrentLoggedInClinic',
                 {
                     id: client.options.clientId,
                     body: {
                         clinicID: theClinic._id
                     }
                 }
-            ))
-
+            )
             client.on('message', function (topic, message) {
+                clinicDataFlag.current = false
                 switch (topic) {
                     case client.options.clientId + '/addDentistResponse':
                         receivedMessage(message.toString())
@@ -135,22 +151,19 @@ export function NewDentist() {
         } else {
             e.preventDefault();
             console.log(formData)
-            if (client !== null) {
-                client.publish('AddDentist', JSON.stringify(
-                    {
-                        id: client.options.clientId,
-                        body: {
-                            email: currentClinic.email,
-                            name: formData.dentistName,
-                            dentistEmail: formData.email,
-                            phoneNumber: formData.phoneNumber,
-                            speciality: formData.specialty
-                        }
+            sendMessage('AddDentist',
+                {
+                    id: client.options.clientId,
+                    body: {
+                        email: currentClinic.email,
+                        name: formData.dentistName,
+                        dentistEmail: formData.email,
+                        phoneNumber: formData.phoneNumber,
+                        speciality: formData.specialty
                     }
-                ))
-            }
+                }
+            )
         }
-
     }
 
     return (
