@@ -1,20 +1,14 @@
 # Clinic-Data Backend
 
 ## Description 
-Here you should mention what is the purpose this specific folder. 
+This is a component service that is part of the Dentistry project. Clinic-Data service contains and handles 
+all clinic-related backend logic. Namely, creating, updating and getting clinics. 
 
-## Installation
-Here you should mention what installation is required to run this directory. Include MQTT connection and npm install step wise.
+It is built upon a custom, HiveMQ based, MQTT backend implementation which acts as a middle-man 
+between the client and backend. Furthermore, it receives messages from different clients, handles those messages and sends a response. 
+These responses depend on the success of the respective called operation and are in JSON-format, either including a success message or the opposite. 
 
-## Interaction
-Maybe the title can be changed but mention how this directory interacts with the broker, client and the database.
 
-### MQTT
-
-### Front-end side (React)
-
-### MongoDB 
-
-## Contributors
-Mention who contributed here. TBD can be removed if its repitative or unnecessary.
-
+### MongoDB
+This component uses the schemas that are stored within a external [helpers folder](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/server/helpers).
+Specifically, the "dentist" and the "clinic" schemas as it creates and updates models of those. 
