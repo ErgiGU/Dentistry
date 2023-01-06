@@ -72,6 +72,11 @@ try {
                 break;
             case 'sendAppointmentInformation':
                 waitTimeslotData(intermediary).then(r => {
+                    if (intermediary.body.test) {
+                        r = JSON.stringify(r)
+                        r = JSON.parse(r)
+                        r[0].id = "id"
+                    }
                     mqttClient.sendMessage(intermediary.id + "/appointmentInformationResponse", JSON.stringify(r))
                 })
                 break;
@@ -79,11 +84,6 @@ try {
                 cancelAppointment(intermediary).then(r => {
                     mqttClient.sendMessage(intermediary.id + "/canceledAppointment", JSON.stringify(r))
                 })
-                break;
-            case 'cancelBookedTimeslot':
-                //Cancels the booked timeslot
-                const cancelTimeslotResult = cancelAppointment(intermediary)
-                mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(cancelRes))
                 break;
             case 'test':
                 process.exit()
