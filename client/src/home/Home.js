@@ -1,3 +1,8 @@
+/**
+ * Skeleton for patient home page.
+ * @author Agata Ciuchta (@ciuchta)
+ */
+
 import './Home.css'
 import React, {useEffect, useState} from 'react';
 import mqttHandler from "../common_components/MqttHandler";

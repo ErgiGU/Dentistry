@@ -1,3 +1,7 @@
+/**
+ * Skeleton for card body.
+ * @author Agata Ciuchta (@ciuchta)
+ */
 import React from 'react';
 import {Link} from 'react-router-dom';
 

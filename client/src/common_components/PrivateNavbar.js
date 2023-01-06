@@ -1,4 +1,7 @@
-// Example common component
+/**
+ * Navbar displayed for logged clinics.
+ * @author Agata Ciuchta (@ciuchta)
+ */
 import React from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
@@ -21,8 +24,8 @@ function PrivateNavbar() {
 
     return (
         <div>
-            <div className="header">
-                <img className="logo" src={Logo} alt="logo"/>
+            <div className="headerDentist">
+                <img className="logoNavbar" src={Logo} alt="logo"/>
                 <h1>DENTAL CLINIC</h1>
             </div>
             <Navbar id="navbar" expand="lg">

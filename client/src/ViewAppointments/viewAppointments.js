@@ -1,3 +1,7 @@
+/**
+ * Page for viewing appointments as a clinic. 
+ * This class serves  function for tracking the logged clinic, communicating with backend, and structure for dispalying infromation.
+ */
 import './ViewAppointments.css'
 import React, {useEffect, useRef, useState} from "react";
 import {MDBRow, MDBCol} from 'mdb-react-ui-kit';
@@ -63,6 +67,7 @@ export default function ViewAppointments() {
                         break;
                     case client.options.clientId + '/canceledAppointment':
                         console.log(JSON.parse(message))
+                        alert(JSON.parse(message))
                         break;
                     default:
                         (new Error("The wrong message is received"))
@@ -98,7 +103,7 @@ export default function ViewAppointments() {
      * @param id the ID of the timeslot to be cancelled
      */
     const handleChildClick = (id) => {
-        const timeslotID = id;
+        const timeslotID =id;
         console.log(timeslotID)
         if (client !== null) {
             client.publish('cancelAppointment', JSON.stringify(
@@ -114,12 +119,13 @@ export default function ViewAppointments() {
 
 
     return (
+        <>
+        <PrivateNavbar/>
         <div id="ty">
-            <PrivateNavbar/>
-            <div id="background">
+            <div id="backgroundAppointments">
                 <MDBRow>
                     <MDBCol md='3'>
-                        <div className="card">
+                        <div className="cardAppointment">
                             <div className="card-body">
                                 <h3 id={"currentAppointments"}> Current appointments </h3>
                                 <h2 id={"currentAppointments"}></h2>
@@ -140,6 +146,7 @@ export default function ViewAppointments() {
                 </MDBRow>
             </div>
         </div>
+        </>
     );
 }
 

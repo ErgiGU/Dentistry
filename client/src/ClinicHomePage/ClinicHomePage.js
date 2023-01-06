@@ -1,3 +1,8 @@
+/**
+ * Skeleton for clinic home page.
+ * @author Agata Ciuchta (@ciuchta)
+ */
+
 import Card from './Card'
 import PrivateNavbar from "../common_components/PrivateNavbar";
 import React, {useEffect, useState} from 'react';
