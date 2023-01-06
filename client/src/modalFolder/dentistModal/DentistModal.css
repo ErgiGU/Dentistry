@@ -1,4 +1,4 @@
-.modalBtn{
+.dentistModalBtn{
     position: fixed;
     top: 40%;
     left: 50%;
@@ -16,7 +16,7 @@ main{
 }
 
 
-.modalContainer{
+.dentistModalContainer{
     max-width: 40%;
     min-height: 50%;
     width: 100%;
@@ -32,7 +32,7 @@ main{
 }
 
 
-.modalRight{
+.dentistModalRight{
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -40,7 +40,7 @@ main{
     padding-left: 5%;
 }
 
-.btnOutline{
+.dentistBtnOutline{
     left: 94%;
     bottom: 95%;
     position: fixed;

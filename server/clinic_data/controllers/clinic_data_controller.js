@@ -1,6 +1,6 @@
 /**
  * All the mongoose manipulation for clinic_data component is contained here
- * @author Burak Askan (@askan)
+ * @authors Burak Askan (@askan), Ossian Ålund (@ossiana)
  */
 const mongooseHandler = require('../../helpers/mongoose_handler')
 const clinicSchema = require('../../helpers/schemas/clinic')
@@ -248,23 +248,21 @@ async function changePassword(req) {
  * If none are found an error is sent.
  * @param req the message from the frontend, that being the body containing the clinics ID.
  * @returns {Promise<string>} A status and a response text.
- * @author Ossian Ålund (@ossiana)
  */
-async function getWorkweek(req) {
-    const clinicID = req.body.id
-    console.log(clinicID)
-    const dentists = await dentistModel.find({clinicID})
+async function getDentistCard(req) {
+    const clinicID = req.body.id;
+    console.log(clinicID);
+    const dentists = await dentistModel.find({ clinicID });
     let message;
-    if (dentists){
+    if (dentists.length > 0) {
         message = {
-            dentistsID: dentists.id,
-            dentistsWork: dentists.workweek
-        }
+            dentists: dentists
+        };
     } else {
         message = {
             status: 404,
-            text: 'Dentists is not registered'
-        }
+            text: 'No dentists are registered'
+        };
     }
     return JSON.stringify(message);
 }
@@ -275,9 +273,8 @@ async function getWorkweek(req) {
  * If no dentist is found matching an error is sent.
  * @param req the message from the frontend, that being the body containing the dentist email.
  * @returns {Promise<string>} A status and a response text.
- * @author Ossian Ålund (@ossiana)
  */
-async function setWorkweek(req) {
+async function setDentistSchedule(req) {
     const email = req.body.email
     console.log(email)
     const dentist = await dentistModel.findOne({email})
@@ -302,13 +299,43 @@ async function setWorkweek(req) {
     return JSON.stringify(message);
 }
 
+/**
+ * Finds the correct dentist the email provided in the body.
+ * Then checks a matching dentist was found.
+ * If no dentist is found matching an error is sent.
+ * @param req the message from the frontend, that being the body containing the dentist email.
+ * @returns {Promise<string>} A status and a response text.
+ */
+async function setDentistInfo(req) {
+    const email = req.body.email
+    console.log(email)
+    const dentist = await dentistModel.findOne({email})
+    let message;
+    if (dentist) {
+        {
+            dentist.name = req.body.name || dentist.name,
+                dentist.email = req.body.email || dentist.email,
+                dentist.phonenumber = req.body.phonenumber || dentist.phonenumber,
+        }
+        dentist.save();
+        console.log("Dentist successfully updated")
+        console.log(clinic)
+    } else {
+        message = {
+            status: 404,
+            text: 'Dentist is not registered'
+        }
+    }
+    return JSON.stringify(message);
+}
 
 const clinicController = {
     removeData,
     mapDataRequest,
     reconnect,
-    getWorkweek,
-    setWorkweek,
+    getDentistCard,
+    setDentistSchedule,
+    setDentistInfo,
     reconnect,
     clinicData,
     getDentist,

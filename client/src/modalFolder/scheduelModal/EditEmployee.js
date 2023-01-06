@@ -17,20 +17,20 @@ import "./EditEmployee.css"
 const Modal = ({ open, onClose, dentist }) => {
     if (!open) return null;
     return (
-        <div onClick={onClose} className='overlay'>
+        <div onClick={onClose} className='scheduleOverlay'>
             <div
                 onClick={(e) => {
                     e.stopPropagation();
                 }}
-                className='modalContainer'
+                className='scheduleModalContainer'
             >
-                <div className='modalRight'>
+                <div className='scheduleModalRight'>
 
-                    <div className='content'>
+                    <div className='scheduleContent'>
                         <h1>Working days</h1>
-                        <button type={"button"} className='btn-close btnOutline' onClick={onClose}></button>
+                        <button type={"button"} className='scheduleBtn-close btnOutline' onClick={onClose}></button>
                     </div>
-                    <div className='btnContainer'>
+                    <div className='scheduleBtnContainer'>
                         <h4>monday</h4>
                         <BootstrapSwitchButton
                             checked={true}
@@ -75,13 +75,13 @@ const Modal = ({ open, onClose, dentist }) => {
                             width={100}  />
                     </div>
                 </div>
-                <div className="noteAndConfirm">
+                <div className="scheduleNoteAndConfirm">
                 <h5>
                     NOTE: this is a running calender,
                     it will display the same hours from week to week if no changes are made.
                     If your schedule changes please update this calender.
                 </h5>
-                    <button className='confirmBtn' onClick={onClose}>
+                    <button className='scheduleConfirmBtn' onClick={onClose}>
                         confirm changes
                     </button>
                 </div>

@@ -1,15 +1,16 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import "./DentistCard.css"
 import EditSchedule from "../modalFolder/scheduelModal/EditEmployee"
 import EditDentist from "../modalFolder/dentistModal/DentistModal";
 
 function DentistCard(props) {
-    const [openModal, setOpenModal] = useState(false)
+
+    const [openDentistModal, setOpenDentistModal] = useState(false);
+    const [openScheduleModal, setOpenScheduleModal] = useState(false);
+
     return(
-        <div className="cardContainer">
-            <div className="imageContainer">
-                <img src={props.image} alt="pp"/>
-            </div>
+        <div className="dentistCardContainer">
+
             <div className="DentistName">
                     <h3> name </h3>
             </div>
@@ -21,12 +22,12 @@ function DentistCard(props) {
             </div>
             <div className="DentistBtn">
 
-                        <button className="openModal" onClick={() => setOpenModal(true)}>click me</button>
-                        <EditSchedule open={openModal} onClose={() => setOpenModal(false)} />
+                        <button className="openScheduleModal" onClick={() => setOpenScheduleModal(true)}>Edit schedule</button>
+                        <EditSchedule open={openScheduleModal} onClose={() => setOpenScheduleModal(false)} />
 
 
-                        <button className="openModal" onClick={() => setOpenModal(true)}>click me</button>
-                        <EditDentist open={openModal} onClose={() => setOpenModal(false)} />
+                        <button className="openDentistModal" onClick={() => setOpenDentistModal(true)}>Edit info</button>
+                        <EditDentist open={openDentistModal} onClose={() => setOpenDentistModal(false)} />
 
             </div>
         </div>

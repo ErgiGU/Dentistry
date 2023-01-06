@@ -15,7 +15,6 @@ import "./DentistModal.css"
 
 const Modal = ({ open, onClose, dentist }) => {
 
-    const [client, setClient] = useState(null)
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
@@ -76,20 +75,19 @@ const Modal = ({ open, onClose, dentist }) => {
 
     if (!open) return null;
     return (
-        <div onClick={onClose} className='overlay'>
+        <div onClick={onClose} className='dentistOverlay'>
             <div
                 onClick={(e) => {
                     e.stopPropagation();
                 }}
-                className='modalContainer'
+                className='dentistModalContainer'
             >
-                <div className='modalRight'>
-
-                    <div className='content'>
+                <div className='dentistModalRight'>
+                    <div className='dentistContent'>
                         <h1>Edit Dentist</h1>
-                        <button type={"button"} className='btn-close btnOutline' onClick={onClose}></button>
+                        <button type={"button"} className='dentistBtn-close btnOutline' onClick={onClose}></button>
                     </div>
-                    <div className='btnContainer'>
+                    <div className='dentistBtnContainer'>
                         <div className="form-floating">
                             <input
                                 type="text"
@@ -101,20 +99,20 @@ const Modal = ({ open, onClose, dentist }) => {
                                 style={{color: "black"}}
                                 onChange={(e) => handleChanges(e)}
                             />
-                            <label htmlFor="name"> Clinic's name </label>
+                            <label htmlFor="name"> Dentist's name </label>
                         </div>
                     </div>
                     <div className="form-floating">
                         <input
                             type="text"
                             className="form-control"
-                            placeholder="Phone"
-                            name="phone"
-                            id={"phone"}
+                            placeholder="PhoneNumber"
+                            name="phoneNumber"
+                            id={"phoneNumber"}
                             value={phone}
                             onChange={(e) => handleChanges(e)}
                         />
-                        <label htmlFor="owner"> Clinic's owner </label>
+                        <label htmlFor="phoneNumber"> Dentist's owner </label>
                     </div>
                     <div className="form-floating">
                         <input
@@ -126,13 +124,12 @@ const Modal = ({ open, onClose, dentist }) => {
                             value={email}
                             onChange={(e) => handleChanges(e)}
                         />
-                        <label htmlFor="address"> Clinic's Address </label>
+                        <label htmlFor="email"> Dentist's email </label>
                     </div>
                     <button className={"button"} onClick={(e) => submit(e)}>
                         Change info
                     </button>
                 </div>
-
             </div>
         </div>
     );

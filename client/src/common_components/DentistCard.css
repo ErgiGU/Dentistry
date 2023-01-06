@@ -1,12 +1,15 @@
-.cardContainer {
+.dentistCardContainer {
    width: 300px;
+    height: 185px;
     overflow: hidden;
     box-shadow: 0px 0px 15px -5px;
-    padding: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 20px;
 }
 
-.imageContainer{
-    overflow: hidden;
-    height: 200px;
-    justify-content: center;
+.dentistBtn{
+    display: flex;
+    justify-content: space-between;
+
 }
