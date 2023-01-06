@@ -5,8 +5,8 @@
 
 import Card from './Card'
 import PrivateNavbar from "../common_components/PrivateNavbar";
-import React, {useEffect, useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import React, {useEffect} from 'react';
+import { useNavigate} from 'react-router-dom';
 
 function ClinicHomePage() {
     const navigate = useNavigate();
@@ -22,7 +22,7 @@ function ClinicHomePage() {
         }
         return () => {
         };
-    }, []);
+    }, [navigate]);
 
     return (
 

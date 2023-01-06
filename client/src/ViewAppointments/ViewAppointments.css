@@ -1,6 +1,7 @@
 #appointments {
     background-color: whitesmoke;
     width: 20px;
+
 }
 
 .cardAppointment {
@@ -17,6 +18,7 @@
 
 #backgroundAppointments {
     background-color: whitesmoke;
+    height: 100%;
 }
 
 .clinic {

@@ -35,7 +35,7 @@ export default function ViewAppointments() {
         }
         return () => {
         };
-    }, []);
+    }, [navigate]);
 
     /**
      * Subscribes and publishes to the corresponding topic defined in backend.
@@ -80,7 +80,7 @@ export default function ViewAppointments() {
                 client.end()
             }
         }
-    }, [client,]);
+    }, [client]);
 
     function sendMessage(topic, json) {
         if (client !== null) {
@@ -121,13 +121,13 @@ export default function ViewAppointments() {
         <>
         <PrivateNavbar/>
     <div id="ty">
-        <div id="background">
+        <div id="backgroundAppointments">
             <div className="row">
                 <div className="col-3">
-                    <div className="card">
+                    <div className="cardAppointment">
                         <div className="card-body">
                             <h3 id={"currentAppointments"}> Current appointments </h3>
-                            <h2 id={"currentAppointments"}></h2>
+                            <h2 id={"currentAppointments"}>~</h2>
                             <img className="clinic"
                                  src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
                                  alt="clinic"/>
