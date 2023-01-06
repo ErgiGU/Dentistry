@@ -1,3 +1,7 @@
+/**
+ * Skeleton for cards inserted in the clinic home page.
+ * @author Agata Ciuchta (@ciuchta)
+ */
 import React from 'react';
 import '../home/Card.css';
 import CardItem from './CardItem';

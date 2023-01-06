@@ -1,4 +1,7 @@
-// Example common component
+/**
+ * Navbar displayed for logged clinics.
+ * @author Agata Ciuchta (@ciuchta)
+ */
 import React from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
@@ -21,8 +24,8 @@ function PrivateNavbar() {
 
     return (
         <div>
-            <div className="header">
-                <img className="logo" src={Logo} alt="logo"/>
+            <div className="headerDentist">
+                <img className="logoNavbar" src={Logo} alt="logo"/>
                 <h1>DENTAL CLINIC</h1>
             </div>
             <Navbar id="navbar" expand="lg">
@@ -33,9 +36,8 @@ function PrivateNavbar() {
 
                             <Link to={'/appointments'}>Schedule</Link>
                             <Link to={'/profile'}>Your information</Link>
-                            <Link>Opening hours</Link>
                             <Link to={'/addDentist'}>Add a dentist</Link>
-                            <Link onClick={logout}>Log out</Link>
+                            <Link onClick={logout} to={'/login'}>Log out</Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
