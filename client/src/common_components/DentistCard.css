@@ -10,6 +10,15 @@
 
 .dentistBtn{
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
 
+}
+
+.openScheduleModal{
+    padding-right: 9px;
+    display: flex;
+}
+
+.openDentistModal{
+    display: flex;
 }

@@ -21,7 +21,7 @@ export default function ViewDentists() {
         }
     }, [client])
     /**
-     * Navigates the user to the log in page in case the user is not
+     * Navigates the user to the login page in case the user is not
      * authenticated to be on this page
      */
     useEffect(() => {
@@ -41,7 +41,7 @@ export default function ViewDentists() {
             client.publish('getDentists', JSON.stringify({
                 id: client.options.clientId,
                 body: {
-                    clinicID: "63b5c6377cb8fcdbcaa3939c"
+                    clinicID: theClinic._id
                 }
             }))
             client.on('message', function (topic, message) {
@@ -49,7 +49,7 @@ export default function ViewDentists() {
                     case client.options.clientId + '/getDentistsResponse':
                         console.log(JSON.parse(message))
                         const pMessage = JSON.parse(message)
-                        setDentists(pMessage)
+                        setDentists(pMessage.dentists)
                         break;
 
                     default:
@@ -71,10 +71,11 @@ export default function ViewDentists() {
         <>
             <PrivateNavbar/>
             <h1 className="info">
-                Dentist's registered at Clinic
+                Dentist's registered at {clinic}
             </h1>
             <div className="dentists">
                 {Array.from(dentists).map((dentist) => (
+                    <div className="dentist-card">
                     <DentistCard
                         key={dentist.id}
                         id={dentist.id}
@@ -84,6 +85,7 @@ export default function ViewDentists() {
                         clinic={clinic}
                         workweek={dentist.workWeek} // passes the workweek array as a prop
                     />
+                    </div>
                 ))}
             </div>
         </>

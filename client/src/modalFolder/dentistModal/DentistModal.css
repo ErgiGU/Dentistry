@@ -40,11 +40,12 @@ main{
     padding-left: 5%;
 }
 
-.dentistBtnOutline{
-    left: 94%;
+.dentistBtn-close{
+    left: 95%;
     bottom: 95%;
     position: fixed;
     z-index: 1;
+    border: 0;
 }
 
 
@@ -55,6 +56,10 @@ main{
     flex-direction: column;
 }
 
+.dentistModalRight {
+    margin-left: 10px;
+    flex-wrap: wrap;
+}
 
 .noteAndConfirm{
     display: flex;

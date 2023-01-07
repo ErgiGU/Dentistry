@@ -36,7 +36,7 @@ function PrivateNavbar() {
 
                         <Link to={'/clinic/schedule'} >Schedule</Link>
                         <Link to={'/clinic/editInfo'} >Your information</Link>
-                        <Link to={'/clinic/dentists'}>"Dentist's schedule"</Link>
+                        <Link to={'/clinic/dentists'}>Edit dentist's</Link>
                         <Link to={'/appointments'}>Schedule</Link>
                         <Link to={'/profile'}>Your information</Link>
                         <Link to={'/addDentist'}>Add a dentist</Link>

@@ -96,7 +96,7 @@ const Modal = ({id, open, onClose, name, workweek}) => {
 
                     <div className='scheduleContent'>
                         <h1>Working days of {name}</h1>
-                        <button type={"button"} className='scheduleBtn-close btnOutline' onClick={onClose}></button>
+                        <button type={"button"} className='scheduleBtn-close' onClick={onClose}>X</button>
                     </div>
                     <div className='scheduleBtnContainer'>
                         <h4>monday</h4>
@@ -128,18 +128,6 @@ const Modal = ({id, open, onClose, name, workweek}) => {
                             type="checkbox"
                             checked={toggles.Friday}
                             onChange={() => handleToggle("Friday")}
-                        />
-                        <h4>saturday</h4>
-                        <input
-                            type="checkbox"
-                            checked={toggles.Friday}
-                            onChange={() => handleToggle("Saturday")}
-                        />
-                        <h4>sunday</h4>
-                        <input
-                            type="checkbox"
-                            checked={toggles.Friday}
-                            onChange={() => handleToggle("sunday")}
                         />
                     </div>
                 </div>

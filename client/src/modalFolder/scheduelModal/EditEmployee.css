@@ -1,9 +1,9 @@
-.scheduleModalBtn{
+.scheduleBtn-close {
+    left: 95%;
+    bottom: 95%;
     position: fixed;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: -1;
+    z-index: 1;
+    border: 0;
 }
 
 main{
@@ -15,12 +15,22 @@ main{
     min-height: 100vh;
 }
 
+.scheduleModalRight h1,
+.scheduleModalRight h4 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.scheduleModalRight input {
+    margin-left: 10px;
+}
+
 
 .scheduleModalContainer{
     max-width: 40%;
     min-height: 50%;
     width: 100%;
-    height: 95%;
+    height: 90%;
     position: fixed;
     top: 50%;
     left: 50%;

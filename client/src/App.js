@@ -11,7 +11,6 @@ import Login from "./ClinicLogin/Login";
 import Home from "./home/Home";
 import ViewAppointments from "./ViewAppointments/viewAppointments"
 import ClinicHomePage from "./ClinicHomePage/ClinicHomePage";
-import ViewAppointments from "./ViewAppointments/viewAppointments";
 import ViewDentists from "./EditDentists/EditDentists"
 import {MyInformation} from "./MyInformation/MyInformation";
 import {AboutUsSkeleton} from "./AboutUsPage/AboutUsSkeleton";

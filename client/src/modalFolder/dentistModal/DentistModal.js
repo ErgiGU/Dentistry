@@ -113,7 +113,7 @@ const Modal = ({ open, onClose, name, email, phoneNumber, id}) => {
                 <div className='dentistModalRight'>
                     <div className='dentistContent'>
                         <h1>Edit Dentist</h1>
-                        <button type={"button"} className='dentistBtn-close btnOutline' onClick={onClose}></button>
+                        <button type={"button"} className='dentistBtn-close' onClick={onClose}>X</button>
                     </div>
                     <div className='dentistBtnContainer'>
                         <div className="form-floating">
