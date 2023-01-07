@@ -1,11 +1,12 @@
 import './MyInformation.css'
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState, useCallback} from 'react';
 import mqttHandler from "../common_components/MqttHandler";
 import PrivateNavbar from "../common_components/PrivateNavbar";
 import jwt from "jsonwebtoken";
 import {useNavigate} from "react-router-dom";
 
 export function MyInformation() {
+    let clinicDataFlag = useRef(true)
     const [changedValue, setChangedValue] = useState(false);
     const [client, setClient] = useState(null);
     const [currentClinic, setCurrentClinic] = useState({
@@ -32,6 +33,21 @@ export function MyInformation() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const navigate = useNavigate();
 
+    const sendMessage = useCallback((topic, json) => {
+        if (client !== null) {
+            clinicDataFlag.current = true
+            client.publish(topic, JSON.stringify(json))
+            setTimeout(() => {
+                if (clinicDataFlag.current) {
+                    navigate("/error");
+                }
+            }, 3000);
+
+        } else {
+            navigate("/error")
+        }
+    }, [client, navigate])
+
     useEffect(() => {
         if (client === null) {
             setClient(mqttHandler.getClient(client))
@@ -49,22 +65,23 @@ export function MyInformation() {
         }
         return () => {
         };
-    }, []);
+    }, [navigate]);
 
     useEffect(() => {
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#')
             const theClinic = jwt.decode(localStorage.token, 'something');
-            client.publish('getCurrentLoggedInClinic', JSON.stringify(
+            sendMessage('getCurrentLoggedInClinic',
                 {
                     id: client.options.clientId,
                     body: {
                         clinicID: theClinic._id
                     }
                 }
-            ))
+            )
 
             client.on('message', async function (topic, message) {
+                clinicDataFlag.current = false
                 switch (topic) {
                     case client.options.clientId + '/editInfoResponse':
                         receivedMessage(message.toString())
@@ -75,7 +92,7 @@ export function MyInformation() {
                     case client.options.clientId + '/currentLoggedInClinicResponse':
                         console.log(JSON.parse(message))
                         const pmessage = JSON.parse(message)
-                        setCurrentClinic(formData => ({
+                        setCurrentClinic(currentClinic => ({
                             ...currentClinic,
                             name: pmessage.name,
                             owner: pmessage.owner,
@@ -107,9 +124,7 @@ export function MyInformation() {
          * @param message response from backend
          */
         function receivedMessage(message) {
-            console.log(message)
             const pMessage = JSON.parse(message)
-            console.log(pMessage.status)
             alert(pMessage)
         }
 
@@ -119,12 +134,7 @@ export function MyInformation() {
                 client.end()
             }
         }
-    }, [client])
-
-    useEffect(() => {
-        console.log(currentClinic)
-        console.log(currentClinic.name)
-    }, [currentClinic])
+    }, [client, sendMessage])
 
     /**
      * A custom alert, which receives a message to be alerted.
@@ -150,7 +160,7 @@ export function MyInformation() {
      * @param e Event object which contains the user input and field id.
      */
     const handleChanges = (e) => {
-        let theTime = String;
+        //let theTime = String; Was not used so I commented it out to stop lint complaint - Askan
         const {id, value} = e.target;
         if (id === "oldPassword") {
             setOldPassword(value);
@@ -192,44 +202,42 @@ export function MyInformation() {
             alert(message)
         } else {
             event.preventDefault();
-            if (client !== null) {
-                client.publish('editInfo', JSON.stringify(
-                    {
-                        id: client.options.clientId,
-                        body: {
-                            name: currentClinic.name,
-                            owner: currentClinic.owner,
-                            address: currentClinic.address,
-                            email: currentClinic.email,
-                            newEmail: currentClinic.newEmail,
-                            openingHours: {
-                                monday: {
-                                    start: currentClinic.mondayStart,
-                                    end: currentClinic.mondayEnd
-                                },
-                                tuesday: {
-                                    start: currentClinic.tuesdayStart,
-                                    end: currentClinic.tuesdayEnd
-                                },
-                                wednesday: {
-                                    start: currentClinic.wednesdayStart,
-                                    end: currentClinic.wednesdayEnd
-                                },
-                                thursday: {
-                                    start: currentClinic.thursdayStart,
-                                    end: currentClinic.thursdayEnd
-                                },
-                                friday: {
-                                    start: currentClinic.fridayStart,
-                                    end: currentClinic.fridayEnd
-                                },
+            sendMessage('editInfo',
+                {
+                    id: client.options.clientId,
+                    body: {
+                        name: currentClinic.name,
+                        owner: currentClinic.owner,
+                        address: currentClinic.address,
+                        email: currentClinic.email,
+                        newEmail: currentClinic.newEmail,
+                        openingHours: {
+                            monday: {
+                                start: currentClinic.mondayStart,
+                                end: currentClinic.mondayEnd
                             },
-                            lunchHour: currentClinic.lunchHour,
-                            fikaHour: currentClinic.fikaHour
+                            tuesday: {
+                                start: currentClinic.tuesdayStart,
+                                end: currentClinic.tuesdayEnd
+                            },
+                            wednesday: {
+                                start: currentClinic.wednesdayStart,
+                                end: currentClinic.wednesdayEnd
+                            },
+                            thursday: {
+                                start: currentClinic.thursdayStart,
+                                end: currentClinic.thursdayEnd
+                            },
+                            friday: {
+                                start: currentClinic.fridayStart,
+                                end: currentClinic.fridayEnd
+                            },
                         },
-                    }
-                ))
-            }
+                        lunchHour: currentClinic.lunchHour,
+                        fikaHour: currentClinic.fikaHour
+                    },
+                }
+            )
         }
     }
     /**
@@ -246,22 +254,20 @@ export function MyInformation() {
             document.getElementById("confirmPassword").setCustomValidity("Passwords do not match!");
         } else {
             event.preventDefault();
-            if (client !== null) {
-                client.publish('changePassword', JSON.stringify(
-                    {
-                        id: client.options.clientId,
-                        body: {
-                            email: currentClinic.email,
-                            password: password,
-                            oldPassword: oldPassword
-                        }
+            sendMessage('changePassword',
+                {
+                    id: client.options.clientId,
+                    body: {
+                        email: currentClinic.email,
+                        password: password,
+                        oldPassword: oldPassword
                     }
-                ))
-            }
+                }
+            )
         }
     }
     return (
-        <>
+        <div>
             <PrivateNavbar/>
             <div className={"profileContainer"}>
                 <div id="alertPlaceholder"></div>
@@ -279,7 +285,7 @@ export function MyInformation() {
                                 style={{color: "black", letterSpacing: "normal", fontFamily: "intel"}}
                                 onChange={(e) => handleChanges(e)}
                             />
-                            <label for="name"> Clinic's name </label>
+                            <label htmlFor={"name"}> Clinic's name </label>
                         </div>
                         <div className="form-floating informationInputContainer">
                             <input
@@ -291,7 +297,7 @@ export function MyInformation() {
                                 value={currentClinic.owner}
                                 onChange={(e) => handleChanges(e)}
                             />
-                            <label for="owner"> Clinic's owner </label>
+                            <label htmlFor="owner"> Clinic's owner </label>
                         </div>
                         <div className="form-floating informationInputContainer">
                             <input
@@ -303,7 +309,7 @@ export function MyInformation() {
                                 value={currentClinic.address}
                                 onChange={(e) => handleChanges(e)}
                             />
-                            <label for="address"> Clinic's Address </label>
+                            <label htmlFor="address"> Clinic's Address </label>
                         </div>
                         <div className="form-floating informationInputContainer">
                             <input
@@ -315,7 +321,7 @@ export function MyInformation() {
                                 value={currentClinic.newEmail}
                                 onChange={(e) => handleChanges(e)}
                             />
-                            <label for="email"> Email address </label>
+                            <label htmlFor="email"> Email address </label>
                         </div>
                         <button className={"informationButton"} onClick={(e) => submit(e)}>
                             Change info
@@ -423,28 +429,25 @@ export function MyInformation() {
                                 onChange={(e) => handleChanges(e)}
                             />
                         </label>
-                        <form className="breakHours">
-                            <label className="day"><h3 id={"hoursHeader"}> Break Hours </h3>
-                                <label> Fika: </label>
-                                <input
-                                    className="informationInput"
-                                    type="time"
-                                    name="fikaHour"
-                                    id={"fikaHour"}
-                                    value={currentClinic.fikaHour}
-                                    onChange={(e) => handleChanges(e)}
-                                />
-                                <label> Lunch: </label>
-                                <input
-                                    className="informationInput"
-                                    type="time"
-                                    name="lunchHour"
-                                    id={"lunchHour"}
-                                    value={currentClinic.lunchHour}
-                                    onChange={(e) => handleChanges(e)}
-                                />
-                            </label>
-                        </form>
+                            <div className="day"><h3 id={"hoursHeader"}> Break Hours </h3></div>
+                            <label> Fika: </label>
+                            <input
+                                className="informationInput"
+                                type="time"
+                                name="fikaHour"
+                                id={"fikaHour"}
+                                value={currentClinic.fikaHour}
+                                onChange={(e) => handleChanges(e)}
+                            />
+                            <label> Lunch: </label>
+                            <input
+                                className="informationInput"
+                                type="time"
+                                name="lunchHour"
+                                id={"lunchHour"}
+                                value={currentClinic.lunchHour}
+                                onChange={(e) => handleChanges(e)}
+                            />
                         <button id={"otherButton"} onClick={() => submit()}>
                             Update information
                         </button>
@@ -462,7 +465,7 @@ export function MyInformation() {
                                value={oldPassword}
                                onChange={(e) => handleChanges(e)}
                         />
-                        <label for="oldPassword"> Old password </label>
+                        <label htmlFor="oldPassword"> Old password </label>
                     </div>
                     <div className="form-floating informationInputContainer">
                         <input required
@@ -474,7 +477,7 @@ export function MyInformation() {
                                value={password}
                                onChange={(e) => handleChanges(e)}
                         />
-                        <label for="password"> New password </label>
+                        <label htmlFor="password"> New password </label>
                     </div>
                     <div className="form-floating informationInputContainer">
                         <input required
@@ -486,7 +489,7 @@ export function MyInformation() {
                                value={confirmPassword}
                                onChange={(e) => handleChanges(e)}
                         />
-                        <label for="confirmPassword"> Confirm password </label>
+                        <label htmlFor="confirmPassword"> Confirm password </label>
                     </div>
                     <label id={"passwordError"}> </label> <br/>
                     <button className={"informationButton"} onClick={(e) => changePassword(e)}>
@@ -494,6 +497,6 @@ export function MyInformation() {
                     </button>
                 </form>
             </div>
-        </>
+        </div>
     )
 }

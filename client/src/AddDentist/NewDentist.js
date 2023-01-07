@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import './NewDentist.css';
 import mqttHandler from "../common_components/MqttHandler";
 import PrivateNavbar from "../common_components/PrivateNavbar";
@@ -6,10 +6,12 @@ import jwt from "jsonwebtoken";
 import {useNavigate} from "react-router-dom";
 
 export function NewDentist() {
+    let clinicDataFlag = useRef(true)
     const [client, setClient] = useState(null);
     const [currentClinic, setCurrentClinic] = useState({
         email: ''
     });
+
     const [formData, setFormData] = useState({
         dentistName: '',
         phoneNumber: '',
@@ -17,6 +19,21 @@ export function NewDentist() {
         specialty: ''
     });
     const navigate = useNavigate();
+
+    const sendMessage = useCallback((topic, json) => {
+        if (client !== null) {
+            clinicDataFlag.current = true
+            client.publish(topic, JSON.stringify(json))
+            setTimeout(() => {
+                if (clinicDataFlag.current) {
+                    navigate("/error");
+                }
+            }, 3000);
+
+        } else {
+            navigate("/error")
+        }
+    }, [client, navigate])
 
     useEffect(() => {
         if (client === null) {
@@ -35,30 +52,30 @@ export function NewDentist() {
         }
         return () => {
         };
-    }, []);
+    }, [navigate]);
 
     useEffect(() => {
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#')
             const theClinic = jwt.decode(localStorage.token, 'something');
-            client.publish('getCurrentLoggedInClinic', JSON.stringify(
+            sendMessage('getCurrentLoggedInClinic',
                 {
                     id: client.options.clientId,
                     body: {
                         clinicID: theClinic._id
                     }
                 }
-            ))
-
+            )
             client.on('message', function (topic, message) {
+                clinicDataFlag.current = false
                 switch (topic) {
                     case client.options.clientId + '/addDentistResponse':
-                        receivedMessage(message.toString())
+                        const pMessage = JSON.parse(message)
+                        alert(pMessage)
                         break;
                     case client.options.clientId + '/currentLoggedInClinicResponse':
-                        console.log(JSON.parse(message))
                         const pmessage = JSON.parse(message)
-                        setCurrentClinic(formData => ({
+                        setCurrentClinic(currentClinic => ({
                             ...currentClinic,
                             email: pmessage.email,
                         }))
@@ -69,24 +86,13 @@ export function NewDentist() {
             })
         }
 
-        /**
-         * Recieves the response from backend, parses it and sends it over to be alerted.
-         * @param message the response from backend.
-         */
-        function receivedMessage(message) {
-            console.log(message)
-            const pMessage = JSON.parse(message)
-            console.log(pMessage.status)
-            alert(pMessage)
-        }
-
         return () => {
             if (client !== null) {
                 console.log('ending process')
                 client.end()
             }
         }
-    }, [client])
+    }, [client, sendMessage])
 
     /**
      * Visually displays a response message to the user.
@@ -135,22 +141,19 @@ export function NewDentist() {
         } else {
             e.preventDefault();
             console.log(formData)
-            if (client !== null) {
-                client.publish('AddDentist', JSON.stringify(
-                    {
-                        id: client.options.clientId,
-                        body: {
-                            email: currentClinic.email,
-                            name: formData.dentistName,
-                            dentistEmail: formData.email,
-                            phoneNumber: formData.phoneNumber,
-                            speciality: formData.specialty
-                        }
+            sendMessage('AddDentist',
+                {
+                    id: client.options.clientId,
+                    body: {
+                        email: currentClinic.email,
+                        name: formData.dentistName,
+                        dentistEmail: formData.email,
+                        phoneNumber: formData.phoneNumber,
+                        speciality: formData.specialty
                     }
-                ))
-            }
+                }
+            )
         }
-
     }
 
     return (

@@ -233,10 +233,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                 __v: 0
             }
             await asyncMethod("getDentist", "giveDentist", messageSend, newExpected)
-            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {
-                id: "123",
-                body: {email: "gusaskbu@student.gu.se "}
-            }, expectedResult)
+            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "gusaskbu@student.gu.se "}}, newExpected)
         })
     })
 
@@ -293,16 +290,11 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
             await asyncMethod("getDentistSchedule", "getDentistWeek", messageSend, expectedResult)
         })
     })
-
-    //Is needed to close the runner in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
-    describe('Closing runner', function () {
-        it('Is this closing the runner?', function () {
-            mqttClient.sendMessage('test', JSON.stringify({message: 'someMsg'}))
-        })
-    })
 })
 //Is needed to close the tester in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
 
 after(function () {
-    process.exit()
+    setTimeout(() => {
+        process.exit()
+    }, 5000)
 });
