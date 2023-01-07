@@ -4,16 +4,16 @@ import "./AboutUs.css";
 export function ToothFairy() {
     return (
         <>
-            <div id="main">
-                <div id="info">
-                    <p id="intro-text">
+            <div id="aboutUs-main">
+                <div id="aboutUs-info">
+                    <p id="aboutUs-intro-text">
                         <br/><span style={{color: "#003d80"}}>TOOTH FAIRY</span> <br/> <br/>
                         We are located at <i> Slottskogen, Gothenburg. </i> <br/>
                         Our central location makes it perfectly convenient for all the Gothenburg residents
                         to contact us.<br/> Following are our opening hours for the respective days,
                         feel free to book your desired timeslot by going to the Appointments section.
                         <div id="table">
-                            <table id="opening-hours">
+                            <table id="aboutUs-opening-hours">
                                 <tr>
                                     <th> Days</th>
                                     <th> Opening hours</th>
