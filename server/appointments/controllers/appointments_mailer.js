@@ -24,8 +24,8 @@ class appointments_mailer {
      * @param dentist the dentist JSON for the timeslot
      * @returns {Promise<string>} whether the operation is successful or failure
      */
-    async sendAppointmentNotifPatient (recipient, timeslot, clinic, dentist) {
-        try{
+    async sendAppointmentNotifPatient(recipient, timeslot, clinic, dentist) {
+        try {
             const option = {
                 from: "DentistryAutomated@hotmail.com",
                 to: recipient,
@@ -46,14 +46,14 @@ class appointments_mailer {
                 attachments: [
                     {
                         filename: 'toothLogo.png',
-                        path:'./controllers/toothLogo.png',
+                        path: './controllers/toothLogo.png',
                         cid: 'toothLogo'
                     }
                 ]
             }
             await transporter.sendMail(option)
             return "Success"
-        }catch (e) {
+        } catch (e) {
             console.log("Failed to send email to patient")
             console.log(e)
             return "Failed"
@@ -68,7 +68,7 @@ class appointments_mailer {
      * @param dentist the dentist JSON for the timeslot
      * @returns {Promise<string>} whether the operation is successful or failure
      */
-    async sendAppointmentNotifClinic (patient, timeslot, clinic, dentist) {
+    async sendAppointmentNotifClinic(patient, timeslot, clinic, dentist) {
         try {
             const option = {
                 from: "DentistryAutomated@hotmail.com",
@@ -84,7 +84,7 @@ class appointments_mailer {
                 attachments: [
                     {
                         filename: 'toothLogo.png',
-                        path:'./controllers/toothLogo.png',
+                        path: './controllers/toothLogo.png',
                         cid: 'toothLogo'
                     }
                 ]
@@ -106,7 +106,7 @@ class appointments_mailer {
      * @param dentist the dentist JSON for the timeslot
      * @returns {Promise<string>} whether the operation is successful or failure
      */
-    sendAppointmentCancelNotif (recipient, timeslot, clinic, dentist) {
+    sendAppointmentCancelNotif(recipient, timeslot, clinic, dentist) {
         try {
             const option = {
                 from: "DentistryAutomated@hotmail.com",
@@ -121,12 +121,12 @@ class appointments_mailer {
                 attachments: [
                     {
                         filename: 'toothLogo.png',
-                        path:'./controllers/toothLogo.png',
+                        path: './controllers/toothLogo.png',
                         cid: 'toothLogo'
                     }
                 ]
             }
-            transporter.sendMail(option, async function(err, info) {
+            transporter.sendMail(option, async function (err, info) {
                 if (err) {
                     console.log('Email could not be sent.')
                     console.log(err)
@@ -142,4 +142,5 @@ class appointments_mailer {
         }
     }
 }
+
 module.exports = appointments_mailer

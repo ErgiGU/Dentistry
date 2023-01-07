@@ -1,5 +1,11 @@
+/**
+ * Skeleton for card body.
+ * @author Agata Ciuchta (@ciuchta)
+ */
+
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 function CardItem(props) {
     return (
@@ -7,7 +13,7 @@ function CardItem(props) {
             <li className='item'>
                 <Link className='link' to={props.path}>
                     <figure className='image_container' data-category={props.label}>
-                        <img className='image' alt='something' src={props.src}/>
+                        <img className='image' alt='item' src={props.src}/>
                     </figure>
                     <div className='text_container'>
                         <h5 className='text'>{props.text}</h5>

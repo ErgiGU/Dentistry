@@ -1,6 +1,14 @@
+/**
+ * Skeleton for cards inserted in patient home page.
+ * @author Agata Ciuchta (@ciuchta)
+ */
+
+
 import React from 'react';
-import './Card.css';
+import '../home/Card.css';
 import CardItem from './CardItem';
+import Tips from '../assets/tips.png'
+import TeethCare from '../assets/toothcare.png'
 
 function Card() {
     return (
@@ -9,31 +17,29 @@ function Card() {
                 <div className='cards__wrapper'>
                     <ul className='cards__items'>
                         <CardItem
-                            src='https://v.wpimg.pl/QUJDREVGfjQrJiR2eTxzIWh-cCw_ZX13P2ZoZ3lxY2Eyaz8qOCIoez00MSE4aSE5ZS19LXl2ZGRlKyA8MXNgY3txY2s8NzZ3Nw'
-                            text='Explore the hidden waterfall deep inside the Amazon Jungle'
+                            src='https://st.depositphotos.com/1003098/1651/i/600/depositphotos_16512515-stock-photo-woman-with-receptionist-filling-form.jpg'
+                            text='Find the clinics localizations in different parts of Göteborg.'
                             path='/'
                         />
                         <CardItem
-                            src='images/img-2.jpg'
-                            text='Travel through the Islands of Bali in a Private Cruise'
+                            src='https://static8.depositphotos.com/1594308/1073/i/600/depositphotos_10733789-stock-photo-medical-check-up.jpg'
+                            text='Choose the day, time and book the appointment just now.'
                             path='/'
                         />
                         <CardItem
-                            src='images/img-3.jpg'
-                            text='Set Sail in the Atlantic Ocean visiting Uncharted Waters'
+                            src="https://st4.depositphotos.com/13193658/24527/i/600/depositphotos_245279174-stock-photo-dentists-masks-standing-crossed-arms.jpg"
+                            text='Find out more about our clinics. Vist the About Us page.'
                             path='/'
                         />
                     </ul>
                     <ul className='cards__items'>
                         <CardItem
-                            src='images/img-4.jpg'
-                            text='Experience Football on Top of the Himilayan Mountains'
-                            path='/'
+                            src={Tips}
+                            text='To avoid any stress before the appointment, use the advices we prepared for you above!'
                         />
                         <CardItem
-                            src='images/img-8.jpg'
-                            text='Ride through the Sahara Desert on a guided camel tour'
-                            path='/'
+                            src={TeethCare}
+                            text='What can you do to maintain your teeth health? Follow the list we prepared for you!'
                         />
                     </ul>
                 </div>

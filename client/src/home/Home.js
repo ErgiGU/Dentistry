@@ -1,9 +1,14 @@
+/**
+ * Skeleton for patient home page.
+ * @author Agata Ciuchta (@ciuchta)
+ */
+
 import './Home.css'
 import React, {useEffect, useState} from 'react';
 import mqttHandler from "../common_components/MqttHandler";
 import {useNavigate} from "react-router-dom";
 import Card from './Card';
-import Navbar from '../common_components/navbar'
+import PatientNavbar from "../common_components/PatientNavbar";
 
 export default function Home() {
     const navigate = useNavigate()
@@ -56,7 +61,7 @@ export default function Home() {
         if (client !== null) {
             client.publish('login', JSON.stringify(
                 {
-                    id:client.options.clientId,
+                    id: client.options.clientId,
                     body: {
                         username: 'user1',
                         password: '2001-01-01'
@@ -68,10 +73,10 @@ export default function Home() {
 
     return (
         <>
-            <Navbar/>
-            <Card />
+            <PatientNavbar/>
+            <Card/>
             <div className="footer">
-                <a id="clinic" href="url">link text</a>
+                <a id="clinic" href="/login">Are you a clinic? Click here!</a>
             </div>
             <h1>Testing</h1>
             <div className={"btn btn-primary"} onClick={handleClick}>Test</div>

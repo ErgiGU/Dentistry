@@ -1,0 +1,76 @@
+.newDentistContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dentistFormBox {
+    display: block;
+    font-family: Inter;
+    font-size: 18px;
+    color: white;
+    padding: 30px;
+    height: 500px;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    background-color: steelblue;
+    box-shadow: 10px 0px 15px #888888;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.dentistInputContainer {
+    color: gray;
+    margin-top: 25px;
+    width: 100%;
+}
+
+.dentistButton {
+    padding: 10px;
+    font-size: 18px;
+    margin-top: 30px;
+    background-color: whitesmoke;
+    color: black;
+    border: 1px darkgray;
+    border-radius: 5px;
+    float: left;
+}
+
+.dentistButton:hover {
+    background-color: lightgray;
+}
+
+#dentistAlertPlaceholder {
+    font-family: Inter;
+    display: none;
+    height: 60px;
+    padding: 10px;
+    padding-left: 13px;
+    margin-top: 3%;
+    font-size: 23px;
+    border: 1px solid black;
+    border-radius: 3px;
+}
+
+@media only screen and (min-width: 995px) {
+    .dentistFormBox {
+        width: 50%;
+    }
+
+    #dentistAlertPlaceholder {
+        width: 50%;
+    }
+}
+
+@media only screen and (max-width: 994px) {
+    .dentistFormBox {
+        width: 80%;
+    }
+
+    #dentistAlertPlaceholder {
+        width: 80%;
+    }
+}
+
+
+

@@ -6,24 +6,35 @@ import {
 
 import Registration from "./ClinicRegistration/Registration";
 import MapPage from "./clinics/MapPage"
-import {MyInformation} from "./MyInformation/MyInformation"
 import React from 'react';
 import Login from "./ClinicLogin/Login";
 import Home from "./home/Home";
-
-
+import ViewAppointments from "./ViewAppointments/viewAppointments"
+import ClinicHomePage from "./ClinicHomePage/ClinicHomePage";
+import {MyInformation} from "./MyInformation/MyInformation";
+import {AboutUsSkeleton} from "./AboutUsPage/AboutUsSkeleton";
+import {NewDentist} from "./AddDentist/NewDentist";
+import ErrorPage from "./ErrorPage";
 function App() {
 
     return(
         //you can add more routes here, just follow the same format
+        <>
+
         <Routes>
-            <Route path ="/" />
+            <Route path ="/addDentist" element={<NewDentist/>}/>
             <Route path ="/registration" element= {< Registration />} />
             <Route path ="/login" element= {< Login />} />
             <Route path ="/Home" element= {< Home />} />
             <Route path ="/map" element = {< MapPage />} />
+            <Route path ="/appointments" element = {< ViewAppointments />} />
+            <Route path ="/clinic" element = {< ClinicHomePage/>} />
             <Route path ="/profile" element = {< MyInformation />} />
+            <Route path = "/aboutUs" element = {< AboutUsSkeleton />} />
+            <Route path = "/error" element = {< ErrorPage />} />
+            <Route />
         </Routes>
+        </>
     );
 }
 

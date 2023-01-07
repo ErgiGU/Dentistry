@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "chai": "^4.3.7",
-    "mocha": "^10.1.0",
-    "mongoose": "^6.8.0",
+    "mocha": "^10.2.0",
+    "mongoose": "^6.8.2",
     "mqtt": "^4.3.7",
     "nodemailer": "^6.8.0"
   }
