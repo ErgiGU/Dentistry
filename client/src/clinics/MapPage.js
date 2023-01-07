@@ -4,7 +4,7 @@ import Map from './clinics_components/ClinicsMap';
 export default function MapPage() {
     return (
         <div>
-            <Map />
+            <Map/>
         </div>
     );
 }

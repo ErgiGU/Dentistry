@@ -1,9 +1,12 @@
 /**
  * All mqtt related operations for the clinic_data component are done here
  * @author Burak Askan (@askan)
+ * @Author Aieh Eissa (@aieh)
  */
 const mqttHandler = require('../helpers/mqtt_handler');
-const clinic_data_controller = require('./controllers/clinic_data_controller');
+const clinic_data_controller = require('./controllers/clinic_data_controller.js');
+const clinicData = require('./controllers/clinic_data_controller.js');
+
 
 let config
 try {
@@ -29,6 +32,8 @@ mqttClient.subscribeTopic('changePassword')
 mqttClient.subscribeTopic('getDentists')
 mqttClient.subscribeTopic('editDentistInfo')
 mqttClient.subscribeTopic('setDentistSchedule')
+mqttClient.subscribeTopic('AddDentist')
+mqttClient.subscribeTopic('getCurrentLoggedInClinic')
 
 
 
@@ -53,8 +58,8 @@ try {
                 break;
             case 'clinicDataRequest':
                 let clinic = await clinic_data_controller.clinicData(intermediary.body.email)
-                if(intermediary.body.test) {
-                    clinic= JSON.stringify(clinic)
+                if (intermediary.body.test) {
+                    clinic = JSON.stringify(clinic)
                     clinic = JSON.parse(clinic)
                     clinic._id = "id"
                     clinic.password = "password"
@@ -62,18 +67,18 @@ try {
                 mqttClient.sendMessage(intermediary.id + '/clinicData', JSON.stringify(clinic))
                 break;
             case 'editInfo':
-                clinic_data_controller.editInfo(intermediary).then(res => {
+                clinicData.editInfo(intermediary).then(res => {
                     mqttClient.sendMessage(intermediary.id + '/editInfoResponse', res)
                 })
                 break;
             case 'changePassword':
-                clinic_data_controller.changePassword(intermediary).then(res => {
+                clinicData.changePassword(intermediary).then(res => {
                     mqttClient.sendMessage(intermediary.id + '/changePasswordResponse', res)
                 })
                 break;
             case 'getDentist':
                 let dentist = await clinic_data_controller.getDentist(intermediary.body.email)
-                dentist= JSON.stringify(dentist)
+                dentist = JSON.stringify(dentist)
                 dentist = JSON.parse(dentist)
                 dentist._id = "id"
                 mqttClient.sendMessage(intermediary.id + '/giveDentist', JSON.stringify(dentist))
@@ -91,11 +96,21 @@ try {
             case 'initiateTesting':
                 clinic_data_controller.reconnect(config.admin_config.database_tester.mongoURI)
                 break;
-                //THIS ENDPOINT SHOULD ONLY BE USED TO WIPE THE DATABASE
+            //THIS ENDPOINT SHOULD ONLY BE USED TO WIPE THE DATABASE
             case 'wipeTestData':
                 console.log("Entered")
                 let response = await clinic_data_controller.removeData()
                 mqttClient.sendMessage('123/wipeTestData', JSON.stringify(response))
+                break;
+            case 'AddDentist':
+                clinicData.addDentist(intermediary).then(res => {
+                    mqttClient.sendMessage(intermediary.id + '/addDentistResponse', res)
+                })
+                break;
+            case 'getCurrentLoggedInClinic':
+                clinicData.getCurrentClinic(intermediary).then(res => {
+                    mqttClient.sendMessage(intermediary.id + '/currentLoggedInClinicResponse', res)
+                })
                 break;
             case 'getDentists':
                 clinic_data_controller.getDentistCard(intermediary).then(res => {
@@ -118,5 +133,4 @@ try {
     console.log(e)
     console.log("Message was received but caused a crash.")
 }
-
 module.exports = mqttClient;

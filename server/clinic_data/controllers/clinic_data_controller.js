@@ -1,5 +1,8 @@
 /**
  * All the mongoose manipulation for clinic_data component is contained here
+ * @author Burak Askan (@askan)
+ * @author Aieh Eissa (@aieh)
+ * @author Ossian Ålund (@ossiana)
  * @authors Burak Askan (@askan), Ossian Ålund (@ossiana)
  */
 const mongooseHandler = require('../../helpers/mongoose_handler')
@@ -154,10 +157,12 @@ async function editInfo(req) {
     const clinic = await clinicModel.findOne({email})
     let message;
     if (clinic) {
-        if (await emailExists(req.body.newEmail)) {
-            message = {
-                status: 400,
-                text: 'Email is already used!'
+        if (!req.body.newEmail === req.body.email) {
+            if (await emailExists(req.body.newEmail)) {
+                message = {
+                    status: 400,
+                    text: 'Email is already used!'
+                }
             }
         } else {
             clinic.name = req.body.name || clinic.name;
@@ -245,110 +250,57 @@ async function changePassword(req) {
 }
 
 /**
- * Finds the correct clinic using the clinic ID provided in the body.
- * Then fetches all dentists registered at said clinic.
- * If none are found an error is sent.
- * @param req the message from the frontend, that being the body containing the clinics ID.
+ * Finds the correct clinic provided in the body, then creates a new dentist with the data provided in the body
+ * Then adds the dentist to the clinic's dentists list.
+ * @param req the message from the frontend.
  * @returns {Promise<string>} A status and a response text.
  */
-async function getDentistCard(intermediary) {
-    let clinicDentists = [];
-    const clinicID = intermediary.body.clinicID
-    const dentists = await dentistModel.find({clinic: clinicID})
-    console.log(dentists)
-    try {
-        dentists.forEach(dentist => {
-            clinicDentists.push({
-                id: dentist._id,
-                name: dentist.name,
-                email: dentist.email,
-                phoneNumber: dentist.phoneNumber,
-                workWeek: {
-                    monday: dentist.workweek.monday,
-                    tuesday: dentist.workweek.tuesday,
-                    wednesday: dentist.workweek.wednesday,
-                    thursday: dentist.workweek.thursday,
-                    friday: dentist.workweek.friday
-                }
-            })
+async function addDentist(req) {
+    const email = req.body.email
+    console.log(email)
+    const clinic = await clinicModel.findOne({email})
+    let message;
+    if (clinic) {
+        const dentist = new dentistModel({
+            clinic: clinic._id,
+            name: req.body.name,
+            email: req.body.dentistEmail,
+            phoneNumber: req.body.phoneNumber,
+            speciality: req.body.specialty
         })
-        console.log(clinicDentists)
-    } catch (e) {
-        console.log(e)
-    }
-    if (dentists.length > 0) {
-        return JSON.stringify(clinicDentists);
-    } else {
-        message = {
-            status: 404,
-            text: 'No dentists are registered'
-        };
-    }
-    return JSON.stringify(message);
-}
-
-/**
- * Finds the correct dentist the email provided in the body.
- * Then checks a matching dentist was found.
- * If no dentist is found matching an error is sent.
- * @param req the message from the frontend, that being the body containing the dentist email.
- * @returns {Promise<string>} A status and a response text.
- */
-async function setDentistSchedule(req) {
-    const theID = req.body.id
-    console.log(theID)
-    const dentist = await dentistModel.findById(theID)
-    let message;
-    if (dentist) {
-        dentist.workweek.monday = req.body.workweek.monday,
-            dentist.workweek.tuesday = req.body.workweek.tuesday,
-            dentist.workweek.wednesday = req.body.workweek.wednesday,
-            dentist.workweek.thursday = req.body.workweek.thursday,
-            dentist.workweek.friday = req.body.workweek.friday
-        dentist.save();
-        message = {
-            status: 200,
-            text: "Updated!"
-        }
-    } else {
-        message = {
-            status: 404,
-            text: 'Dentist is not registered'
-        }
-    }
-    return JSON.stringify(message);
-}
-
-/**
- * Finds the correct dentist the email provided in the body.
- * Then checks a matching dentist was found.
- * If no dentist is found matching an error is sent.
- * @param req the message from the frontend, that being the body containing the dentist email.
- * @returns {Promise<string>} A status and a response text.
- */
-async function setDentistInfo(req) {
-    const theID = req.body.id
-    console.log(theID)
-    const dentist = await dentistModel.findById(theID)
-    let message;
-    if (dentist) {
-        dentist.name = req.body.name || dentist.name,
-            dentist.email = req.body.email || dentist.email,
-            dentist.phonenumber = req.body.phonenumber || dentist.phonenumber,
-            dentist.save();
-        console.log("Dentist successfully updated")
+        dentist.save()
         console.log(dentist)
+        clinic.dentists.push(dentist)
+        clinic.save()
+        console.log(clinic.dentists)
         message = {
             status: 200,
-            text: "Updated!"
+            text: 'Dentist Added!'
         }
     } else {
         message = {
             status: 404,
-            text: 'Dentist is not registered'
+            text: 'Clinic not found!'
         }
     }
     return JSON.stringify(message);
+}
+
+/**
+ * Retrieves a clinic by the ID provided in the request body.
+ * @param req the request body from the frontend, including the clinic's ID
+ * @returns {Promise<string>} Returns the clinic object as string.
+ */
+async function getCurrentClinic(req) {
+    const theID = req.body.clinicID
+    const clinic = await clinicModel.findById(theID)
+    if (clinic) {
+        return JSON.stringify(clinic)
+    } else {
+        console.log("failed")
+        return "failed"
+    }
+
 }
 
 const clinicController = {
@@ -360,9 +312,11 @@ const clinicController = {
     setDentistInfo,
     reconnect,
     clinicData,
-    getDentist,
     editInfo,
-    changePassword
+    changePassword,
+    addDentist,
+    getCurrentClinic
 }
 
 module.exports = clinicController
+

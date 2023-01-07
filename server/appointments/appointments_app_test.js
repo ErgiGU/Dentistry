@@ -39,8 +39,8 @@ function asyncMethod(topicRequest, topicResponse, messageSend, expectedResult) {
                 console.log(topic + " : is the topic of this message")
                 console.log('Message is received: ' + message + ' ::: This was the expectation: ' + JSON.stringify(expectedResult))
 
-                if(topic === ("123/" + topicResponse)) {
-                    if(topic !== "123/clinicData" || messageSend.body !== undefined && messageSend.body.test) {
+                if (topic === ("123/" + topicResponse)) {
+                    if (topic !== "123/clinicData" || messageSend.body !== undefined && messageSend.body.test) {
                         if (!util.isDeepStrictEqual(JSON.parse(message), expectedResult)) {
                             reject(new Error(message + " is not the expected message. This is: " + JSON.stringify(expectedResult)
                                 + ". The listing topic in backend: " + topicRequest + ". The listening topic in testing: " + topicResponse))
@@ -64,10 +64,30 @@ describe("Tests to see if the tests are working", function () {
 
     // await attempt at async testing
     describe('Tests to see if MQTT is working', function () {
-        it('Is MQTT working? We want back ToothyClinic',  async function () {
+        it('Is MQTT working? We want back ToothyClinic', async function () {
             this.timeout(10000)
-            const expectedResult = {openingHours:{monday:{start:"8:00",end:"17:00"},tuesday:{start:"8:00",end:"17:00"},wednesday:{start:"8:00",end:"17:00"},thursday:{start:"8:00",end:"17:00"},friday:{start:"8:00",end:"17:00"}},_id:"639f999b75948aaabf80d80f",dentists:[],timeslots:["63a1a393e2743de0e3b4845c"],name:"Testing Clinic",password:"$2b$10$WnpIf0U4aaTn9x2dHFUnvu4MdpVuHdzQr.eyMIPsxJ96Mx/risOuy",email:"burakaskan2001@gmail.com",address:"Lindholmen",city:"Göteborg",__v:1}
-            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "gusaskbu@student.gu.se"}}, expectedResult)
+            const expectedResult = {
+                openingHours: {
+                    monday: {start: "8:00", end: "17:00"},
+                    tuesday: {start: "8:00", end: "17:00"},
+                    wednesday: {start: "8:00", end: "17:00"},
+                    thursday: {start: "8:00", end: "17:00"},
+                    friday: {start: "8:00", end: "17:00"}
+                },
+                _id: "639f999b75948aaabf80d80f",
+                dentists: [],
+                timeslots: ["63a1a393e2743de0e3b4845c"],
+                name: "Testing Clinic",
+                password: "$2b$10$WnpIf0U4aaTn9x2dHFUnvu4MdpVuHdzQr.eyMIPsxJ96Mx/risOuy",
+                email: "burakaskan2001@gmail.com",
+                address: "Lindholmen",
+                city: "Göteborg",
+                __v: 1
+            }
+            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {
+                id: "123",
+                body: {email: "gusaskbu@student.gu.se"}
+            }, expectedResult)
 
         })
     })
@@ -75,7 +95,7 @@ describe("Tests to see if the tests are working", function () {
 
 describe('AppointmentTests. Runs tests that checks up on every backend endpoint belonging to the appointments service.', function () {
     describe('bookAppointment', function () {
-        it('See if timeslot gets booked',  async function () {
+        it('See if timeslot gets booked', async function () {
             this.timeout(10000)
             const messageSend = {
                 client_id: "123",
@@ -98,7 +118,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
         })
     })
     describe('sendAppointmentInformation', function () {
-        it('See if timeslot(s) can be recieved',  async function () {
+        it('See if timeslot(s) can be recieved', async function () {
             this.timeout(10000)
             const messageSend = {
                 client_id: "123",
@@ -107,24 +127,44 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                 }
             }
             const expectedResult = {
-                    patient: {
-                        name : "John Jane",
-                        text : "My tooth aches"
-                    },
-                    dentist: {
-                        name: "William Bjorn"
-                    },
-                    timeslot: "9:30"
+                patient: {
+                    name: "John Jane",
+                    text: "My tooth aches"
+                },
+                dentist: {
+                    name: "William Bjorn"
+                },
+                timeslot: "9:30"
             }
             await asyncMethod("sendAppointmentInformation", "sendAppointmentInformation", messageSend, expectedResult)
         })
     })
 
     describe('cancelBookedTimeslot', function () {
-        it('See if timeslot is canceled',  async function () {
+        it('See if timeslot is canceled', async function () {
             this.timeout(10000)
-            const fetchClinicExpectation = {openingHours:{monday:{start:"8:00",end:"17:00"},tuesday:{start:"8:00",end:"17:00"},wednesday:{start:"8:00",end:"17:00"},thursday:{start:"8:00",end:"17:00"},friday:{start:"8:00",end:"17:00"}},_id:"639f999b75948aaabf80d80f",dentists:[],timeslots:[],name:"Testing Clinic",password:"$2b$10$WnpIf0U4aaTn9x2dHFUnvu4MdpVuHdzQr.eyMIPsxJ96Mx/risOuy",email:"burakaskan2001@gmail.com",address:"Lindholmen",city:"Göteborg",__v:0}
-            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "burakaskan2001@gmail.com"}}, fetchClinicExpectation)
+            const fetchClinicExpectation = {
+                openingHours: {
+                    monday: {start: "8:00", end: "17:00"},
+                    tuesday: {start: "8:00", end: "17:00"},
+                    wednesday: {start: "8:00", end: "17:00"},
+                    thursday: {start: "8:00", end: "17:00"},
+                    friday: {start: "8:00", end: "17:00"}
+                },
+                _id: "639f999b75948aaabf80d80f",
+                dentists: [],
+                timeslots: [],
+                name: "Testing Clinic",
+                password: "$2b$10$WnpIf0U4aaTn9x2dHFUnvu4MdpVuHdzQr.eyMIPsxJ96Mx/risOuy",
+                email: "burakaskan2001@gmail.com",
+                address: "Lindholmen",
+                city: "Göteborg",
+                __v: 0
+            }
+            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {
+                id: "123",
+                body: {email: "burakaskan2001@gmail.com"}
+            }, fetchClinicExpectation)
             console.log(clinicStored)
             const messageSend = {
                 client_id: "123",
@@ -137,7 +177,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
             }
             await asyncMethod("cancelBookedTimeslot", "cancelBookedTimeslot", messageSend, expectedResult)
         })
-        it('Check if timeslot was deleted',  async function () {
+        it('Check if timeslot was deleted', async function () {
             this.timeout(10000)
             const messageSend = {
                 client_id: "123",
@@ -153,14 +193,14 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
     })
 
     describe('wipeTestData', function () {
-        it('Is this wiping test database?',   async function () {
-            mqttClient.sendMessage('wipeTestData', JSON.stringify({id: "123", message: "no expectation"}))
+        it('Is this wiping test database?', async function () {
+            await asyncMethod('wipeTestData', 'wipeTestData', {id: 123, body: 'no expectation'}, {response: "Success"})
         })
     })
 
     //Is needed to close the runner in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
     describe('Closing runner', function () {
-        it('Is this closing the runner?',   function () {
+        it('Is this closing the runner?', function () {
             mqttClient.sendMessage('test', JSON.stringify({message: 'no expectation'}))
         })
     })

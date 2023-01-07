@@ -1,3 +1,8 @@
+/**
+ * Skeleton for patient home page.
+ * @author Agata Ciuchta (@ciuchta)
+ */
+
 import './Home.css'
 import React, {useEffect, useState} from 'react';
 import mqttHandler from "../common_components/MqttHandler";
@@ -56,7 +61,7 @@ export default function Home() {
         if (client !== null) {
             client.publish('login', JSON.stringify(
                 {
-                    id:client.options.clientId,
+                    id: client.options.clientId,
                     body: {
                         username: 'user1',
                         password: '2001-01-01'
@@ -69,7 +74,7 @@ export default function Home() {
     return (
         <>
             <PatientNavbar/>
-            <Card />
+            <Card/>
             <div className="footer">
                 <a id="clinic" href="/login">Are you a clinic? Click here!</a>
             </div>

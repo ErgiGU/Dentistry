@@ -1,14 +1,22 @@
+/**
+ * Page for viewing appointments as a clinic. 
+ * This class serves  function for tracking the logged clinic, communicating with backend, and structure for dispalying infromation.
+ */
 import './ViewAppointments.css'
 import React, {useEffect, useRef, useState} from "react";
-import {MDBRow, MDBCol} from 'mdb-react-ui-kit';
 import TimeslotCard from './components/timeslotCard'
 import mqttHandler from "../common_components/MqttHandler";
+import {useNavigate} from "react-router-dom";
+import PrivateNavbar from "../common_components/PrivateNavbar";
+import jwt from "jsonwebtoken";
 
 
 export default function ViewAppointments() {
 
     const [client, setClient] = useState(null);
     const [appointments, setAppointments] = useState([]);
+    const navigate = useNavigate();
+    let appointmentsFlag = useRef(true)
 // Primary client generating effect
     useEffect(() => {
         if (client === null) {
@@ -17,23 +25,43 @@ export default function ViewAppointments() {
     }, [client])
 
     /**
+     * Navigates the user to the log in page in case the user is not
+     * authenticated to be on this page
+     */
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate("/login");
+        }
+        return () => {
+        };
+    }, [navigate]);
+
+    /**
      * Subscribes and publishes to the corresponding topic defined in backend.
      * Thus is receives the information about patient, dentist and timeslot.
      */
     useEffect(() => {
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#')
-            client.publish('sendAppointmentInformation', JSON.stringify({
+            const theClinic = jwt.decode(localStorage.token, 'something');
+            console.log(theClinic._id)
+            sendMessage('sendAppointmentInformation', {
                 id: client.options.clientId,
                 body: {
-                    clinicID: "6391e39a3e08ac910fbede6f"
+                    clinicID: theClinic._id
                 }
-            }))
+            })
             client.on('message', function (topic, message) {
+                appointmentsFlag.current = false
                 switch (topic) {
                     case client.options.clientId + '/appointmentInformationResponse':
                         console.log(JSON.parse(message))
                         const pMessage = JSON.parse(message)
+                        if (pMessage.length === 0) {
+                            const alertPlaceholder = document.getElementById('currentAppointments')
+                            alertPlaceholder.innerHTML = "No booked appointments for now"
+                        }
                         setAppointments(pMessage)
                         break;
                     case client.options.clientId + '/canceledAppointment':
@@ -53,6 +81,20 @@ export default function ViewAppointments() {
             }
         }
     }, [client]);
+
+    function sendMessage(topic, json) {
+        if (client !== null) {
+            appointmentsFlag.current = true
+            client.publish(topic, JSON.stringify(json))
+            setTimeout(() => {
+                if (appointmentsFlag.current) {
+                    navigate("/error");
+                }
+            }, 3000);
+
+        }
+    }
+
 
     /**
      * Publishes a message to the backend to cancel & delete the timeslot
@@ -76,29 +118,34 @@ export default function ViewAppointments() {
 
 
     return (
-        <div id="ty">
-            <div id="background">
-                <MDBRow>
-                    <MDBCol md='3'>
-                        <div className="card">
-                            <div className="card-body">
-                                <h3 id={"currentAppointments"}> Current appointments </h3>
-                                <img className="clinic"
-                                     src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
-                                     alt="clinic"/>
-                            </div>
+        <>
+        <PrivateNavbar/>
+    <div id="ty">
+        <div id="backgroundAppointments">
+            <div className="row">
+                <div className="col-3">
+                    <div className="cardAppointment">
+                        <div className="card-body">
+                            <h3 id={"currentAppointments"}> Current appointments </h3>
+                            <h2 id={"currentAppointments"}>~</h2>
+                            <img className="clinic"
+                                 src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
+                                 alt="clinic"/>
                         </div>
-                    </MDBCol>
-                    <MDBCol md='8'>
-                        <div id={"timeslots"}>
-                            {Array.from(appointments).map((appointment) => (
-                                <TimeslotCard key={appointment.id} appointment={appointment} parentCallback={handleChildClick}/>
-                            ))}
-                        </div>
-                    </MDBCol>
-                </MDBRow>
+                    </div>
+                </div>
+                <div className='col-8'>
+                    <div id={"timeslots"}>
+                        {Array.from(appointments).map((appointment) => (
+                            <TimeslotCard key={appointment.id} appointment={appointment}
+                                          parentCallback={handleChildClick}/>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+</>
     );
 }
 
