@@ -319,7 +319,7 @@ async function setDentistInfo(req) {
         }
         dentist.save();
         console.log("Dentist successfully updated")
-        console.log(clinic)
+        console.log(dentist)
     } else {
         message = {
             status: 404,

@@ -83,9 +83,17 @@ export default function EditDentists() {
             <h1 className="info">
                 Dentist's registered at Clinic
             </h1>
-            <div className="dentists">
-                <DentistCard/>
-            </div>
+                <div className="dentists">
+                    {dentists.map(dentist => (
+                        <DentistCard
+                            key={dentist.id}
+                            name={dentist.name}
+                            email={dentist.email}
+                            PhoneNumber={dentist.PhoneNumber}
+                            workweek={dentist.workweek} // passes the workweek array as a prop
+                        />
+                    ))}
+                </div>
         </>
     )
 }

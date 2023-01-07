@@ -13,19 +13,20 @@ import "./DentistModal.css"
 ///>
 
 
-const Modal = ({ open, onClose, dentist }) => {
+const Modal = ({ open, onClose, props}) => {
 
-    const [name, setName] = useState("");
-    const [phone, setPhone] = useState("");
-    const [email, setEmail] = useState("");
+    const { name, email, phoneNumber } = props;
+    const [client, setClient] = useState(null);
+    const [setName] = useState(name);
+    const [setPhone] = useState(phoneNumber);
+    const [setEmail] = useState(email);
 
     /**
-     * Changes the initial state of the variables when the user types in something, in order to keep
+     * Changes the initial state of the variables when the user changes in something, in order to keep
      * track of the user's input.
      * @param e Event object which contains the user input and field id.
      */
     const handleChanges = (e) => {
-        let theTime = String;
         const {id, value} = e.target;
         if (id === "name") {
             setName(value);
@@ -39,8 +40,8 @@ const Modal = ({ open, onClose, dentist }) => {
     }
 
     /**
-     * Checks if the user's input is valid. E.g the email has a valid format and the opening hours are logical.
-     * Then publishes a message to the backend, to swap the information of the clinic with the provided input..
+     * Checks if the user's input is valid. E.g. the email has a valid format.
+     * Then publishes a message to the backend, to swap the information of the dentist with the provided input.
      * @param event event object.
      */
     const submit = (event) => {
@@ -50,7 +51,7 @@ const Modal = ({ open, onClose, dentist }) => {
             email.setCustomValidity("Invalid email format")
         } else {
             event.preventDefault();
-            if (!(name || phone || email)) {
+            if (!(name || phoneNumber || email)) {
                 const message = {
                     text: "Can not change empty fields!"
                 }
@@ -62,7 +63,7 @@ const Modal = ({ open, onClose, dentist }) => {
                             id: client.options.clientId,
                             body: {
                                 name: name,
-                                phone: phone,
+                                phone: phoneNumber,
                                 email: 'modify@hotmail.se',
                                 newEmail: email,
                             },
@@ -109,7 +110,7 @@ const Modal = ({ open, onClose, dentist }) => {
                             placeholder="PhoneNumber"
                             name="phoneNumber"
                             id={"phoneNumber"}
-                            value={phone}
+                            value={phoneNumber}
                             onChange={(e) => handleChanges(e)}
                         />
                         <label htmlFor="phoneNumber"> Dentist's owner </label>
