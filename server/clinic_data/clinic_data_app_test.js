@@ -244,7 +244,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
         it('See if work week can get changed', async function () {
             this.timeout(10000)
             const messageSend = {
-                client_id: "123",
+                clientId: "123",
                 body: {
                     dentist_id: clinicStored.dentist[0],
                     workWeek: {
@@ -273,7 +273,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
         it('See if work week is getting received', async function () {
             this.timeout(10000)
             const messageSend = {
-                client_id: "123",
+                clientId: "123",
                 body: {
                     clinic_id: clinicStored._id
                 }

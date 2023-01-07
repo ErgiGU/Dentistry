@@ -89,7 +89,7 @@ export default function Login() {
         setShowAlert(false);
         if (email.checkValidity() && pass.checkValidity()) {
             const json = {
-                "client_id": client.options.clientId,
+                "clientId": client.options.clientId,
                 "body": {
                     "email": loginData.email,
                     "password": loginData.password

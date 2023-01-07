@@ -17,7 +17,6 @@ export default function Calendar({clinic, client}) {
         setYear(getYear(Date.now()))
         setWeek(getISOWeek(Date.now()))
         let dayIndex = getISODay(Date.now())
-        console.log(dayIndex)
         let intermediaryEnabledDays = [false, false, false, false, false]
         for (let i = dayIndex - 1; i < 5; i++) {
             intermediaryEnabledDays[i] = true;
@@ -25,20 +24,31 @@ export default function Calendar({clinic, client}) {
         setDaysEnabled(intermediaryEnabledDays)
     }, [])
 
-    useEffect(() => {
-        console.log(clinic)
-    }, [clinic])
+    // useEffect(() => {
+    //     console.log(clinic)
+    // }, [clinic])
+
+    function handleWeekChange(add) {
+        let intermediaryWeek = week + add
+        if (getISOWeek(Date.now()) > intermediaryWeek) {
+
+        } else if (getISOWeek(Date.now()) - intermediaryWeek >= 12) {
+
+        } else {
+
+        }
+    }
 
     return (
         <div className="container">
             <div className="row">
-                <div id="week" className="col-lg-12 col-md-12 col-sm-12">
+                <div id="week" className="col-sm-12">
                     <div className={'card'}>
                         <div className={'card-body'}>
                             <div className={'card-title'}>
-                                <div className={'btn'} onClick={() => setWeek(week - 1)}>&lt;</div>
+                                <div className={'btn'} onClick={() => handleWeekChange(-1)}>&lt;</div>
                                 {year} WEEK {week}
-                                <div className={'btn'} onClick={() => setWeek(week + 1)}>&gt;</div>
+                                <div className={'btn'} onClick={() => handleWeekChange(1)}>&gt;</div>
                             </div>
                         </div>
                     </div>

@@ -15,7 +15,7 @@ function asyncMethod(client) {
             if (client !== null) {
                 client.subscribe(client.options.clientId + '/#')
                 client.publish('mapDataRequest', JSON.stringify({
-                    id: client.options.clientId,
+                    clientId: client.options.clientId,
                     body: "MapDataRequest"
                 }))
                 client.on('message', function (topic, message) {

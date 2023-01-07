@@ -15,10 +15,9 @@ try {
     config = require('../../helpers/dummy_config')
 }
 const bcrypt = require('bcrypt');
-const {compare} = require("bcrypt");
 
 // Connect to MongoDB
-let mongooseClient = new mongooseHandler(config.admin_config.database_tester.mongoURI)
+let mongooseClient = new mongooseHandler(config.module_config.clinicUser.mongoURI)
 mongooseClient.connect().then(() => {
     createModels()
 }, null)
@@ -64,7 +63,7 @@ async function getDentist(email) {
 
 //TODO documentation
 async function getClinics() {
-    return await clinicModel.find({}).populate('timeslots').populate('dentists')
+    return await clinicModel.find({}).populate('dentists')
 }
 
 /**
@@ -314,7 +313,6 @@ const clinicController = {
     editInfo,
     changePassword,
     addDentist,
-    clinicController,
     getCurrentClinic,
     getClinics
 }

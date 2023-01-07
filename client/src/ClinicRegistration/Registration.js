@@ -119,7 +119,7 @@ export default function Registration() {
             confPass.checkValidity()) {
             event.preventDefault();
             let clinicAccount = {
-                "client_id": client.options.clientId,
+                "clientId": client.options.clientId,
                 "body": {
                     "clinicName": formData.clinicName,
                     "address": formData.address,

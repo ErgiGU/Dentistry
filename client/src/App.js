@@ -1,16 +1,19 @@
 import './App.css';
 import {Route, Routes,} from "react-router-dom";
 
-import Registration from "./clinic_registration/Registration";
-import MapPage from "./clinics/MapPage"
+import Registration from "./ClinicRegistration/Registration";
+import MapPage from "./clinic_map/MapPage"
 import React from 'react';
-import Login from "./clinic_login/Login";
+import Login from "./ClinicLogin/Login";
 import Home from "./home/Home";
-import ViewAppointments from "./ViewAppointments/viewAppointments"
+import ClinicAppointments from "./ViewAppointments/viewAppointments"
 import ClinicHomePage from "./ClinicHomePage/ClinicHomePage";
 import {MyInformation} from "./MyInformation/MyInformation";
 import {AboutUsSkeleton} from "./AboutUsPage/AboutUsSkeleton";
 import {NewDentist} from "./AddDentist/NewDentist";
+import ErrorPage from "./ErrorPage";
+import Appointments from "./appointments_calendar/Appointments";
+
 function App() {
 
     return (
@@ -23,10 +26,12 @@ function App() {
             <Route path ="/login" element= {< Login />} />
             <Route path ="/Home" element= {< Home />} />
             <Route path ="/map" element = {< MapPage />} />
-            <Route path ="/appointments" element = {< ViewAppointments />} />
+            <Route path ="/clinicAppointments" element = {< ClinicAppointments />} />
+            <Route path ="/appointments" element = {< Appointments />} />
             <Route path ="/clinic" element = {< ClinicHomePage/>} />
             <Route path ="/profile" element = {< MyInformation />} />
-            <Route path = "/aboutUs" element = {< AboutUsSkeleton />} />
+            <Route path ="/aboutUs" element = {< AboutUsSkeleton />} />
+            <Route path ="/error" element = {<ErrorPage/>} />
             <Route />
         </Routes>
         </>

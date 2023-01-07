@@ -65,7 +65,8 @@ async function register(req) {
                 email: req.body.email,
                 password: hashedPassword,
                 city: "Göteborg",
-                coordinates: coordinates
+                coordinates: coordinates,
+                mapStorage: new Map([])
             });
         try {
             await clinicAccount.save();

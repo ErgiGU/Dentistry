@@ -81,7 +81,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
         it('Testing for a successful registeration', async function () {
             this.timeout(10000)
             const messageSend = {
-                client_id: "123",
+                clientId: "123",
                 body: {
                     clinicName: "Testing Clinic",
                     address: "Lindholmen",
@@ -130,7 +130,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
         it('Checking to see if a unsuccessful attempt is correct.', async function () {
             this.timeout(10000)
             const messageSend = {
-                client_id: "123",
+                clientId: "123",
                 body: {
                     email: "burakaskan2001@gmail.com"
                 }
@@ -146,7 +146,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
         it('Checking to see if a successful attempt correct.', async function () {
             this.timeout(10000)
             const messageSend = {
-                client_id: "123",
+                clientId: "123",
                 body: {
                     email: "burakaskan2001@gmail.com",
                     password: "Team-7"
@@ -172,7 +172,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
         it('Checking to see if a unsuccessful attempt correct.', async function () {
             this.timeout(10000)
             const messageSend = {
-                client_id: "123",
+                clientId: "123",
                 body: {
                     email: "burakaskan2001@gmail.com",
                     password: "Team-7Test"

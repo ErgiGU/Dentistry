@@ -43,7 +43,7 @@ export function NewDentist() {
             const theClinic = jwt.decode(localStorage.token, 'something');
             client.publish('getCurrentLoggedInClinic', JSON.stringify(
                 {
-                    id: client.options.clientId,
+                    clientId: client.options.clientId,
                     body: {
                         clinicID: theClinic._id
                     }
@@ -138,7 +138,7 @@ export function NewDentist() {
             if (client !== null) {
                 client.publish('AddDentist', JSON.stringify(
                     {
-                        id: client.options.clientId,
+                        clientId: client.options.clientId,
                         body: {
                             email: currentClinic.email,
                             name: formData.dentistName,

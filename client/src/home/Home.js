@@ -56,7 +56,7 @@ export default function Home() {
         if (client !== null) {
             client.publish('login', JSON.stringify(
                 {
-                    id: client.options.clientId,
+                    clientId: client.options.clientId,
                     body: {
                         username: 'user1',
                         password: '2001-01-01'
@@ -73,10 +73,6 @@ export default function Home() {
             <div className="footer">
                 <a id="clinic" href="/login">Are you a clinic? Click here!</a>
             </div>
-            <h1>Testing</h1>
-            <div className={"btn btn-primary"} onClick={handleClick}>Test</div>
-            <div className={"btn btn-primary"} onClick={sendMessage}>Send message</div>
-            <h2>{response}</h2>
         </>
     );
 }

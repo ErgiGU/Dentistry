@@ -53,7 +53,7 @@ try {
                     } else {
                         response.response = "registration failed";
                     }
-                    mqttClient.sendMessage(intermediary.client_id + "/register", JSON.stringify(response));
+                    mqttClient.sendMessage(intermediary.clientId + "/register", JSON.stringify(response));
                 });
                 break;
             //topic for login
@@ -64,12 +64,12 @@ try {
 
                     if (res.response === "login successful") {
 
-                        mqttClient.sendMessage(intermediary.client_id + "/loginClient", JSON.stringify(res));
+                        mqttClient.sendMessage(intermediary.clientId + "/loginClient", JSON.stringify(res));
                     } else {
                         const response = {
                             response: "Invalid email/password"
                         }
-                        mqttClient.sendMessage(intermediary.client_id + "/loginClient", JSON.stringify(response))
+                        mqttClient.sendMessage(intermediary.clientId + "/loginClient", JSON.stringify(response))
                     }
                 })
                 break;

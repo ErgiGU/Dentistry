@@ -50,7 +50,7 @@ try {
             case 'mapDataRequest':
                 const body = await clinic_data_controller.mapDataRequest()
                 console.log(body)
-                mqttClient.sendMessage(intermediary.id + '/mapDataResponse', JSON.stringify(body))
+                mqttClient.sendMessage(intermediary.clientId + '/mapDataResponse', JSON.stringify(body))
                 break;
             case 'clinicDataRequest':
                 let clinic = await clinic_data_controller.clinicData(intermediary.body.email)
@@ -60,16 +60,16 @@ try {
                     clinic._id = "id"
                     clinic.password = "password"
                 }
-                mqttClient.sendMessage(intermediary.id + '/clinicData', JSON.stringify(clinic))
+                mqttClient.sendMessage(intermediary.clientId + '/clinicData', JSON.stringify(clinic))
                 break;
             case 'editInfo':
                 clinicData.editInfo(intermediary).then(res => {
-                    mqttClient.sendMessage(intermediary.id + '/editInfoResponse', res)
+                    mqttClient.sendMessage(intermediary.clientId + '/editInfoResponse', res)
                 })
                 break;
             case 'changePassword':
                 clinicData.changePassword(intermediary).then(res => {
-                    mqttClient.sendMessage(intermediary.id + '/changePasswordResponse', res)
+                    mqttClient.sendMessage(intermediary.clientId + '/changePasswordResponse', res)
                 })
                 break;
             case 'getDentist':
@@ -77,7 +77,7 @@ try {
                 dentist = JSON.stringify(dentist)
                 dentist = JSON.parse(dentist)
                 dentist._id = "id"
-                mqttClient.sendMessage(intermediary.id + '/giveDentist', JSON.stringify(dentist))
+                mqttClient.sendMessage(intermediary.clientId + '/giveDentist', JSON.stringify(dentist))
                 break;
             case 'testingTestingRequest':
                 const messageSending = {
@@ -100,16 +100,16 @@ try {
                 break;
             case 'getClinics':
                 let clinics = await clinic_data_controller.getClinics()
-                mqttClient.sendMessage(intermediary.id + '/clinics', JSON.stringify(clinics))
+                mqttClient.sendMessage(intermediary.clientId + '/clinics', JSON.stringify(clinics))
                 break
             case 'AddDentist':
                 clinicData.addDentist(intermediary).then(res => {
-                    mqttClient.sendMessage(intermediary.id + '/addDentistResponse', res)
+                    mqttClient.sendMessage(intermediary.clientId + '/addDentistResponse', res)
                 })
                 break;
             case 'getCurrentLoggedInClinic':
                 clinicData.getCurrentClinic(intermediary).then(res => {
-                    mqttClient.sendMessage(intermediary.id + '/currentLoggedInClinicResponse', res)
+                    mqttClient.sendMessage(intermediary.clientId + '/currentLoggedInClinicResponse', res)
                 })
                 break;
         }

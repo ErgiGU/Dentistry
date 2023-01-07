@@ -81,41 +81,60 @@ async function bookedMailingData(clinicID, timeslotID) {
  * @param clinicID the id of the clinic that is getting a timeslot booked
  * @param dentistID the id of the dentist that is getting a timeslot booked
  * @param patientInfo the info of the patient that booked the timeslot
- * @param timeslotTime the time of the timeslot
+ * @param date
+ * @param time
  * @returns {Promise<*>} the timeslot JSON
  */
-async function makeAppointment(clinicID, dentistID, patientInfo, timeslotTime) {
-    let clinic = await clinicModel.findById(clinicID)
-    let dentist = await dentistModel.findById(dentistID)
-    console.log(dentist + " this is the dentist ")
+async function makeAppointment(clinicID, dentistID, patientInfo, date, time) {
+    let clinic = await clinicModel.findById(clinicID).populate('dentists')
+    let dentist = await dentistModel.findById(dentistID).populate('clinic')
+    let patient = await patientModel.findOne({email: patientInfo.email}).populate('timeslots')
 
-    let middlemanTimeslotsList = []
+    if (patient === null) {
+        console.log('creating new patient')
+        patient = new patientModel({
+            name: patientInfo.name,
+            email: patientInfo.email,
+            dateOfBirth: patientInfo.dateOfBirth,
+            text: patientInfo.text
+        });
+    }
 
+    if (dentist === null) {
+
+    }
+
+    console.log('creating new timeslot')
     const timeslot = new timeslotModel({
-        startTime: timeslotTime,// <-- The start-time of the selected timeslot goes here
-        clinic: clinicID
+        startTime: time,// <-- The start-time of the selected timeslot goes here
+        clinic: clinicID,
+        patient: patient._id,
+        dentist: dentist._id
     });
 
-    const patient = new patientModel({
-        name: patientInfo.name,
-        email: patientInfo.email,
-        dateOfBirth: patientInfo.dateOfBirth,
-        text: patientInfo.text,
-        timeslot: timeslot._id
-    });
-
+    patient.timeslots.push(timeslot._id)
+    console.log(patient.timeslots)
+    console.log('saving patient')
     patient.save()
 
-    timeslot.dentist = dentist
-    timeslot.patient = patient
-
+    console.log('saving timeslot')
     timeslot.save()
 
-    middlemanTimeslotsList = clinic.timeslots
-    clinic.timeslots = []
-    middlemanTimeslotsList.push(timeslot._id)
+    let mappedDate = clinic.mapStorage.get(date)
+    console.log(mappedDate)
 
-    clinic.timeslots = middlemanTimeslotsList
+    if (mappedDate !== null && mappedDate.timeslots !== null && mappedDate.timeslots.length > 0) {
+        console.log('not new array, adding')
+        mappedDate.timeslots.push({_id: timeslot._id})
+    } else {
+        console.log('new array needed')
+        mappedDate = {
+            timeslots: [timeslot._id]
+        }
+        clinic.mapStorage.set(date, mappedDate)
+    }
+
+    console.log(mappedDate)
 
     clinic.save()
 
@@ -138,7 +157,8 @@ async function cancelAppointment(timeslotID) {
     }
 }
 
-/* Generates dummy data into the given clinic ID.
+/**
+ * Generates dummy data into the given clinic ID.
  * Generating dentist, timeslot and patient to fill up the db.
  * @param clinicID the id of clinic which will have the data generated in
  */

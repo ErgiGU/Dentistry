@@ -98,7 +98,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
         it('See if timeslot gets booked', async function () {
             this.timeout(10000)
             const messageSend = {
-                client_id: "123",
+                clientId: "123",
                 body: {
                     clinicID: clinicStored._id,
                     dentistID: clinicStored.dentists[0],
@@ -121,7 +121,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
         it('See if timeslot(s) can be recieved', async function () {
             this.timeout(10000)
             const messageSend = {
-                client_id: "123",
+                clientId: "123",
                 body: {
                     clinicID: clinicStored._id
                 }
@@ -167,7 +167,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
             }, fetchClinicExpectation)
             console.log(clinicStored)
             const messageSend = {
-                client_id: "123",
+                clientId: "123",
                 body: {
                     timeslotID: clinicStored.timeslots[0]
                 }
@@ -180,7 +180,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
         it('Check if timeslot was deleted', async function () {
             this.timeout(10000)
             const messageSend = {
-                client_id: "123",
+                clientId: "123",
                 body: {
                     clinicID: clinicStored._id
                 }

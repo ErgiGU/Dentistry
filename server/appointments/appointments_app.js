@@ -24,6 +24,7 @@ const mailer = new appointments_mailer
 mqttClient.subscribeTopic('test')
 mqttClient.subscribeTopic('appointment')
 mqttClient.subscribeTopic('testingTestingRequest')
+mqttClient.subscribeTopic('bookAppointment')
 mqttClient.subscribeTopic('bookTimeslot')
 mqttClient.subscribeTopic('generateData')
 mqttClient.subscribeTopic('cancelBookedTimeslot')
@@ -46,8 +47,10 @@ try {
             case 'schema':
                 mqttClient.sendMessage('testAppointment', "newClinic")
                 break;
-            case 'appointment':
-                testAppointment(intermediary)
+            case 'bookAppointment':
+                waitMakeTimeslots(intermediary.body).then(res => {
+                    mqttClient.sendMessage(intermediary.clientId + '/appointmentResponse', JSON.stringify(res))
+                })
                 break;
             case 'testingTestingRequest':
                 const messageSending = {
@@ -67,23 +70,23 @@ try {
                     const bookingRes = {
                         response: r //If the whole thing has succeeded or failed.
                     }
-                    mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(bookingRes))
+                    mqttClient.sendMessage(intermediary.clientId + "/bookTimeslot", JSON.stringify(bookingRes))
                 })
                 break;
             case 'sendAppointmentInformation':
                 waitTimeslotData(intermediary).then(r => {
-                    mqttClient.sendMessage(intermediary.id + "/appointmentInformationResponse", JSON.stringify(r))
+                    mqttClient.sendMessage(intermediary.clientId + "/appointmentInformationResponse", JSON.stringify(r))
                 })
                 break;
             case 'cancelAppointment':
                 cancelAppointment(intermediary).then(r => {
-                    mqttClient.sendMessage(intermediary.id + "/canceledAppointment", JSON.stringify(r))
+                    mqttClient.sendMessage(intermediary.clientId + "/canceledAppointment", JSON.stringify(r))
                 })
                 break;
             case 'cancelBookedTimeslot':
                 //Cancels the booked timeslot
                 const cancelTimeslotResult = cancelAppointment(intermediary)
-                mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(cancelRes))
+                mqttClient.sendMessage(intermediary.clientId + "/bookTimeslot", JSON.stringify(cancelRes))
                 break;
             case 'test':
                 process.exit()
@@ -117,13 +120,7 @@ async function waitGenerateData() {
 }
 
 async function waitMakeTimeslots(message) {
-
-    const clinicID = message.clinicID
-    const dentistID = message.dentistID
-    const patientInfo = message.patientInfo
-    const timeslotTime = message.timeslotTime
-
-    return appointments_controller.makeAppointment(clinicID, dentistID, patientInfo, timeslotTime);
+    return appointments_controller.makeAppointment(message.clinicID, message.dentistID, message.patientInfo, message.date, message.time);
 }
 
 async function waitMailData(clinicID, timeslotID) {
@@ -144,25 +141,6 @@ async function waitDeleteTimeslot(message) {
 
 async function waitBookAppointment(message) {
     return await bookAppointment(message)
-}
-
-// Function declaration
-/**
- * Test function extracted from topic switcher
- * @param message MQTT message
- */
-function testAppointment(message) {
-    const newClinic = new timeSlotModel({
-        startTime: Date.parse(message.body.startTime),
-        dentist: "6386284314d29ecf98a61c70"
-    });
-    newClinic.save(function (err) {
-        if (err) {
-            console.log(err);
-        }
-        console.log('successfully saved')
-    });
-    mqttClient.sendMessage(message.id + '/appointmentResponse', JSON.stringify(newClinic))
 }
 
 /**

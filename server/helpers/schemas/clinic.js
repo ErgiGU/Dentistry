@@ -5,23 +5,20 @@ const jwt = require("jsonwebtoken");
 const clinicSchema = new Schema({
     dentists: [{
         type: Schema.Types.ObjectId,
+        unique: true,
         ref: 'Dentist'
     }],
-    timeslots: [{
-        year: {
-            type: Number,
-            week: {
-                type: Number,
-                day: {
-                    type: Number,
-                    timeslot: {
-                        type: Schema.Types.ObjectId,
-                        ref: 'Timeslot'
-                    }
-                }
-            }
-        }
-    }],
+    mapStorage: {
+        type: Map,
+        required: true,
+        of: new Schema({
+            timeslots: [{
+                type: Schema.Types.ObjectId,
+                unique: true,
+                ref: 'Timeslot'
+            }]
+        })
+    },
     name: {
         type: String,
         required: true

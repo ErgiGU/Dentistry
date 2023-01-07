@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import Calendar from "./appointments_components/Calendar";
 import Loading from "./appointments_components/Loading";
-import NavigationBar from "../common_components/navigationBar";
 import mqttHandler from "../common_components/MqttHandler";
 import {getISOWeek} from "date-fns";
+import PatientNavbar from "../common_components/PatientNavbar";
 
 export default function Appointments() {
 
@@ -21,6 +21,7 @@ export default function Appointments() {
         if (client === null) {
             setClient(mqttHandler.getClient(client))
         }
+        setIsLoading(true)
     }, [client])
 
     // Secondary effect containing all message logic and closure state
@@ -30,7 +31,7 @@ export default function Appointments() {
 
             client.publish('getClinics', JSON.stringify(
                 {
-                    id: client.options.clientId
+                    clientId: client.options.clientId
                 }
             ))
 
@@ -38,10 +39,11 @@ export default function Appointments() {
                 let intermediary = JSON.parse(message)
                 switch (topic) {
                     case client.options.clientId + '/appointmentResponse':
+                        console.log(intermediary)
                         break;
                     case client.options.clientId + '/clinics':
-                        console.log(intermediary)
                         setClinics(intermediary)
+                        setIsLoading(false)
                         break;
                     default:
                         break;
@@ -67,6 +69,7 @@ export default function Appointments() {
                 intermediaryTimeslots[i] = templateWeek;
             }
             let intermediaryClinic = {
+                clinic: clinic,
                 weeks: intermediaryTimeslots
             }
             switch (clinic.name) {
@@ -100,11 +103,11 @@ export default function Appointments() {
             let hour = i.toString().padStart(2, '0')
             intermediaryTimeslots.push({
                 time: `${hour}:00`,
-                batch: dentists
+                dentists: dentists
             })
             intermediaryTimeslots.push({
                 time: `${hour}:30`,
-                batch: dentists
+                dentists: dentists
             })
         }
         return intermediaryTimeslots
@@ -120,7 +123,7 @@ export default function Appointments() {
 
     return (
         <div>
-            <NavigationBar/>
+            <PatientNavbar/>
             <div className="row">
                 <div id="selectClinic" className="col-lg-12 col-md-12 mb-4">
                     <div>Select Clinic</div>
@@ -165,8 +168,7 @@ export default function Appointments() {
                 </div>
             </div>
             <div className={"btn btn-primary"} role={'button'} onClick={triggerLoad}>Trigger load</div>
-            <div className={"btn btn-primary"} role={'button'} onClick={generateTimeslotsFromOpeningHours}>Trigger fun
-            </div>
+            <div className={"btn btn-primary"} role={'button'} onClick={generateTimeslotsFromOpeningHours}>Trigger fun</div>
             <React.StrictMode>
                 {isLoading ? <Loading/> :
                     <Calendar clinic={currentClinic} clinicTimeslots={currentClinic} client={client}/>}

@@ -57,7 +57,7 @@ export function MyInformation() {
             const theClinic = jwt.decode(localStorage.token, 'something');
             client.publish('getCurrentLoggedInClinic', JSON.stringify(
                 {
-                    id: client.options.clientId,
+                    clientId: client.options.clientId,
                     body: {
                         clinicID: theClinic._id
                     }
@@ -195,7 +195,7 @@ export function MyInformation() {
             if (client !== null) {
                 client.publish('editInfo', JSON.stringify(
                     {
-                        id: client.options.clientId,
+                        clientId: client.options.clientId,
                         body: {
                             name: currentClinic.name,
                             owner: currentClinic.owner,
@@ -249,7 +249,7 @@ export function MyInformation() {
             if (client !== null) {
                 client.publish('changePassword', JSON.stringify(
                     {
-                        id: client.options.clientId,
+                        clientId: client.options.clientId,
                         body: {
                             email: currentClinic.email,
                             password: password,

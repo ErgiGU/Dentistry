@@ -1,0 +1,6 @@
+#timeslotListGroup {
+}
+
+#timeslotListGroupItem {
+    --bs-list-group-item-padding-y: 10px;
+}
