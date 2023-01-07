@@ -17,9 +17,6 @@ Moreover, the highly interactive calendar displays all the available timeslots f
 Our application also allows the dental clinic to create a secured account with us. The purpose of the account is to manage the clinic's opening hours, input how many dentists are available and also help the patients to cancel an appointment if needed. Once a patient successfully books an appointment, a confirmation email containing all the necessary details is sent to the provided email address.
 <!--Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors. -->
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-**Maybe remove this (idk).**
 
 ## Visuals
 Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
@@ -59,16 +56,21 @@ Here are the installation steps in order to run the project and import it in you
 - Setting up MongoDB database: https://www.mongodb.com/basics/create-database
 
 
+### Technologies
+
+Here are the technologies that we used in our project:
+
+1. Webstorm IDE
+2. React JS frontend framework
+3. Node JS backend framework
+4. MQTT communication protocol
+5. Jmeter with MQTT plugin(for MQTT load testing)
+6. MongoDB
+
 
 ## Usage
 Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-**Maybe remove this (idk).**
 
 ## Authors and acknowledgment
 
@@ -80,9 +82,3 @@ If you have ideas for releases in the future, it is a good idea to list them in 
 - Ossian Ålund
 - Sejal Ulhas Kanaskar
 
-## License
-For open source projects, say how it is licensed.
-**Maybe remove this (idk).**
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
