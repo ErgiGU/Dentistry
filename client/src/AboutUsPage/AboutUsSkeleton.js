@@ -82,7 +82,7 @@ export function AboutUsSkeleton() {
                             </Card.Body>
                         </Card>
                     </div>
-                    <div class="col-lg-4 col-md-6 mb-4">
+                    <div className="col-lg-4 col-md-6 mb-4">
                         <Card style={{width: "20rem", backgroundColor:"whitesmoke"}}>
                             <Card.Body>
                                 <Card.Title style={{color: "#003d80"}}>TOOTH FAIR DENTIST</Card.Title>
@@ -97,7 +97,7 @@ export function AboutUsSkeleton() {
                             </Card.Body>
                         </Card>
                     </div>
-                    <div class="col-lg-4 col-md-6 mb-4">
+                    <div className="col-lg-4 col-md-6 mb-4">
                         <Card style={{width: "20rem", backgroundColor:"whitesmoke"}}>
                             <Card.Body>
                                 <Card.Title style={{color: "#003d80"}}>THE CROWN</Card.Title>
@@ -112,7 +112,7 @@ export function AboutUsSkeleton() {
                             </Card.Body>
                         </Card>
                     </div>
-                    <div class="col-lg-4 col-md-6">
+                    <div className="col-lg-4 col-md-6">
                         <Card style={{width: "20rem", backgroundColor:"whitesmoke"}}>
                             <Card.Body>
                                 <Card.Title style={{color: "#003d80"}}>LISEBERGS DENTISTS</Card.Title>

@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import '../home/Card.css';
-import CardItem from './CardItem';
+import CardItem from '../common_components/CardItem';
 import Services from '../assets/services.png'
 
 function Card() {

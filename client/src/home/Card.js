@@ -5,17 +5,17 @@
 
 
 import React from 'react';
-import '../home/Card.css';
-import CardItem from './CardItem';
+import './Card.css';
+import CardItem from '../common_components/CardItem';
 import Tips from '../assets/tips.png'
 import TeethCare from '../assets/toothcare.png'
 
 function Card() {
     return (
-        <div className='cards'>
-            <div className='cards__container'>
-                <div className='cards__wrapper'>
-                    <ul className='cards__items'>
+        <div className='cards' id={'homeCardsTop'}>
+            <div className='cards__container' id={'homeCardsContainer'}>
+                <div className='cards__wrapper' id={'homeCardsWrapper'}>
+                    <ul className='cards__items' id={'homeCardsItems'}>
                         <CardItem
                             src='https://st.depositphotos.com/1003098/1651/i/600/depositphotos_16512515-stock-photo-woman-with-receptionist-filling-form.jpg'
                             text='Find the clinics localizations in different parts of Göteborg.'
@@ -32,7 +32,7 @@ function Card() {
                             path='/'
                         />
                     </ul>
-                    <ul className='cards__items'>
+                    <ul className='cards__items' id={'homeCardsItems'}>
                         <CardItem
                             src={Tips}
                             text='To avoid any stress before the appointment, use the advices we prepared for you above!'

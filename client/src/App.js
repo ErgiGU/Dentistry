@@ -2,7 +2,7 @@ import './App.css';
 import {Route, Routes,} from "react-router-dom";
 
 import Registration from "./ClinicRegistration/Registration";
-import MapPage from "./clinic_map/MapPage"
+import MapPage from "./clinic_map/map_components/ClinicsMap"
 import React from 'react';
 import Login from "./ClinicLogin/Login";
 import Home from "./home/Home";

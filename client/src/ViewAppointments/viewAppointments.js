@@ -17,7 +17,8 @@ export default function ViewAppointments() {
     const [appointments, setAppointments] = useState([]);
     const navigate = useNavigate();
     let appointmentsFlag = useRef(true)
-// Primary client generating effect
+
+    // Primary client generating effect
     useEffect(() => {
         if (client === null) {
             setClient(mqttHandler.getClient(client))
@@ -25,7 +26,7 @@ export default function ViewAppointments() {
     }, [client])
 
     /**
-     * Navigates the user to the log in page in case the user is not
+     * Navigates the user to the login page in case the user is not
      * authenticated to be on this page
      */
     useEffect(() => {
@@ -47,7 +48,7 @@ export default function ViewAppointments() {
             const theClinic = jwt.decode(localStorage.token, 'something');
             console.log(theClinic._id)
             sendMessage('sendAppointmentInformation', {
-                id: client.options.clientId,
+                clientId: client.options.clientId,
                 body: {
                     clinicID: theClinic._id
                 }
@@ -107,7 +108,7 @@ export default function ViewAppointments() {
         if (client !== null) {
             client.publish('cancelAppointment', JSON.stringify(
                 {
-                    id: client.options.clientId,
+                    clientId: client.options.clientId,
                     body: {
                         timeslotID: timeslotID
                     }

@@ -28,13 +28,13 @@
     margin-left: 30%;
 }
 
-.col {
+#timeslotCardCol {
     text-align: center;
     font-family: "Trebuchet MS", sans-serif;
     margin-top: 1%;
 }
 
-.text {
+#timeslotCardText {
     text-align: center;
     float: bottom;
     margin-top: 10%;

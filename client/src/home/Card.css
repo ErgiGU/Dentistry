@@ -1,4 +1,4 @@
-.cards {
+#homeCardsTop {
     padding: 4rem;
     background: whitesmoke;
 }
@@ -7,7 +7,7 @@ h1 {
     text-align: center;
 }
 
-.cards__container {
+#homeCardsContainer {
     display: flex;
     flex-flow: column;
     align-items: center;
@@ -16,16 +16,16 @@ h1 {
     margin: 0 auto;
 }
 
-.cards__wrapper {
+#homeCardsWrapper {
     position: relative;
     margin: 50px 0 45px;
 }
 
-.cards__items {
+#homeCardsItems {
     margin-bottom: 24px;
 }
 
-.item {
+#homeCardItem {
     display: flex;
     flex: 1;
     margin: 0 1rem;
@@ -33,7 +33,7 @@ h1 {
     width: 350px;
 }
 
-.link {
+#homeCardLink {
     display: flex;
     flex-flow: column;
     width: 100%;
@@ -44,7 +44,7 @@ h1 {
     text-decoration: none;
 }
 
-.image_container {
+#homeCardImageContainer {
     position: relative;
     width: 100%;
     padding-top: 67%;
@@ -56,7 +56,7 @@ h1 {
     animation-duration: 2s;
 }
 
-.image {
+#homeCardImage {
     position: absolute;
     top: 0;
     right: 0;
@@ -71,16 +71,16 @@ h1 {
     transition: all 0.2s linear;
 }
 
-.cards__item__img:hover {
+#homeCardImage:hover {
     transform: scale(1.1);
 }
 
-.text_container {
+#homeCardTextContainer {
     padding: 10px 10px 20px;
     background-color: white;
 }
 
-.text {
+#homeCardText {
     color: #252e48;
     font-size: 18px;
     line-height: 24px;
