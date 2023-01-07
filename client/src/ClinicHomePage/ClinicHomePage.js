@@ -1,8 +1,12 @@
+/**
+ * Skeleton for clinic home page.
+ * @author Agata Ciuchta (@ciuchta)
+ */
+
 import Card from './Card'
 import PrivateNavbar from "../common_components/PrivateNavbar";
-// Removed unused imports to stop lint complaints.
 import React, {useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 
 function ClinicHomePage() {
     const navigate = useNavigate();

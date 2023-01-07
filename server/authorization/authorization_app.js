@@ -1,6 +1,6 @@
 /**
  * All mqtt related operations for the authorization component are done here
- * @author
+ * @author Ergi Senja (@ergi)
  */
 const mqttHandler = require('../helpers/mqtt_handler');
 

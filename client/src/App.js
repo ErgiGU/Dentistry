@@ -14,6 +14,7 @@ import ClinicHomePage from "./ClinicHomePage/ClinicHomePage";
 import {MyInformation} from "./MyInformation/MyInformation";
 import {AboutUsSkeleton} from "./AboutUsPage/AboutUsSkeleton";
 import {NewDentist} from "./AddDentist/NewDentist";
+import ErrorPage from "./ErrorPage";
 function App() {
 
     return(
@@ -28,6 +29,7 @@ function App() {
             <Route path ="/clinic" element = {< ClinicHomePage/>} />
             <Route path ="/profile" element = {< MyInformation />} />
             <Route path = "/aboutUs" element = {< AboutUsSkeleton />} />
+            <Route path = "/error" element = {< ErrorPage />} />
             <Route />
         </Routes>
     );

@@ -1,6 +1,9 @@
+/**
+ * Page for viewing appointments as a clinic. 
+ * This class serves  function for tracking the logged clinic, communicating with backend, and structure for dispalying infromation.
+ */
 import './ViewAppointments.css'
 import React, {useEffect, useRef, useState, useCallback} from "react";
-import {MDBRow, MDBCol} from 'mdb-react-ui-kit';
 import TimeslotCard from './components/timeslotCard'
 import mqttHandler from "../common_components/MqttHandler";
 import {useNavigate} from "react-router-dom";
@@ -77,6 +80,7 @@ export default function ViewAppointments() {
                         break;
                     case client.options.clientId + '/canceledAppointment':
                         console.log(JSON.parse(message))
+                        alert(JSON.parse(message))
                         break;
                     default:
                         (new Error("The wrong message is received"))
@@ -99,7 +103,7 @@ export default function ViewAppointments() {
      * @param id the ID of the timeslot to be cancelled
      */
     const handleChildClick = (id) => {
-        const timeslotID = id;
+        const timeslotID =id;
         console.log(timeslotID)
         sendMessage('cancelAppointment', {
                 id: client.options.clientId,
@@ -112,32 +116,34 @@ export default function ViewAppointments() {
 
 //Line 125 with empty h2 I added a empty space to stop the empty header complaint -Askan
     return (
-        <div id="ty">
-            <PrivateNavbar/>
-            <div id="background">
-                <MDBRow>
-                    <MDBCol md='3'>
-                        <div className="card">
-                            <div className="card-body">
-                                <h3 id={"currentAppointments"}> Current appointments </h3>
-                                <h2 id={"currentAppointments"}> </h2>
-                                <img className="clinic"
-                                     src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
-                                     alt="clinic"/>
-                            </div>
+        <>
+        <PrivateNavbar/>
+    <div id="ty">
+        <div id="backgroundAppointments">
+            <div className="row">
+                <div className="col-3">
+                    <div className="cardAppointment">
+                        <div className="card-body">
+                            <h3 id={"currentAppointments"}> Current appointments </h3>
+                            <h2 id={"currentAppointments"}>~</h2>
+                            <img className="clinic"
+                                 src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
+                                 alt="clinic"/>
                         </div>
-                    </MDBCol>
-                    <MDBCol md='8'>
-                        <div id={"timeslots"}>
-                            {Array.from(appointments).map((appointment) => (
-                                <TimeslotCard key={appointment.id} appointment={appointment}
-                                              parentCallback={handleChildClick}/>
-                            ))}
-                        </div>
-                    </MDBCol>
-                </MDBRow>
+                    </div>
+                </div>
+                <div className='col-8'>
+                    <div id={"timeslots"}>
+                        {Array.from(appointments).map((appointment) => (
+                            <TimeslotCard key={appointment.id} appointment={appointment}
+                                          parentCallback={handleChildClick}/>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+</>
     );
 }
 
