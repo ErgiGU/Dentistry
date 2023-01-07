@@ -1,4 +1,8 @@
-// Example common component
+/**
+ * Navbar displayed for the patients.
+ * @author Agata Ciuchta (@ciuchta)
+ */
+
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -9,8 +13,8 @@ import '../common_components/Navbar.css'
 function PatientNavbar() {
     return (
         <div>
-            <div className="header">
-                <img className="logo" src={logo} alt="logo"/>
+            <div className="headerDentist">
+                <img className="logoNavbar" src={logo} alt="logo"/>
                 <h1>DENTAL CLINIC</h1>
             </div>
             <Navbar id="navbar" expand="lg">

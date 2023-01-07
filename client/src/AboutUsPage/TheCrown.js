@@ -4,16 +4,16 @@ import "./AboutUs.css";
 export function TheCrown() {
     return (
         <>
-            <div id="main">
-                <div id="info">
-                    <p id="intro-text">
+            <div id="aboutUs-main">
+                <div id="aboutUs-info">
+                    <p id="aboutUs-intro-text">
                         <br/><span style={{color: "#003d80"}}>THE CROWN</span> <br/> <br/>
                         We are located at <i> Lindholmsallén 19, Gothenburg. </i> <br/>
                         We aim the provide the best dental care service for all age groups. <br/>
                         Following are our opening hours for the respective days, feel free to book your desired
                         timeslot by going to the Appointments section.
-                        <div id="table">
-                            <table id="opening-hours">
+                        <div id="aboutUs-table">
+                            <table id="aboutUs-opening-hours">
                                 <tr>
                                     <th> Days</th>
                                     <th> Opening hours</th>

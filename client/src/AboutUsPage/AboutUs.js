@@ -4,8 +4,8 @@ export function AboutUs() {
 
     return (
         <>
-            <div id="text">
-                <p id="intro-text">
+            <div id="aboutUs-text">
+                <p id="aboutUs-intro-text">
                     <br/><span style={{color: "#003d80"}}>OUR STORY </span> <br/> <br/>
                     Dentistry is an online dental care booking application for clinics all over Gothenburg <br/>
                     Through our very flexible booking time slots specially adapted to the patients needs, <br/>
