@@ -134,6 +134,8 @@ authorization-unit-run-job:
   tags:
     - docker
   script:
-    - cd server/authorization
+    - cd server/helpers
+    - npm install
+    - cd ../authorization
     - npm install
     - node authorization_app.js
