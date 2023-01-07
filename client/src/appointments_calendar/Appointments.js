@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import Calendar from "./appointments_components/Calendar";
 import Loading from "./appointments_components/Loading";
 import mqttHandler from "../common_components/MqttHandler";
-import {getISOWeek} from "date-fns";
+import {getISOWeek, isWeekend} from "date-fns";
 import PatientNavbar from "../common_components/PatientNavbar";
 
 export default function Appointments() {
@@ -43,6 +43,7 @@ export default function Appointments() {
                         break;
                     case client.options.clientId + '/clinics':
                         setClinics(intermediary)
+                        console.log(intermediary)
                         setIsLoading(false)
                         break;
                     default:
@@ -61,10 +62,14 @@ export default function Appointments() {
 
     function generateTimeslotsFromOpeningHours() {
         let startWeek = getISOWeek(Date.now())
+        if (isWeekend(Date.now())) {
+            console.log('is weekend')
+            startWeek = startWeek + 1
+        }
 
         clinics.forEach(clinic => {
             let intermediaryTimeslots = {}
-            let templateWeek = generateTemplateWeek(clinic, clinic.dentists.length)
+            let templateWeek = generateTemplateWeek(clinic, clinic.dentists)
             for (let i = startWeek; i < (startWeek + 12); i++) {
                 intermediaryTimeslots[i] = templateWeek;
             }
@@ -73,11 +78,17 @@ export default function Appointments() {
                 weeks: intermediaryTimeslots
             }
             switch (clinic.name) {
-                case 'Clinic Testing':
+                case 'ClinicOne':
                     setLisebergDentistsTimeslots(intermediaryClinic)
                     break;
-                case 'Testing Clinic':
+                case 'Clinic Testing':
                     setToothFairyTimeslots(intermediaryClinic)
+                    break;
+                case 'clinic 52':
+                    setTheCrownTimeslots(intermediaryClinic)
+                    break;
+                case 'OssianDentists':
+                    setYourDentistTimeslots(intermediaryClinic)
                     break;
                 default:
                     break;

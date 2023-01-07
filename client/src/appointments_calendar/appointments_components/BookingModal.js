@@ -6,23 +6,21 @@ import {formatISO} from "date-fns";
 export default function BookingModal({modalShow, onClose, slot, clinic, client}) {
     const [formData, setFormData] = useState({
         patientName: '',
-        address: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
+        patientEmail: '',
+        patientDateOfBirth: '',
+        patientText: ''
     });
-    const clinicName = document.getElementById('clinicName');
-    const address = document.getElementById('address');
-    const email = document.getElementById('email');
-    const pass = document.getElementById('password');
-    const confPass = document.getElementById('confirmPassword');
-
+    const patientName = document.getElementById('clinicName');
+    const patientEmail = document.getElementById('address');
+    const patientDateOfBirth = document.getElementById('email');
+    const patientText = document.getElementById('password');
+    const alertPlaceholder = document.getElementById("displayAlert");
 
     //This is for the checkbox
     const [checked, setChecked] = useState(false);
     const handleChange = () => {
         setChecked(!checked);
-        const okButton = document.getElementById("btn1");
+        const okButton = document.getElementById("bookingButton");
         if (checked) {
             okButton.classList.add("disabled");
         } else {
@@ -43,8 +41,13 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
         let message = {
             clientId: client.options.clientId,
             body: {
+                // clinicID: clinic._id,
                 clinicID: '63b749fa938c270b734ec8fd',
                 patientInfo: {
+                    // name: patientName,
+                    // email: patientEmail,
+                    // dateOfBirth: patientDateOfBirth,
+                    // text: patientText
                     name: 'John',
                     email: 'john@doe.com',
                     dateOfBirth: '1978-02-09',
@@ -93,21 +96,10 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
                                     </div>
 
                                     <div className="form-floating mb-4">
-                                        <input type="text"
-                                               className="form-control form-control-lg"
-                                               id="address"
-                                               name="patientForm"
-                                               title="Invalid address format"
-                                               placeholder="a"
-                                               onChange={handleInputChange}
-                                               required pattern="^[\p{L}]+(\s+[\p{L}]+)*\s+[\d]+$" />
-                                        <label>Address</label>
-                                    </div>
-
-                                    <div className="form-floating mb-4">
                                         <input type={"email"}
                                                className={"form-control form-control-lg"}
                                                id={"email"}
+                                               value={formData.patientEmail}
                                                name={"patientForm"}
                                                placeholder={"a"}
                                                onChange={handleInputChange}
@@ -116,21 +108,40 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
                                     </div>
 
                                     <div className="form-floating mb-4">
-                                        <input type="password"
+                                        <input type="date"
                                                className="form-control form-control-lg"
-                                               id="password"
+                                               id="patientDateOfBirth"
                                                name="patientForm"
-                                               placeholder="b"
+                                               value={formData.patientDateOfBirth}
                                                onChange={handleInputChange}
-                                               required
-                                               pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"/>
-                                        <label>Password</label>
+                                               required/>
+                                        <label>Date of Birth</label>
+                                    </div>
+
+                                    <div className="form-floating mb-4">
+                                        <input type="text"
+                                               className="form-control form-control-lg"
+                                               id="patientText"
+                                               name="patientForm"
+                                               value={formData.patientText}
+                                               title="Describe your symptoms"
+                                               placeholder=""
+                                               onChange={handleInputChange}
+                                               required/>
+                                        <label>Address</label>
+                                    </div>
+
+                                    <div className="form-check d-flex mb-2">
+                                        <input className="form-check-input me-2"
+                                               type="checkbox" checked={checked}
+                                               onChange={handleChange} id="tosCheckbox"/>
+                                        <label className="form-check-label text-white">I accept the <a href={'#'} className="text-body"><u>Terms of Service</u></a> and acknowledge the use of my data for this booking</label>
                                     </div>
                                 </form>
                             </div>
                         </div>
                         <div className={'modal-footer'}>
-                            <div className={'btn'} onClick={handleBooking}>
+                            <div className={'btn btn-primary text-white sign-up disabled'} id={'bookingButton'} onClick={handleBooking}>
                                 Book
                             </div>
                         </div>
