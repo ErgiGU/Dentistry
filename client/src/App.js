@@ -18,8 +18,6 @@ function App() {
 
     return(
         //you can add more routes here, just follow the same format
-        <>
-
         <Routes>
             <Route path ="/addDentist" element={<NewDentist/>}/>
             <Route path ="/registration" element= {< Registration />} />
@@ -32,7 +30,6 @@ function App() {
             <Route path = "/aboutUs" element = {< AboutUsSkeleton />} />
             <Route />
         </Routes>
-        </>
     );
 }
 

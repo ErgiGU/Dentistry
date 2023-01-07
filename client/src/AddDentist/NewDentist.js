@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useState, useCallback} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import './NewDentist.css';
 import mqttHandler from "../common_components/MqttHandler";
 import PrivateNavbar from "../common_components/PrivateNavbar";
@@ -11,6 +11,7 @@ export function NewDentist() {
     const [currentClinic, setCurrentClinic] = useState({
         email: ''
     });
+
     const [formData, setFormData] = useState({
         dentistName: '',
         phoneNumber: '',
@@ -69,12 +70,12 @@ export function NewDentist() {
                 clinicDataFlag.current = false
                 switch (topic) {
                     case client.options.clientId + '/addDentistResponse':
-                        receivedMessage(message.toString())
+                        const pMessage = JSON.parse(message)
+                        alert(pMessage)
                         break;
                     case client.options.clientId + '/currentLoggedInClinicResponse':
-                        console.log(JSON.parse(message))
                         const pmessage = JSON.parse(message)
-                        setCurrentClinic(formData => ({
+                        setCurrentClinic(currentClinic => ({
                             ...currentClinic,
                             email: pmessage.email,
                         }))
@@ -85,24 +86,13 @@ export function NewDentist() {
             })
         }
 
-        /**
-         * Recieves the response from backend, parses it and sends it over to be alerted.
-         * @param message the response from backend.
-         */
-        function receivedMessage(message) {
-            console.log(message)
-            const pMessage = JSON.parse(message)
-            console.log(pMessage.status)
-            alert(pMessage)
-        }
-
         return () => {
             if (client !== null) {
                 console.log('ending process')
                 client.end()
             }
         }
-    }, [client, currentClinic])
+    }, [client, sendMessage])
 
     /**
      * Visually displays a response message to the user.
