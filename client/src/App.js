@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 import Registration from "./ClinicRegistration/Registration";
-import MapPage from "./clinics/MapPage"
+import MapPage from "./ClinicsMap/MapParent"
 import React from 'react';
 import Login from "./ClinicLogin/Login";
 import Home from "./home/Home";
@@ -21,8 +21,6 @@ function App() {
 
     return(
         //you can add more routes here, just follow the same format
-        <>
-
         <Routes>
             <Route path ="/addDentist" element={<NewDentist/>}/>
             <Route path ="/registration" element= {< Registration />} />
@@ -38,7 +36,6 @@ function App() {
             <Route path ="/clinic/schedule" element = {< ViewAppointments />} />
             <Route path ="/clinic/dentists" element = {< ViewDentists />} />
         </Routes>
-        </>
     );
 }
 

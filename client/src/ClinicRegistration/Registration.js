@@ -90,6 +90,8 @@ export default function Registration() {
                 }
             }, 3000);
 
+        }else {
+            navigate("/error")
         }
     }
 

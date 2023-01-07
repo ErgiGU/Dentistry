@@ -66,8 +66,8 @@ async function getDentist(email) {
 }
 
 /**
- * Does mongoose manipulations to get all JSON coordinates, opening hours, name and address of all clinics.
- * @returns {Promise<{clinics: *[]}|boolean>} JSON containing coordinates, opening hours, name and address of all clinics.
+ * Does mongoose manipulations to get all JSON coordinates, opening hours, name and address of all ClinicsMap.
+ * @returns {Promise<{ClinicsMap: *[]}|boolean>} JSON containing coordinates, opening hours, name and address of all ClinicsMap.
  */
 async function mapDataRequest() {
 
@@ -428,8 +428,8 @@ const clinicController = {
     editInfo,
     changePassword,
     addDentist,
-    getCurrentClinic
+    getCurrentClinic,
+    getDentist
 }
 
 module.exports = clinicController
-

@@ -7,6 +7,7 @@
 const assert = require('assert')
 const mqttHandler = require('../helpers/mqtt_handler');
 const util = require("util");
+const {MqttClient} = require("mqtt");
 let config
 try {
     config = require('../helpers/config-server');
@@ -112,7 +113,9 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                 }
             }
             const expectedResult = {
-                response: "Success"
+                response: {
+                    response: "Success"
+                }
             }
             await asyncMethod("bookTimeslot", "bookTimeslot", messageSend, expectedResult)
         })
@@ -121,12 +124,14 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
         it('See if timeslot(s) can be recieved', async function () {
             this.timeout(10000)
             const messageSend = {
-                client_id: "123",
+                id: "123",
                 body: {
-                    clinicID: clinicStored._id
+                    clinicID: clinicStored._id,
+                    test: "This is for a test"
                 }
             }
-            const expectedResult = {
+            const expectedResult = [{
+                id: "id",
                 patient: {
                     name: "John Jane",
                     text: "My tooth aches"
@@ -135,8 +140,9 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                     name: "William Bjorn"
                 },
                 timeslot: "9:30"
-            }
-            await asyncMethod("sendAppointmentInformation", "sendAppointmentInformation", messageSend, expectedResult)
+                }]
+
+            await asyncMethod("sendAppointmentInformation", "appointmentInformationResponse", messageSend, expectedResult)
         })
     })
 
@@ -151,11 +157,11 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                     thursday: {start: "8:00", end: "17:00"},
                     friday: {start: "8:00", end: "17:00"}
                 },
-                _id: "639f999b75948aaabf80d80f",
+                _id: clinicStored._id,
                 dentists: [],
                 timeslots: [],
                 name: "Testing Clinic",
-                password: "$2b$10$WnpIf0U4aaTn9x2dHFUnvu4MdpVuHdzQr.eyMIPsxJ96Mx/risOuy",
+                password: "password",
                 email: "burakaskan2001@gmail.com",
                 address: "Lindholmen",
                 city: "Göteborg",
@@ -163,11 +169,11 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
             }
             clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {
                 id: "123",
-                body: {email: "burakaskan2001@gmail.com"}
+                body: {email: "gusaskbu@student.gu.se"}
             }, fetchClinicExpectation)
             console.log(clinicStored)
             const messageSend = {
-                client_id: "123",
+                id: "123",
                 body: {
                     timeslotID: clinicStored.timeslots[0]
                 }
@@ -175,20 +181,18 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
             const expectedResult = {
                 response: "Success"
             }
-            await asyncMethod("cancelBookedTimeslot", "cancelBookedTimeslot", messageSend, expectedResult)
+            await asyncMethod("cancelAppointment", "canceledAppointment", messageSend, expectedResult)
         })
         it('Check if timeslot was deleted', async function () {
             this.timeout(10000)
             const messageSend = {
-                client_id: "123",
+                id: "123",
                 body: {
                     clinicID: clinicStored._id
                 }
             }
-            const expectedResult = {
-                response: "No timeslots"
-            }
-            await asyncMethod("sendAppointmentInformation", "sendAppointmentInformation", messageSend, expectedResult)
+            const expectedResult = []
+            await asyncMethod("sendAppointmentInformation", "appointmentInformationResponse", messageSend, expectedResult)
         })
     })
 
@@ -207,5 +211,8 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
 })
 //Is needed to close the tester in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
 after(function () {
-    process.exit()
+    setTimeout(() => {
+        process.exit()
+    }, 5000)
+
 });

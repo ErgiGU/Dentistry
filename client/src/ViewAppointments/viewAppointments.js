@@ -3,7 +3,7 @@
  * This class serves  function for tracking the logged clinic, communicating with backend, and structure for dispalying infromation.
  */
 import './ViewAppointments.css'
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState, useCallback} from "react";
 import TimeslotCard from './components/timeslotCard'
 import mqttHandler from "../common_components/MqttHandler";
 import {useNavigate} from "react-router-dom";
@@ -17,6 +17,20 @@ export default function ViewAppointments() {
     const [appointments, setAppointments] = useState([]);
     const navigate = useNavigate();
     let appointmentsFlag = useRef(true)
+    const sendMessage = useCallback((topic, json) => {
+        if (client !== null) {
+            appointmentsFlag.current = true
+            client.publish(topic, JSON.stringify(json))
+            setTimeout(() => {
+                if (appointmentsFlag.current) {
+                    navigate("/error");
+                }
+            }, 3000);
+
+        } else {
+            navigate("/error")
+        }
+    }, [client, navigate])
 // Primary client generating effect
     useEffect(() => {
         if (client === null) {
@@ -80,20 +94,7 @@ export default function ViewAppointments() {
                 client.end()
             }
         }
-    }, [client]);
-
-    function sendMessage(topic, json) {
-        if (client !== null) {
-            appointmentsFlag.current = true
-            client.publish(topic, JSON.stringify(json))
-            setTimeout(() => {
-                if (appointmentsFlag.current) {
-                    navigate("/error");
-                }
-            }, 3000);
-
-        }
-    }
+    }, [client, navigate, sendMessage]);
 
 
     /**
@@ -104,19 +105,16 @@ export default function ViewAppointments() {
     const handleChildClick = (id) => {
         const timeslotID =id;
         console.log(timeslotID)
-        if (client !== null) {
-            client.publish('cancelAppointment', JSON.stringify(
-                {
-                    id: client.options.clientId,
-                    body: {
-                        timeslotID: timeslotID
-                    }
+        sendMessage('cancelAppointment', {
+                id: client.options.clientId,
+                body: {
+                    timeslotID: timeslotID
                 }
-            ))
-        }
+            }
+        )
     }
 
-
+//Line 125 with empty h2 I added a empty space to stop the empty header complaint -Askan
     return (
         <>
         <PrivateNavbar/>
