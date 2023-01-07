@@ -10,7 +10,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Logo from '../assets/logo.png'
 import './Navbar.css'
 
-function PrivateNavbar() {
+export default function PrivateNavbar() {
     const navigate = useNavigate();
 
     function logout() {
@@ -24,8 +24,8 @@ function PrivateNavbar() {
 
     return (
         <div>
-            <div className="headerDentist">
-                <img className="logoNavbar" src={Logo} alt="logo"/>
+            <div id="headerDentist">
+                <img id="logoNavbar" src={Logo} alt="logo"/>
                 <h1>DENTAL CLINIC</h1>
             </div>
             <Navbar id="navbar" expand="lg">
@@ -33,7 +33,6 @@ function PrivateNavbar() {
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="justify-content-end">
-
                             <Link to={'/appointments'}>Schedule</Link>
                             <Link to={'/profile'}>Your information</Link>
                             <Link to={'/addDentist'}>Add a dentist</Link>
@@ -42,11 +41,6 @@ function PrivateNavbar() {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-
-
         </div>
-
-    );
+    )
 }
-
-export default PrivateNavbar;

@@ -9,7 +9,7 @@ import TheCrown from "./TheCrown";
 import LisebergDentist from "./LisebergDentist";
 import AboutUs from "./AboutUs";
 
-export function AboutUsSkeleton() {
+export default function AboutUsSkeleton() {
     const [showClinic1, setShowClinic1] = useState(false);
     const [showClinic2, setShowClinic2] = useState(false);
     const [showClinic3, setShowClinic3] = useState(false);

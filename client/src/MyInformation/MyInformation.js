@@ -5,7 +5,7 @@ import PrivateNavbar from "../common_components/PrivateNavbar";
 import jwt from "jsonwebtoken";
 import {useNavigate} from "react-router-dom";
 
-export function MyInformation() {
+export default function MyInformation() {
     const [changedValue, setChangedValue] = useState(false);
     const [client, setClient] = useState(null);
     const [currentClinic, setCurrentClinic] = useState({

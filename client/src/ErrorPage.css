@@ -1,13 +1,15 @@
-#error-main{
+#error-main {
     background-color: #ADD8E6;
     height: max-content;
 }
-#error-oops{
+
+#error-oops {
     font-size: 45px;
     text-align: center;
     font-style: oblique;
 }
-#error-content{
+
+#error-content {
     text-align: justify;
     margin: 10%;
     margin-left: 25%;
@@ -16,10 +18,11 @@
 }
 
 @media only screen and (max-width: 500px) {
-    #error-oops{
+    #error-oops {
         font-size: 35px;
     }
-    #error-content{
+
+    #error-content {
         text-align: justify;
         margin: 10%;
         border-style: groove;

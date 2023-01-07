@@ -5,7 +5,7 @@ import PrivateNavbar from "../common_components/PrivateNavbar";
 import jwt from "jsonwebtoken";
 import {useNavigate} from "react-router-dom";
 
-export function NewDentist() {
+export default function NewDentist() {
     const [client, setClient] = useState(null);
     const [currentClinic, setCurrentClinic] = useState({
         email: ''
@@ -154,7 +154,7 @@ export function NewDentist() {
     }
 
     return (
-        <>
+        <div>
             <PrivateNavbar/>
             <div className="newDentistContainer">
                 <div id="dentistAlertPlaceholder"></div>
@@ -213,6 +213,6 @@ export function NewDentist() {
                     </button>
                 </form>
             </div>
-        </>
+        </div>
     )
 }

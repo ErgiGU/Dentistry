@@ -8,9 +8,9 @@ import Login from "./ClinicLogin/Login";
 import Home from "./home/Home";
 import ClinicAppointments from "./ViewAppointments/viewAppointments"
 import ClinicHomePage from "./ClinicHomePage/ClinicHomePage";
-import {MyInformation} from "./MyInformation/MyInformation";
-import {AboutUsSkeleton} from "./AboutUsPage/AboutUsSkeleton";
-import {NewDentist} from "./AddDentist/NewDentist";
+import MyInformation from "./MyInformation/MyInformation";
+import AboutUsSkeleton from "./AboutUsPage/AboutUsSkeleton";
+import NewDentist from "./AddDentist/NewDentist";
 import ErrorPage from "./ErrorPage";
 import Appointments from "./appointments_calendar/Appointments";
 
@@ -20,20 +20,20 @@ function App() {
         //you can add more routes here, just follow the same format
         <>
 
-        <Routes>
-            <Route path ="/addDentist" element={<NewDentist/>}/>
-            <Route path ="/registration" element= {< Registration />} />
-            <Route path ="/login" element= {< Login />} />
-            <Route path ="/Home" element= {< Home />} />
-            <Route path ="/map" element = {< MapPage />} />
-            <Route path ="/clinicAppointments" element = {< ClinicAppointments />} />
-            <Route path ="/appointments" element = {< Appointments />} />
-            <Route path ="/clinic" element = {< ClinicHomePage/>} />
-            <Route path ="/profile" element = {< MyInformation />} />
-            <Route path ="/aboutUs" element = {< AboutUsSkeleton />} />
-            <Route path ="/error" element = {<ErrorPage/>} />
-            <Route />
-        </Routes>
+            <Routes>
+                <Route path="/addDentist" element={<NewDentist/>}/>
+                <Route path="/registration" element={< Registration/>}/>
+                <Route path="/login" element={< Login/>}/>
+                <Route path="/Home" element={< Home/>}/>
+                <Route path="/map" element={< MapPage/>}/>
+                <Route path="/clinicAppointments" element={< ClinicAppointments/>}/>
+                <Route path="/appointments" element={< Appointments/>}/>
+                <Route path="/clinic" element={< ClinicHomePage/>}/>
+                <Route path="/profile" element={< MyInformation/>}/>
+                <Route path="/aboutUs" element={< AboutUsSkeleton/>}/>
+                <Route path="/error" element={<ErrorPage/>}/>
+                <Route/>
+            </Routes>
         </>
     );
 }

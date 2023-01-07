@@ -1,5 +1,5 @@
 /* Example Homepage css */
-.footer {
+#footer {
     left: 0;
     bottom: 0;
     width: 100%;
@@ -7,7 +7,6 @@
     background-color: steelblue;
     color: white;
     text-align: center;
-
 }
 
 #clinic {

@@ -7,12 +7,12 @@ import '../home/Card.css';
 import CardItem from '../common_components/CardItem';
 import Services from '../assets/services.png'
 
-function Card() {
+export default function Card() {
     return (
-        <div className='cards'>
-            <div className='cards__container'>
-                <div className='cards__wrapper'>
-                    <ul className='cards__items'>
+        <div id='cards'>
+            <div id='cards__container'>
+                <div id='cards__wrapper'>
+                    <ul id='cards__items'>
                         <CardItem
                             src='https://static9.depositphotos.com/1023803/1104/i/600/depositphotos_11043046-stock-photo-closeup-of-calendar-page.jpg'
                             text='Check out all the booked appointments and their specifications.'
@@ -29,7 +29,7 @@ function Card() {
                             path='/'
                         />
                     </ul>
-                    <ul className='cards__items'>
+                    <ul id='cards__items'>
                         <CardItem
                             src="https://static8.depositphotos.com/1000423/922/i/600/depositphotos_9220251-stock-photo-scientists-in-laboratory.jpg"
                             text='Add a new dentist to your clinic.'
@@ -42,8 +42,6 @@ function Card() {
                 </div>
             </div>
         </div>
-    );
+    )
 }
-
-export default Card;
 

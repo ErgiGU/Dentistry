@@ -1,5 +1,5 @@
 /**
- * Page for viewing appointments as a clinic. 
+ * Page for viewing appointments as a clinic.
  * This class serves  function for tracking the logged clinic, communicating with backend, and structure for dispalying infromation.
  */
 import './ViewAppointments.css'
@@ -103,7 +103,7 @@ export default function ViewAppointments() {
      * @param id the ID of the timeslot to be cancelled
      */
     const handleChildClick = (id) => {
-        const timeslotID =id;
+        const timeslotID = id;
         console.log(timeslotID)
         if (client !== null) {
             client.publish('cancelAppointment', JSON.stringify(
@@ -120,33 +120,33 @@ export default function ViewAppointments() {
 
     return (
         <>
-        <PrivateNavbar/>
-    <div id="ty">
-        <div id="backgroundAppointments">
-            <div className="row">
-                <div className="col-3">
-                    <div className="cardAppointment">
-                        <div className="card-body">
-                            <h3 id={"currentAppointments"}> Current appointments </h3>
-                            <h2 id={"currentAppointments"}>~</h2>
-                            <img className="clinic"
-                                 src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
-                                 alt="clinic"/>
+            <PrivateNavbar/>
+            <div id="ty">
+                <div id="backgroundAppointments">
+                    <div className="row">
+                        <div className="col-3">
+                            <div className="cardAppointment">
+                                <div className="card-body">
+                                    <h3 id={"currentAppointments"}> Current appointments </h3>
+                                    <h2 id={"currentAppointments"}>~</h2>
+                                    <img className="clinic"
+                                         src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
+                                         alt="clinic"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='col-8'>
+                            <div id={"timeslots"}>
+                                {Array.from(appointments).map((appointment) => (
+                                    <TimeslotCard key={appointment.id} appointment={appointment}
+                                                  parentCallback={handleChildClick}/>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div className='col-8'>
-                    <div id={"timeslots"}>
-                        {Array.from(appointments).map((appointment) => (
-                            <TimeslotCard key={appointment.id} appointment={appointment}
-                                          parentCallback={handleChildClick}/>
-                        ))}
-                    </div>
-                </div>
             </div>
-        </div>
-    </div>
-</>
+        </>
     );
 }
 

@@ -179,7 +179,8 @@ export default function Appointments() {
                 </div>
             </div>
             <div className={"btn btn-primary"} role={'button'} onClick={triggerLoad}>Trigger load</div>
-            <div className={"btn btn-primary"} role={'button'} onClick={generateTimeslotsFromOpeningHours}>Trigger fun</div>
+            <div className={"btn btn-primary"} role={'button'} onClick={generateTimeslotsFromOpeningHours}>Trigger fun
+            </div>
             <React.StrictMode>
                 {isLoading ? <Loading/> :
                     <Calendar clinic={currentClinic} clinicTimeslots={currentClinic} client={client}/>}

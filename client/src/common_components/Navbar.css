@@ -1,5 +1,5 @@
 
-.headerDentist {
+#headerDentist {
     padding: 30px;
     text-align: left;
     color: white;
@@ -56,7 +56,7 @@
     padding-top: 60px;
 }
 
-.logoNavbar {
+#logoNavbar {
     width: 60px;
     height: 60px;
     margin-bottom: 0%;

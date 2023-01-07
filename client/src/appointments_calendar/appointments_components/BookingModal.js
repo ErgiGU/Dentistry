@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import ReactDom from "react-dom";
 import './Modal.css'
 import {formatISO} from "date-fns";
@@ -54,7 +54,7 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
                     text: 'teef hurt'
                 },
                 dentistID: '63b80067182f8ac5d5568cdd',
-                date: formatISO(Date.now(), {representation:"date"}),
+                date: formatISO(Date.now(), {representation: "date"}),
                 time: slot.time
             }
         }
@@ -79,7 +79,8 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
                             </div>
                             <div id={'patientInformationForm'}>
                                 <form id={'patientInfoForm'} className={'flex flex-column'}>
-                                    <h2 className="text-center text-white mb-3" style={{top: '100px'}}>Patient information</h2>
+                                    <h2 className="text-center text-white mb-3" style={{top: '100px'}}>Patient
+                                        information</h2>
 
                                     <div id='displayAlert'></div>
 
@@ -135,13 +136,17 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
                                         <input className="form-check-input me-2"
                                                type="checkbox" checked={checked}
                                                onChange={handleChange} id="tosCheckbox"/>
-                                        <label className="form-check-label text-white">I accept the <a href={'#'} className="text-body"><u>Terms of Service</u></a> and acknowledge the use of my data for this booking</label>
+                                        <label className="form-check-label text-white">I accept the <a href={'#'}
+                                                                                                       className="text-body"><u>Terms
+                                            of Service</u></a> and acknowledge the use of my data for this
+                                            booking</label>
                                     </div>
                                 </form>
                             </div>
                         </div>
                         <div className={'modal-footer'}>
-                            <div className={'btn btn-primary text-white sign-up disabled'} id={'bookingButton'} onClick={handleBooking}>
+                            <div className={'btn btn-primary text-white sign-up disabled'} id={'bookingButton'}
+                                 onClick={handleBooking}>
                                 Book
                             </div>
                         </div>

@@ -2,7 +2,6 @@
  * Navbar displayed for the patients.
  * @author Agata Ciuchta (@ciuchta)
  */
-
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -10,7 +9,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import logo from '../assets/logo.png'
 import '../common_components/Navbar.css'
 
-function PatientNavbar() {
+export default function PatientNavbar() {
     return (
         <div>
             <div className="headerDentist">
@@ -30,10 +29,6 @@ function PatientNavbar() {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-
         </div>
-
-    );
+    )
 }
-
-export default PatientNavbar;
