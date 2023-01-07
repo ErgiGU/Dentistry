@@ -27,6 +27,9 @@ mqttClient.subscribeTopic('editInfo')
 mqttClient.subscribeTopic('getDentist')
 mqttClient.subscribeTopic('changePassword')
 mqttClient.subscribeTopic('getDentists')
+mqttClient.subscribeTopic('editDentistInfo')
+mqttClient.subscribeTopic('setDentistSchedule')
+
 
 
 // When a message arrives, respond to it or propagate it further
@@ -97,6 +100,16 @@ try {
             case 'getDentists':
                 clinic_data_controller.getDentistCard(intermediary).then(res => {
                     mqttClient.sendMessage(intermediary.id + '/getDentistsResponse', res)
+                })
+                break;
+            case 'editDentistInfo':
+                clinic_data_controller.setDentistInfo(intermediary).then(res => {
+                    mqttClient.sendMessage(intermediary.id + '/editDentistInfoResponse', res)
+                })
+                break;
+            case 'setDentistSchedule':
+                clinic_data_controller.setDentistSchedule(intermediary).then(res => {
+                    mqttClient.sendMessage(intermediary.id + '/setDentistScheduleResponse', res)
                 })
                 break;
         }

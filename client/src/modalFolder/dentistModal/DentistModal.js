@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import "./DentistModal.css"
+import mqttHandler from "../../common_components/MqttHandler";
+import jwt from "jsonwebtoken";
 
 //in case needed bootstrap template
 
@@ -13,14 +15,39 @@ import "./DentistModal.css"
 ///>
 
 
-const Modal = ({ open, onClose, props}) => {
+const Modal = ({ open, onClose, name, email, phoneNumber, id}) => {
 
-    const { name, email, phoneNumber } = props;
     const [client, setClient] = useState(null);
-    const [setName] = useState(name);
-    const [setPhone] = useState(phoneNumber);
-    const [setEmail] = useState(email);
+    const [currentName, setCurrentName] = useState(name);
+    const [phone, setPhone] = useState(phoneNumber);
+    const [currentEmail, setCurrentEmail] = useState(email);
 
+    useEffect(() => {
+        if (client === null) {
+            setClient(mqttHandler.getClient(client))
+        }
+    }, [client])
+
+    useEffect(() => {
+        if (client !== null) {
+            client.subscribe(client.options.clientId + '/#')
+            client.on('message', function (topic, message) {
+                switch (topic) {
+                    case client.options.clientId + '/editDentistInfoResponse':
+                        console.log(JSON.parse(message))
+                        const pMessage = JSON.parse(message)
+                        alert(pMessage.text)
+                        break;
+                }
+            })
+        }
+        return () => {
+            if (client !== null) {
+                console.log("ending process");
+                client.end()
+            }
+        }
+    }, [client]);
     /**
      * Changes the initial state of the variables when the user changes in something, in order to keep
      * track of the user's input.
@@ -29,13 +56,13 @@ const Modal = ({ open, onClose, props}) => {
     const handleChanges = (e) => {
         const {id, value} = e.target;
         if (id === "name") {
-            setName(value);
+            setCurrentName(value);
         }
         if (id === "phone") {
             setPhone(value);
         }
         if (id === "email") {
-            setEmail(value);
+            setCurrentEmail(value);
         }
     }
 
@@ -58,14 +85,14 @@ const Modal = ({ open, onClose, props}) => {
                 alert(message)
             } else {
                 if (client !== null) {
-                    client.publish('editInfo', JSON.stringify(
+                    client.publish('editDentistInfo', JSON.stringify(
                         {
                             id: client.options.clientId,
                             body: {
-                                name: name,
-                                phone: phoneNumber,
-                                email: 'modify@hotmail.se',
-                                newEmail: email,
+                                id: id,
+                                name: currentName,
+                                phone: phone,
+                                email: currentEmail,
                             },
                         }
                     ))
@@ -96,7 +123,7 @@ const Modal = ({ open, onClose, props}) => {
                                 placeholder="Name"
                                 name="name"
                                 id={"name"}
-                                value={name}
+                                value={currentName}
                                 style={{color: "black"}}
                                 onChange={(e) => handleChanges(e)}
                             />
@@ -105,15 +132,15 @@ const Modal = ({ open, onClose, props}) => {
                     </div>
                     <div className="form-floating">
                         <input
-                            type="text"
+                            type="tel"
                             className="form-control"
                             placeholder="PhoneNumber"
                             name="phoneNumber"
                             id={"phoneNumber"}
-                            value={phoneNumber}
+                            value={phone}
                             onChange={(e) => handleChanges(e)}
                         />
-                        <label htmlFor="phoneNumber"> Dentist's owner </label>
+                        <label htmlFor="phoneNumber"> Dentist's phone number </label>
                     </div>
                     <div className="form-floating">
                         <input
@@ -122,7 +149,7 @@ const Modal = ({ open, onClose, props}) => {
                             placeholder="Email"
                             name="email"
                             id={"email"}
-                            value={email}
+                            value={currentEmail}
                             onChange={(e) => handleChanges(e)}
                         />
                         <label htmlFor="email"> Dentist's email </label>

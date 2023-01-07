@@ -79,14 +79,14 @@ async function mapDataRequest() {
 
             let openingHourString
 
-            if(clinic.openingHours.monday.start) {
+            if (clinic.openingHours.monday.start) {
                 openingHourString = "Opening Hours: " +
                     "Monday: " + clinic.openingHours.monday.start + " - " + clinic.openingHours.monday.end +
                     "  Tuesday: " + clinic.openingHours.tuesday.start + " - " + clinic.openingHours.tuesday.end +
                     "  Wednesday: " + clinic.openingHours.wednesday.start + " - " + clinic.openingHours.wednesday.end +
                     "  Thursday: " + clinic.openingHours.thursday.start + " - " + clinic.openingHours.thursday.end +
                     "  Friday : " + clinic.openingHours.friday.start + " - " + clinic.openingHours.friday.end
-            }else {
+            } else {
                 openingHourString = "No opening hours given"
             }
             clinicMapJSON.clinics.push({
@@ -108,6 +108,7 @@ async function mapDataRequest() {
         console.log(err)
     }
 }
+
 /**
  * Removes all data from the database
  * @returns {Promise<boolean>} returns success or failure
@@ -128,6 +129,7 @@ async function removeData() {
         response: "Success"
     }
 }
+
 /**
  * Checks if the email provided already exists in the database.
  * @param email The email provided
@@ -162,24 +164,24 @@ async function editInfo(req) {
             clinic.owner = req.body.owner || clinic.owner;
             clinic.address = req.body.address || clinic.address;
             clinic.email = req.body.newEmail || clinic.email;
-            if(req.body.openingHours) {
-                if(req.body.openingHours.monday){
+            if (req.body.openingHours) {
+                if (req.body.openingHours.monday) {
                     clinic.openingHours.monday.start = req.body.openingHours.monday.start || clinic.openingHours.monday.start;
                     clinic.openingHours.monday.end = req.body.openingHours.monday.end || clinic.openingHours.monday.end;
                 }
-                if(req.body.openingHours.tuesday) {
+                if (req.body.openingHours.tuesday) {
                     clinic.openingHours.tuesday.start = req.body.openingHours.tuesday.start || clinic.openingHours.tuesday.start;
                     clinic.openingHours.tuesday.end = req.body.openingHours.tuesday.end || clinic.openingHours.tuesday.end;
                 }
-                if(req.body.openingHours.wednesday) {
+                if (req.body.openingHours.wednesday) {
                     clinic.openingHours.wednesday.start = req.body.openingHours.wednesday.start || clinic.openingHours.wednesday.start;
                     clinic.openingHours.wednesday.end = req.body.openingHours.wednesday.end || clinic.openingHours.wednesday.end;
                 }
-                if(req.body.openingHours.thursday) {
+                if (req.body.openingHours.thursday) {
                     clinic.openingHours.thursday.start = req.body.openingHours.thursday.start || clinic.openingHours.thursday.start;
                     clinic.openingHours.thursday.end = req.body.openingHours.thursday.end || clinic.openingHours.thursday.end;
                 }
-                if(req.body.openingHours.friday) {
+                if (req.body.openingHours.friday) {
                     clinic.openingHours.friday.start = req.body.openingHours.friday.start || clinic.openingHours.friday.start;
                     clinic.openingHours.friday.end = req.body.openingHours.friday.end || clinic.openingHours.friday.end;
                 }
@@ -252,9 +254,7 @@ async function changePassword(req) {
 async function getDentistCard(intermediary) {
     let clinicDentists = [];
     const clinicID = intermediary.body.clinicID
-    console.log(clinicID)
     const dentists = await dentistModel.find({clinic: clinicID})
-    // const clinic = await clinicModel.find
     console.log(dentists)
     try {
         dentists.forEach(dentist => {
@@ -263,8 +263,13 @@ async function getDentistCard(intermediary) {
                 name: dentist.name,
                 email: dentist.email,
                 phoneNumber: dentist.phoneNumber,
-
-                workWeek: dentist.workWeek
+                workWeek: {
+                    monday: dentist.workweek.monday,
+                    tuesday: dentist.workweek.tuesday,
+                    wednesday: dentist.workweek.wednesday,
+                    thursday: dentist.workweek.thursday,
+                    friday: dentist.workweek.friday
+                }
             })
         })
         console.log(clinicDentists)
@@ -290,21 +295,21 @@ async function getDentistCard(intermediary) {
  * @returns {Promise<string>} A status and a response text.
  */
 async function setDentistSchedule(req) {
-    const email = req.body.email
-    console.log(email)
-    const dentist = await dentistModel.findOne({email})
+    const theID = req.body.id
+    console.log(theID)
+    const dentist = await dentistModel.findById(theID)
     let message;
     if (dentist) {
-        {
-            dentist.monday = req.body.monday || dentist.monday,
-                dentist.tuesday = req.body.tuesday || dentist.tuesday,
-                dentist.wednesday = req.body.wednesday || dentist.wednesday,
-                dentist.thursday = req.body.thursday || dentist.thursday,
-                dentist.friday = req.body.friday || dentist.friday
-        }
+        dentist.workweek.monday = req.body.workweek.monday,
+            dentist.workweek.tuesday = req.body.workweek.tuesday,
+            dentist.workweek.wednesday = req.body.workweek.wednesday,
+            dentist.workweek.thursday = req.body.workweek.thursday,
+            dentist.workweek.friday = req.body.workweek.friday
         dentist.save();
-        console.log("Workweek successfully updated")
-        console.log(clinic)
+        message = {
+            status: 200,
+            text: "Updated!"
+        }
     } else {
         message = {
             status: 404,
@@ -322,17 +327,21 @@ async function setDentistSchedule(req) {
  * @returns {Promise<string>} A status and a response text.
  */
 async function setDentistInfo(req) {
-    const email = req.body.email
-    console.log(email)
-    const dentist = await dentistModel.findOne({email})
+    const theID = req.body.id
+    console.log(theID)
+    const dentist = await dentistModel.findById(theID)
     let message;
     if (dentist) {
         dentist.name = req.body.name || dentist.name,
             dentist.email = req.body.email || dentist.email,
             dentist.phonenumber = req.body.phonenumber || dentist.phonenumber,
-        dentist.save();
+            dentist.save();
         console.log("Dentist successfully updated")
         console.log(dentist)
+        message = {
+            status: 200,
+            text: "Updated!"
+        }
     } else {
         message = {
             status: 404,

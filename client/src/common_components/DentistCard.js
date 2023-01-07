@@ -3,9 +3,8 @@ import "./DentistCard.css"
 import EditSchedule from "../modalFolder/scheduelModal/EditEmployee"
 import EditDentist from "../modalFolder/dentistModal/DentistModal";
 
-function DentistCard(props) {
+function DentistCard({id, name, email, phoneNumber, workweek, clinic}) {
 
-    const { id, name, email, phoneNumber, workweek } = props;
     const [openDentistModal, setOpenDentistModal] = useState(false);
     const [openScheduleModal, setOpenScheduleModal] = useState(false);
 //are email and phone mandatory?
@@ -37,6 +36,7 @@ function DentistCard(props) {
                                      id={id}
                                      name={name}
                                      email={email}
+                                     clinic={clinic}
                                      PhoneNumber={phoneNumber}/>
 
             </div>

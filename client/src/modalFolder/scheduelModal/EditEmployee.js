@@ -1,30 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import "./EditEmployee.css"
+import mqttHandler from "../../common_components/MqttHandler";
 
 
-const Modal = ({ open, onClose, dentist }) => {
+const Modal = ({id, open, onClose, name, workweek}) => {
 
-    const { id, name, workweek } = dentist;
 
     const [client, setClient] = useState(null);
-    const [setMonday, setSetMonday] = useState(workweek.monday);
-    const [setTuesday, setSetTuesday] = useState(workweek.tuesday);
-    const [setWednesday, setSetWednesday] = useState(workweek.wednesday);
-    const [setThursday, setSetThursday] = useState(workweek.thursday);
-    const [setFriday, setSetFriday] = useState(workweek.friday);
-    const [setSaturday, setSetSaturday] = useState(workweek.saturday);
-    const [setSunday, setSetSunday] = useState(workweek.sunday);
-
-    useEffect(() => {
-        setSetMonday(workweek.monday);
-        setSetTuesday(workweek.tuesday);
-        setSetWednesday(workweek.wednesday);
-        setSetThursday(workweek.thursday);
-        setSetFriday(workweek.friday);
-        setSetSaturday(workweek.saturday);
-        setSetSunday(workweek.sunday);
-    }, [workweek]);
-
     /**
      * provides the starting positions for the workweek toggles and updates them when the user changes them.
      * @param toggles Event object which contains the user input and field id.
@@ -36,9 +18,34 @@ const Modal = ({ open, onClose, dentist }) => {
         Wednesday: workweek.wednesday,
         Thursday: workweek.thursday,
         Friday: workweek.friday,
-        Saturday: workweek.saturday,
-        Sunday: workweek.sunday
     });
+
+    useEffect(() => {
+        if (client === null) {
+            setClient(mqttHandler.getClient(client))
+        }
+    }, [client])
+
+    useEffect(() => {
+        if (client !== null) {
+            client.subscribe(client.options.clientId + '/#')
+            client.on('message', function (topic, message) {
+                switch (topic) {
+                    case client.options.clientId + '/setDentistScheduleResponse':
+                        console.log(JSON.parse(message))
+                        const pMessage = JSON.parse(message)
+                        alert(pMessage.text)
+                        break;
+                }
+            })
+        }
+        return () => {
+            if (client !== null) {
+                console.log("ending process");
+                client.end()
+            }
+        }
+    }, [client]);
 
     if (!open) return null;
 
@@ -50,18 +57,16 @@ const Modal = ({ open, onClose, dentist }) => {
 
     const submit = (event) => {
         if (client !== null) {
-            client.publish("editInfo", JSON.stringify({
+            client.publish("setDentistSchedule", JSON.stringify({
                 id: client.options.clientId,
                 body: {
                     id: id,
                     workweek: {
-                        monday: setMonday,
-                        tuesday: setTuesday,
-                        wednesday: setWednesday,
-                        thursday: setThursday,
-                        friday: setFriday,
-                        saturday: setSaturday,
-                        sunday: setSunday
+                        monday: toggles.Monday,
+                        tuesday: toggles.Tuesday,
+                        wednesday: toggles.Wednesday,
+                        thursday: toggles.Thursday,
+                        friday: toggles.Friday
                     }
                 }
             }));
@@ -139,11 +144,11 @@ const Modal = ({ open, onClose, dentist }) => {
                     </div>
                 </div>
                 <div className="scheduleNoteAndConfirm">
-                <h5>
-                    NOTE: this is a running calender,
-                    it will display the same hours from week to week if no changes are made.
-                    If your schedule changes please update this calender.
-                </h5>
+                    <h5>
+                        NOTE: this is a running calender,
+                        it will display the same hours from week to week if no changes are made.
+                        If your schedule changes please update this calender.
+                    </h5>
                     <button
                         className={"scheduleConfirmBtn"}
                         onClick={e => {
