@@ -26,6 +26,8 @@ mqttClient.subscribeTopic('wipeTestData')
 mqttClient.subscribeTopic('editInfo')
 mqttClient.subscribeTopic('getDentist')
 mqttClient.subscribeTopic('changePassword')
+mqttClient.subscribeTopic('getDentists')
+
 
 // When a message arrives, respond to it or propagate it further
 try {
@@ -91,6 +93,11 @@ try {
                 console.log("Entered")
                 let response = await clinic_data_controller.removeData()
                 mqttClient.sendMessage('123/wipeTestData', JSON.stringify(response))
+                break;
+            case 'getDentists':
+                clinic_data_controller.getDentistCard(intermediary).then(res => {
+                    mqttClient.sendMessage(intermediary.id + '/getDentistsResponse', res)
+                })
                 break;
         }
     });

@@ -249,15 +249,30 @@ async function changePassword(req) {
  * @param req the message from the frontend, that being the body containing the clinics ID.
  * @returns {Promise<string>} A status and a response text.
  */
-async function getDentistCard(req) {
-    const clinicID = req.body.id;
-    console.log(clinicID);
-    const dentists = await dentistModel.find({ clinicID });
-    let message;
+async function getDentistCard(intermediary) {
+    let clinicDentists = [];
+    const clinicID = intermediary.body.clinicID
+    console.log(clinicID)
+    const dentists = await dentistModel.find({clinic: clinicID})
+    // const clinic = await clinicModel.find
+    console.log(dentists)
+    try {
+        dentists.forEach(dentist => {
+            clinicDentists.push({
+                id: dentist._id,
+                name: dentist.name,
+                email: dentist.email,
+                phoneNumber: dentist.phoneNumber,
+
+                workWeek: dentist.workWeek
+            })
+        })
+        console.log(clinicDentists)
+    } catch (e) {
+        console.log(e)
+    }
     if (dentists.length > 0) {
-        message = {
-            dentists: dentists
-        };
+        return JSON.stringify(clinicDentists);
     } else {
         message = {
             status: 404,
@@ -312,11 +327,9 @@ async function setDentistInfo(req) {
     const dentist = await dentistModel.findOne({email})
     let message;
     if (dentist) {
-        {
-            dentist.name = req.body.name || dentist.name,
-                dentist.email = req.body.email || dentist.email,
-                dentist.phonenumber = req.body.phonenumber || dentist.phonenumber,
-        }
+        dentist.name = req.body.name || dentist.name,
+            dentist.email = req.body.email || dentist.email,
+            dentist.phonenumber = req.body.phonenumber || dentist.phonenumber,
         dentist.save();
         console.log("Dentist successfully updated")
         console.log(dentist)
