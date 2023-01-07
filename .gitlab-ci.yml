@@ -70,7 +70,9 @@ appointments-unit-run-job:
   tags:
     - docker
   script:
-    - cd server/appointments
+    - cd server/helpers
+    - npm install
+    - cd ../appointments
     - npm install
     - node appointments_app.js
 
@@ -102,7 +104,9 @@ clinic_data-unit-run-job:
   tags:
     - docker
   script:
-    - cd server/clinic_data
+    - cd server/helpers
+    - npm install
+    - cd ../clinic_data
     - npm install
     - node clinic_data_app.js
 
