@@ -29,15 +29,13 @@ export default function PrivateNavbar() {
                 <h1>DENTAL CLINIC</h1>
             </div>
             <Navbar id="navbar" expand="lg">
-                <Container id="me-auto">
+                <Container className="me-auto">
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="justify-content-end">
-                            <Link to={'/appointments'}>Schedule</Link>
-                            <Link to={'/profile'}>Your information</Link>
-                            <Link to={'/addDentist'}>Add a dentist</Link>
-                            <Link onClick={logout} to={'/login'}>Log out</Link>
-                        </Nav>
+                    <Navbar.Collapse id="basic-navbar-nav" className={'justify-content-center'}>
+                        <Link to={'/appointments'}>Schedule</Link>
+                        <Link to={'/profile'}>Your information</Link>
+                        <Link to={'/addDentist'}>Add a dentist</Link>
+                        <Link onClick={logout} to={'/login'}>Log out</Link>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
