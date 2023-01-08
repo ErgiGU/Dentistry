@@ -30,7 +30,7 @@ function DentistCard({id, name, email, phoneNumber, workweek, clinic}) {
                                       workweek={workweek}/>
 
 
-                        <button className="openDentistModal" onClick={() => setOpenDentistModal(true)}>Edit info</button>
+                        <button id="openDentistModal" onClick={() => setOpenDentistModal(true)}>Edit info</button>
                         <EditDentist open={openDentistModal}
                                      onClose={() => setOpenDentistModal(false)}
                                      id={id}
