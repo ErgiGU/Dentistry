@@ -16,7 +16,7 @@ main{
 }
 
 
-.dentistModalContainer{
+#dentistModalContainer {
     max-width: 40%;
     min-height: 50%;
     width: 100%;
