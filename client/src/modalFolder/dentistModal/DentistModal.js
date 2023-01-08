@@ -154,7 +154,7 @@ const Modal = ({ open, onClose, name, email, phoneNumber, id}) => {
                         />
                         <label htmlFor="email"> Dentist's email </label>
                     </div>
-                    <button className={"button"} onClick={(e) => submit(e)}>
+                    <button className={"btn"} onClick={(e) => submit(e)}>
                         Change info
                     </button>
                 </div>
