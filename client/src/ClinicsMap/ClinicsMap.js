@@ -37,7 +37,7 @@ export default function Maps(props) {
             if (client !== null) {
                 client.subscribe(client.options.clientId + '/#')
                 sendMessage('mapDataRequest', {
-                    id: client.options.clientId,
+                    clientId: client.options.clientId,
                     body: "MapDataRequest"
                 })
                 client.on('message', function (topic, message) {
