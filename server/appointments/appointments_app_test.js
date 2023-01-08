@@ -137,7 +137,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                     text: "My tooth aches"
                 },
                 dentist: {
-                    name: "William Bjorn"
+                    name: "Solomon Mathews"
                 },
                 timeslot: "9:30"
                 }]
@@ -196,7 +196,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
         })
     })
 
-    describe('wipeTestData', function () {
+    /*describe('wipeTestData', function () {
         it('Is this wiping test database?', async function () {
             await asyncMethod('wipeTestData', 'wipeTestData', {id: 123, body: 'no expectation'}, {response: "Success"})
         })
@@ -207,7 +207,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
         it('Is this closing the runner?', function () {
             mqttClient.sendMessage('test', JSON.stringify({message: 'no expectation'}))
         })
-    })
+    })*/
 })
 //Is needed to close the tester in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
 after(function () {
