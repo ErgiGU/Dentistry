@@ -137,7 +137,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                     text: "My tooth aches"
                 },
                 dentist: {
-                    name: "William Bjorn"
+                    name: "Solomon Mathews"
                 },
                 timeslot: "9:30"
                 }]

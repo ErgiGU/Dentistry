@@ -34,10 +34,13 @@ function PrivateNavbar() {
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="justify-content-end">
 
-                            <Link to={'/appointments'}>Schedule</Link>
-                            <Link to={'/profile'}>Your information</Link>
-                            <Link to={'/addDentist'}>Add a dentist</Link>
-                            <Link onClick={logout} to={'/login'}>Log out</Link>
+                        <Link to={'/clinic/schedule'} >Schedule</Link>
+                        <Link to={'/clinic/editInfo'} >Your information</Link>
+                        <Link to={'/clinic/dentists'}>Edit dentist's</Link>
+                        <Link to={'/appointments'}>Schedule</Link>
+                        <Link to={'/profile'}>Your information</Link>
+                        <Link to={'/addDentist'}>Add a dentist</Link>
+                        <Link onClick={logout} to={'/login'}>Log out</Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
