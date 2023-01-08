@@ -1,5 +1,5 @@
 
-.dentists {
+#dentists {
     display: flex;
     flex-wrap: wrap;
 }
