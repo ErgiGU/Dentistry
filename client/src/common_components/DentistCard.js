@@ -9,18 +9,18 @@ function DentistCard({id, name, email, phoneNumber, workweek, clinic}) {
     const [openScheduleModal, setOpenScheduleModal] = useState(false);
 //are email and phone mandatory?
     return(
-        <div className="dentistCardContainer">
+        <div id="dentistCardContainer">
 
-            <div className="DentistName">
+            <div id="DentistName">
                     <h3> {name} </h3>
             </div>
-            <div className="DentistPhone">
+            <div id="DentistPhone">
                 <p> {phoneNumber} </p>
             </div>
-            <div className="DentistMail">
+            <div id="DentistMail">
             <p> {email} </p>
             </div>
-            <div className="DentistBtn">
+            <div id="DentistBtn">
 
                         <button className="openScheduleModal" onClick={() => setOpenScheduleModal(true)}>Edit schedule</button>
                         <EditSchedule open={openScheduleModal}
