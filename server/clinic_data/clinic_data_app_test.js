@@ -285,7 +285,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
             await asyncMethod("editDentistInfo", "editDentistInfoResponse", messageSend, expectedResult)
         })
 
-        it('See if work week is getting received', async function () {
+        it('See if dentist is getting received correctly', async function () {
             this.timeout(10000)
             const messageSend = {
                 id: "123",
@@ -298,7 +298,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                     id: clinicStored.dentists[0],
                     name: "Solomon Mathews",
                     email: "burakaskan2001@gmail.com",
-                    phoneNumber: "07691363",
+                    phoneNumber: "0769136300",
                     workWeek:{
                         monday: false,
                         tuesday: true,
