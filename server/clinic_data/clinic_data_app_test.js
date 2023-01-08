@@ -236,21 +236,12 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                 clinic: clinicStored._id,
                 name:"William Bjorn",
                 email:"burakaskan2001@gmail.com",
-                phoneNumber:"073213214",
+                phoneNumber:"0732132141",
                 timeslots:[],
                 __v:0
             }
-            const newExpected = {
-                _id: "id",
-                timeslot: [],
-                clinic: clinicStored._id,
-                name: "William Bjorn",
-                email: "burakaskan2001@gmail.com",
-                phoneNumber: "0732132141",
-                __v: 0
-            }
             await asyncMethod("getDentist", "giveDentist", messageSend, expected)
-            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "gusaskbu@student.gu.se"}}, newExpected)
+            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "gusaskbu@student.gu.se"}}, expected)
         })
     })
 
