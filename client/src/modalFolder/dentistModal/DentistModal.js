@@ -110,8 +110,8 @@ const Modal = ({ open, onClose, name, email, phoneNumber, id}) => {
                 }}
                 id='dentistModalContainer'
             >
-                <div className='dentistModalRight'>
-                    <div className='dentistContent'>
+                <div id='dentistModalRight'>
+                    <div id='dentistContent'>
                         <h1>Edit Dentist</h1>
                         <button type={"button"} className='dentistBtn-close' onClick={onClose}>X</button>
                     </div>
