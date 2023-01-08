@@ -208,7 +208,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                     name: "William Bjorn",
                     email: "gusaskbu@student.gu.se",
                     dentistEmail: "burakaskan2001@gmail.com",
-                    phoneNumber: "073213214",
+                    phoneNumber: "0732132141",
                     speciality: "Teeth"
                 }
             }
