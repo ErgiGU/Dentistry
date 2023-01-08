@@ -10,7 +10,6 @@ function DentistCard({id, name, email, phoneNumber, workweek, clinic}) {
 //are email and phone mandatory?
     return (
         <div id="dentistCardContainer">
-
             <div id="DentistName">
                 <h3> {name} </h3>
             </div>
@@ -21,16 +20,13 @@ function DentistCard({id, name, email, phoneNumber, workweek, clinic}) {
                 <p> {email} </p>
             </div>
             <div id="DentistBtn">
-
-                <button id="openScheduleModal" onClick={() => setOpenScheduleModal(true)}>Edit schedule</button>
+                <button className={'btn btn-secondary'} id="openScheduleModal" onClick={() => setOpenScheduleModal(true)}>Edit schedule</button>
                 <EditSchedule open={openScheduleModal}
                               onClose={() => setOpenScheduleModal(false)}
                               id={id}
                               name={name}
                               workweek={workweek}/>
-
-
-                <button id="openDentistModal" onClick={() => setOpenDentistModal(true)}>Edit info</button>
+                <button className={'btn btn-secondary'} id="openDentistModal" onClick={() => setOpenDentistModal(true)}>Edit info</button>
                 <EditDentist open={openDentistModal}
                              onClose={() => setOpenDentistModal(false)}
                              id={id}
@@ -38,7 +34,6 @@ function DentistCard({id, name, email, phoneNumber, workweek, clinic}) {
                              email={email}
                              clinic={clinic}
                              PhoneNumber={phoneNumber}/>
-
             </div>
         </div>
     )

@@ -12,6 +12,7 @@ import MyInformation from "./MyInformation/MyInformation";
 import AboutUsSkeleton from "./AboutUsPage/AboutUsSkeleton";
 import NewDentist from "./AddDentist/NewDentist";
 import ErrorPage from "./ErrorPage";
+import EditDentists from "./EditDentists/EditDentists";
 import Appointments from "./appointments_calendar/Appointments";
 
 export default function App() {
@@ -28,6 +29,7 @@ export default function App() {
                 <Route path="/clinicAppointments" element={< ClinicAppointments/>}/>
                 <Route path="/appointments" element={< Appointments/>}/>
                 <Route path="/clinic" element={< ClinicHomePage/>}/>
+                <Route path="/clinic/dentists" element={< EditDentists/>}/>
                 <Route path="/profile" element={< MyInformation/>}/>
                 <Route path="/aboutUs" element={< AboutUsSkeleton/>}/>
                 <Route path="/error" element={<ErrorPage/>}/>

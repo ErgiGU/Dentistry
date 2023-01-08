@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 import {useNavigate} from "react-router-dom";
 
 
-export default function ViewDentists() {
+export default function EditDentists() {
     const [dentists, setDentists] = useState([]);
     const [client, setClient] = useState(null);
     const [clinic, setClinic] = useState(null);
