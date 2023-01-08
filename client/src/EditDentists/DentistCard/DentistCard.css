@@ -1,4 +1,4 @@
-.dentistCardContainer {
+#dentistCardContainer {
    width: 300px;
     height: 185px;
     overflow: hidden;
@@ -8,17 +8,17 @@
     margin: 20px;
 }
 
-.dentistBtn{
+#dentistBtn {
     display: flex;
     flex-wrap: wrap;
 
 }
 
-.openScheduleModal{
+#openScheduleModal {
     padding-right: 9px;
     display: flex;
 }
 
-.openDentistModal{
+#openDentistModal {
     display: flex;
 }

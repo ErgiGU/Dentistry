@@ -112,19 +112,19 @@ const Modal = ({ open, onClose, name, email, phoneNumber, id}) => {
 
     if (!open) return null;
     return (
-        <div onClick={onClose} className='dentistOverlay'>
+        <div onClick={onClose} id='dentistOverlay'>
             <div
                 onClick={(e) => {
                     e.stopPropagation();
                 }}
-                className='dentistModalContainer'
+                id='dentistModalContainer'
             >
-                <div className='dentistModalRight'>
-                    <div className='dentistContent'>
+                <div id='dentistModalRight'>
+                    <div id='dentistContent'>
                         <h1>Edit Dentist</h1>
                         <button type={"button"} className='dentistBtn-close' onClick={onClose}>X</button>
                     </div>
-                    <div className='dentistBtnContainer'>
+                    <div id='dentistBtnContainer'>
                         <div className="form-floating">
                             <input
                                 type="text"
@@ -163,7 +163,7 @@ const Modal = ({ open, onClose, name, email, phoneNumber, id}) => {
                         />
                         <label htmlFor="email"> Dentist's email </label>
                     </div>
-                    <button className={"button"} onClick={(e) => submit(e)}>
+                    <button className={"btn"} onClick={(e) => submit(e)}>
                         Change info
                     </button>
                 </div>

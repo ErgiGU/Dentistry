@@ -1,4 +1,4 @@
-.dentistModalBtn{
+#dentistModalBtn {
     position: fixed;
     top: 40%;
     left: 50%;
@@ -16,7 +16,7 @@ main{
 }
 
 
-.dentistModalContainer{
+#dentistModalContainer {
     max-width: 40%;
     min-height: 50%;
     width: 100%;
@@ -32,7 +32,7 @@ main{
 }
 
 
-.dentistModalRight{
+#dentistModalRight {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -40,7 +40,7 @@ main{
     padding-left: 5%;
 }
 
-.dentistBtn-close{
+#dentistBtn-close {
     left: 95%;
     bottom: 95%;
     position: fixed;
@@ -49,19 +49,19 @@ main{
 }
 
 
-.saveBtn{
+#saveBtn {
     display: flex;
     justify-content: center;
     text-align: center;
     flex-direction: column;
 }
 
-.dentistModalRight {
+#dentistModalRight {
     margin-left: 10px;
     flex-wrap: wrap;
 }
 
-.noteAndConfirm{
+#noteAndConfirm {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -70,7 +70,7 @@ main{
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1399px) {
-    .modalContainer{
+    #modalContainer {
         max-width: 40%;
         min-height: 50%;
         width: 100%;
@@ -84,7 +84,7 @@ main{
 }
 
 @media only screen and (max-width: 991px) {
-    .modalContainer{
+    #modalContainer {
         max-width: 50%;
         min-height: 50%;
         width: 100%;
@@ -98,7 +98,7 @@ main{
 }
 
 @media only screen and (max-width: 463px) {
-    .modalContainer{
+    #modalContainer {
         max-width: 90%;
         min-height: 50%;
         width: 100%;
