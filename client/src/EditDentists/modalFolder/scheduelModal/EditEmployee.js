@@ -107,20 +107,20 @@ const Modal = ({id, open, onClose, name, workweek}) => {
     };
 
     return (
-        <div onClick={onClose} className='scheduleOverlay'>
+        <div onClick={onClose} id='scheduleOverlay'>
             <div
                 onClick={(e) => {
                     e.stopPropagation();
                 }}
-                className='scheduleModalContainer'
+                id='scheduleModalContainer'
             >
-                <div className='scheduleModalRight'>
+                <div id='scheduleModalRight'>
 
-                    <div className='scheduleContent'>
+                    <div id='scheduleContent'>
                         <h1>Working days of {name}</h1>
-                        <button type={"button"} className='scheduleBtn-close' onClick={onClose}>X</button>
+                        <button type={"button"} id='scheduleBtn-close' onClick={onClose}>X</button>
                     </div>
-                    <div className='scheduleBtnContainer'>
+                    <div id='scheduleBtnContainer'>
                         <h4>monday</h4>
                         <input
                             type="checkbox"
@@ -153,14 +153,14 @@ const Modal = ({id, open, onClose, name, workweek}) => {
                         />
                     </div>
                 </div>
-                <div className="scheduleNoteAndConfirm">
+                <div id="scheduleNoteAndConfirm">
                     <h5>
                         NOTE: this is a running calender,
                         it will display the same hours from week to week if no changes are made.
                         If your schedule changes please update this calender.
                     </h5>
                     <button
-                        className={"scheduleConfirmBtn"}
+                        id={"scheduleConfirmBtn"}
                         onClick={e => {
                             onClose();
                             submit(e);

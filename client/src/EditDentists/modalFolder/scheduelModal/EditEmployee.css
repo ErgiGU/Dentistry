@@ -15,18 +15,18 @@ main{
     min-height: 100vh;
 }
 
-.scheduleModalRight h1,
-.scheduleModalRight h4 {
+#scheduleModalRight h1,
+#scheduleModalRight h4 {
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
-.scheduleModalRight input {
+#scheduleModalRight input {
     margin-left: 10px;
 }
 
 
-.scheduleModalContainer{
+#scheduleModalContainer {
     max-width: 40%;
     min-height: 50%;
     width: 100%;
@@ -42,7 +42,7 @@ main{
 }
 
 
-.scheduleModalRight{
+#scheduleModalRight {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -50,7 +50,7 @@ main{
     padding-left: 5%;
 }
 
-.scheduleBtnOutline{
+#scheduleBtnOutline {
     left: 94%;
     bottom: 95%;
     position: fixed;
@@ -58,7 +58,7 @@ main{
 }
 
 
-.scheduleSaveBtn{
+#scheduleSaveBtn {
     display: flex;
     justify-content: center;
     text-align: center;
@@ -66,7 +66,7 @@ main{
 }
 
 
-.scheduleNoteAndConfirm{
+#scheduleNoteAndConfirm {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -75,7 +75,7 @@ main{
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1399px) {
-    .scheduleModalContainer{
+    #scheduleModalContainer {
         max-width: 40%;
         min-height: 50%;
         width: 100%;
@@ -89,7 +89,7 @@ main{
 }
 
 @media only screen and (max-width: 991px) {
-    .scheduleModalContainer{
+    #scheduleModalContainer {
         max-width: 50%;
         min-height: 50%;
         width: 100%;
@@ -103,7 +103,7 @@ main{
 }
 
 @media only screen and (max-width: 463px) {
-    .scheduleModalContainer{
+    #scheduleModalContainer {
         max-width: 90%;
         min-height: 50%;
         width: 100%;
