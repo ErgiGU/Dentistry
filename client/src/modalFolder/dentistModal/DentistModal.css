@@ -61,7 +61,7 @@ main{
     flex-wrap: wrap;
 }
 
-.noteAndConfirm{
+#noteAndConfirm {
     display: flex;
     flex-direction: column;
     justify-content: center;
