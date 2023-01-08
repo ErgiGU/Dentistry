@@ -63,6 +63,32 @@ Here are the technologies that we used in our project:
 5. Jmeter with MQTT plugin(for MQTT load testing)
 6. MongoDB
 
+## Testing
+When it comes to testing, we've got unit tests that test every backend method and endpoint to ensure that they work as
+intended, and we also have CI/CD tests that run each time someone makes a merge request to ensure that nothing is broken
+when we commit our code. We also have an MQTT load tester. For that we use an external tool called Jmeter with the mqtt plugin
+installed. The purpose it serves is to test the limits of our backend(the HiveMQ broker) and see if all connected clients
+get their responses back even when the system is close to its limit. The screenshots below show the tool in use:
+
+The amount of clients connected and the successful publishes:
+
+![max load](client/src/assets/Screenshot_21.png)
+
+This is the 47th client(user) getting the response with the clinic information, which shows resilience in our system and 
+that the messages get delivered even when the broker is near its limit(50 in this case):
+
+![responses](client/src/assets/Screenshot_20.png)
+
+This is how things look on the broker's end: 
+
+![broker](client/src/assets/Screenshot_22.png)
+
+This is the generated graph that shows response times over time(10 seconds) for each test:
+
+![graph](client/src/assets/Screenshot_23.png)
+
+
+
 
 # Project Brief
 
