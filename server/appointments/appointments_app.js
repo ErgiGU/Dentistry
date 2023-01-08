@@ -50,8 +50,12 @@ try {
                 mqttClient.sendMessage('testAppointment', "newClinic")
                 break;
             case 'bookAppointment':
-                waitMakeTimeslots(intermediary.body).then(res => {
-                    mqttClient.sendMessage(intermediary.clientId + '/appointmentResponse', JSON.stringify(res))
+                waitMakeTimeslots(intermediary.body).then(timeslotIDResponse => {
+                    console.log(timeslotIDResponse)
+                    appointments_controller.getTimeslotInfo(timeslotIDResponse).then(timeslotResponse => {
+                        console.log(timeslotResponse)
+                        mqttClient.sendMessage(intermediary.clientId + '/appointmentResponse', JSON.stringify(timeslotResponse))
+                    })
                 })
                 break;
             case 'testingTestingRequest':
@@ -130,8 +134,8 @@ async function waitMakeTimeslots(message) {
     return appointments_controller.makeAppointment(message.clinicId, message.dentistID, message.patientInfo, message.date, message.time);
 }
 
-async function waitMailData(clinicId, timeslotID) {
-    return appointments_controller.bookedMailingData(clinicId, timeslotID);
+async function waitMailData(timeslotID) {
+    return appointments_controller.getTimeslotInfo(timeslotID);
 }
 
 async function waitClinicNotifMail(mailingData) {
@@ -158,9 +162,8 @@ async function waitBookAppointment(message) {
 async function bookAppointment(intermediary) {
     //Creates a timeslot. Returns the timeslot JSON.
     const timeslot = await waitMakeTimeslots(intermediary.body)
-    console.log(timeslot)
     //Takes the ID of the timeslot JSON and ID. Returns success or failure of emailing.
-    const mailingData = await waitMailData(intermediary.body.clinicId, timeslot._id)
+    const mailingData = await waitMailData({_id:timeslot._id})
     const mailingPatient = await waitPatientNotifMail(mailingData)
     const mailingClinic = await waitClinicNotifMail(mailingData)
     if (mailingPatient === "Success" && mailingClinic === "Success") {

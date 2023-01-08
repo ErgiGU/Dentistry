@@ -48,12 +48,12 @@ export default function Appointments() {
                 let intermediary = JSON.parse(message)
                 switch (topic) {
                     case client.options.clientId + '/appointmentResponse':
+                        console.log(intermediary)
                         setBookingResponse(intermediary)
                         setTimeout(() => {
                             setIsBookingResponse(true)
                             setIsLoading(false)
                         }, 2000)
-                        console.log(intermediary)
                         break;
                     case client.options.clientId + '/clinics':
                         setClinics(intermediary)
@@ -83,7 +83,7 @@ export default function Appointments() {
     /**
      * Performs generation calls and assigns results to relevant clinic
      */
-    const generateTimeslotsFromOpeningHours = useCallback(() => {
+    function generateTimeslotsFromOpeningHours() {
         let startWeek = getISOWeek(Date.now())
         if (isWeekend(Date.now())) {
             startWeek = startWeek + 1
@@ -117,23 +117,23 @@ export default function Appointments() {
                     break;
             }
         })
+    }
 
-        /**
-         * Based on week generation, creates objects of timeslots mapped to weekdays
-         * @param clinic
-         * @param dentists
-         * @returns {{tuesday: *[], wednesday: *[], thursday: *[], friday: *[], monday: *[]}}
-         */
-        function generateTemplateWeek(clinic, dentists) {
-            return {
-                monday: generateWeek(clinic.openingHours.monday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists),
-                tuesday: generateWeek(clinic.openingHours.tuesday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists),
-                wednesday: generateWeek(clinic.openingHours.wednesday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists),
-                thursday: generateWeek(clinic.openingHours.thursday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists),
-                friday: generateWeek(clinic.openingHours.friday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists)
-            }
+    /**
+     * Based on week generation, creates objects of timeslots mapped to weekdays
+     * @param clinic
+     * @param dentists
+     * @returns {{tuesday: *[], wednesday: *[], thursday: *[], friday: *[], monday: *[]}}
+     */
+    function generateTemplateWeek(clinic, dentists) {
+        return {
+            monday: generateWeek(clinic.openingHours.monday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists),
+            tuesday: generateWeek(clinic.openingHours.tuesday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists),
+            wednesday: generateWeek(clinic.openingHours.wednesday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists),
+            thursday: generateWeek(clinic.openingHours.thursday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists),
+            friday: generateWeek(clinic.openingHours.friday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists)
         }
-    }, [clinics])
+    }
 
 
     /**
@@ -216,6 +216,7 @@ export default function Appointments() {
                     </div>
                 </div>
             </div>
+            <div className={"btn btn-primary"} role={'button'} onClick={generateTimeslotsFromOpeningHours}>Trigger fun</div>
             <React.StrictMode>
                 {isLoading ? <Loading/> : (isBookingResponse ? <BookingResponse bookingResponse={bookingResponse}/> :
                     <Calendar clinic={currentClinic} clinicTimeslots={currentClinic} client={client}/>)}
