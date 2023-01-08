@@ -4,14 +4,14 @@
 
 .passwordChanging, .leftBox {
     float: left;
-    font-family: Inter;
+    font-family: Inter, serif;
     font-size: 18px;
     padding: 30px;
     color: white;
     height: 570px;
     margin-top: 3%;
     background-color: steelblue;
-    box-shadow: 10px 0px 15px #888888;
+    box-shadow: 10px 0 15px #888888;
     border-radius: 5px;
     margin-bottom: 50px;
 }
@@ -22,7 +22,7 @@
 }
 
 .leftBox {
-    padding-right: 0px;
+    padding-right: 0;
 }
 
 .clinicInfo {
@@ -30,7 +30,7 @@
     float: left;
     padding-right: 25px;
     margin-right: 15px;
-    border-right: 0.5px solid #444444;
+    border-right: 1px solid #444444;
 }
 
 #fikaHour {
@@ -40,8 +40,7 @@
 .openingHours {
     width: 47%;
     float: left;
-    padding: 5px;
-    padding-left: 10px;
+    padding: 5px 5px 5px 10px;
 }
 
 #clinicHeader2 {
@@ -50,10 +49,9 @@
 }
 
 #hoursHeader {
-    margin: 0px;
     font-size: 22px;
     text-shadow: 3px 2px 2px #888888;
-    margin-right: 2px;
+    margin: 0px 2px 0px 0px;
 }
 
 .informationInput {
@@ -125,14 +123,13 @@
 }
 
 #alertPlaceholder {
-    font-family: Inter;
+    font-family: Inter, serif;
     display: none;
     height: 60px;
     width: 70%;
-    padding: 10px;
-    padding-left: 13px;
+    padding: 10px 10px 10px 13px;
     margin-top: 30px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     font-size: 23px;
     border: 1px solid black;
     border-radius: 3px;

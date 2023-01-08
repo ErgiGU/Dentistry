@@ -230,8 +230,7 @@ async function changePassword(req) {
     let message;
     if (clinic) {
         if (await bcrypt.compare(req.body.oldPassword, clinic.password)) {
-            const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            clinic.password = hashedPassword;
+            clinic.password = await bcrypt.hash(req.body.password, 10);
             clinic.save();
             console.log("password changed");
             console.log(clinic)
@@ -288,6 +287,7 @@ async function getDentistCard(intermediary) {
     } catch (e) {
         console.log(e)
     }
+    let message;
     if (dentists.length > 0) {
         return JSON.stringify(clinicDentists);
     } else {

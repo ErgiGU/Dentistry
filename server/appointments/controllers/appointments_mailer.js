@@ -104,7 +104,7 @@ class appointments_mailer {
      * @param timeslot the timeslot JSON
      * @param clinic the clinic JSON for the timeslot
      * @param dentist the dentist JSON for the timeslot
-     * @returns {Promise<string>} whether the operation is successful or failure
+     * @returns {string} whether the operation is successful or failure
      */
     sendAppointmentCancelNotif(recipient, timeslot, clinic, dentist) {
         try {

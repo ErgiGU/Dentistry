@@ -62,7 +62,7 @@ try {
                 mqttClient.sendMessage('123/testingTesting', JSON.stringify(messageSending))
                 break;
             case 'generateTimeSlots':
-                appointments_controller.generateTimeslots('63af60e44e09e582e395a69d', '63af4ee39556e442b5e1dc3e', '63af50fc4d37ce68a1981263');
+                appointments_controller.generateTimeslots('63af60e44e09e582e395a69d', '63af4ee39556e442b5e1dc3e', '63af50fc4d37ce68a1981263').then(r => {});
                 break;
             case 'generateData':
                 const dataResult = waitGenerateData()
@@ -123,7 +123,7 @@ async function waitTimeslotData(intermediary) {
 }
 
 async function waitGenerateData() {
-    await appointments_controller.generateData("6391e39a3e08ac910fbede6f")
+    await appointments_controller.generateData('6391e39a3e08ac910fbede6f')
 }
 
 async function waitMakeTimeslots(message) {
@@ -153,7 +153,7 @@ async function waitBookAppointment(message) {
 /**
  * A method which calls mongoose manipulation methods that all related to the process of booking an appointment
  * @param intermediary The JSON which is received by the service
- * @returns {Promise<string>} The success or failure message
+ * @returns {Promise<{response: string}>} The success or failure message
  */
 async function bookAppointment(intermediary) {
     //Creates a timeslot. Returns the timeslot JSON.

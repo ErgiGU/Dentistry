@@ -78,7 +78,7 @@ export default function Appointments() {
                 client.end()
             }
         }
-    }, [client])
+    }, [client, generateTimeslotsFromOpeningHours])
 
     /**
      * Performs generation calls and assigns results to relevant clinic

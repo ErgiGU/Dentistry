@@ -1,6 +1,6 @@
 /**
  * A class purely for testing the backend MQTT endpoints that exist within the clinic_data component.
- * Each describe and it has a description of what they do within their sting field.
+ * Each describe, and it has a description of what they do within their sting field.
  *
  * @author Burak Askan (@askan)
  */

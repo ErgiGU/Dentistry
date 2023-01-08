@@ -95,12 +95,11 @@ async function loginClinic(email, password) {
     const clinic = await clinicModel.findOne({email: email});
     if (clinic && await bcrypt.compare(password, clinic.password)) {
         const token = clinic.generateToken();
-        const payload = {
+        return {
             response: "login successful",
             clinicAccount: clinic,
             token: token
         }
-        return payload;
     } else {
         console.log("failed");
         return "Invalid email/password"
