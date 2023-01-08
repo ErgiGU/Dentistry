@@ -14,13 +14,12 @@ import NewDentist from "./AddDentist/NewDentist";
 import ErrorPage from "./ErrorPage";
 import Appointments from "./appointments_calendar/Appointments";
 
-function App() {
+export default function App() {
 
     return (
-        //you can add more routes here, just follow the same format
-        <>
-
+        <div>
             <Routes>
+                <Route path="/" element={< Home/>}/>
                 <Route path="/addDentist" element={<NewDentist/>}/>
                 <Route path="/registration" element={< Registration/>}/>
                 <Route path="/login" element={< Login/>}/>
@@ -34,8 +33,6 @@ function App() {
                 <Route path="/error" element={<ErrorPage/>}/>
                 <Route/>
             </Routes>
-        </>
+        </div>
     );
 }
-
-export default App;

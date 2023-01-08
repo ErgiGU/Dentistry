@@ -8,7 +8,7 @@ export default function LisebergDentist() {
                 <p id="aboutUs-intro-text">
                     <br/><span style={{color: "#003d80"}}>LISEBERG DENTISTS</span> <br/> <br/>
                     We are located near <i> Liseberg, Gothenburg. </i> <br/>
-                    Located near the very fammous liseberg amusement park, we offer all dental care facilities
+                    Located near the very famous liseberg amusement park, we offer all dental care facilities
                     to our patients. <br/> Following are our opening hours for the respective days,
                     feel free to book your desired timeslot by going to the Appointments section.
                     <div id="aboutUs-table">

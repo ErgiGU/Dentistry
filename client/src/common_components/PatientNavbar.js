@@ -12,9 +12,9 @@ import '../common_components/Navbar.css'
 export default function PatientNavbar() {
     return (
         <div>
-            <div className="headerDentist">
-                <img className="logoNavbar" src={logo} alt="logo"/>
-                <h1>DENTAL CLINIC</h1>
+            <div id="headerDentist">
+                <img id="logoNavbar" src={logo} alt="logo"/>
+                <h1 id={'name'}>DENTISTRY</h1>
             </div>
             <Navbar id="navbar" expand="lg">
                 <Container id="me-auto">

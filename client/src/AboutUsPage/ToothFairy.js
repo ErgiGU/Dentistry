@@ -11,7 +11,7 @@ export default function ToothFairy() {
                     Our central location makes it perfectly convenient for all the Gothenburg residents
                     to contact us.<br/> Following are our opening hours for the respective days,
                     feel free to book your desired timeslot by going to the Appointments section.
-                    <div id="table">
+                    <div id="aboutUs-table">
                         <table id="aboutUs-opening-hours">
                             <tr>
                                 <th> Days</th>

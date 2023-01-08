@@ -39,7 +39,7 @@ export default function YourDentist() {
                                 <td> 09.00 - 15.00</td>
                             </tr>
                         </table>
-                        <br/>
+                        <br/><br/>
                         <span> We are closed on weekends and please contact our clinic for more information about
                            the opening hours on public holidays.  </span>
                     </div>

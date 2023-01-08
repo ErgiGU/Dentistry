@@ -1,7 +1,5 @@
-
 #headerDentist {
-    padding: 30px;
-    text-align: left;
+    min-height: 80px;
     color: white;
     background-color: steelblue;
     font-family: 'Verdana', serif;
@@ -15,6 +13,7 @@
 #name {
     font-family: "Trebuchet MS", sans-serif;
     color: white;
+    font-size: 400%;
     letter-spacing: 5px;
     font-weight: lighter;
 }
@@ -57,8 +56,8 @@
 }
 
 #logoNavbar {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 0%;
+    margin: 8px;
+    width: 64px;
+    height: 64px;
     float: left;
 }

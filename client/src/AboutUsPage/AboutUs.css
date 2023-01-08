@@ -1,7 +1,10 @@
 
 #aboutUs-main {
     background-color: #e6f2ff;
-    height: fit-content;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 20px;
+    padding-bottom: 30px;
     width: 100%;
 }
 
@@ -41,7 +44,7 @@
 }
 
 #aboutUs-table {
-    margin-top: 10%;
+    margin-top: 2%;
     margin-left: 10%;
 }
 

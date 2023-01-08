@@ -11,9 +11,9 @@ import TeethCare from '../assets/toothcare.png'
 export default function Card() {
     return (
         <div id={'homeCardsTop'}>
-            <div id={'homeCardsContainer'}>
-                <div id={'homeCardsWrapper'}>
-                    <ul id={'homeCardsItems'}>
+            <div id={'homeCardsContainer'} className={'container'}>
+                <div id={'homeCardsWrapper'} className={'col'}>
+                    <div id={'homeCardsItems'} className={'row'}>
                         <CardItem
                             src='https://st.depositphotos.com/1003098/1651/i/600/depositphotos_16512515-stock-photo-woman-with-receptionist-filling-form.jpg'
                             text='Find the clinics localizations in different parts of Göteborg.'
@@ -29,8 +29,8 @@ export default function Card() {
                             text='Find out more about our clinics. Vist the About Us page.'
                             path='/'
                         />
-                    </ul>
-                    <ul id={'homeCardsItems'}>
+                    </div>
+                    <div id={'homeCardsItems'} className={'row'}>
                         <CardItem
                             src={Tips}
                             text='To avoid any stress before the appointment, use the advices we prepared for you above!'
@@ -39,7 +39,7 @@ export default function Card() {
                             src={TeethCare}
                             text='What can you do to maintain your teeth health? Follow the list we prepared for you!'
                         />
-                    </ul>
+                    </div>
                 </div>
             </div>
         </div>
