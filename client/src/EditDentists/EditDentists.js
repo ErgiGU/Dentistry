@@ -8,8 +8,6 @@ import {useNavigate} from "react-router-dom";
 
 
 export default function ViewDentists() {
-
-
     const [dentists, setDentists] = useState([]);
     const [client, setClient] = useState(null);
     const [clinic, setClinic] = useState(null);
@@ -42,7 +40,7 @@ export default function ViewDentists() {
             sendMessage('getDentists', {
                 id: client.options.clientId,
                 body: {
-                    clinicID: theClinic._id
+                    clinicId: theClinic._id
                 }
             })
             client.on('message', function (topic, message) {

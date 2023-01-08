@@ -47,12 +47,12 @@ function createModels() {
 
 /**
  * The mongoose manipulations to get data required for emailing about the booked timeslot
- * @param clinicID the id of clinic which the timeslot belongs to
+ * @param clinicId the id of clinic which the timeslot belongs to
  * @param timeslotID the id of the timeslot just booked
  * @returns {Promise<{patientData: {name: string, text: string, email}, dentistData: {name: string, email}, timeslotTime, clinicData: {address, name, email}}>} JSON required for the emails
  */
-async function bookedMailingData(clinicID, timeslotID) {
-    let clinic = await clinicModel.findById(clinicID)
+async function bookedMailingData(clinicId, timeslotID) {
+    let clinic = await clinicModel.findById(clinicId)
     let timeslot = await timeslotModel.findById(timeslotID).populate('dentist').populate('patient')
     let dentist = timeslot.dentist
     let patient = timeslot.patient
@@ -78,15 +78,15 @@ async function bookedMailingData(clinicID, timeslotID) {
 
 /**
  * The method required for making an appointment
- * @param clinicID the id of the clinic that is getting a timeslot booked
+ * @param clinicId the id of the clinic that is getting a timeslot booked
  * @param dentistID the id of the dentist that is getting a timeslot booked
  * @param patientInfo the info of the patient that booked the timeslot
  * @param date
  * @param time
  * @returns {Promise<*>} the timeslot JSON
  */
-async function makeAppointment(clinicID, dentistID, patientInfo, date, time) {
-    let clinic = await clinicModel.findById(clinicID).populate('dentists')
+async function makeAppointment(clinicId, dentistID, patientInfo, date, time) {
+    let clinic = await clinicModel.findById(clinicId).populate('dentists')
     let dentist = await dentistModel.findById(dentistID).populate('clinic')
     let patient = await patientModel.findOne({email: patientInfo.email}).populate('timeslots')
 
@@ -107,7 +107,7 @@ async function makeAppointment(clinicID, dentistID, patientInfo, date, time) {
     console.log('creating new timeslot')
     const timeslot = new timeslotModel({
         startTime: time,// <-- The start-time of the selected timeslot goes here
-        clinic: clinicID,
+        clinic: clinicId,
         patient: patient._id,
         dentist: dentist._id
     });
@@ -162,11 +162,11 @@ async function cancelAppointment(timeslotID) {
 /**
  * Generates dummy data into the given clinic ID.
  * Generating dentist, timeslot and patient to fill up the db.
- * @param clinicID the id of clinic which will have the data generated in
+ * @param clinicId the id of clinic which will have the data generated in
  */
-async function generateData(clinicID) {
+async function generateData(clinicId) {
 
-    let clinic = await clinicModel.findById(clinicID).populate('timeslots')
+    let clinic = await clinicModel.findById(clinicId).populate('timeslots')
     console.log(clinic)
 
     let thingTimeslots = []
@@ -176,7 +176,7 @@ async function generateData(clinicID) {
 
     const timeslot = new timeslotModel({
         startTime: "09:30",
-        clinic: clinicID // <-- The ID of the clinic goes here
+        clinic: clinicId // <-- The ID of the clinic goes here
     });
 
     const patient = new patientModel({
@@ -186,7 +186,7 @@ async function generateData(clinicID) {
 
     const dentist = new dentistModel({
         name: "Ergi Senja",
-        clinic: clinicID
+        clinic: clinicId
     });
 
     dentist.save()
@@ -246,14 +246,14 @@ async function sendAppointmentInformation(intermediary) {
     return clinicTimeslots
 }
 
-async function generateTimeslots(clinicID, dentistID, patientID) {
-    let clinic = await clinicModel.findById(clinicID).populate('timeslots').populate('dentists')
+async function generateTimeslots(clinicId, dentistID, patientID) {
+    let clinic = await clinicModel.findById(clinicId).populate('timeslots').populate('dentists')
 
     const timeslot = new timeslotModel({
         startTime: "09:30",
         dentist: dentistID,
         patient: patientID,
-        clinic: clinicID // <-- The ID of the clinic goes here
+        clinic: clinicId // <-- The ID of the clinic goes here
     });
     timeslot.save()
 
@@ -261,7 +261,7 @@ async function generateTimeslots(clinicID, dentistID, patientID) {
         startTime: "11:30",
         dentist: dentistID,
         patient: patientID,
-        clinic: clinicID // <-- The ID of the clinic goes here
+        clinic: clinicId // <-- The ID of the clinic goes here
     });
     timeslot2.save()
 
@@ -269,7 +269,7 @@ async function generateTimeslots(clinicID, dentistID, patientID) {
         startTime: "13:00",
         dentist: dentistID,
         patient: patientID,
-        clinic: clinicID // <-- The ID of the clinic goes here
+        clinic: clinicId // <-- The ID of the clinic goes here
     });
     timeslot3.save()
 

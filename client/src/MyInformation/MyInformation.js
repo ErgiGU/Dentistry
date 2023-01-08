@@ -10,23 +10,23 @@ export default function MyInformation() {
     const [changedValue, setChangedValue] = useState(false);
     const [client, setClient] = useState(null);
     const [currentClinic, setCurrentClinic] = useState({
-        name: '',
-        owner: '',
-        address: '',
-        email: '',
-        newEmail: '',
-        mondayStart: '',
-        mondayEnd: '',
-        tuesdayStart: '',
-        tuesdayEnd: '',
-        wednesdayStart: '',
-        wednesdayEnd: '',
-        thursdayStart: '',
-        thursdayEnd: '',
-        fridayStart: '',
-        fridayEnd: '',
-        fikaHour: '',
-        lunchHour: ''
+        clinicInfoName: '',
+        clinicInfoOwner: '',
+        clinicInfoAddress: '',
+        clinicInfoEmail: '',
+        clinicInfoNewEmail: '',
+        openingHoursMondayStart: '',
+        openingHoursMondayEnd: '',
+        openingHoursTuesdayStart: '',
+        openingHoursTuesdayEnd: '',
+        openingHoursWednesdayStart: '',
+        openingHoursWednesdayEnd: '',
+        openingHoursThursdayStart: '',
+        openingHoursThursdayEnd: '',
+        openingHoursFridayStart: '',
+        openingHoursFridayEnd: '',
+        openingHoursFikaHour: '',
+        openingHoursLunchHour: ''
     });
     const [oldPassword, setOldPassword] = useState("");
     const [password, setPassword] = useState("");
@@ -39,12 +39,11 @@ export default function MyInformation() {
             client.publish(topic, JSON.stringify(json))
             setTimeout(() => {
                 if (clinicDataFlag.current) {
-                    navigate("/error");
+                    //navigate("/error");
                 }
             }, 3000);
-
         } else {
-            navigate("/error")
+            //navigate("/error")
         }
     }, [client, navigate])
 
@@ -55,7 +54,7 @@ export default function MyInformation() {
     }, [client])
 
     /**
-     * Navigates the user to the log in page in case the user is not
+     * Navigates the user to the login page in case the user is not
      * authenticated to be on this page
      */
     useEffect(() => {
@@ -75,7 +74,7 @@ export default function MyInformation() {
                 {
                     clientId: client.options.clientId,
                     body: {
-                        clinicID: theClinic._id
+                        clinicId: theClinic._id
                     }
                 }
             )
@@ -90,28 +89,31 @@ export default function MyInformation() {
                         receivedMessage(message.toString())
                         break;
                     case client.options.clientId + '/currentLoggedInClinicResponse':
-                        console.log(JSON.parse(message))
                         const pmessage = JSON.parse(message)
-                        setCurrentClinic(currentClinic => ({
-                            ...currentClinic,
-                            name: pmessage.name,
-                            owner: pmessage.owner,
-                            address: pmessage.address,
-                            email: pmessage.email,
-                            newEmail: pmessage.email,
-                            mondayStart: pmessage.openingHours.monday.start,
-                            mondayEnd: pmessage.openingHours.monday.end,
-                            tuesdayStart: pmessage.openingHours.tuesday.start,
-                            tuesdayEnd: pmessage.openingHours.tuesday.end,
-                            wednesdayStart: pmessage.openingHours.wednesday.start,
-                            wednesdayEnd: pmessage.openingHours.wednesday.end,
-                            thursdayStart: pmessage.openingHours.thursday.start,
-                            thursdayEnd: pmessage.openingHours.thursday.end,
-                            fridayStart: pmessage.openingHours.friday.start,
-                            fridayEnd: pmessage.openingHours.friday.end,
-                            fikaHour: pmessage.fikaHour,
-                            lunchHour: pmessage.lunchHour
-                        }))
+                        if (pmessage.response !== null && pmessage.response === "failed") {
+
+                        } else {
+                            setCurrentClinic(currentClinic => ({
+                                ...currentClinic,
+                                clinicInfoName: pmessage.name,
+                                clinicInfoOwner: pmessage.owner,
+                                clinicInfoAddress: pmessage.address,
+                                clinicInfoEmail: pmessage.email,
+                                clinicInfoNewEmail: pmessage.email,
+                                openingHoursMondayStart: pmessage.openingHours.monday.start,
+                                openingHoursMondayEnd: pmessage.openingHours.monday.end,
+                                openingHoursTuesdayStart: pmessage.openingHours.tuesday.start,
+                                openingHoursTuesdayEnd: pmessage.openingHours.tuesday.end,
+                                openingHoursWednesdayStart: pmessage.openingHours.wednesday.start,
+                                openingHoursWednesdayEnd: pmessage.openingHours.wednesday.end,
+                                openingHoursThursdayStart: pmessage.openingHours.thursday.start,
+                                openingHoursThursdayEnd: pmessage.openingHours.thursday.end,
+                                openingHoursFridayStart: pmessage.openingHours.friday.start,
+                                openingHoursFridayEnd: pmessage.openingHours.friday.end,
+                                openingHoursFikaHour: pmessage.fikaHour,
+                                openingHoursLunchHour: pmessage.lunchHour
+                            }))
+                        }
                         break;
                     default:
                         break;
@@ -160,7 +162,6 @@ export default function MyInformation() {
      * @param e Event object which contains the user input and field id.
      */
     const handleChanges = (e) => {
-        //let theTime = String; Was not used so I commented it out to stop lint complaint - Askan
         const {id, value} = e.target;
         if (id === "oldPassword") {
             setOldPassword(value);
@@ -178,20 +179,24 @@ export default function MyInformation() {
             }))
         }
     }
+
     /**
      * Checks if the user's input is valid. E.g the email has a valid format and the opening hours are logical.
      * Then publishes a message to the backend, to swap the information of the clinic with the provided input..
      * @param event event object.
      */
     const submit = (event) => {
-        if (currentClinic.mondayStart > currentClinic.mondayEnd || currentClinic.tuesdayStart > currentClinic.tuesdayEnd
-            || currentClinic.wednesdayStart > currentClinic.wednesdayEnd || currentClinic.thursdayStart > currentClinic.thursdayEnd || currentClinic.fridayStart > currentClinic.fridayEnd) {
+        if (currentClinic.openingHoursMondayStart > currentClinic.openingHoursMondayEnd ||
+            currentClinic.openingHoursTuesdayStart > currentClinic.openingHoursTuesdayEnd ||
+            currentClinic.openingHoursWednesdayStart > currentClinic.openingHoursWednesdayEnd ||
+            currentClinic.openingHoursThursdayStart > currentClinic.openingHoursThursdayEnd ||
+            currentClinic.openingHoursFridayStart > currentClinic.openingHoursFridayEnd) {
             event.preventDefault();
             const message = {
                 text: "Start time should be before the end time in the opening hours."
             }
             alert(message);
-        } else if (!/\S+@\S+\.\S+/.test(currentClinic.newEmail) && currentClinic.newEmail) {
+        } else if (!/\S+@\S+\.\S+/.test(currentClinic.clinicInfoNewEmail) && currentClinic.clinicInfoNewEmail) {
             const email = document.getElementById("newEmail");
             email.setCustomValidity("Invalid email format")
         } else if (!changedValue) {
@@ -203,40 +208,40 @@ export default function MyInformation() {
         } else {
             event.preventDefault();
             if (client !== null) {
-                sendMessage('editInfo', JSON.stringify({
+                sendMessage('editInfo', {
                     id: client.options.clientId,
                     body: {
-                        name: currentClinic.name,
-                        owner: currentClinic.owner,
-                        address: currentClinic.address,
-                        email: currentClinic.email,
-                        newEmail: currentClinic.newEmail,
+                        name: currentClinic.clinicInfoName,
+                        owner: currentClinic.clinicInfoOwner,
+                        address: currentClinic.clinicInfoAddress,
+                        email: currentClinic.clinicInfoEmail,
+                        newEmail: currentClinic.clinicInfoNewEmail,
                         openingHours: {
                             monday: {
-                                start: currentClinic.mondayStart,
-                                end: currentClinic.mondayEnd
+                                start: currentClinic.openingHoursMondayStart,
+                                end: currentClinic.openingHoursMondayEnd
                             },
                             tuesday: {
-                                start: currentClinic.tuesdayStart,
-                                end: currentClinic.tuesdayEnd
+                                start: currentClinic.openingHoursTuesdayStart,
+                                end: currentClinic.openingHoursTuesdayEnd
                             },
                             wednesday: {
-                                start: currentClinic.wednesdayStart,
-                                end: currentClinic.wednesdayEnd
+                                start: currentClinic.openingHoursWednesdayStart,
+                                end: currentClinic.openingHoursWednesdayEnd
                             },
                             thursday: {
-                                start: currentClinic.thursdayStart,
-                                end: currentClinic.thursdayEnd
+                                start: currentClinic.openingHoursThursdayStart,
+                                end: currentClinic.openingHoursThursdayEnd
                             },
                             friday: {
-                                start: currentClinic.fridayStart,
-                                end: currentClinic.fridayEnd
+                                start: currentClinic.openingHoursFridayStart,
+                                end: currentClinic.openingHoursFridayEnd
                             },
-                            lunchHour: currentClinic.lunchHour,
-                            fikaHour: currentClinic.fikaHour
+                            lunchHour: currentClinic.openingHoursLunchHour,
+                            fikaHour: currentClinic.openingHoursFikaHour
                         }
                     }
-                }))
+                })
             }
         }
     }
@@ -255,14 +260,14 @@ export default function MyInformation() {
         } else {
             event.preventDefault();
             if (client !== null) {
-                sendMessage('changePassword', JSON.stringify({
+                sendMessage('changePassword', {
                         id: client.options.clientId,
                         body: {
                             email: currentClinic.email,
                             password: password,
                             oldPassword: oldPassword
                         }
-                    })
+                    }
                 )
             }
         }
@@ -280,49 +285,49 @@ export default function MyInformation() {
                                 type="text"
                                 className="form-control informationInput"
                                 placeholder="Name"
-                                name="name"
-                                id={"name"}
-                                value={currentClinic.name}
+                                name="clinicInfoForm"
+                                id={"clinicInfoName"}
+                                value={currentClinic.clinicInfoName}
                                 style={{color: "black", letterSpacing: "normal", fontFamily: "intel"}}
                                 onChange={(e) => handleChanges(e)}
                             />
-                            <label htmlFor={"name"}> Clinic's name </label>
+                            <label htmlFor={"clinicInfoName"}> Clinic's name </label>
                         </div>
                         <div className="form-floating informationInputContainer">
                             <input
                                 type="text"
                                 className="form-control informationInput"
                                 placeholder="Owner"
-                                name="owner"
-                                id={"owner"}
-                                value={currentClinic.owner}
+                                name="clinicInfoForm"
+                                id={"clinicInfoOwner"}
+                                value={currentClinic.clinicInfoOwner}
                                 onChange={(e) => handleChanges(e)}
                             />
-                            <label htmlFor="owner"> Clinic's owner </label>
+                            <label htmlFor="clinicInfoOwner"> Clinic's owner </label>
                         </div>
                         <div className="form-floating informationInputContainer">
                             <input
                                 type="text"
                                 className="form-control informationInput"
                                 placeholder="Address"
-                                name="address"
-                                id={"address"}
-                                value={currentClinic.address}
+                                name="clinicInfoForm"
+                                id={"clinicInfoAddress"}
+                                value={currentClinic.clinicInfoAddress}
                                 onChange={(e) => handleChanges(e)}
                             />
-                            <label htmlFor="address"> Clinic's Address </label>
+                            <label htmlFor="clinicInfoAddress"> Clinic's Address </label>
                         </div>
                         <div className="form-floating informationInputContainer">
                             <input
                                 type="text"
                                 className="form-control informationInput"
                                 placeholder="name@example.com"
-                                name="email"
-                                id={"newEmail"}
-                                value={currentClinic.newEmail}
+                                name="clinicInfoForm"
+                                id={"clinicInfoNewEmail"}
+                                value={currentClinic.clinicInfoNewEmail}
                                 onChange={(e) => handleChanges(e)}
                             />
-                            <label htmlFor="email"> Email address </label>
+                            <label htmlFor="clinicInfoNewEmail"> Email address </label>
                         </div>
                         <button className={"informationButton"} onClick={(e) => submit(e)}>
                             Change info
@@ -335,18 +340,18 @@ export default function MyInformation() {
                             <input
                                 className="informationInput"
                                 type="time"
-                                name="mondayStart"
-                                id={"mondayStart"}
-                                value={currentClinic.mondayStart}
+                                name="openingHoursForm"
+                                id={"openingHoursMondayStart"}
+                                value={currentClinic.openingHoursMondayStart}
                                 onChange={(e) => handleChanges(e)}
                             />
                             <label> End: </label>
                             <input
                                 className="informationInput"
                                 type="time"
-                                name="mondayEnd"
-                                id={"mondayEnd"}
-                                value={currentClinic.mondayEnd}
+                                name="openingHoursForm"
+                                id={"openingHoursMondayEnd"}
+                                value={currentClinic.openingHoursMondayEnd}
                                 onChange={(e) => handleChanges(e)}
                             />
                         </label>
@@ -355,18 +360,18 @@ export default function MyInformation() {
                             <input
                                 className="informationInput"
                                 type="time"
-                                name="tuesdayStart"
-                                id={"tuesdayStart"}
-                                value={currentClinic.tuesdayStart}
+                                name="openingHoursForm"
+                                id={"openingHoursTuesdayStart"}
+                                value={currentClinic.openingHoursTuesdayStart}
                                 onChange={(e) => handleChanges(e)}
                             />
                             <label> End: </label>
                             <input
                                 className="informationInput"
                                 type="time"
-                                name="tuesdayEnd"
-                                id={"tuesdayEnd"}
-                                value={currentClinic.tuesdayEnd}
+                                name="openingHoursForm"
+                                id={"openingHoursTuesdayEnd"}
+                                value={currentClinic.openingHoursTuesdayEnd}
                                 onChange={(e) => handleChanges(e)}
                             />
                         </label>
@@ -375,18 +380,18 @@ export default function MyInformation() {
                             <input
                                 className="informationInput"
                                 type="time"
-                                name="wednesdayStart"
-                                id={"wednesdayStart"}
-                                value={currentClinic.wednesdayStart}
+                                name="openingHoursForm"
+                                id={"openingHoursWednesdayStart"}
+                                value={currentClinic.openingHoursWednesdayStart}
                                 onChange={(e) => handleChanges(e)}
                             />
                             <label> End: </label>
                             <input
                                 className="informationInput"
                                 type="time"
-                                name="wednesdayEnd"
-                                id={"wednesdayEnd"}
-                                value={currentClinic.wednesdayEnd}
+                                name="openingHoursForm"
+                                id={"openingHoursWednesdayEnd"}
+                                value={currentClinic.openingHoursWednesdayEnd}
                                 onChange={(e) => handleChanges(e)}
                             />
                         </label>
@@ -395,18 +400,18 @@ export default function MyInformation() {
                             <input
                                 className="informationInput"
                                 type="time"
-                                name="thursdayStart"
-                                id={"thursdayStart"}
-                                value={currentClinic.thursdayStart}
+                                name="openingHoursForm"
+                                id={"openingHoursThursdayStart"}
+                                value={currentClinic.openingHoursThursdayStart}
                                 onChange={(e) => handleChanges(e)}
                             />
                             <label> End: </label>
                             <input
                                 className="informationInput"
                                 type="time"
-                                name="thursdayEnd"
-                                id={"thursdayEnd"}
-                                value={currentClinic.thursdayEnd}
+                                name="openingHoursForm"
+                                id={"openingHoursThursdayEnd"}
+                                value={currentClinic.openingHoursThursdayEnd}
                                 onChange={(e) => handleChanges(e)}
                             />
                         </label>
@@ -415,18 +420,18 @@ export default function MyInformation() {
                             <input
                                 className="informationInput"
                                 type="time"
-                                name="fridayStart"
-                                id={"fridayStart"}
-                                value={currentClinic.fridayStart}
+                                name="openingHoursForm"
+                                id={"openingHoursFridayStart"}
+                                value={currentClinic.openingHoursFridayStart}
                                 onChange={(e) => handleChanges(e)}
                             />
                             <label> End: </label>
                             <input
                                 className="informationInput"
                                 type="time"
-                                name="fridayEnd"
-                                id={"fridayEnd"}
-                                value={currentClinic.fridayEnd}
+                                name="openingHoursForm"
+                                id={"openingHoursFridayEnd"}
+                                value={currentClinic.openingHoursFridayEnd}
                                 onChange={(e) => handleChanges(e)}
                             />
                         </label>
@@ -435,18 +440,18 @@ export default function MyInformation() {
                         <input
                             className="informationInput"
                             type="time"
-                            name="fikaHour"
-                            id={"fikaHour"}
-                            value={currentClinic.fikaHour}
+                            name="openingHoursForm"
+                            id={"openingHoursFikaHour"}
+                            value={currentClinic.openingHoursFikaHour}
                             onChange={(e) => handleChanges(e)}
                         />
                         <label> Lunch: </label>
                         <input
                             className="informationInput"
                             type="time"
-                            name="lunchHour"
-                            id={"lunchHour"}
-                            value={currentClinic.lunchHour}
+                            name="openingHoursForm"
+                            id={"openingHoursLunchHour"}
+                            value={currentClinic.openingHoursLunchHour}
                             onChange={(e) => handleChanges(e)}
                         />
                         <button id={"otherButton"} onClick={() => submit()}>
@@ -461,36 +466,36 @@ export default function MyInformation() {
                                type="password"
                                className="form-control informationInput"
                                placeholder="Password"
-                               name="password"
-                               id={"oldPassword"}
+                               name="passwordForm"
+                               id={"passwordFormOldPassword"}
                                value={oldPassword}
                                onChange={(e) => handleChanges(e)}
                         />
-                        <label htmlFor="oldPassword"> Old password </label>
+                        <label htmlFor="passwordFormOldPassword"> Old password </label>
                     </div>
                     <div className="form-floating informationInputContainer">
                         <input required
                                type="password"
                                className="form-control informationInput"
                                placeholder="Password"
-                               name="password"
-                               id={"password"}
+                               name="passwordForm"
+                               id={"passwordFormPassword"}
                                value={password}
                                onChange={(e) => handleChanges(e)}
                         />
-                        <label htmlFor="password"> New password </label>
+                        <label htmlFor="passwordFormPassword"> New password </label>
                     </div>
                     <div className="form-floating informationInputContainer">
                         <input required
                                type="password"
                                className="form-control informationInput"
                                placeholder="Password"
-                               name="confirmPassword"
-                               id={"confirmPassword"}
+                               name="passwordForm"
+                               id={"passwordFormConfirmPassword"}
                                value={confirmPassword}
                                onChange={(e) => handleChanges(e)}
                         />
-                        <label htmlFor="confirmPassword"> Confirm password </label>
+                        <label htmlFor="passwordFormConfirmPassword"> Confirm password </label>
                     </div>
                     <label id={"passwordError"}> </label> <br/>
                     <button className={"informationButton"} onClick={(e) => changePassword(e)}>

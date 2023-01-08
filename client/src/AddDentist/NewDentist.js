@@ -62,7 +62,7 @@ export default function NewDentist() {
                 {
                     clientId: client.options.clientId,
                     body: {
-                        clinicID: theClinic._id
+                        clinicId: theClinic._id
                     }
                 }
             )
@@ -142,7 +142,7 @@ export default function NewDentist() {
             e.preventDefault();
             console.log(formData)
             if (client !== null) {
-                sendMessage('AddDentist', JSON.stringify({
+                sendMessage('AddDentist', {
                         clientId: client.options.clientId,
                         body: {
                             email: currentClinic.email,
@@ -151,7 +151,7 @@ export default function NewDentist() {
                             phoneNumber: formData.phoneNumber,
                             speciality: formData.specialty
                         }
-                    })
+                    }
                 )
             }
         }

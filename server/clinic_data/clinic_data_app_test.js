@@ -293,7 +293,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
             const messageSend = {
                 clientId: "123",
                 body: {
-                    clinicID: clinicStored._id
+                    clinicId: clinicStored._id
                 }
             }
             const resultExpectation = {

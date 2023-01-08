@@ -45,8 +45,8 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
         let message = {
             clientId: client.options.clientId,
             body: {
-                // clinicID: clinic._id,
-                clinicID: '63b70ba9108d58f87599131e',
+                // clinicId: clinic._id,
+                clinicId: '63b70ba9108d58f87599131e',
                 patientInfo: {
                     // name: patientName,
                     // email: patientEmail,

@@ -51,7 +51,7 @@
 #hoursHeader {
     font-size: 22px;
     text-shadow: 3px 2px 2px #888888;
-    margin: 0px 2px 0px 0px;
+    margin: 0 2px 0 0;
 }
 
 .informationInput {

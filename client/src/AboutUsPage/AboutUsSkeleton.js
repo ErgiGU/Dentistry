@@ -67,7 +67,8 @@ export default function AboutUsSkeleton() {
                 </div>
                 <br/>
                 <div id="aboutUs-b-row" className="row">
-                    <p id="aboutUs-clinic-name">OUR CLINICS <hr/></p>
+                    <p id="aboutUs-clinic-name">OUR CLINICS</p>
+                    <hr/>
                     <div className="col-lg-4 col-md-6 mb-4">
                         <Card style={{width: "20rem", backgroundColor: "whitesmoke"}}>
                             <Card.Body>

@@ -59,7 +59,6 @@ export default function Appointments() {
                         setClinics(intermediary)
                         console.log(intermediary)
                         setTimeout(() => {
-                            generateTimeslotsFromOpeningHours()
                             setIsLoading(false)
                         }, 3000)
                         break;
@@ -78,8 +77,9 @@ export default function Appointments() {
                 client.end()
             }
         }
-    }, [client, generateTimeslotsFromOpeningHours])
+    }, [client])
 
+    
     /**
      * Performs generation calls and assigns results to relevant clinic
      */

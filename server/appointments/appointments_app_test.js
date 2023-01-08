@@ -101,7 +101,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
             const messageSend = {
                 clientId: "123",
                 body: {
-                    clinicID: clinicStored._id,
+                    clinicId: clinicStored._id,
                     dentistID: clinicStored.dentists[0],
                     patientInfo: {
                         name: "John Jane",
@@ -126,7 +126,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
             const messageSend = {
                 clientId: "123",
                 body: {
-                    clinicID: clinicStored._id,
+                    clinicId: clinicStored._id,
                     test: "This is for a test"
                 }
             }
@@ -188,7 +188,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
             const messageSend = {
                 clientId: "123",
                 body: {
-                    clinicID: clinicStored._id
+                    clinicId: clinicStored._id
                 }
             }
             const expectedResult = []

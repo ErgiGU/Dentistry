@@ -63,7 +63,7 @@ export default function ViewAppointments() {
             sendMessage('sendAppointmentInformation', {
                 clientId: client.options.clientId,
                 body: {
-                    clinicID: theClinic
+                    clinicId: theClinic
                 }
             })
             client.on('message', function (topic, message) {
@@ -106,12 +106,12 @@ export default function ViewAppointments() {
         const timeslotID = id;
         console.log(timeslotID)
         if (client !== null) {
-            sendMessage('cancelAppointment', JSON.stringify({
+            sendMessage('cancelAppointment', {
                     id: client.options.clientId,
                     body: {
                         timeslotID: timeslotID
                     }
-                })
+                }
             )
         }
     }
