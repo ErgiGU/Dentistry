@@ -84,7 +84,7 @@ main{
 }
 
 @media only screen and (max-width: 991px) {
-    .modalContainer{
+    #modalContainer {
         max-width: 50%;
         min-height: 50%;
         width: 100%;
