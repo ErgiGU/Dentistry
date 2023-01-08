@@ -1,8 +1,14 @@
 #error-main {
-    margin-bottom: 25%;
-    margin-top: 25%;
-    padding-bottom: 5%;
     background-color: #ADD8E6;
+    width: 100%;
+    min-height: 25%;
+    max-height: 50%;
+    padding-left: 25%;
+    padding-right: 25%;
+}
+
+#brokenTooth {
+    max-height: 128px;
 }
 
 #error-oops {
@@ -13,7 +19,6 @@
 
 #error-content {
     text-align: justify;
-    margin: 10% 25%;
     border-style: groove;
 }
 

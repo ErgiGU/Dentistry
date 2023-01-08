@@ -29,7 +29,7 @@ export default function BookedTimeslots({appointment, parentCallback}) {
                         <div className="text" id={'timeslotCardText'}>{dentistName}</div>
                     </div>
                     <div className="col" id={'timeslotCardCol'}>
-                        <button className="cancelButton" onClick={() => parentCallback(appointment.id)}>
+                        <button id="cancelButton" onClick={() => parentCallback(appointment.id)}>
                             Cancel
                         </button>
                     </div>

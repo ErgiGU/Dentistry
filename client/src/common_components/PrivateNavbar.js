@@ -5,7 +5,6 @@
 import React from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Logo from '../assets/logo.png'
 import './Navbar.css'
@@ -26,7 +25,7 @@ export default function PrivateNavbar() {
         <div>
             <div id="headerDentist">
                 <img id="logoNavbar" src={Logo} alt="logo"/>
-                <h1>DENTAL CLINIC</h1>
+                <h1 id={'name'}>DENTISTRY</h1>
             </div>
             <Navbar id="navbar" expand="lg">
                 <Container className="me-auto">

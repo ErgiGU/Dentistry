@@ -65,14 +65,14 @@ const clinicSchema = new Schema({
             start: {type: String, default: "08:00"},
             end: {type: String, default: "17:00"}
         },
-    },
-    lunchHour: {
-        type: String,
-        default: "12:00"
-    },
-    fikaHour: {
-        type: String,
-        default: "14:00"
+        lunchHour: {
+            type: String,
+            default: "12:00"
+        },
+        fikaHour: {
+            type: String,
+            default: "14:00"
+        }
     }
 })
 

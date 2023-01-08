@@ -8,7 +8,6 @@ import TimeslotCard from './components/timeslotCard'
 import mqttHandler from "../common_components/MqttHandler";
 import {useNavigate} from "react-router-dom";
 import PrivateNavbar from "../common_components/PrivateNavbar";
-import jwt from "jsonwebtoken";
 
 
 export default function ViewAppointments() {
@@ -129,7 +128,7 @@ export default function ViewAppointments() {
                             <div id="cardAppointment">
                                 <div className="card-body">
                                     <h3 id={"currentAppointments"}> Current appointments </h3>
-                                    <h2 id={"currentAppointments"}>~</h2>
+                                    <h2 id={"currentAppointmentsNumber"}>~</h2>
                                     <img id="clinicImage"
                                          src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
                                          alt="clinic"/>

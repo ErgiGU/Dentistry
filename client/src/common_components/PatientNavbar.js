@@ -6,14 +6,14 @@ import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import logo from '../assets/logo.png'
+import Logo from '../assets/logo.png'
 import './Navbar.css'
 
 export default function PatientNavbar() {
     return (
         <div>
             <div id="headerDentist">
-                <img id="logoNavbar" src={logo} alt="logo"/>
+                <img id="logoNavbar" src={Logo} alt="logo"/>
                 <h1 id={'name'}>DENTISTRY</h1>
             </div>
             <Navbar id="navbar" expand="lg">
