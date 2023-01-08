@@ -132,7 +132,10 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
             const messageSend = {
                 client_id: "123",
                 body: {
-                    email: "burakaskan2001@gmail.com"
+                    clinicName: "Testing Clinic",
+                    address: "Lindholmen",
+                    email: "burakaskan2001@gmail.com",
+                    password: "Team-7"
                 }
             }
             const expectedResult = {
@@ -165,7 +168,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
             const clinicStored = await asyncMethod("clinicDataRequest", "clinicData", messageSendClient, expectedResult)
             const result = await asyncMethod("login", "loginClient", messageSend, expectedResult)
             if (!util.isDeepStrictEqual(result.clinicAccount, clinicStored)) {
-                new Error(JSON.stringify(result.clinicAccount) + " is not the expected message. This is: " + JSON.stringify(expectedResult)
+                throw new Error(JSON.stringify(result.clinicAccount) + " is not the expected message. This is: " + JSON.stringify(clinicStored)
                     + ". The listing topic in backend: " + "login" + ". The listening topic in testing: " + "123/loginClient")
             }
         })
@@ -188,14 +191,10 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
             })
         })
     })
-    //Is needed to close the runner in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
-    describe('Closing runner', function () {
-        it('Is this closing the runner?', function () {
-            mqttClient.sendMessage('test', JSON.stringify({message: 'someMsg'}))
-        })
-    })
 })
 //Is needed to close the tester in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
 after(function () {
-    process.exit()
+    setTimeout(() => {
+        process.exit()
+    }, 5000)
 });

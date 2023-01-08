@@ -10,7 +10,6 @@
     "bootstrap": "^5.2.3",
     "jsonwebtoken": "^8.5.1",
     "mapbox-gl": "^2.11.1",
-    "mdb-react-ui-kit": "^5.0.0",
     "mongoose": "^6.8.0",
     "mqtt": "^4.3.7",
     "react": "^18.2.0",
