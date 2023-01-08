@@ -22,7 +22,7 @@ function DentistCard({id, name, email, phoneNumber, workweek, clinic}) {
             </div>
             <div id="DentistBtn">
 
-                        <button className="openScheduleModal" onClick={() => setOpenScheduleModal(true)}>Edit schedule</button>
+                        <button id="openScheduleModal" onClick={() => setOpenScheduleModal(true)}>Edit schedule</button>
                         <EditSchedule open={openScheduleModal}
                                       onClose={() => setOpenScheduleModal(false)}
                                       id={id}
