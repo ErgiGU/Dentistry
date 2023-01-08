@@ -73,7 +73,7 @@ export default function ViewDentists() {
             <h1 className="info">
                 Dentist's registered at {clinic}
             </h1>
-            <div className="dentists">
+            <div id="dentists">
                 {Array.from(dentists).map((dentist) => (
                     <div className="dentist-card">
                     <DentistCard
