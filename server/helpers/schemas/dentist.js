@@ -3,12 +3,10 @@ const Schema = mongoose.Schema
 
 //remove fika time (not needed for project)
 const dentistSchema = new Schema({
-    timeslot: [{ type: Schema.Types.ObjectId, ref: 'Timeslot' }],
     clinic: { type: Schema.Types.ObjectId, ref: 'Clinic' },
     name: String,
     email: String,
     phoneNumber: String,
-    clinic: { type: Schema.Types.ObjectId, ref: 'Clinic' },
     timeslots: [{ type: Schema.Types.ObjectId, ref: 'Timeslot' }],
     workweek: {
         monday: {type: Boolean, default: true},
@@ -16,7 +14,7 @@ const dentistSchema = new Schema({
         wednesday: {type: Boolean, default: true},
         thursday: {type: Boolean, default: true},
         friday: {type: Boolean, default: true}
-    }
+    },
     speciality: String,
     lunchHour: String,
     fikaHour: String,

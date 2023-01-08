@@ -1,7 +1,7 @@
 import "./EditDentists.css";
-import DentistCard from "../common_components/DentistCard";
+import DentistCard from "./DentistCard/DentistCard";
 import PrivateNavbar from "../common_components/PrivateNavbar";
-import React, {useEffect, useState} from "react";
+import React, {useRef, useEffect, useState} from "react";
 import mqttHandler from "../common_components/MqttHandler";
 import jwt from "jsonwebtoken";
 import {useNavigate} from "react-router-dom";
@@ -13,6 +13,7 @@ export default function ViewDentists() {
     const [dentists, setDentists] = useState([]);
     const [client, setClient] = useState(null);
     const [clinic, setClinic] = useState(null);
+    let clinicDataBackend = useRef(true)
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,20 +32,21 @@ export default function ViewDentists() {
         }
         return () => {
         };
-    }, []);
+    }, [navigate]);
 
     useEffect(() => {
         if (client !== null) {
             const theClinic = jwt.decode(localStorage.token, 'something');
             setClinic(theClinic.name)
             client.subscribe(client.options.clientId + '/#')
-            client.publish('getDentists', JSON.stringify({
+            sendMessage('getDentists', {
                 id: client.options.clientId,
                 body: {
                     clinicID: theClinic._id
                 }
-            }))
+            })
             client.on('message', function (topic, message) {
+                clinicDataBackend.current = false
                 switch (topic) {
                     case client.options.clientId + '/getDentistsResponse':
                         console.log(JSON.parse(message))
@@ -64,7 +66,21 @@ export default function ViewDentists() {
                 client.end()
             }
         }
-    }, [client]);
+        function sendMessage(topic, json) {
+            if (client !== null) {
+                clinicDataBackend.current = true
+                client.publish(topic, JSON.stringify(json))
+                setTimeout(() => {
+                    if (clinicDataBackend.current) {
+                        navigate("/error");
+                    }
+                }, 3000);
+
+            }else {
+                navigate("/error")
+            }
+        }
+    }, [client, navigate]);
 
 
     return (

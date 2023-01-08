@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import "./DentistCard.css"
 import EditSchedule from "../modalFolder/scheduelModal/EditEmployee"
 import EditDentist from "../modalFolder/dentistModal/DentistModal";

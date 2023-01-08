@@ -1,18 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import "./DentistModal.css"
-import mqttHandler from "../../common_components/MqttHandler";
-import jwt from "jsonwebtoken";
-
-//in case needed bootstrap template
-
-//<BootstrapSwitchButton
-//checked={false}
-//onlabel='Admin User'
-//offlabel='Regular User'
-//onChange={(checked: boolean) => {
-//  this.setState({ isUserAdmin: checked })
-//}}
-///>
+import mqttHandler from "../../../common_components/MqttHandler";
+import {useNavigate} from "react-router-dom";
 
 
 const Modal = ({ open, onClose, name, email, phoneNumber, id}) => {
@@ -21,6 +10,8 @@ const Modal = ({ open, onClose, name, email, phoneNumber, id}) => {
     const [currentName, setCurrentName] = useState(name);
     const [phone, setPhone] = useState(phoneNumber);
     const [currentEmail, setCurrentEmail] = useState(email);
+    const navigate = useNavigate()
+    let clinicDataBackend = useRef(true)
 
     useEffect(() => {
         if (client === null) {
@@ -32,11 +23,15 @@ const Modal = ({ open, onClose, name, email, phoneNumber, id}) => {
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#')
             client.on('message', function (topic, message) {
+                clinicDataBackend.current = false
                 switch (topic) {
                     case client.options.clientId + '/editDentistInfoResponse':
                         console.log(JSON.parse(message))
                         const pMessage = JSON.parse(message)
                         alert(pMessage.text)
+                        break;
+                    default:
+                        console.log("The wrong message has been received")
                         break;
                 }
             })
@@ -48,6 +43,22 @@ const Modal = ({ open, onClose, name, email, phoneNumber, id}) => {
             }
         }
     }, [client]);
+
+    function sendMessage(topic, json) {
+        if (client !== null) {
+            clinicDataBackend.current = true
+            client.publish(topic, JSON.stringify(json))
+            setTimeout(() => {
+                if (clinicDataBackend.current) {
+                    navigate("/error");
+                }
+            }, 3000);
+
+        } else {
+            navigate("/error")
+        }
+    }
+
     /**
      * Changes the initial state of the variables when the user changes in something, in order to keep
      * track of the user's input.
@@ -84,19 +95,17 @@ const Modal = ({ open, onClose, name, email, phoneNumber, id}) => {
                 }
                 alert(message)
             } else {
-                if (client !== null) {
-                    client.publish('editDentistInfo', JSON.stringify(
-                        {
-                            id: client.options.clientId,
-                            body: {
-                                id: id,
-                                name: currentName,
-                                phone: phone,
-                                email: currentEmail,
-                            },
-                        }
-                    ))
-                }
+               sendMessage('editDentistInfo', {
+                       id: client.options.clientId,
+                       body: {
+                           id: id,
+                           name: currentName,
+                           phone: phone,
+                           email: currentEmail,
+                       },
+                   }
+               )
+
             }
         }
     }

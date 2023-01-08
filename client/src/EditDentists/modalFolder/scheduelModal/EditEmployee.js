@@ -1,12 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import "./EditEmployee.css"
-import mqttHandler from "../../common_components/MqttHandler";
+import {useNavigate} from "react-router-dom";
+import mqttHandler from "../../../common_components/MqttHandler";
+
 
 
 const Modal = ({id, open, onClose, name, workweek}) => {
 
 
+    const navigate = new useNavigate()
     const [client, setClient] = useState(null);
+    let clinicDataBackend = useRef(true)
     /**
      * provides the starting positions for the workweek toggles and updates them when the user changes them.
      * @param toggles Event object which contains the user input and field id.
@@ -30,11 +34,15 @@ const Modal = ({id, open, onClose, name, workweek}) => {
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#')
             client.on('message', function (topic, message) {
+                clinicDataBackend.current = false
                 switch (topic) {
                     case client.options.clientId + '/setDentistScheduleResponse':
                         console.log(JSON.parse(message))
                         const pMessage = JSON.parse(message)
                         alert(pMessage.text)
+                        break;
+                    default:
+                        console.log("Wrong message has been received.")
                         break;
                 }
             })
@@ -49,6 +57,20 @@ const Modal = ({id, open, onClose, name, workweek}) => {
 
     if (!open) return null;
 
+    function sendMessage(topic, json) {
+        if (client !== null) {
+            clinicDataBackend.current = true
+            client.publish(topic, JSON.stringify(json))
+            setTimeout(() => {
+                if (clinicDataBackend.current) {
+                    navigate("/error");
+                }
+            }, 3000);
+
+        } else {
+            navigate("/error")
+        }
+    }
 
     /**
      * sends a message containing the updated information of the dentist workweek after a user changes it.
@@ -57,7 +79,7 @@ const Modal = ({id, open, onClose, name, workweek}) => {
 
     const submit = (event) => {
         if (client !== null) {
-            client.publish("setDentistSchedule", JSON.stringify({
+            sendMessage("setDentistSchedule", {
                 id: client.options.clientId,
                 body: {
                     id: id,
@@ -69,7 +91,7 @@ const Modal = ({id, open, onClose, name, workweek}) => {
                         friday: toggles.Friday
                     }
                 }
-            }));
+            })
         }
     }
 
