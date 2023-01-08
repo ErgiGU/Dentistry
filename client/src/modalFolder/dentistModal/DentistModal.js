@@ -108,7 +108,7 @@ const Modal = ({ open, onClose, name, email, phoneNumber, id}) => {
                 onClick={(e) => {
                     e.stopPropagation();
                 }}
-                className='dentistModalContainer'
+                id='dentistModalContainer'
             >
                 <div className='dentistModalRight'>
                     <div className='dentistContent'>
