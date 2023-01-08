@@ -2,7 +2,7 @@ import './ErrorPage.css'
 
 export default function ErrorPage() {
     return (
-        <>
+        <div>
             <div id="error-main">
                 <hr id="error-horizontal-rule"/>
                 <div id="error-oops"> 500 Server Error</div>
@@ -15,6 +15,6 @@ export default function ErrorPage() {
                     Or try again later
                 </div>
             </div>
-        </>
+        </div>
     )
 }

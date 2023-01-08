@@ -9,10 +9,10 @@ import Services from '../assets/services.png'
 
 export default function Card() {
     return (
-        <div id='cards'>
-            <div id='cards__container'>
-                <div id='cards__wrapper'>
-                    <ul id='cards__items'>
+        <div id='homeCardsTop'>
+            <div id='homeCardsContainer' className={'container'}>
+                <div id='homeCardsWrapper' className={'col'}>
+                    <ul id='homeCardsItems' className={'row'}>
                         <CardItem
                             src='https://static9.depositphotos.com/1023803/1104/i/600/depositphotos_11043046-stock-photo-closeup-of-calendar-page.jpg'
                             text='Check out all the booked appointments and their specifications.'
@@ -29,7 +29,7 @@ export default function Card() {
                             path='/'
                         />
                     </ul>
-                    <ul id='cards__items'>
+                    <ul id='homeCardsItems' className={'row'}>
                         <CardItem
                             src="https://static8.depositphotos.com/1000423/922/i/600/depositphotos_9220251-stock-photo-scientists-in-laboratory.jpg"
                             text='Add a new dentist to your clinic.'

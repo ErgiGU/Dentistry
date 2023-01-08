@@ -13,7 +13,7 @@ export default function BookedTimeslots({appointment, parentCallback}) {
     const timeslotTime = appointment.timeslot
     const text = appointment.patient.text
     return (
-        <div className="cardTimeslot">
+        <div id="cardTimeslot">
             <div className="card-body">
                 <div className="row align-items-end">
                     <div className="col" id={'timeslotCardCol'}>TIME

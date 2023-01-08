@@ -1,6 +1,8 @@
 #error-main {
+    margin-bottom: 25%;
+    margin-top: 25%;
+    padding-bottom: 5%;
     background-color: #ADD8E6;
-    height: max-content;
 }
 
 #error-oops {
@@ -11,9 +13,7 @@
 
 #error-content {
     text-align: justify;
-    margin: 10%;
-    margin-left: 25%;
-    margin-right: 25%;
+    margin: 10% 25%;
     border-style: groove;
 }
 

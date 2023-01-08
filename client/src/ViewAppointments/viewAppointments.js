@@ -45,12 +45,13 @@ export default function ViewAppointments() {
     useEffect(() => {
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#')
-            const theClinic = jwt.decode(localStorage.token, 'something');
+            const theClinic = '63b749fa938c270b734ec8fd'
+                //jwt.decode(localStorage.token, 'something');
             console.log(theClinic._id)
             sendMessage('sendAppointmentInformation', {
                 clientId: client.options.clientId,
                 body: {
-                    clinicID: theClinic._id
+                    clinicID: theClinic
                 }
             })
             client.on('message', function (topic, message) {
@@ -125,11 +126,11 @@ export default function ViewAppointments() {
                 <div id="backgroundAppointments">
                     <div className="row">
                         <div className="col-3">
-                            <div className="cardAppointment">
+                            <div id="cardAppointment">
                                 <div className="card-body">
                                     <h3 id={"currentAppointments"}> Current appointments </h3>
                                     <h2 id={"currentAppointments"}>~</h2>
-                                    <img className="clinic"
+                                    <img id="clinicImage"
                                          src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
                                          alt="clinic"/>
                                 </div>

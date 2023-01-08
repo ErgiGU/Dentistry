@@ -1,15 +1,14 @@
 #appointments {
     background-color: whitesmoke;
     width: 20px;
-
 }
 
-.cardAppointment {
+#cardAppointment {
     background-color: steelblue;
     margin-top: 20%;
 }
 
-.cardTimeslot {
+#cardTimeslot {
     height: 130px;
     margin-top: 7%;
     margin-left: 2%;
@@ -19,9 +18,11 @@
 #backgroundAppointments {
     background-color: whitesmoke;
     height: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
-.clinic {
+#clinicImage {
     width: 150px;
     height: 150px;
     margin-top: 20%;
@@ -47,7 +48,7 @@
     color: white;
 }
 
-.cancelButton {
+#cancelButton {
     padding: 10px;
     font-size: 18px;
     margin-top: 30px;

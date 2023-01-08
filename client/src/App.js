@@ -17,7 +17,7 @@ import Appointments from "./appointments_calendar/Appointments";
 export default function App() {
 
     return (
-        <div>
+        <div id={'topPage'}>
             <Routes>
                 <Route path="/" element={< Home/>}/>
                 <Route path="/addDentist" element={<NewDentist/>}/>

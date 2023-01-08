@@ -2,6 +2,14 @@
     text-align: center;
 }
 
+html, body {
+    min-height: 100%;
+}
+
+#topPage {
+    height: 100%;
+}
+
 .App-logo {
     height: 40vmin;
     pointer-events: none;
