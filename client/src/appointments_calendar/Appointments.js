@@ -117,7 +117,7 @@ export default function Appointments() {
                     break;
             }
         })
-        
+
         /**
          * Based on week generation, creates objects of timeslots mapped to weekdays
          * @param clinic
@@ -217,7 +217,8 @@ export default function Appointments() {
                 </div>
             </div>
             <React.StrictMode>
-                {isLoading ? <Loading/> : (isBookingResponse ? <BookingResponse bookingResponse={bookingResponse}/> : <Calendar clinic={currentClinic} clinicTimeslots={currentClinic} client={client}/>)}
+                {isLoading ? <Loading/> : (isBookingResponse ? <BookingResponse bookingResponse={bookingResponse}/> :
+                    <Calendar clinic={currentClinic} clinicTimeslots={currentClinic} client={client}/>)}
             </React.StrictMode>
         </div>
     )

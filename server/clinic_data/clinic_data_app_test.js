@@ -208,7 +208,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                     name: "William Bjorn",
                     email: "gusaskbu@student.gu.se",
                     dentistEmail: "burakaskan2001@gmail.com",
-                    phoneNumber: "073213214",
+                    phoneNumber: "0732132141",
                     speciality: "Teeth"
                 }
             }
@@ -223,31 +223,39 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                     email: "burakaskan2001@gmail.com"
                 }
             }
-            const newExpected = {
+            const expected = {
+                workweek:
+                    {
+                        monday: true,
+                        tuesday: true,
+                        wednesday: true,
+                        thursday: true,
+                        friday: true
+                    },
                 _id: "id",
-                timeslot: [],
                 clinic: clinicStored._id,
                 name: "William Bjorn",
                 email: "burakaskan2001@gmail.com",
-                phoneNumber: "073213214",
+                phoneNumber: "0732132141",
+                timeslots: [],
                 __v: 0
             }
-            await asyncMethod("getDentist", "giveDentist", messageSend, newExpected)
+            await asyncMethod("getDentist", "giveDentist", messageSend, expected)
             clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {
                 id: "123",
-                body: {email: "gusaskbu@student.gu.se "}
-            }, expectedResult)
+                body: {email: "gusaskbu@student.gu.se"}
+            }, expected)
         })
     })
 
-    describe('Dentists work schedule', function () {
+    describe('Editing the dentist', function () {
         it('See if work week can get changed', async function () {
             this.timeout(10000)
             const messageSend = {
                 clientId: "123",
                 body: {
-                    dentist_id: clinicStored.dentist[0],
-                    workWeek: {
+                    id: clinicStored.dentists[0],
+                    workweek: {
                         monday: false,
                         tuesday: true,
                         wednesday: false,
@@ -257,30 +265,43 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                 }
             }
             const expectedResult = {
-                dentistWork: {
-                    dentist_id: clinicStored.dentist[0],
-                    workWeek: {
-                        monday: false,
-                        tuesday: true,
-                        wednesday: false,
-                        thursday: true,
-                        friday: false
-                    }
+                status: 200,
+                text: "Updated!"
+            }
+            await asyncMethod("setDentistSchedule", "setDentistScheduleResponse", messageSend, expectedResult)
+        })
+
+        it('See if dentist general information is getting changed', async function () {
+            this.timeout(10000)
+            const messageSend = {
+                id: "123",
+                body: {
+                    id: clinicStored.dentists[0],
+                    name: "Solomon Mathews",
+                    phonenumber: "0769136300"
                 }
             }
-            await asyncMethod("setDentistSchedule", "updateDentistWeek", messageSend, expectedResult)
+            const expectedResult = {
+                status: 200,
+                text: "Updated!"
+            }
+            await asyncMethod("editDentistInfo", "editDentistInfoResponse", messageSend, expectedResult)
         })
-        it('See if work week is getting received', async function () {
+
+        it('See if dentist is getting received correctly', async function () {
             this.timeout(10000)
             const messageSend = {
                 clientId: "123",
                 body: {
-                    clinic_id: clinicStored._id
+                    clinicID: clinicStored._id
                 }
             }
-            const expectedResult = {
-                dentistWork: [{
-                    dentist_id: clinicStored.dentist[0],
+            const resultExpectation = {
+                dentists: [{
+                    id: clinicStored.dentists[0],
+                    name: "Solomon Mathews",
+                    email: "burakaskan2001@gmail.com",
+                    phoneNumber: "0769136300",
                     workWeek: {
                         monday: false,
                         tuesday: true,
@@ -290,19 +311,14 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                     }
                 }]
             }
-            await asyncMethod("getDentistSchedule", "getDentistWeek", messageSend, expectedResult)
-        })
-    })
-
-    //Is needed to close the runner in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
-    describe('Closing runner', function () {
-        it('Is this closing the runner?', function () {
-            mqttClient.sendMessage('test', JSON.stringify({message: 'someMsg'}))
+            await asyncMethod("getDentists", "getDentistsResponse", messageSend, resultExpectation)
         })
     })
 })
 //Is needed to close the tester in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
 
 after(function () {
-    process.exit()
+    setTimeout(() => {
+        process.exit()
+    }, 5000)
 });

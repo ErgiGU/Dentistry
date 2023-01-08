@@ -63,7 +63,7 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
                 time: slot.time
             }
         }
-        client.publish(client.options.clientId + '/triggerLoading', JSON.stringify({booking:'booking'}))
+        client.publish(client.options.clientId + '/triggerLoading', JSON.stringify({booking: 'booking'}))
         client.publish('bookAppointment', JSON.stringify(message))
         onClose()
     }

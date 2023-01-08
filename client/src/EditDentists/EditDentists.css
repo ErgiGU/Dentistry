@@ -1,0 +1,10 @@
+
+#dentists {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#dentist-card {
+    flex: 1 1 calc(33% - 20px);
+    margin: 10px;
+}

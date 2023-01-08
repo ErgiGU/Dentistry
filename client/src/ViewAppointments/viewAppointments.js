@@ -3,7 +3,7 @@
  * This class serves  function for tracking the logged clinic, communicating with backend, and structure for dispalying infromation.
  */
 import './ViewAppointments.css'
-import React, {useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import TimeslotCard from './components/timeslotCard'
 import mqttHandler from "../common_components/MqttHandler";
 import {useNavigate} from "react-router-dom";
@@ -16,8 +16,21 @@ export default function ViewAppointments() {
     const [appointments, setAppointments] = useState([]);
     const navigate = useNavigate();
     let appointmentsFlag = useRef(true)
+    const sendMessage = useCallback((topic, json) => {
+        if (client !== null) {
+            appointmentsFlag.current = true
+            client.publish(topic, JSON.stringify(json))
+            setTimeout(() => {
+                if (appointmentsFlag.current) {
+                    navigate("/error");
+                }
+            }, 3000);
 
-    // Primary client generating effect
+        } else {
+            navigate("/error")
+        }
+    }, [client, navigate])
+// Primary client generating effect
     useEffect(() => {
         if (client === null) {
             setClient(mqttHandler.getClient(client))
@@ -45,7 +58,7 @@ export default function ViewAppointments() {
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#')
             const theClinic = '63b749fa938c270b734ec8fd'
-                //jwt.decode(localStorage.token, 'something');
+            //jwt.decode(localStorage.token, 'something');
             console.log(theClinic._id)
             sendMessage('sendAppointmentInformation', {
                 clientId: client.options.clientId,
@@ -81,20 +94,7 @@ export default function ViewAppointments() {
                 client.end()
             }
         }
-    }, [client]);
-
-    function sendMessage(topic, json) {
-        if (client !== null) {
-            appointmentsFlag.current = true
-            client.publish(topic, JSON.stringify(json))
-            setTimeout(() => {
-                if (appointmentsFlag.current) {
-                    navigate("/error");
-                }
-            }, 3000);
-
-        }
-    }
+    }, [client, navigate, sendMessage]);
 
 
     /**
@@ -106,18 +106,17 @@ export default function ViewAppointments() {
         const timeslotID = id;
         console.log(timeslotID)
         if (client !== null) {
-            client.publish('cancelAppointment', JSON.stringify(
-                {
-                    clientId: client.options.clientId,
+            sendMessage('cancelAppointment', JSON.stringify({
+                    id: client.options.clientId,
                     body: {
                         timeslotID: timeslotID
                     }
-                }
-            ))
+                })
+            )
         }
     }
 
-
+//Line 125 with empty h2 I added a empty space to stop the empty header complaint -Askan
     return (
         <>
             <PrivateNavbar/>

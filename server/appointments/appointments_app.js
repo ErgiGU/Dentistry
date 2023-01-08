@@ -26,6 +26,7 @@ mqttClient.subscribeTopic('appointment')
 mqttClient.subscribeTopic('testingTestingRequest')
 mqttClient.subscribeTopic('bookAppointment')
 mqttClient.subscribeTopic('bookTimeslot')
+mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('generateData')
 mqttClient.subscribeTopic('cancelBookedTimeslot')
 mqttClient.subscribeTopic('sendAppointmentInformation')
@@ -76,7 +77,12 @@ try {
                 break;
             case 'sendAppointmentInformation':
                 waitTimeslotData(intermediary).then(r => {
-                    mqttClient.sendMessage(intermediary.clientId + "/appointmentInformationResponse", JSON.stringify(r))
+                    if (intermediary.body.test) {
+                        r = JSON.stringify(r)
+                        r = JSON.parse(r)
+                        r[0].id = "id"
+                    }
+                    mqttClient.sendMessage(intermediary.id + "/appointmentInformationResponse", JSON.stringify(r))
                 })
                 break;
             case 'cancelAppointment':

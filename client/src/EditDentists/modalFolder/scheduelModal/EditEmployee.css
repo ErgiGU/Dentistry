@@ -1,0 +1,117 @@
+#scheduleBtn-close {
+    left: 95%;
+    bottom: 95%;
+    position: fixed;
+    z-index: 1;
+    border: 0;
+}
+
+main {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+#scheduleModalRight h1,
+#scheduleModalRight h4 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#scheduleModalRight input {
+    margin-left: 10px;
+}
+
+
+#scheduleModalContainer {
+    max-width: 40%;
+    min-height: 50%;
+    width: 100%;
+    height: 90%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    background-color: whitesmoke;
+    border-radius: 5px;
+
+}
+
+
+#scheduleModalRight {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 5%;
+    padding-left: 5%;
+}
+
+#scheduleBtnOutline {
+    left: 94%;
+    bottom: 95%;
+    position: fixed;
+    z-index: 1;
+}
+
+
+#scheduleSaveBtn {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+
+#scheduleNoteAndConfirm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 40%;
+    padding-right: 10%;
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1399px) {
+    #scheduleModalContainer {
+        max-width: 40%;
+        min-height: 50%;
+        width: 100%;
+        height: 95%;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    #scheduleModalContainer {
+        max-width: 50%;
+        min-height: 50%;
+        width: 100%;
+        height: 95%;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+    }
+}
+
+@media only screen and (max-width: 463px) {
+    #scheduleModalContainer {
+        max-width: 90%;
+        min-height: 50%;
+        width: 100%;
+        height: 95%;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+    }
+}

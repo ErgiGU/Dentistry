@@ -2,12 +2,15 @@
  * All the mongoose manipulation for clinic_data component is contained here
  * @author Burak Askan (@askan)
  * @author Aieh Eissa (@aieh)
+ * @author Ossian Ålund (@ossiana)
  */
+
 const mongooseHandler = require('../../helpers/mongoose_handler')
 const clinicSchema = require('../../helpers/schemas/clinic')
 const dentistSchema = require('../../helpers/schemas/dentist')
 const timeslotSchema = require('../../helpers/schemas/timeslot')
 const patientSchema = require('../../helpers/schemas/patient')
+
 let config
 try {
     config = require('../../helpers/config-server');
@@ -67,8 +70,8 @@ async function getClinics() {
 }
 
 /**
- * Does mongoose manipulations to get all JSON coordinates, opening hours, name and address of all clinic_map.
- * @returns {Promise<{clinic_map: *[]}|boolean>} JSON containing coordinates, opening hours, name and address of all clinic_map.
+ * Does mongoose manipulations to get all JSON coordinates, opening hours, name and address of all ClinicsMap.
+ * @returns {Promise<{ClinicsMap: *[]}|boolean>} JSON containing coordinates, opening hours, name and address of all ClinicsMap.
  */
 async function mapDataRequest() {
 
@@ -252,6 +255,115 @@ async function changePassword(req) {
 }
 
 /**
+ * Finds the correct clinic using the clinic ID provided in the body.
+ * Then fetches all dentists registered at said clinic.
+ * If none are found an error is sent.
+ * @param intermediary the message from the frontend, that being the body containing the clinics ID.
+ * @returns {Promise<string>} A status and a response text.
+ */
+async function getDentistCard(intermediary) {
+    let clinicDentists = {
+        dentists: []
+    };
+    const clinicID = intermediary.body.clinicID
+    const dentists = await dentistModel.find({clinic: clinicID})
+    console.log(dentists)
+    try {
+        dentists.forEach(dentist => {
+            clinicDentists.dentists.push({
+                id: dentist._id,
+                name: dentist.name,
+                email: dentist.email,
+                phoneNumber: dentist.phoneNumber,
+                workWeek: {
+                    monday: dentist.workweek.monday,
+                    tuesday: dentist.workweek.tuesday,
+                    wednesday: dentist.workweek.wednesday,
+                    thursday: dentist.workweek.thursday,
+                    friday: dentist.workweek.friday
+                }
+            })
+        })
+        console.log(clinicDentists)
+    } catch (e) {
+        console.log(e)
+    }
+    if (dentists.length > 0) {
+        return JSON.stringify(clinicDentists);
+    } else {
+        message = {
+            status: 404,
+            text: 'No dentists are registered'
+        };
+    }
+    return JSON.stringify(message);
+}
+
+/**
+ * Finds the correct dentist the ID provided in the body.
+ * Then checks a matching dentist was found.
+ * If no dentist is found matching an error is sent.
+ * Otherwise, the workweek of said dentist will be updated.
+ * @param req the message from the frontend, that being the body containing the dentist email.
+ * @returns {Promise<string>} A status and a response text.
+ */
+async function setDentistSchedule(req) {
+    const theID = req.body.id
+    console.log(theID)
+    const dentist = await dentistModel.findById(theID)
+    let message;
+    if (dentist) {
+        dentist.workweek.monday = req.body.workweek.monday
+        dentist.workweek.tuesday = req.body.workweek.tuesday
+        dentist.workweek.wednesday = req.body.workweek.wednesday
+        dentist.workweek.thursday = req.body.workweek.thursday
+        dentist.workweek.friday = req.body.workweek.friday
+        dentist.save();
+        message = {
+            status: 200,
+            text: "Updated!"
+        }
+    } else {
+        message = {
+            status: 404,
+            text: 'Dentist is not registered'
+        }
+    }
+    return JSON.stringify(message);
+}
+
+/**
+ * Finds the correct dentist the ID provided in the body.
+ * Then checks a matching dentist was found.
+ * If no dentist is found matching an error is sent.
+ * Otherwise, name, phoneNumber and email of said dentist will be updated.
+ * @param req the message from the frontend, that being the body containing the dentist email.
+ * @returns {Promise<string>} A status and a response text.
+ */
+async function setDentistInfo(req) {
+    const theID = req.body.id
+    console.log(theID)
+    const dentist = await dentistModel.findById(theID)
+    let message;
+    if (dentist) {
+        dentist.name = req.body.name || dentist.name
+        dentist.email = req.body.email || dentist.email
+        dentist.phoneNumber = req.body.phonenumber || dentist.phoneNumber
+        dentist.save();
+        message = {
+            status: 200,
+            text: "Updated!"
+        }
+    } else {
+        message = {
+            status: 404,
+            text: 'Dentist is not registered'
+        }
+    }
+    return JSON.stringify(message);
+}
+
+/**
  * Finds the correct clinic provided in the body, then creates a new dentist with the data provided in the body
  * Then adds the dentist to the clinic's dentists list.
  * @param req the message from the frontend.
@@ -308,14 +420,17 @@ async function getCurrentClinic(req) {
 const clinicController = {
     removeData,
     mapDataRequest,
-    reconnect,
+    getDentistCard,
+    setDentistSchedule,
+    setDentistInfo,
     clinicData,
+    reconnect,
     editInfo,
     changePassword,
     addDentist,
     getCurrentClinic,
-    getClinics
+    getClinics,
+    getDentist
 }
 
 module.exports = clinicController
-
