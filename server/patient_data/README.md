@@ -7,7 +7,7 @@ Here you should mention what is the purpose this specific folder.
 Here you should mention what installation is required to run this directory. Include MQTT connection and npm install step wise.
 
 ## Interaction
-Maybe the title can be changed but mention how this directory interacts with the broker, client and the database. (if there is no interaction with any of the below sections, remove it).
+Maybe the title can be changed but mention how this directory interacts with the broker, client and the database(if there is no interaction wwith the below mentioned sections, remove them).
 
 ### MQTT
 
@@ -17,4 +17,3 @@ Maybe the title can be changed but mention how this directory interacts with the
 
 ## Contributors
 Mention who contributed here. TBD can be removed if its repitative or unnecessary.
-
