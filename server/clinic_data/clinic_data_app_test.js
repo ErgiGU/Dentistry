@@ -223,28 +223,45 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                     email: "burakaskan2001@gmail.com"
                 }
             }
+            const expected = {
+                workweek:
+                    {
+                        monday:true,
+                        tuesday:true,
+                        wednesday:true,
+                        thursday:true,
+                        friday:true
+                    },
+                _id:"id",
+                clinic: clinicStored._id,
+                name:"William Bjorn",
+                email:"burakaskan2001@gmail.com",
+                phoneNumber:"073213214",
+                timeslots:[],
+                __v:0
+            }
             const newExpected = {
                 _id: "id",
                 timeslot: [],
                 clinic: clinicStored._id,
                 name: "William Bjorn",
                 email: "burakaskan2001@gmail.com",
-                phoneNumber: "073213214",
+                phoneNumber: "0732132141",
                 __v: 0
             }
-            await asyncMethod("getDentist", "giveDentist", messageSend, newExpected)
-            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "gusaskbu@student.gu.se "}}, newExpected)
+            await asyncMethod("getDentist", "giveDentist", messageSend, expected)
+            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "gusaskbu@student.gu.se"}}, newExpected)
         })
     })
 
-    describe('Dentists work schedule', function () {
+    describe('Editing the dentist', function () {
         it('See if work week can get changed', async function () {
             this.timeout(10000)
             const messageSend = {
-                client_id: "123",
+                id: "123",
                 body: {
-                    dentist_id: clinicStored.dentist[0],
-                    workWeek: {
+                    id: clinicStored.dentists[0],
+                    workweek: {
                         monday: false,
                         tuesday: true,
                         wednesday: false,
@@ -254,31 +271,44 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                 }
             }
             const expectedResult = {
-                dentistWork: {
-                    dentist_id: clinicStored.dentist[0],
-                    workWeek: {
-                        monday: false,
-                        tuesday: true,
-                        wednesday: false,
-                        thursday: true,
-                        friday: false
-                    }
+                status: 200,
+                text: "Updated!"
+            }
+            await asyncMethod("setDentistSchedule", "setDentistScheduleResponse", messageSend, expectedResult)
+        })
+
+        it('See if dentist general information is getting changed', async function () {
+            this.timeout(10000)
+            const messageSend = {
+                id: "123",
+                body: {
+                    id: clinicStored.dentists[0],
+                    name: "Solomon Mathews",
+                    phonenumber: "0769136300"
                 }
             }
-            await asyncMethod("setDentistSchedule", "updateDentistWeek", messageSend, expectedResult)
+            const expectedResult = {
+                status: 200,
+                text: "Updated!"
+            }
+            await asyncMethod("editDentistInfo", "editDentistInfoResponse", messageSend, expectedResult)
         })
+
         it('See if work week is getting received', async function () {
             this.timeout(10000)
             const messageSend = {
-                client_id: "123",
+                id: "123",
                 body: {
-                    clinic_id: clinicStored._id
+                    clinicID: clinicStored._id
                 }
             }
-            const expectedResult = {
-                dentistWork: [{
-                    dentist_id: clinicStored.dentist[0],
-                    workWeek: {
+            const resultExpectation = {
+                dentists:[{
+                    id: clinicStored.dentists[0],
+                    name: "Solomon Mathews",
+                    email: "burakaskan2001@gmail.com",
+                    phoneNumber: "07691363",
+                    workWeek:{
                         monday: false,
                         tuesday: true,
                         wednesday: false,
@@ -287,7 +317,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                     }
                 }]
             }
-            await asyncMethod("getDentistSchedule", "getDentistWeek", messageSend, expectedResult)
+            await asyncMethod("getDentists", "getDentistsResponse", messageSend, resultExpectation)
         })
     })
 })

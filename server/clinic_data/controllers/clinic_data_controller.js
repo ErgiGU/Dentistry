@@ -342,12 +342,10 @@ async function setDentistInfo(req) {
     const dentist = await dentistModel.findById(theID)
     let message;
     if (dentist) {
-        dentist.name = req.body.name || dentist.name,
-            dentist.email = req.body.email || dentist.email,
-            dentist.phonenumber = req.body.phonenumber || dentist.phonenumber,
-            dentist.save();
-        console.log("Dentist successfully updated")
-        console.log(dentist)
+        dentist.name = req.body.name || dentist.name
+        dentist.email = req.body.email || dentist.email
+        dentist.phoneNumber = req.body.phonenumber || dentist.phoneNumber
+        dentist.save();
         message = {
             status: 200,
             text: "Updated!"
@@ -418,13 +416,11 @@ async function getCurrentClinic(req) {
 const clinicController = {
     removeData,
     mapDataRequest,
-    reconnect,
     getDentistCard,
     setDentistSchedule,
     setDentistInfo,
-    reconnect,
     clinicData,
-    getDentist,
+    reconnect,
     editInfo,
     changePassword,
     addDentist,
