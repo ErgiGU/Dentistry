@@ -103,7 +103,7 @@ const Modal = ({ open, onClose, name, email, phoneNumber, id}) => {
 
     if (!open) return null;
     return (
-        <div onClick={onClose} className='dentistOverlay'>
+        <div onClick={onClose} id='dentistOverlay'>
             <div
                 onClick={(e) => {
                     e.stopPropagation();
