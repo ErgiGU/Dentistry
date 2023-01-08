@@ -75,7 +75,7 @@ export default function ViewDentists() {
             </h1>
             <div id="dentists">
                 {Array.from(dentists).map((dentist) => (
-                    <div className="dentist-card">
+                    <div id="dentist-card">
                     <DentistCard
                         key={dentist.id}
                         id={dentist.id}
