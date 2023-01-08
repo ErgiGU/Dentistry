@@ -123,10 +123,12 @@ async function makeAppointment(clinicID, dentistID, patientInfo, date, time) {
     let mappedDate = clinic.mapStorage.get(date)
     console.log(mappedDate)
 
-    if (mappedDate !== null && mappedDate.timeslots !== null && mappedDate.timeslots.length > 0) {
-        console.log('not new array, adding')
-        mappedDate.timeslots.push({_id: timeslot._id})
-    } else {
+    try {
+        if (mappedDate !== null && mappedDate.timeslots !== null && mappedDate.timeslots.length > 0) {
+            console.log('not new array, adding')
+            mappedDate.timeslots.push({_id: timeslot._id})
+        }
+    } catch (e) {
         console.log('new array needed')
         mappedDate = {
             timeslots: [timeslot._id]
@@ -138,7 +140,7 @@ async function makeAppointment(clinicID, dentistID, patientInfo, date, time) {
 
     clinic.save()
 
-    return timeslot
+    return await timeslotModel.findById(timeslot._id).populate('dentist').populate('patient').populate('clinic')
 }
 
 /**

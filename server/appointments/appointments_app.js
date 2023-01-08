@@ -41,6 +41,7 @@ try {
     mqttClient.mqttClient.on('message', function (topic, message) {
         let intermediary = JSON.parse(message)
         console.log(config.module_config.appointmentUser.handler + " service received MQTT message")
+        console.log('topic: ' + topic)
         console.log(intermediary)
 
         switch (topic) {

@@ -33,16 +33,20 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
 
         setFormData(formData => ({
             ...formData,
-            [event.target.name]: event.target.value
+            [event.target.id]: event.target.value
         }));
     };
 
+    /**
+     * Sends booking information to backend and closes modal.
+     * Confirmation handled by Appointments.js
+     */
     function handleBooking() {
         let message = {
             clientId: client.options.clientId,
             body: {
                 // clinicID: clinic._id,
-                clinicID: '63b749fa938c270b734ec8fd',
+                clinicID: '63b70ba9108d58f87599131e',
                 patientInfo: {
                     // name: patientName,
                     // email: patientEmail,
@@ -53,12 +57,15 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
                     dateOfBirth: '1978-02-09',
                     text: 'teef hurt'
                 },
-                dentistID: '63b80067182f8ac5d5568cdd',
+                dentistID: '63b70bb69bc4afd6a0969c86',
+                //dentistID: slot.dentists[0],
                 date: formatISO(Date.now(), {representation: "date"}),
                 time: slot.time
             }
         }
+        client.publish(client.options.clientId + '/triggerLoading', JSON.stringify({booking:'booking'}))
         client.publish('bookAppointment', JSON.stringify(message))
+        onClose()
     }
 
     if (!modalShow) {
@@ -81,9 +88,7 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
                                 <form id={'patientInfoForm'} className={'flex flex-column'}>
                                     <h2 className="text-center text-white mb-3" style={{top: '100px'}}>Patient
                                         information</h2>
-
                                     <div id='displayAlert'></div>
-
                                     <div className="form-floating mb-4">
                                         <input type="text"
                                                className="form-control form-control-lg"
@@ -93,13 +98,13 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
                                                onChange={handleInputChange}
                                                placeholder="a"
                                                required/>
-                                        <label>Clinic Name</label>
+                                        <label>Name</label>
                                     </div>
 
                                     <div className="form-floating mb-4">
                                         <input type={"email"}
                                                className={"form-control form-control-lg"}
-                                               id={"email"}
+                                               id={"patientEmail"}
                                                value={formData.patientEmail}
                                                name={"patientForm"}
                                                placeholder={"a"}
@@ -129,16 +134,15 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
                                                placeholder=""
                                                onChange={handleInputChange}
                                                required/>
-                                        <label>Address</label>
+                                        <label>Symptoms</label>
                                     </div>
 
                                     <div className="form-check d-flex mb-2">
                                         <input className="form-check-input me-2"
                                                type="checkbox" checked={checked}
-                                               onChange={handleChange} id="tosCheckbox"/>
-                                        <label className="form-check-label text-white">I accept the <a href={'#'}
-                                                                                                       className="text-body"><u>Terms
-                                            of Service</u></a> and acknowledge the use of my data for this
+                                               onChange={handleChange} id="bookingTosCheckbox"/>
+                                        <label className="form-check-label">I accept the Terms
+                                            of Service and acknowledge the use of my data for this
                                             booking</label>
                                     </div>
                                 </form>

@@ -9,23 +9,30 @@ const resolvePath = require("object-resolve-path");
 export default function Calendar({clinic, client}) {
     const [year, setYear] = useState(0);
     const [week, setWeek] = useState(0);
+    const [currentDate] = useState(Date.now)
     const [currentSlot, setCurrentSlot] = useState({});
     const [modalShow, setModalShow] = useState(false);
     const [daysEnabled, setDaysEnabled] = useState([true, true, true, true, true]);
 
     useEffect(() => {
-        setYear(getYear(Date.now()))
-        if (isWeekend(Date.now())) {
-            console.log('is weekend')
-            setWeek(getISOWeek(Date.now()) + 1)
+        setYear(getYear(currentDate))
+        if (isWeekend(currentDate)) {
+            setWeek(getISOWeek(currentDate) + 1)
         } else {
-            setWeek(getISOWeek(Date.now()))
+            setWeek(getISOWeek(currentDate))
         }
-    }, [])
+    }, [currentDate])
 
+    /**
+     * Sets the display of enabled days.
+     * Prevents selecting days of current week which have already passed.
+     * On weekends automatically moves week forward
+     *
+     * @param currentWeek
+     */
     function setEnabledDays(currentWeek) {
         if (currentWeek) {
-            let dayIndex = getISODay(Date.now())
+            let dayIndex = getISODay(currentDate)
             let intermediaryEnabledDays = [false, false, false, false, false]
             for (let i = dayIndex - 1; i < 5; i++) {
                 intermediaryEnabledDays[i] = true;
@@ -36,11 +43,16 @@ export default function Calendar({clinic, client}) {
         }
     }
 
+    /**
+     * Handles moving back and forth between weeks on calendar interface
+     * min: current week, max: 12 weeks from current week
+     *
+     * @param add number of weeks to add
+     */
     function handleWeekChange(add) {
-        let realWeek = getISOWeek(Date.now());
+        let realWeek = getISOWeek(currentDate);
         let intermediaryWeek = week + add
-        console.log(intermediaryWeek)
-        if ((intermediaryWeek - realWeek >= 12) && (intermediaryWeek - realWeek >= 0)) {
+        if ((intermediaryWeek - realWeek <= 12) && (intermediaryWeek - realWeek >= 1)) {
             setWeek(intermediaryWeek)
             if (intermediaryWeek === realWeek) {
                 setEnabledDays(true)
