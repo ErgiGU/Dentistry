@@ -40,7 +40,7 @@ main{
     padding-left: 5%;
 }
 
-.dentistBtn-close{
+#dentistBtn-close {
     left: 95%;
     bottom: 95%;
     position: fixed;
