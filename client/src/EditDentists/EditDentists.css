@@ -4,6 +4,12 @@
     flex-wrap: wrap;
 }
 
+#noDentistH {
+    text-decoration-line: underline;
+    color: blue;
+    text-decoration-color: blue;
+}
+
 #dentist-card {
     flex: 1 1 calc(33% - 20px);
     margin: 10px;

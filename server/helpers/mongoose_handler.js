@@ -20,9 +20,11 @@ class mongooseHandler {
             setTimeout(async () => {
                 let logURI = this.mongoURI
                 this.mongooseClient = mongoose.createConnection(this.mongoURI, {
-                        useNewUrlParser: true,
-                        useUnifiedTopology: true
-                    });
+                    useNewUrlParser: true,
+                    useUnifiedTopology: true
+                });
+
+                this.mongooseClient.set('debug', true)
 
                 this.mongooseClient.on('error', (error) => {
                     console.error(`Failed to connect to MongoDB with URI: ${logURI}`);

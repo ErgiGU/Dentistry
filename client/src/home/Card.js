@@ -2,50 +2,46 @@
  * Skeleton for cards inserted in patient home page.
  * @author Agata Ciuchta (@ciuchta)
  */
-
-
 import React from 'react';
-import '../home/Card.css';
-import CardItem from './CardItem';
+import './Card.css';
+import CardItem from '../common_components/CardItem';
 import Tips from '../assets/tips.png'
 import TeethCare from '../assets/toothcare.png'
 
-function Card() {
+export default function Card() {
     return (
-        <div className='cards'>
-            <div className='cards__container'>
-                <div className='cards__wrapper'>
-                    <ul className='cards__items'>
+        <div id={'homeCardsTop'}>
+            <div id={'homeCardsContainer'} className={'container'}>
+                <div id={'homeCardsWrapper'} className={'col'}>
+                    <div id={'homeCardsItems'} className={'row'}>
                         <CardItem
                             src='https://st.depositphotos.com/1003098/1651/i/600/depositphotos_16512515-stock-photo-woman-with-receptionist-filling-form.jpg'
-                            text='Find the clinics localizations in different parts of Göteborg.'
-                            path='/'
+                            text='Find the clinic locations in different parts of Göteborg.'
+                            path='/map'
                         />
                         <CardItem
                             src='https://static8.depositphotos.com/1594308/1073/i/600/depositphotos_10733789-stock-photo-medical-check-up.jpg'
-                            text='Choose the day, time and book the appointment just now.'
-                            path='/'
+                            text='Choose the day, time and book your appointment now.'
+                            path='/appointments'
                         />
                         <CardItem
                             src="https://st4.depositphotos.com/13193658/24527/i/600/depositphotos_245279174-stock-photo-dentists-masks-standing-crossed-arms.jpg"
-                            text='Find out more about our clinics. Vist the About Us page.'
-                            path='/'
+                            text='Find out more about our clinics. Visit the About Us page.'
+                            path='/aboutus'
                         />
-                    </ul>
-                    <ul className='cards__items'>
+                    </div>
+                    <div id={'homeCardsItems'} className={'row'}>
                         <CardItem
                             src={Tips}
-                            text='To avoid any stress before the appointment, use the advices we prepared for you above!'
+                            text='To avoid any stress before the appointment, follow the advice we have prepared for you above!'
                         />
                         <CardItem
                             src={TeethCare}
-                            text='What can you do to maintain your teeth health? Follow the list we prepared for you!'
+                            text='What can you do to maintain healthy teeth? Follow the list we prepared for you!'
                         />
-                    </ul>
+                    </div>
                 </div>
             </div>
         </div>
     );
 }
-
-export default Card;

@@ -1,9 +1,9 @@
 /**
- * Page for viewing appointments as a clinic. 
+ * Page for viewing appointments as a clinic.
  * This class serves  function for tracking the logged clinic, communicating with backend, and structure for dispalying infromation.
  */
 import './ViewAppointments.css'
-import React, {useEffect, useRef, useState, useCallback} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import TimeslotCard from './components/timeslotCard'
 import mqttHandler from "../common_components/MqttHandler";
 import {useNavigate} from "react-router-dom";
@@ -17,6 +17,7 @@ export default function ViewAppointments() {
     const [appointments, setAppointments] = useState([]);
     const navigate = useNavigate();
     let appointmentsFlag = useRef(true)
+
     const sendMessage = useCallback((topic, json) => {
         if (client !== null) {
             appointmentsFlag.current = true
@@ -31,7 +32,8 @@ export default function ViewAppointments() {
             navigate("/error")
         }
     }, [client, navigate])
-// Primary client generating effect
+
+    // Primary client generating effect
     useEffect(() => {
         if (client === null) {
             setClient(mqttHandler.getClient(client))
@@ -39,7 +41,7 @@ export default function ViewAppointments() {
     }, [client])
 
     /**
-     * Navigates the user to the log in page in case the user is not
+     * Navigates the user to the login page in case the user is not
      * authenticated to be on this page
      */
     useEffect(() => {
@@ -61,9 +63,9 @@ export default function ViewAppointments() {
             const theClinic = jwt.decode(localStorage.token, 'something');
             console.log(theClinic._id)
             sendMessage('sendAppointmentInformation', {
-                id: client.options.clientId,
+                clientId: client.options.clientId,
                 body: {
-                    clinicID: theClinic._id
+                    clinicId: theClinic
                 }
             })
             client.on('message', function (topic, message) {
@@ -94,7 +96,7 @@ export default function ViewAppointments() {
                 client.end()
             }
         }
-    }, [client, navigate, sendMessage]);
+    }, [client, sendMessage]);
 
 
     /**
@@ -103,47 +105,49 @@ export default function ViewAppointments() {
      * @param id the ID of the timeslot to be cancelled
      */
     const handleChildClick = (id) => {
-        const timeslotID =id;
+        const timeslotID = id;
         console.log(timeslotID)
-        sendMessage('cancelAppointment', {
-                id: client.options.clientId,
-                body: {
-                    timeslotID: timeslotID
+        if (client !== null) {
+            sendMessage('cancelAppointment', {
+                    id: client.options.clientId,
+                    body: {
+                        timeslotID: timeslotID
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 
 //Line 125 with empty h2 I added a empty space to stop the empty header complaint -Askan
     return (
         <>
-        <PrivateNavbar/>
-    <div id="ty">
-        <div id="backgroundAppointments">
-            <div className="row">
-                <div className="col-3">
-                    <div className="cardAppointment">
-                        <div className="card-body">
-                            <h3 id={"currentAppointments"}> Current appointments </h3>
-                            <h2 id={"currentAppointments"}>~</h2>
-                            <img className="clinic"
-                                 src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
-                                 alt="clinic"/>
+            <PrivateNavbar/>
+            <div id="ty">
+                <div id="backgroundAppointments">
+                    <div className="row">
+                        <div className="col-3">
+                            <div id="cardAppointment">
+                                <div className="card-body">
+                                    <h3 id={"currentAppointments"}> Current appointments </h3>
+                                    <h2 id={"currentAppointmentsNumber"}>~</h2>
+                                    <img id="clinicImage"
+                                         src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
+                                         alt="clinic"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='col-8'>
+                            <div id={"timeslots"}>
+                                {Array.from(appointments).map((appointment) => (
+                                    <TimeslotCard key={appointment.id} appointment={appointment}
+                                                  parentCallback={handleChildClick}/>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div className='col-8'>
-                    <div id={"timeslots"}>
-                        {Array.from(appointments).map((appointment) => (
-                            <TimeslotCard key={appointment.id} appointment={appointment}
-                                          parentCallback={handleChildClick}/>
-                        ))}
-                    </div>
-                </div>
             </div>
-        </div>
-    </div>
-</>
+        </>
     );
 }
 

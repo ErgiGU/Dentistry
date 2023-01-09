@@ -5,7 +5,7 @@ import PrivateNavbar from "../common_components/PrivateNavbar";
 import jwt from "jsonwebtoken";
 import {useNavigate} from "react-router-dom";
 
-export function NewDentist() {
+export default function NewDentist() {
     let clinicDataFlag = useRef(true)
     const [client, setClient] = useState(null);
     const [currentClinic, setCurrentClinic] = useState({
@@ -60,9 +60,9 @@ export function NewDentist() {
             const theClinic = jwt.decode(localStorage.token, 'something');
             sendMessage('getCurrentLoggedInClinic',
                 {
-                    id: client.options.clientId,
+                    clientId: client.options.clientId,
                     body: {
-                        clinicID: theClinic._id
+                        clinicId: theClinic._id
                     }
                 }
             )
@@ -141,23 +141,24 @@ export function NewDentist() {
         } else {
             e.preventDefault();
             console.log(formData)
-            sendMessage('AddDentist',
-                {
-                    id: client.options.clientId,
-                    body: {
-                        email: currentClinic.email,
-                        name: formData.dentistName,
-                        dentistEmail: formData.email,
-                        phoneNumber: formData.phoneNumber,
-                        speciality: formData.specialty
+            if (client !== null) {
+                sendMessage('AddDentist', {
+                        clientId: client.options.clientId,
+                        body: {
+                            email: currentClinic.email,
+                            name: formData.dentistName,
+                            dentistEmail: formData.email,
+                            phoneNumber: formData.phoneNumber,
+                            speciality: formData.specialty
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
 
     return (
-        <>
+        <div>
             <PrivateNavbar/>
             <div className="newDentistContainer">
                 <div id="dentistAlertPlaceholder"></div>
@@ -216,6 +217,6 @@ export function NewDentist() {
                     </button>
                 </form>
             </div>
-        </>
+        </div>
     )
 }

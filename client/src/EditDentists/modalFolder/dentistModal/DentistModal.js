@@ -1,10 +1,10 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import "./DentistModal.css"
 import mqttHandler from "../../../common_components/MqttHandler";
 import {useNavigate} from "react-router-dom";
 
 
-const Modal = ({ open, onClose, name, email, phoneNumber, id}) => {
+const Modal = ({open, onClose, name, email, phoneNumber, id}) => {
 
     const [client, setClient] = useState(null);
     const [currentName, setCurrentName] = useState(name);
@@ -95,17 +95,15 @@ const Modal = ({ open, onClose, name, email, phoneNumber, id}) => {
                 }
                 alert(message)
             } else {
-               sendMessage('editDentistInfo', {
-                       id: client.options.clientId,
-                       body: {
-                           id: id,
-                           name: currentName,
-                           phone: phone,
-                           email: currentEmail,
-                       },
-                   }
-               )
-
+                sendMessage('editDentistInfo', {
+                    clientId: client.options.clientId,
+                    body: {
+                        id: id,
+                        name: currentName,
+                        phone: phone,
+                        email: currentEmail,
+                    },
+                })
             }
         }
     }

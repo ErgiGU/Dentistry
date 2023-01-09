@@ -24,12 +24,14 @@ const mailer = new appointments_mailer
 mqttClient.subscribeTopic('test')
 mqttClient.subscribeTopic('appointment')
 mqttClient.subscribeTopic('testingTestingRequest')
+mqttClient.subscribeTopic('bookAppointment')
 mqttClient.subscribeTopic('bookTimeslot')
 mqttClient.subscribeTopic('initiateTesting')
 mqttClient.subscribeTopic('generateData')
 mqttClient.subscribeTopic('cancelBookedTimeslot')
 mqttClient.subscribeTopic('sendAppointmentInformation')
 mqttClient.subscribeTopic('cancelAppointment')
+mqttClient.subscribeTopic('generateTimeSlots')
 
 
 // When a message arrives, respond to it or propagate it further
@@ -37,17 +39,28 @@ try {
     /**
      * The MQTT listener that receives incoming messages and sends back messages after data manipulation.
      */
-    mqttClient.mqttClient.on('message', function (topic, message) {
+    mqttClient.mqttClient.on('message', async function (topic, message) {
         let intermediary = JSON.parse(message)
         console.log(config.module_config.appointmentUser.handler + " service received MQTT message")
+        console.log('topic: ' + topic)
         console.log(intermediary)
 
         switch (topic) {
             case 'schema':
                 mqttClient.sendMessage('testAppointment', "newClinic")
                 break;
-            case 'appointment':
-                testAppointment(intermediary)
+            case 'bookAppointment':
+                appointments_controller.makeAppointment(intermediary.body.clinicId, intermediary.body.dentistID, intermediary.body.patientInfo, intermediary.body.date, intermediary.body.time).then(timeslotID => {
+                    console.log('id:')
+                    console.log(timeslotID)
+                    //setTimeout(() => {
+                        appointments_controller.getTimeslotInfo(timeslotID).then(timeslot => {
+                            console.log('found timeslot:')
+                            console.log(timeslot)
+                            mqttClient.sendMessage(intermediary.clientId + '/appointmentResponse', JSON.stringify(timeslot))
+                        })
+                    //}, 5000)
+                })
                 break;
             case 'testingTestingRequest':
                 const messageSending = {
@@ -56,18 +69,12 @@ try {
                 }
                 mqttClient.sendMessage('123/testingTesting', JSON.stringify(messageSending))
                 break;
-            case 'generateTimeSlots':
-                appointments_controller.generateTimeslots('63af60e44e09e582e395a69d', '63af4ee39556e442b5e1dc3e', '63af50fc4d37ce68a1981263');
-                break;
-            case 'generateData':
-                const dataResult = waitGenerateData()
-                break;
             case 'bookTimeslot':
                 waitBookAppointment(intermediary).then(r => {
                     const bookingRes = {
                         response: r //If the whole thing has succeeded or failed.
                     }
-                    mqttClient.sendMessage(intermediary.client_id + "/bookTimeslot", JSON.stringify(bookingRes))
+                    mqttClient.sendMessage(intermediary.clientId + "/bookTimeslot", JSON.stringify(bookingRes))
                 })
                 break;
             case 'sendAppointmentInformation':
@@ -77,12 +84,12 @@ try {
                         r = JSON.parse(r)
                         r[0].id = "id"
                     }
-                    mqttClient.sendMessage(intermediary.id + "/appointmentInformationResponse", JSON.stringify(r))
+                    mqttClient.sendMessage(intermediary.clientId + "/appointmentInformationResponse", JSON.stringify(r))
                 })
                 break;
             case 'cancelAppointment':
                 cancelAppointment(intermediary).then(r => {
-                    mqttClient.sendMessage(intermediary.id + "/canceledAppointment", JSON.stringify(r))
+                    mqttClient.sendMessage(intermediary.clientId + "/canceledAppointment", JSON.stringify(r))
                 })
                 break;
             case 'test':
@@ -104,30 +111,23 @@ try {
 
 /**
  * Below are wrapper async functions to avoid making other function async when they don't need to be.
- * @returns {Promise<void>} the result of mongoose manipulations
+ * @returns {Promise<*[]>} the result of mongoose manipulations
  */
-
 async function waitTimeslotData(intermediary) {
     console.log(JSON.stringify(intermediary.body))
-    return await appointments_controller.sendAppointmentInformation(intermediary.body.clinicID)
+    return await appointments_controller.sendAppointmentInformation(intermediary.body.clinicId)
 }
 
 async function waitGenerateData() {
-    await appointments_controller.generateData("6391e39a3e08ac910fbede6f")
+    await appointments_controller.generateData('6391e39a3e08ac910fbede6f')
 }
 
 async function waitMakeTimeslots(message) {
-
-    const clinicID = message.clinicID
-    const dentistID = message.dentistID
-    const patientInfo = message.patientInfo
-    const timeslotTime = message.timeslotTime
-
-    return appointments_controller.makeAppointment(clinicID, dentistID, patientInfo, timeslotTime);
+    return await appointments_controller.makeAppointment(message.clinicId, message.dentistID, message.patientInfo, message.date, message.time)
 }
 
-async function waitMailData(clinicID, timeslotID) {
-    return appointments_controller.bookedMailingData(clinicID, timeslotID);
+async function waitMailData(timeslotID) {
+    return await appointments_controller.getTimeslotInfo(timeslotID);
 }
 
 async function waitClinicNotifMail(mailingData) {
@@ -146,36 +146,16 @@ async function waitBookAppointment(message) {
     return await bookAppointment(message)
 }
 
-// Function declaration
-/**
- * Test function extracted from topic switcher
- * @param message MQTT message
- */
-function testAppointment(message) {
-    const newClinic = new timeSlotModel({
-        startTime: Date.parse(message.body.startTime),
-        dentist: "6386284314d29ecf98a61c70"
-    });
-    newClinic.save(function (err) {
-        if (err) {
-            console.log(err);
-        }
-        console.log('successfully saved')
-    });
-    mqttClient.sendMessage(message.id + '/appointmentResponse', JSON.stringify(newClinic))
-}
-
 /**
  * A method which calls mongoose manipulation methods that all related to the process of booking an appointment
  * @param intermediary The JSON which is received by the service
- * @returns {Promise<string>} The success or failure message
+ * @returns {Promise<{response: string}>} The success or failure message
  */
 async function bookAppointment(intermediary) {
     //Creates a timeslot. Returns the timeslot JSON.
     const timeslot = await waitMakeTimeslots(intermediary.body)
-    console.log(timeslot)
     //Takes the ID of the timeslot JSON and ID. Returns success or failure of emailing.
-    const mailingData = await waitMailData(intermediary.body.clinicID, timeslot._id)
+    const mailingData = await waitMailData({_id:timeslot._id})
     const mailingPatient = await waitPatientNotifMail(mailingData)
     const mailingClinic = await waitClinicNotifMail(mailingData)
     if (mailingPatient === "Success" && mailingClinic === "Success") {

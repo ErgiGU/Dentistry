@@ -1,6 +1,6 @@
 /**
  * A class purely for testing the backend MQTT endpoints that exist within the clinic_data component.
- * Each describe and it has a description of what they do within their sting field.
+ * Each describe, and it has a description of what they do within their sting field.
  *
  * @author Burak Askan (@askan)
  */
@@ -99,9 +99,9 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
         it('See if timeslot gets booked', async function () {
             this.timeout(10000)
             const messageSend = {
-                client_id: "123",
+                clientId: "123",
                 body: {
-                    clinicID: clinicStored._id,
+                    clinicId: clinicStored._id,
                     dentistID: clinicStored.dentists[0],
                     patientInfo: {
                         name: "John Jane",
@@ -124,9 +124,9 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
         it('See if timeslot(s) can be recieved', async function () {
             this.timeout(10000)
             const messageSend = {
-                id: "123",
+                clientId: "123",
                 body: {
-                    clinicID: clinicStored._id,
+                    clinicId: clinicStored._id,
                     test: "This is for a test"
                 }
             }
@@ -140,7 +140,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                     name: "Solomon Mathews"
                 },
                 timeslot: "9:30"
-                }]
+            }]
 
             await asyncMethod("sendAppointmentInformation", "appointmentInformationResponse", messageSend, expectedResult)
         })
@@ -168,12 +168,12 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                 __v: 0
             }
             clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {
-                id: "123",
+                clientId: "123",
                 body: {email: "gusaskbu@student.gu.se"}
             }, fetchClinicExpectation)
             console.log(clinicStored)
             const messageSend = {
-                id: "123",
+                clientId: "123",
                 body: {
                     timeslotID: clinicStored.timeslots[0]
                 }
@@ -186,9 +186,9 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
         it('Check if timeslot was deleted', async function () {
             this.timeout(10000)
             const messageSend = {
-                id: "123",
+                clientId: "123",
                 body: {
-                    clinicID: clinicStored._id
+                    clinicId: clinicStored._id
                 }
             }
             const expectedResult = []
@@ -198,7 +198,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
 
     describe('wipeTestData', function () {
         it('Is this wiping test database?', async function () {
-            await asyncMethod('wipeTestData', 'wipeTestData', {id: 123, body: 'no expectation'}, {response: "Success"})
+            await asyncMethod('wipeTestData', 'wipeTestData', { clientId: 123, body: 'no expectation'}, {response: "Success"})
         })
     })
 

@@ -28,7 +28,7 @@ class MqttHandler {
         // Connect mqtt with credentials
         let reconnectPeriodNumber = 1000
         console.log(this.host)
-        if(configFileBoolean){
+        if (configFileBoolean) {
             reconnectPeriodNumber = 0
         }
         this.mqttClient = mqtt.connect(this.host,

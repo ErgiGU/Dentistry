@@ -47,79 +47,67 @@ function createModels() {
 
 /**
  * The mongoose manipulations to get data required for emailing about the booked timeslot
- * @param clinicID the id of clinic which the timeslot belongs to
  * @param timeslotID the id of the timeslot just booked
  * @returns {Promise<{patientData: {name: string, text: string, email}, dentistData: {name: string, email}, timeslotTime, clinicData: {address, name, email}}>} JSON required for the emails
  */
-async function bookedMailingData(clinicID, timeslotID) {
-    let clinic = await clinicModel.findById(clinicID)
-    let timeslot = await timeslotModel.findById(timeslotID).populate('dentist').populate('patient')
-    let dentist = timeslot.dentist
-    let patient = timeslot.patient
-
-    return {
-        clinicData: {
-            name: clinic.name,
-            address: clinic.address,
-            email: clinic.email
-        },
-        timeslotTime: timeslot.startTime,
-        dentistData: {
-            name: dentist.name,
-            email: dentist.email
-        },
-        patientData: {
-            name: patient.name,
-            email: patient.email,
-            text: patient.text
-        }
-    }
+async function getTimeslotInfo(timeslotID) {
+    return await timeslotModel.findById({_id: timeslotID}).populate('clinic').populate('dentist').populate('patient')
 }
 
 /**
  * The method required for making an appointment
- * @param clinicID the id of the clinic that is getting a timeslot booked
+ * @param clinicId the id of the clinic that is getting a timeslot booked
  * @param dentistID the id of the dentist that is getting a timeslot booked
  * @param patientInfo the info of the patient that booked the timeslot
- * @param timeslotTime the time of the timeslot
+ * @param date
+ * @param time
  * @returns {Promise<*>} the timeslot JSON
  */
-async function makeAppointment(clinicID, dentistID, patientInfo, timeslotTime) {
-    let clinic = await clinicModel.findById(clinicID)
-    let dentist = await dentistModel.findById(dentistID)
-    console.log(dentist + " this is the dentist ")
+async function makeAppointment(clinicId, dentistID, patientInfo, date, time) {
+    let clinic = await clinicModel.findById(clinicId).populate('dentists')
+    let dentist = await dentistModel.findById(dentistID).populate('clinic')
+    let patient = await patientModel.findOne({email: patientInfo.email}).populate('timeslots')
 
-    let middlemanTimeslotsList = []
+    if (patient === null) {
+        patient = new patientModel({
+            name: patientInfo.name,
+            email: patientInfo.email,
+            dateOfBirth: patientInfo.dateOfBirth,
+            text: patientInfo.text
+        });
+    }
+
+    if (dentist === null) {
+
+    }
 
     const timeslot = new timeslotModel({
-        startTime: timeslotTime,// <-- The start-time of the selected timeslot goes here
-        clinic: clinicID
+        startTime: time,// <-- The start-time of the selected timeslot goes here
+        clinic: clinicId,
+        patient: patient._id,
+        dentist: dentist._id
     });
 
-    const patient = new patientModel({
-        name: patientInfo.name,
-        email: patientInfo.email,
-        dateOfBirth: patientInfo.dateOfBirth,
-        text: patientInfo.text,
-        timeslot: timeslot._id
-    });
-
+    patient.timeslots.push(timeslot._id)
     patient.save()
-
-    timeslot.dentist = dentist
-    timeslot.patient = patient
-
     timeslot.save()
 
-    middlemanTimeslotsList = clinic.timeslots
-    clinic.timeslots = []
-    middlemanTimeslotsList.push(timeslot._id)
+    let mappedDate = clinic.mapStorage.get(date)
 
-    clinic.timeslots = middlemanTimeslotsList
-
+    try {
+        if (mappedDate !== null && mappedDate.timeslots !== null && mappedDate.timeslots.length > 0) {
+            mappedDate.timeslots.push({_id: timeslot._id})
+        }
+    } catch (e) {
+        mappedDate = {
+            timeslots: [timeslot._id]
+        }
+        clinic.mapStorage.set(date, mappedDate)
+    }
     clinic.save()
 
-    return timeslot
+    console.log(timeslot._id)
+    return await timeslot._id
 }
 
 /**
@@ -138,59 +126,6 @@ async function cancelAppointment(timeslotID) {
     }
 }
 
-/* Generates dummy data into the given clinic ID.
- * Generating dentist, timeslot and patient to fill up the db.
- * @param clinicID the id of clinic which will have the data generated in
- */
-async function generateData(clinicID) {
-
-    let clinic = await clinicModel.findById(clinicID).populate('timeslots')
-    console.log(clinic)
-
-    let thingTimeslots = []
-    let thingDentists = []
-    console.log('found clinic timeslots:')
-    console.log(clinic.timeslots)
-
-    const timeslot = new timeslotModel({
-        startTime: "09:30",
-        clinic: clinicID // <-- The ID of the clinic goes here
-    });
-
-    const patient = new patientModel({
-        name: "Mathias Hallander",
-        timeslot: timeslot._id
-    });
-
-    const dentist = new dentistModel({
-        name: "Ergi Senja",
-        clinic: clinicID
-    });
-
-    dentist.save()
-    patient.save()
-
-    timeslot.dentist = dentist
-    timeslot.patient = patient
-
-    timeslot.save()
-
-    thingTimeslots = clinic.timeslots
-    clinic.timeslots = []
-    thingTimeslots.push(timeslot._id)
-
-    console.log('exists: ' + clinic.dentists)
-    thingDentists = clinic.dentists
-    clinic.dentists = []
-    thingDentists.push(dentist._id)
-
-
-    clinic.city = 'was'
-    console.log(thingTimeslots + " ::::: " + thingDentists)
-    clinic.timeslots = thingTimeslots
-    clinic.dentists = thingDentists
-    clinic.save()
-}
 
 /**
  * Finds all the timeslots within a clinic together with the patient and dentist data
@@ -225,14 +160,11 @@ async function sendAppointmentInformation(intermediary) {
 }
 
 const appointmentsController = {
-    bookedMailingData,
+    getTimeslotInfo,
     makeAppointment,
     cancelAppointment,
-    generateData,
     sendAppointmentInformation,
     reconnect
 }
 
 module.exports = appointmentsController
-
-// Model creation

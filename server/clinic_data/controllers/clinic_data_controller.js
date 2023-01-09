@@ -18,7 +18,6 @@ try {
     config = require('../../helpers/dummy_config')
 }
 const bcrypt = require('bcrypt');
-const {compare} = require("bcrypt");
 
 // Connect to MongoDB
 let mongooseClient = new mongooseHandler(config.module_config.clinicUser.mongoURI)
@@ -40,10 +39,10 @@ function reconnect(mongoURI) {
 }
 
 function createModels() {
-    clinicModel = mongooseClient.model('clinic', clinicSchema)
-    dentistModel = mongooseClient.model('dentist', dentistSchema)
-    timeslotModel = mongooseClient.model('timeslot', timeslotSchema)
-    patientModel = mongooseClient.model('patient', patientSchema)
+    clinicModel = mongooseClient.model('Clinic', clinicSchema)
+    dentistModel = mongooseClient.model('Dentist', dentistSchema)
+    timeslotModel = mongooseClient.model('Timeslot', timeslotSchema)
+    patientModel = mongooseClient.model('Patient', patientSchema)
 }
 
 /**
@@ -63,6 +62,11 @@ async function clinicData(email) {
  */
 async function getDentist(email) {
     return await dentistModel.findOne({email: email})
+}
+
+//TODO documentation
+async function getClinics() {
+    return await clinicModel.find({}).populate('dentists')
 }
 
 /**
@@ -153,8 +157,8 @@ async function emailExists(email) {
  * @returns {Promise<string>} The status and the response text.
  */
 async function editInfo(req) {
+    console.log(req)
     const email = req.body.email
-    console.log(email)
     const clinic = await clinicModel.findOne({email})
     let message;
     if (clinic) {
@@ -226,8 +230,7 @@ async function changePassword(req) {
     let message;
     if (clinic) {
         if (await bcrypt.compare(req.body.oldPassword, clinic.password)) {
-            const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            clinic.password = hashedPassword;
+            clinic.password = await bcrypt.hash(req.body.password, 10);
             clinic.save();
             console.log("password changed");
             console.log(clinic)
@@ -261,8 +264,8 @@ async function getDentistCard(intermediary) {
     let clinicDentists = {
         dentists: []
     };
-    const clinicID = intermediary.body.clinicID
-    const dentists = await dentistModel.find({clinic: clinicID})
+    const clinicId = intermediary.body.clinicId
+    const dentists = await dentistModel.find({clinic: clinicId})
     console.log(dentists)
     try {
         dentists.forEach(dentist => {
@@ -284,6 +287,7 @@ async function getDentistCard(intermediary) {
     } catch (e) {
         console.log(e)
     }
+    let message;
     if (dentists.length > 0) {
         return JSON.stringify(clinicDentists);
     } else {
@@ -309,11 +313,11 @@ async function setDentistSchedule(req) {
     const dentist = await dentistModel.findById(theID)
     let message;
     if (dentist) {
-        dentist.workweek.monday = req.body.workweek.monday,
-            dentist.workweek.tuesday = req.body.workweek.tuesday,
-            dentist.workweek.wednesday = req.body.workweek.wednesday,
-            dentist.workweek.thursday = req.body.workweek.thursday,
-            dentist.workweek.friday = req.body.workweek.friday
+        dentist.workweek.monday = req.body.workweek.monday
+        dentist.workweek.tuesday = req.body.workweek.tuesday
+        dentist.workweek.wednesday = req.body.workweek.wednesday
+        dentist.workweek.thursday = req.body.workweek.thursday
+        dentist.workweek.friday = req.body.workweek.friday
         dentist.save();
         message = {
             status: 200,
@@ -402,13 +406,11 @@ async function addDentist(req) {
  * @returns {Promise<string>} Returns the clinic object as string.
  */
 async function getCurrentClinic(req) {
-    const theID = req.body.clinicID
-    const clinic = await clinicModel.findById(theID)
+    const clinic = await clinicModel.findById(req.body.clinicId)
     if (clinic) {
         return JSON.stringify(clinic)
     } else {
-        console.log("failed")
-        return "failed"
+        return JSON.stringify({response:"failed"})
     }
 
 }
@@ -425,6 +427,7 @@ const clinicController = {
     changePassword,
     addDentist,
     getCurrentClinic,
+    getClinics,
     getDentist
 }
 

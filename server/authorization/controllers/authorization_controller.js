@@ -38,7 +38,7 @@ function createModels() {
 /**
  * Registers the clinic and saves it in the DB via mongoose(if the email that it took doesn't exist)
  * @param req is the request that the method receives, it contains the input that the user
- * entered in the registration page
+ * entered the registration page
  * @returns a string that indicates success or failure.
  */
 async function register(req) {
@@ -71,7 +71,8 @@ async function register(req) {
                 email: req.body.email,
                 password: hashedPassword,
                 city: "Göteborg",
-                coordinates: coordinates
+                coordinates: coordinates,
+                mapStorage: new Map([])
             });
         try {
             await clinicAccount.save();
@@ -94,12 +95,11 @@ async function loginClinic(email, password) {
     const clinic = await clinicModel.findOne({email: email});
     if (clinic && await bcrypt.compare(password, clinic.password)) {
         const token = clinic.generateToken();
-        const payload = {
+        return {
             response: "login successful",
             clinicAccount: clinic,
             token: token
         }
-        return payload;
     } else {
         console.log("failed");
         return "Invalid email/password"

@@ -6,7 +6,7 @@
 
 .dentistFormBox {
     display: block;
-    font-family: Inter;
+    font-family: Inter, serif;
     font-size: 18px;
     color: white;
     padding: 30px;
@@ -14,7 +14,7 @@
     margin-top: 5%;
     margin-bottom: 5%;
     background-color: steelblue;
-    box-shadow: 10px 0px 15px #888888;
+    box-shadow: 10px 0 15px #888888;
     border-radius: 5px;
     text-align: center;
 }
@@ -41,11 +41,10 @@
 }
 
 #dentistAlertPlaceholder {
-    font-family: Inter;
+    font-family: Inter, serif;
     display: none;
     height: 60px;
-    padding: 10px;
-    padding-left: 13px;
+    padding: 10px 10px 10px 13px;
     margin-top: 3%;
     font-size: 23px;
     border: 1px solid black;

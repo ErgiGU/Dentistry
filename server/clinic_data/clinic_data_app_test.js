@@ -90,7 +90,7 @@ describe("Tests to see if the tests are working", function () {
                 __v: 0
             }
             clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {
-                id: "123",
+                clientId: "123",
                 body: {email: "burakaskan2001@gmail.com"}
             }, expectedResult)
         })
@@ -103,7 +103,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
         it('Get all clinic information relating to coordinate, address, opening-hour and name.', async function () {
             this.timeout(10000)
             const messageSend = {
-                id: "123",
+                clientId: "123",
                 hello: "Give Data"
             }
             const expectedResult = {
@@ -124,7 +124,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
         it('Editing the info of a given clinic', async function () {
             this.timeout(10000)
             const messageSend = {
-                id: "123",
+                clientId: "123",
                 body: {
                     name: "Clinic Testing",
                     owner: "Oscar Davidsson",
@@ -141,7 +141,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
         it('Checking if edits were successful', async function () {
             this.timeout(10000)
             const messageSend = {
-                id: "123",
+                clientId: "123",
                 body: {
                     email: "gusaskbu@student.gu.se",
                     test: "this is for the test"
@@ -153,7 +153,8 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                     tuesday: {start: "08:00", end: "17:00"},
                     wednesday: {start: "08:00", end: "17:00"},
                     thursday: {start: "08:00", end: "17:00"},
-                    friday: {start: "08:00", end: "17:00"}
+                    friday: {start: "08:00", end: "17:00"},
+                    lunchHour:"12:00",fikaHour:"14:00"
                 },
                 coordinates: {
                     longitude: 11.943074635698956,
@@ -161,7 +162,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                 },
                 _id: "id",
                 dentists: [],
-                timeslots: [],
+                mapStorage:{},
                 name: "Clinic Testing",
                 password: "password",
                 email: "gusaskbu@student.gu.se",
@@ -203,7 +204,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
         it('See if dentist is getting added', async function () {
             this.timeout(10000)
             const messageSend = {
-                id: "123",
+                clientId: "123",
                 body: {
                     name: "William Bjorn",
                     email: "gusaskbu@student.gu.se",
@@ -218,7 +219,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
         it('See if dentist was added in model', async function () {
             this.timeout(10000)
             const messageSend = {
-                id: "123",
+                clientId: "123",
                 body: {
                     email: "burakaskan2001@gmail.com"
                 }
@@ -226,22 +227,25 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
             const expected = {
                 workweek:
                     {
-                        monday:true,
-                        tuesday:true,
-                        wednesday:true,
-                        thursday:true,
-                        friday:true
+                        monday: true,
+                        tuesday: true,
+                        wednesday: true,
+                        thursday: true,
+                        friday: true
                     },
-                _id:"id",
+                _id: "id",
                 clinic: clinicStored._id,
-                name:"William Bjorn",
-                email:"burakaskan2001@gmail.com",
-                phoneNumber:"0732132141",
-                timeslots:[],
-                __v:0
+                name: "William Bjorn",
+                email: "burakaskan2001@gmail.com",
+                phoneNumber: "0732132141",
+                timeslots: [],
+                __v: 0
             }
             await asyncMethod("getDentist", "giveDentist", messageSend, expected)
-            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {id: "123", body: {email: "gusaskbu@student.gu.se"}}, expected)
+            clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {
+                clientId: "123",
+                body: {email: "gusaskbu@student.gu.se"}
+            }, expected)
         })
     })
 
@@ -249,7 +253,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
         it('See if work week can get changed', async function () {
             this.timeout(10000)
             const messageSend = {
-                id: "123",
+                clientId: "123",
                 body: {
                     id: clinicStored.dentists[0],
                     workweek: {
@@ -271,7 +275,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
         it('See if dentist general information is getting changed', async function () {
             this.timeout(10000)
             const messageSend = {
-                id: "123",
+                clientId: "123",
                 body: {
                     id: clinicStored.dentists[0],
                     name: "Solomon Mathews",
@@ -288,18 +292,18 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
         it('See if dentist is getting received correctly', async function () {
             this.timeout(10000)
             const messageSend = {
-                id: "123",
+                clientId: "123",
                 body: {
-                    clinicID: clinicStored._id
+                    clinicId: clinicStored._id
                 }
             }
             const resultExpectation = {
-                dentists:[{
+                dentists: [{
                     id: clinicStored.dentists[0],
                     name: "Solomon Mathews",
                     email: "burakaskan2001@gmail.com",
                     phoneNumber: "0769136300",
-                    workWeek:{
+                    workWeek: {
                         monday: false,
                         tuesday: true,
                         wednesday: false,

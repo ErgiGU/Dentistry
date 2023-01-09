@@ -1,15 +1,13 @@
 import "./EditDentists.css";
 import DentistCard from "./DentistCard/DentistCard";
 import PrivateNavbar from "../common_components/PrivateNavbar";
-import React, {useRef, useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import mqttHandler from "../common_components/MqttHandler";
 import jwt from "jsonwebtoken";
 import {useNavigate} from "react-router-dom";
 
 
-export default function ViewDentists() {
-
-
+export default function EditDentists() {
     const [dentists, setDentists] = useState([]);
     const [client, setClient] = useState(null);
     const [clinic, setClinic] = useState(null);
@@ -21,6 +19,7 @@ export default function ViewDentists() {
             setClient(mqttHandler.getClient(client))
         }
     }, [client])
+
     /**
      * Navigates the user to the login page in case the user is not
      * authenticated to be on this page
@@ -40,9 +39,9 @@ export default function ViewDentists() {
             setClinic(theClinic.name)
             client.subscribe(client.options.clientId + '/#')
             sendMessage('getDentists', {
-                id: client.options.clientId,
+                clientId: client.options.clientId,
                 body: {
-                    clinicID: theClinic._id
+                    clinicId: theClinic._id
                 }
             })
             client.on('message', function (topic, message) {
@@ -66,6 +65,7 @@ export default function ViewDentists() {
                 client.end()
             }
         }
+
         function sendMessage(topic, json) {
             if (client !== null) {
                 clinicDataBackend.current = true
@@ -75,12 +75,15 @@ export default function ViewDentists() {
                         navigate("/error");
                     }
                 }, 3000);
-
-            }else {
+            } else {
                 navigate("/error")
             }
         }
     }, [client, navigate]);
+
+    function noDentist() {
+        navigate('/addDentist')
+    }
 
 
     return (
@@ -90,19 +93,24 @@ export default function ViewDentists() {
                 Dentist's registered at {clinic}
             </h1>
             <div id="dentists">
-                {Array.from(dentists).map((dentist) => (
-                    <div id="dentist-card">
-                    <DentistCard
-                        key={dentist.id}
-                        id={dentist.id}
-                        name={dentist.name}
-                        email={dentist.email}
-                        PhoneNumber={dentist.phoneNumber}
-                        clinic={clinic}
-                        workweek={dentist.workWeek} // passes the workweek array as a prop
-                    />
+                {dentists && dentists.length > 0 && Array.from(dentists).map((dentist) => (
+                    <div id="dentist-card" key={dentist.id}>
+                        <DentistCard
+                            key={dentist.id}
+                            id={dentist.id}
+                            name={dentist.name}
+                            email={dentist.email}
+                            PhoneNumber={dentist.phoneNumber}
+                            clinic={clinic}
+                            workweek={dentist.workWeek} // passes the workweek array as a prop
+                        />
                     </div>
                 ))}
+                {!dentists &&
+                    <div>
+                        <h3 id="noDentistH" onClick={noDentist}>There are no dentists. Please add them through here!</h3>
+                    </div>
+                }
             </div>
         </>
     )

@@ -34,7 +34,7 @@ mqttClient.subscribeTopic('editDentistInfo')
 mqttClient.subscribeTopic('setDentistSchedule')
 mqttClient.subscribeTopic('AddDentist')
 mqttClient.subscribeTopic('getCurrentLoggedInClinic')
-
+mqttClient.subscribeTopic('getClinics')
 
 
 // When a message arrives, respond to it or propagate it further
@@ -54,7 +54,7 @@ try {
             case 'mapDataRequest':
                 const body = await clinic_data_controller.mapDataRequest()
                 console.log(body)
-                mqttClient.sendMessage(intermediary.id + '/mapDataResponse', JSON.stringify(body))
+                mqttClient.sendMessage(intermediary.clientId + '/mapDataResponse', JSON.stringify(body))
                 break;
             case 'clinicDataRequest':
                 let clinic = await clinic_data_controller.clinicData(intermediary.body.email)
@@ -64,16 +64,16 @@ try {
                     clinic._id = "id"
                     clinic.password = "password"
                 }
-                mqttClient.sendMessage(intermediary.id + '/clinicData', JSON.stringify(clinic))
+                mqttClient.sendMessage(intermediary.clientId + '/clinicData', JSON.stringify(clinic))
                 break;
             case 'editInfo':
                 clinicData.editInfo(intermediary).then(res => {
-                    mqttClient.sendMessage(intermediary.id + '/editInfoResponse', res)
+                    mqttClient.sendMessage(intermediary.clientId + '/editInfoResponse', res)
                 })
                 break;
             case 'changePassword':
                 clinicData.changePassword(intermediary).then(res => {
-                    mqttClient.sendMessage(intermediary.id + '/changePasswordResponse', res)
+                    mqttClient.sendMessage(intermediary.clientId + '/changePasswordResponse', res)
                 })
                 break;
             case 'getDentist':
@@ -81,7 +81,7 @@ try {
                 dentist = JSON.stringify(dentist)
                 dentist = JSON.parse(dentist)
                 dentist._id = "id"
-                mqttClient.sendMessage(intermediary.id + '/giveDentist', JSON.stringify(dentist))
+                mqttClient.sendMessage(intermediary.clientId + '/giveDentist', JSON.stringify(dentist))
                 break;
             case 'testingTestingRequest':
                 const messageSending = {
@@ -102,29 +102,33 @@ try {
                 let response = await clinic_data_controller.removeData()
                 mqttClient.sendMessage('123/wipeTestData', JSON.stringify(response))
                 break;
+            case 'getClinics':
+                let clinics = await clinic_data_controller.getClinics()
+                mqttClient.sendMessage(intermediary.clientId + '/clinics', JSON.stringify(clinics))
+                break
             case 'AddDentist':
                 clinicData.addDentist(intermediary).then(res => {
-                    mqttClient.sendMessage(intermediary.id + '/addDentistResponse', res)
+                    mqttClient.sendMessage(intermediary.clientId + '/addDentistResponse', res)
                 })
                 break;
             case 'getCurrentLoggedInClinic':
                 clinicData.getCurrentClinic(intermediary).then(res => {
-                    mqttClient.sendMessage(intermediary.id + '/currentLoggedInClinicResponse', res)
+                    mqttClient.sendMessage(intermediary.clientId + '/currentLoggedInClinicResponse', res)
                 })
                 break;
             case 'getDentists':
                 clinic_data_controller.getDentistCard(intermediary).then(res => {
-                    mqttClient.sendMessage(intermediary.id + '/getDentistsResponse', res)
+                    mqttClient.sendMessage(intermediary.clientId + '/getDentistsResponse', res)
                 })
                 break;
             case 'editDentistInfo':
                 clinic_data_controller.setDentistInfo(intermediary).then(res => {
-                    mqttClient.sendMessage(intermediary.id + '/editDentistInfoResponse', res)
+                    mqttClient.sendMessage(intermediary.clientId + '/editDentistInfoResponse', res)
                 })
                 break;
             case 'setDentistSchedule':
                 clinic_data_controller.setDentistSchedule(intermediary).then(res => {
-                    mqttClient.sendMessage(intermediary.id + '/setDentistScheduleResponse', res)
+                    mqttClient.sendMessage(intermediary.clientId + '/setDentistScheduleResponse', res)
                 })
                 break;
         }

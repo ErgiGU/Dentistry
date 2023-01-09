@@ -5,12 +5,20 @@ const jwt = require("jsonwebtoken");
 const clinicSchema = new Schema({
     dentists: [{
         type: Schema.Types.ObjectId,
+        required: true,
         ref: 'Dentist'
     }],
-    timeslots: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Timeslot'
-    }],
+    mapStorage: {
+        type: Map,
+        required: true,
+        of: new Schema({
+            timeslots: [{
+                type: Schema.Types.ObjectId,
+                unique: true,
+                ref: 'Timeslot'
+            }]
+        })
+    },
     name: {
         type: String,
         required: true
@@ -57,15 +65,19 @@ const clinicSchema = new Schema({
             start: {type: String, default: "08:00"},
             end: {type: String, default: "17:00"}
         },
-    },
-    lunchHour: String,
-    fikaHour: String
+        lunchHour: {
+            type: String,
+            default: "12:00"
+        },
+        fikaHour: {
+            type: String,
+            default: "14:00"
+        }
+    }
 })
 
 clinicSchema.methods.generateToken = function () {
     return jwt.sign(this.toJSON(), 'secret_key');
 }
 
-
 module.exports = clinicSchema
-

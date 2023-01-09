@@ -1,8 +1,7 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import "./EditEmployee.css"
 import {useNavigate} from "react-router-dom";
 import mqttHandler from "../../../common_components/MqttHandler";
-
 
 
 const Modal = ({id, open, onClose, name, workweek}) => {
@@ -80,7 +79,7 @@ const Modal = ({id, open, onClose, name, workweek}) => {
     const submit = (event) => {
         if (client !== null) {
             sendMessage("setDentistSchedule", {
-                id: client.options.clientId,
+                clientId: client.options.clientId,
                 body: {
                     id: id,
                     workweek: {
