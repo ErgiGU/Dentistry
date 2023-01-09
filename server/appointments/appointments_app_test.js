@@ -168,7 +168,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                 __v: 0
             }
             clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {
-                id: "123",
+                clientId: "123",
                 body: {email: "gusaskbu@student.gu.se"}
             }, fetchClinicExpectation)
             console.log(clinicStored)
@@ -198,7 +198,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
 
     describe('wipeTestData', function () {
         it('Is this wiping test database?', async function () {
-            await asyncMethod('wipeTestData', 'wipeTestData', {id: 123, body: 'no expectation'}, {response: "Success"})
+            await asyncMethod('wipeTestData', 'wipeTestData', { clientId: 123, body: 'no expectation'}, {response: "Success"})
         })
     })
 

@@ -69,13 +69,6 @@ try {
                 }
                 mqttClient.sendMessage('123/testingTesting', JSON.stringify(messageSending))
                 break;
-            case 'generateTimeSlots':
-                appointments_controller.generateTimeslots('63af60e44e09e582e395a69d', '63af4ee39556e442b5e1dc3e', '63af50fc4d37ce68a1981263').then(r => {
-                });
-                break;
-            case 'generateData':
-                const dataResult = waitGenerateData()
-                break;
             case 'bookTimeslot':
                 waitBookAppointment(intermediary).then(r => {
                     const bookingRes = {
@@ -91,18 +84,13 @@ try {
                         r = JSON.parse(r)
                         r[0].id = "id"
                     }
-                    mqttClient.sendMessage(intermediary.id + "/appointmentInformationResponse", JSON.stringify(r))
+                    mqttClient.sendMessage(intermediary.clientId + "/appointmentInformationResponse", JSON.stringify(r))
                 })
                 break;
             case 'cancelAppointment':
                 cancelAppointment(intermediary).then(r => {
                     mqttClient.sendMessage(intermediary.clientId + "/canceledAppointment", JSON.stringify(r))
                 })
-                break;
-            case 'cancelBookedTimeslot':
-                //Cancels the booked timeslot
-                const cancelTimeslotResult = cancelAppointment(intermediary)
-                mqttClient.sendMessage(intermediary.clientId + "/bookTimeslot", JSON.stringify(cancelRes))
                 break;
             case 'test':
                 process.exit()

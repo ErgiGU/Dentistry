@@ -118,7 +118,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
                 __v: 0
             }
             const messageSend = {
-                id: "123",
+                clientId: "123",
                 body: {
                     email: "burakaskan2001@gmail.com",
                     test: "this is for the test"
@@ -160,7 +160,7 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
                 clinicAccount: "clinic"
             }
             const messageSendClient = {
-                id: "123",
+                clientId: "123",
                 body: {
                     email: "burakaskan2001@gmail.com"
                 }

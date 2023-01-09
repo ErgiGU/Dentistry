@@ -118,17 +118,17 @@ try {
                 break;
             case 'getDentists':
                 clinic_data_controller.getDentistCard(intermediary).then(res => {
-                    mqttClient.sendMessage(intermediary.id + '/getDentistsResponse', res)
+                    mqttClient.sendMessage(intermediary.clientId + '/getDentistsResponse', res)
                 })
                 break;
             case 'editDentistInfo':
                 clinic_data_controller.setDentistInfo(intermediary).then(res => {
-                    mqttClient.sendMessage(intermediary.id + '/editDentistInfoResponse', res)
+                    mqttClient.sendMessage(intermediary.clientId + '/editDentistInfoResponse', res)
                 })
                 break;
             case 'setDentistSchedule':
                 clinic_data_controller.setDentistSchedule(intermediary).then(res => {
-                    mqttClient.sendMessage(intermediary.id + '/setDentistScheduleResponse', res)
+                    mqttClient.sendMessage(intermediary.clientId + '/setDentistScheduleResponse', res)
                 })
                 break;
         }

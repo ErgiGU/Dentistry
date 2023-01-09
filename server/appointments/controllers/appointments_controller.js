@@ -126,60 +126,6 @@ async function cancelAppointment(timeslotID) {
     }
 }
 
-/**
- * Generates dummy data into the given clinic ID.
- * Generating dentist, timeslot and patient to fill up the db.
- * @param clinicId the id of clinic which will have the data generated in
- */
-async function generateData(clinicId) {
-
-    let clinic = await clinicModel.findById(clinicId).populate('timeslots')
-    console.log(clinic)
-
-    let thingTimeslots = []
-    let thingDentists = []
-    console.log('found clinic timeslots:')
-    console.log(clinic.timeslots)
-
-    const timeslot = new timeslotModel({
-        startTime: "09:30",
-        clinic: clinicId // <-- The ID of the clinic goes here
-    });
-
-    const patient = new patientModel({
-        name: "Mathias Hallander",
-        timeslot: timeslot._id
-    });
-
-    const dentist = new dentistModel({
-        name: "Ergi Senja",
-        clinic: clinicId
-    });
-
-    dentist.save()
-    patient.save()
-
-    timeslot.dentist = dentist
-    timeslot.patient = patient
-
-    timeslot.save()
-
-    thingTimeslots = clinic.timeslots
-    clinic.timeslots = []
-    thingTimeslots.push(timeslot._id)
-
-    console.log('exists: ' + clinic.dentists)
-    thingDentists = clinic.dentists
-    clinic.dentists = []
-    thingDentists.push(dentist._id)
-
-
-    clinic.city = 'was'
-    console.log(thingTimeslots + " ::::: " + thingDentists)
-    clinic.timeslots = thingTimeslots
-    clinic.dentists = thingDentists
-    clinic.save()
-}
 
 /**
  * Finds all the timeslots within a clinic together with the patient and dentist data
@@ -213,62 +159,12 @@ async function sendAppointmentInformation(intermediary) {
     return clinicTimeslots
 }
 
-async function generateTimeslots(clinicId, dentistID, patientID) {
-    let clinic = await clinicModel.findById(clinicId).populate('timeslots').populate('dentists')
-
-    const timeslot = new timeslotModel({
-        startTime: "09:30",
-        dentist: dentistID,
-        patient: patientID,
-        clinic: clinicId // <-- The ID of the clinic goes here
-    });
-    timeslot.save()
-
-    const timeslot2 = new timeslotModel({
-        startTime: "11:30",
-        dentist: dentistID,
-        patient: patientID,
-        clinic: clinicId // <-- The ID of the clinic goes here
-    });
-    timeslot2.save()
-
-    const timeslot3 = new timeslotModel({
-        startTime: "13:00",
-        dentist: dentistID,
-        patient: patientID,
-        clinic: clinicId // <-- The ID of the clinic goes here
-    });
-    timeslot3.save()
-
-    console.log(clinic.timeslots)
-
-    let intermediaryTimeslots = {
-        2022: {
-            1: {
-                1: [
-                    timeslot,
-                    timeslot2,
-                    timeslot3
-                ]
-            }
-        }
-    }
-
-    console.log(intermediaryTimeslots)
-
-    //clinic.timeslots = intermediaryTimeslots
-
-    clinic.save();
-}
-
 const appointmentsController = {
     getTimeslotInfo,
     makeAppointment,
     cancelAppointment,
-    generateData,
     sendAppointmentInformation,
-    reconnect,
-    generateTimeslots
+    reconnect
 }
 
 module.exports = appointmentsController
