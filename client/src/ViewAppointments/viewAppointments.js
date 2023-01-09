@@ -8,6 +8,7 @@ import TimeslotCard from './components/timeslotCard'
 import mqttHandler from "../common_components/MqttHandler";
 import {useNavigate} from "react-router-dom";
 import PrivateNavbar from "../common_components/PrivateNavbar";
+import jwt from "jsonwebtoken";
 
 
 export default function ViewAppointments() {
@@ -16,6 +17,7 @@ export default function ViewAppointments() {
     const [appointments, setAppointments] = useState([]);
     const navigate = useNavigate();
     let appointmentsFlag = useRef(true)
+
     const sendMessage = useCallback((topic, json) => {
         if (client !== null) {
             appointmentsFlag.current = true
@@ -30,7 +32,8 @@ export default function ViewAppointments() {
             navigate("/error")
         }
     }, [client, navigate])
-// Primary client generating effect
+
+    // Primary client generating effect
     useEffect(() => {
         if (client === null) {
             setClient(mqttHandler.getClient(client))
@@ -57,8 +60,7 @@ export default function ViewAppointments() {
     useEffect(() => {
         if (client !== null) {
             client.subscribe(client.options.clientId + '/#')
-            const theClinic = '63b749fa938c270b734ec8fd'
-            //jwt.decode(localStorage.token, 'something');
+            const theClinic = jwt.decode(localStorage.token, 'something');
             console.log(theClinic._id)
             sendMessage('sendAppointmentInformation', {
                 clientId: client.options.clientId,
@@ -94,7 +96,7 @@ export default function ViewAppointments() {
                 client.end()
             }
         }
-    }, [client, navigate, sendMessage]);
+    }, [client, sendMessage]);
 
 
     /**

@@ -19,6 +19,7 @@ export default function EditDentists() {
             setClient(mqttHandler.getClient(client))
         }
     }, [client])
+
     /**
      * Navigates the user to the login page in case the user is not
      * authenticated to be on this page
