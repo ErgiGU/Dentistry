@@ -16,18 +16,18 @@ export default function Card() {
                     <div id={'homeCardsItems'} className={'row'}>
                         <CardItem
                             src='https://st.depositphotos.com/1003098/1651/i/600/depositphotos_16512515-stock-photo-woman-with-receptionist-filling-form.jpg'
-                            text='Find the clinics localizations in different parts of Göteborg.'
-                            path='/'
+                            text='Find the clinic LOCATIONS in different parts of Göteborg.'
+                            path='/map'
                         />
                         <CardItem
                             src='https://static8.depositphotos.com/1594308/1073/i/600/depositphotos_10733789-stock-photo-medical-check-up.jpg'
-                            text='Choose the day, time and book the appointment just now.'
-                            path='/'
+                            text='Choose the day, time and book you appointment now.'
+                            path='/appointments'
                         />
                         <CardItem
                             src="https://st4.depositphotos.com/13193658/24527/i/600/depositphotos_245279174-stock-photo-dentists-masks-standing-crossed-arms.jpg"
                             text='Find out more about our clinics. Vist the About Us page.'
-                            path='/'
+                            path='/aboutus'
                         />
                     </div>
                     <div id={'homeCardsItems'} className={'row'}>

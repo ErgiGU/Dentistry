@@ -88,7 +88,7 @@ export default function AboutUsSkeleton() {
                     <div className="col-lg-4 col-md-6 mb-4">
                         <Card style={{width: "20rem", backgroundColor: "whitesmoke"}}>
                             <Card.Body>
-                                <Card.Title style={{color: "#003d80"}}>TOOTH FAIR DENTIST</Card.Title>
+                                <Card.Title style={{color: "#003d80"}}>TOOTH FAIRY DENTIST</Card.Title>
                                 <Card.Subtitle className="mb-2 text-muted">
                                     Fix the teeth that your tooth fairy didn't
                                 </Card.Subtitle>
