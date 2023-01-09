@@ -6,13 +6,12 @@ import config from "../config-client"
 import NavBar from "../common_components/PatientNavbar"
 import {useNavigate} from "react-router-dom";
 
+
 // Access token for API
 mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN || config.mapbox_access_token
 
 //Method which routes to timetable page with selected clinicTitle
-/*function selectAppointment(title) {
 
-}*/
 
 export default function Maps(props) {
     const navigate = useNavigate()
@@ -84,14 +83,29 @@ export default function Maps(props) {
 
             // add markers to map
             for (const clinic of r.clinics) {
+
+                const name = clinic.properties.title;
+                const innerHtmlContent = `<div>
+                            <h3>${clinic.properties.title}</h3> +
+                            <p>${clinic.properties.address}</p> +
+                            <p>${clinic.properties.opening_hours}</p>
+                        </div>`;
+
+                const divElement = document.createElement('div');
+                const assignBtn = document.createElement('div');
+                assignBtn.innerHTML = `<button class="btn btn-outline-primary text-black" > Book Appointment </button>`;
+                divElement.innerHTML = innerHtmlContent;
+                divElement.appendChild(assignBtn);
+                assignBtn.addEventListener('click', (e) => {
+
+                    //navigate('/appointments')
+                });
+
                 // make a marker for each clinic and add to the map
                 new mapboxgl.Marker().setLngLat(clinic.coordinates).setPopup(
                     new mapboxgl.Popup({offset: 25}) // add popups
-                        .setHTML(
-                            `<h3>${clinic.properties.title}</h3>
-                         <p>${clinic.properties.address}</p>
-                         <p>${clinic.properties.opening_hours}</p>
-                         <button type="button" class="btn btn-primary" onclick="selectAppointment(${clinic.properties.title})">Book Appointment</button>`
+                        .setDOMContent(
+                            divElement
                         )
                 ).addTo(map);
             }
