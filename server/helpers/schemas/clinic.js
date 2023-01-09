@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const clinicSchema = new Schema({
     dentists: [{
         type: Schema.Types.ObjectId,
-        unique: true,
+        required: true,
         ref: 'Dentist'
     }],
     mapStorage: {
