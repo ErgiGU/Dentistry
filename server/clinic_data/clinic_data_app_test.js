@@ -153,7 +153,8 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                     tuesday: {start: "08:00", end: "17:00"},
                     wednesday: {start: "08:00", end: "17:00"},
                     thursday: {start: "08:00", end: "17:00"},
-                    friday: {start: "08:00", end: "17:00"}
+                    friday: {start: "08:00", end: "17:00"},
+                    lunchHour:"12:00",fikaHour:"14:00"
                 },
                 coordinates: {
                     longitude: 11.943074635698956,
@@ -161,7 +162,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
                 },
                 _id: "id",
                 dentists: [],
-                timeslots: [],
+                mapStorage:{},
                 name: "Clinic Testing",
                 password: "password",
                 email: "gusaskbu@student.gu.se",
