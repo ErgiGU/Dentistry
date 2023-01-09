@@ -79,7 +79,7 @@ const Modal = ({id, open, onClose, name, workweek}) => {
     const submit = (event) => {
         if (client !== null) {
             sendMessage("setDentistSchedule", {
-                id: client.options.clientId,
+                clientId: client.options.clientId,
                 body: {
                     id: id,
                     workweek: {

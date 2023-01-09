@@ -34,7 +34,7 @@ export default function PrivateNavbar() {
                         <Link to={'/clinicAppointments'}>Schedule</Link>
                         <Link to={'/profile'}>Your information</Link>
                         <Link to={'/addDentist'}>Add a dentist</Link>
-                        <Link to={'/clinic/dentists'}>Edit dentist's</Link>
+                        <Link to={'/clinic/dentists'}>Edit dentists</Link>
                         <Link onClick={logout} to={'/login'}>Log out</Link>
                     </Navbar.Collapse>
                 </Container>

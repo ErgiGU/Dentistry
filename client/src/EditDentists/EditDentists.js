@@ -38,7 +38,7 @@ export default function EditDentists() {
             setClinic(theClinic.name)
             client.subscribe(client.options.clientId + '/#')
             sendMessage('getDentists', {
-                id: client.options.clientId,
+                clientId: client.options.clientId,
                 body: {
                     clinicId: theClinic._id
                 }
@@ -74,12 +74,15 @@ export default function EditDentists() {
                         navigate("/error");
                     }
                 }, 3000);
-
             } else {
                 navigate("/error")
             }
         }
     }, [client, navigate]);
+
+    function noDentist() {
+        navigate('/addDentist')
+    }
 
 
     return (
@@ -89,8 +92,8 @@ export default function EditDentists() {
                 Dentist's registered at {clinic}
             </h1>
             <div id="dentists">
-                {Array.from(dentists).map((dentist) => (
-                    <div id="dentist-card">
+                {dentists && dentists.length > 0 && Array.from(dentists).map((dentist) => (
+                    <div id="dentist-card" key={dentist.id}>
                         <DentistCard
                             key={dentist.id}
                             id={dentist.id}
@@ -102,6 +105,11 @@ export default function EditDentists() {
                         />
                     </div>
                 ))}
+                {!dentists &&
+                    <div>
+                        <h3 id="noDentistH" onClick={noDentist}>There are no dentists. Please add them through here!</h3>
+                    </div>
+                }
             </div>
         </>
     )

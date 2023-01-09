@@ -96,16 +96,14 @@ const Modal = ({open, onClose, name, email, phoneNumber, id}) => {
                 alert(message)
             } else {
                 sendMessage('editDentistInfo', {
-                        id: client.options.clientId,
-                        body: {
-                            id: id,
-                            name: currentName,
-                            phone: phone,
-                            email: currentEmail,
-                        },
-                    }
-                )
-
+                    clientId: client.options.clientId,
+                    body: {
+                        id: id,
+                        name: currentName,
+                        phone: phone,
+                        email: currentEmail,
+                    },
+                })
             }
         }
     }
