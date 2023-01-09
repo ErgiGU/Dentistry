@@ -24,10 +24,10 @@ Here are the installation steps in order to run the project and import it in you
 
 1. Clone the repository
 2. Run "npm install" on all the package files that are in the folders.
-3. For the HiveMQ broker to work, a network and an account has to be set up. The account information must be placed in a config file called "config-server" within the helpers folder.
+3. For the HiveMQ broker to work, a network and an account has to be set up. The account information must be placed in a config file called "config-server" within the helpers' folder.
 4. The MQTT broker must also be installed in the device. The communication network host HiveMQ broker is required.
 5. After that, the batch file within the bin folder of the downloaded HiveMQ must be run as administrator. That opens and runs the local broker.
-6. A connection to a MongoDB database is also required. That is also done by putting relevant MongoDB connection information in the "config-server" config file within the helpers folder.
+6. A connection to a MongoDB database is also required. That is also done by putting relevant MongoDB connection information in the "config-server" config file within the helpers' folder.
 7. After completing the steps above, run these backend components by navigating to their respective folder:
    ```
    clinic_data_app.js

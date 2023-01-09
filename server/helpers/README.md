@@ -5,7 +5,7 @@ The helpers directory acts as a medium to help interact to different services to
 There is also a schema directory which creates mongoose schemas for clinic, dentist, patient and timeslots. It is also important to note that all the files in helpers directory are utilized by all components of the repository.
 
 ## Diagram
-The Entity- Relation diagram
+The Entity-Relation diagram
 
 ![ER Diagram](../../client/src/assets/ER Diagram.png)
 
