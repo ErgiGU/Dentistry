@@ -104,11 +104,12 @@ describe('AuthorizationTests. Runs tests that checks up on every backend endpoin
                     tuesday: {start: "08:00", end: "17:00"},
                     wednesday: {start: "08:00", end: "17:00"},
                     thursday: {start: "08:00", end: "17:00"},
-                    friday: {start: "08:00", end: "17:00"}
+                    friday: {start: "08:00", end: "17:00"},
+                    lunchHour:"12:00",fikaHour:"14:00"
                 },
                 _id: "id",
                 dentists: [],
-                timeslots: [],
+                mapStorage:{},
                 name: "Testing Clinic",
                 password: "password",
                 email: "burakaskan2001@gmail.com",
