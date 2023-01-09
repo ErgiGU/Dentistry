@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react'
 import Calendar from "./appointments_components/Calendar";
 import Loading from "./appointments_components/Loading";
 import mqttHandler from "../common_components/MqttHandler";
-import {getISOWeek, isWeekend} from "date-fns";
+import {addDays, formatISO, getISOWeek, isWeekend, nextMonday} from "date-fns";
 import PatientNavbar from "../common_components/PatientNavbar";
 import BookingResponse from "./appointments_components/BookingResponse";
 
@@ -15,15 +15,14 @@ import BookingResponse from "./appointments_components/BookingResponse";
  */
 export default function Appointments() {
     const [client, setClient] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [isBookingResponse, setIsBookingResponse] = useState(false)
     const [bookingResponse, setBookingResponse] = useState({})
-    const [clinics, setClinics] = useState(null);
     const [currentClinic, setCurrentClinic] = useState({})
-    const [yourDentistTimeslots, setYourDentistTimeslots] = useState({})
-    const [toothFairyTimeslots, setToothFairyTimeslots] = useState({})
-    const [theCrownTimeslots, setTheCrownTimeslots] = useState({})
-    const [lisebergDentistsTimeslots, setLisebergDentistsTimeslots] = useState({})
+    const [yourDentist, setYourDentist] = useState({})
+    const [toothFairy, setToothFairy] = useState({})
+    const [theCrown, setTheCrown] = useState({})
+    const [lisebergsDentists, setLisebergsDentists] = useState({})
 
     // Primary client generating effect
     useEffect(() => {
@@ -56,8 +55,8 @@ export default function Appointments() {
                         }, 2000)
                         break;
                     case client.options.clientId + '/clinics':
-                        setClinics(intermediary)
                         console.log(intermediary)
+                        generateTimeslotsFromOpeningHours(intermediary)
                         setTimeout(() => {
                             setIsLoading(false)
                         }, 3000)
@@ -71,6 +70,108 @@ export default function Appointments() {
             })
         }
 
+        /**
+         * Performs generation calls and assigns results to relevant clinic
+         */
+        function generateTimeslotsFromOpeningHours(clinics) {
+            let startDate = Date.now()
+            let startWeek = getISOWeek(startDate)
+            if (isWeekend(startDate)) {
+                startDate = new Date(nextMonday(startDate))
+                startWeek = startWeek + 1
+            }
+
+            clinics.forEach(clinic => {
+                let intermediaryTimeslots = []
+                let intermediaryDate = startDate
+                for (let i = startWeek; i < (startWeek + 12); i++) {
+                    intermediaryTimeslots[i] = generateWeek(intermediaryDate, clinic, clinic.dentists);
+                    intermediaryDate = addDays(intermediaryDate, 7)
+                }
+                let intermediaryClinic = {
+                    clinic: clinic,
+                    weeks: intermediaryTimeslots
+                }
+                console.log(intermediaryClinic.clinic)
+                switch (clinic.name) {
+                    case 'Lisebergs Dentists':
+                        removeBookedTimeslots(intermediaryTimeslots, clinic.mapStorage)
+                        setLisebergsDentists(intermediaryClinic)
+                        break;
+                    case 'Tooth Fairy Dentist':
+                        setToothFairy(intermediaryClinic)
+                        break;
+                    case 'The Crown':
+                        setTheCrown(intermediaryClinic)
+                        break;
+                    case 'Your Dentist':
+                        setYourDentist(intermediaryClinic)
+                        break;
+                    default:
+                        break;
+                }
+            })
+        }
+
+
+        /**
+         * Based on week generation, creates objects of timeslots mapped to weekdays
+         * @param startDate
+         * @param clinic
+         * @param dentists
+         * @returns {{tuesday: *[], wednesday: *[], thursday: *[], friday: *[], monday: *[]}}
+         */
+        function generateWeek(startDate, clinic, dentists) {
+            return {
+                monday: generateWeekday((startDate), clinic.openingHours.monday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists),
+                tuesday: generateWeekday((addDays(startDate, 1)), clinic.openingHours.tuesday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists),
+                wednesday: generateWeekday((addDays(startDate, 2)), clinic.openingHours.wednesday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists),
+                thursday: generateWeekday((addDays(startDate, 3)), clinic.openingHours.thursday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists),
+                friday: generateWeekday((addDays(startDate, 4)), clinic.openingHours.friday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists)
+            }
+        }
+
+        /**
+         * Generates arrays of timeslots based on provided opening, lunch and fika hours.
+         *
+         * @param date
+         * @param openingHours
+         * @param lunchHour
+         * @param fikaHour
+         * @param dentists
+         * @returns {*[]} array of timeslots
+         */
+        function generateWeekday(date, openingHours, lunchHour, fikaHour, dentists) {
+            let intermediaryTimeslots = []
+            let start = openingHours.start.split(":")[0]
+            let end = openingHours.end.split(":")[0]
+            let intermediaryDate = formatISO(date, {representation: "date"})
+            intermediaryTimeslots.push({
+                date: intermediaryDate
+            })
+            for (let i = start; i < end; i++) {
+                let hour = i.toString().padStart(2, '0')
+                if (hour !== lunchHour.split(':')[0] && hour !== fikaHour.split(':')[0]) {
+                    intermediaryTimeslots.push({
+                        time: `${hour}:00`,
+                        dentists: dentists,
+                        date: intermediaryDate
+                    })
+                    intermediaryTimeslots.push({
+                        time: `${hour}:30`,
+                        dentists: dentists,
+                        date: intermediaryDate
+                    })
+                }
+            }
+            return intermediaryTimeslots
+        }
+
+        function removeBookedTimeslots(generatedTimeslots, bookedTimeslots) {
+            console.log(generatedTimeslots)
+            console.log(bookedTimeslots)
+        }
+
         return () => {
             if (client !== null) {
                 console.log('ending process')
@@ -78,97 +179,6 @@ export default function Appointments() {
             }
         }
     }, [client])
-
-    
-    /**
-     * Performs generation calls and assigns results to relevant clinic
-     */
-    function generateTimeslotsFromOpeningHours() {
-        let startWeek = getISOWeek(Date.now())
-        if (isWeekend(Date.now())) {
-            startWeek = startWeek + 1
-        }
-
-        clinics.forEach(clinic => {
-            let intermediaryTimeslots = []
-            let templateWeek = generateTemplateWeek(clinic, clinic.dentists)
-            for (let i = startWeek; i < (startWeek + 12); i++) {
-                intermediaryTimeslots[i] = templateWeek;
-            }
-            let intermediaryClinic = {
-                clinic: clinic,
-                weeks: intermediaryTimeslots
-            }
-            switch (clinic.name) {
-                case 'ClinicOne':
-                    setLisebergDentistsTimeslots(intermediaryClinic)
-                    break;
-                case 'Clinic Testing':
-                    removeBookedTimeslots(intermediaryTimeslots, clinic.mapStorage)
-                    setToothFairyTimeslots(intermediaryClinic)
-                    break;
-                case 'clinic 52':
-                    setTheCrownTimeslots(intermediaryClinic)
-                    break;
-                case 'Testing Clinic':
-                    setYourDentistTimeslots(intermediaryClinic)
-                    break;
-                default:
-                    break;
-            }
-        })
-    }
-
-    /**
-     * Based on week generation, creates objects of timeslots mapped to weekdays
-     * @param clinic
-     * @param dentists
-     * @returns {{tuesday: *[], wednesday: *[], thursday: *[], friday: *[], monday: *[]}}
-     */
-    function generateTemplateWeek(clinic, dentists) {
-        return {
-            monday: generateWeek(clinic.openingHours.monday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists),
-            tuesday: generateWeek(clinic.openingHours.tuesday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists),
-            wednesday: generateWeek(clinic.openingHours.wednesday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists),
-            thursday: generateWeek(clinic.openingHours.thursday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists),
-            friday: generateWeek(clinic.openingHours.friday, clinic.openingHours.lunchHour, clinic.openingHours.fikaHour, dentists)
-        }
-    }
-
-
-    /**
-     * Generates arrays of timeslots based on provided opening, lunch and fika hours.
-     *
-     * @param openingHours
-     * @param lunchHour
-     * @param fikaHour
-     * @param dentists
-     * @returns {*[]} array of timeslots
-     */
-    function generateWeek(openingHours, lunchHour, fikaHour, dentists) {
-        let intermediaryTimeslots = []
-        let start = openingHours.start.split(":")[0]
-        let end = openingHours.end.split(":")[0]
-        for (let i = start; i < end; i++) {
-            let hour = i.toString().padStart(2, '0')
-            if (hour !== lunchHour.split(':')[0] && hour !== fikaHour.split(':')[0]) {
-                intermediaryTimeslots.push({
-                    time: `${hour}:00`,
-                    dentists: dentists
-                })
-                intermediaryTimeslots.push({
-                    time: `${hour}:30`,
-                    dentists: dentists
-                })
-            }
-        }
-        return intermediaryTimeslots
-    }
-
-    function removeBookedTimeslots(generatedTimeslots, bookedTimeslots) {
-        console.log(generatedTimeslots)
-        console.log(bookedTimeslots)
-    }
 
     return (
         <div>
@@ -182,7 +192,7 @@ export default function Appointments() {
                                    type="radio"
                                    id="yourDentistRadio"
                                    name='clinicName1'
-                                   onClick={() => setCurrentClinic(yourDentistTimeslots)}
+                                   onClick={() => setCurrentClinic(yourDentist)}
                             />
                             <label className="form-check-label" htmlFor="yourDentistRadio">Your Dentist</label>
                         </div>
@@ -191,7 +201,7 @@ export default function Appointments() {
                                    type="radio"
                                    id="toothFairyRadio"
                                    name='clinicName1'
-                                   onClick={() => setCurrentClinic(toothFairyTimeslots)}
+                                   onClick={() => setCurrentClinic(toothFairy)}
                             />
                             <label className="form-check-label" htmlFor="toothFairyRadio">Tooth Fairy</label>
                         </div>
@@ -200,7 +210,7 @@ export default function Appointments() {
                                    type="radio"
                                    id="theCrownRadio"
                                    name='clinicName1'
-                                   onClick={() => setCurrentClinic(theCrownTimeslots)}
+                                   onClick={() => setCurrentClinic(theCrown)}
                             />
                             <label className="form-check-label" htmlFor="theCrownRadio">The Crown</label>
                         </div>
@@ -209,17 +219,16 @@ export default function Appointments() {
                                    type="radio"
                                    id="lisebergDentistRadio"
                                    name='clinicName1'
-                                   onClick={() => setCurrentClinic(lisebergDentistsTimeslots)}
+                                   onClick={() => setCurrentClinic(lisebergsDentists)}
                             />
                             <label className="form-check-label" htmlFor="lisebergDentistRadio">Liseberg Dentist</label>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className={"btn btn-primary"} role={'button'} onClick={generateTimeslotsFromOpeningHours}>Trigger fun</div>
             <React.StrictMode>
                 {isLoading ? <Loading/> : (isBookingResponse ? <BookingResponse bookingResponse={bookingResponse}/> :
-                    <Calendar clinic={currentClinic} clinicTimeslots={currentClinic} client={client}/>)}
+                    <Calendar clinic={currentClinic.clinic} clinicTimeslots={currentClinic} client={client}/>)}
             </React.StrictMode>
         </div>
     )

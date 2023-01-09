@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import ReactDom from "react-dom";
 import './Modal.css'
-import {formatISO} from "date-fns";
 
 export default function BookingModal({modalShow, onClose, slot, clinic, client}) {
     const [formData, setFormData] = useState({
@@ -14,7 +13,6 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
     const patientEmail = document.getElementById('address');
     const patientDateOfBirth = document.getElementById('email');
     const patientText = document.getElementById('password');
-    const alertPlaceholder = document.getElementById("displayAlert");
 
     //This is for the checkbox
     const [checked, setChecked] = useState(false);
@@ -45,21 +43,15 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
         let message = {
             clientId: client.options.clientId,
             body: {
-                // clinicId: clinic._id,
-                clinicId: '63b70ba9108d58f87599131e',
+                clinicId: clinic._id,
                 patientInfo: {
-                    // name: patientName,
-                    // email: patientEmail,
-                    // dateOfBirth: patientDateOfBirth,
-                    // text: patientText
-                    name: 'John',
-                    email: 'john@doe.com',
-                    dateOfBirth: '1978-02-09',
-                    text: 'teef hurt'
+                    name: formData.patientName,
+                    email: formData.patientEmail,
+                    dateOfBirth: formData.patientDateOfBirth,
+                    text: formData.patientText
                 },
-                dentistID: '63b70bb69bc4afd6a0969c86',
-                //dentistID: slot.dentists[0],
-                date: formatISO(Date.now(), {representation: "date"}),
+                dentistID: slot.dentists[0],
+                date: slot.date,
                 time: slot.time
             }
         }
@@ -81,12 +73,25 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
                         </div>
                         <div className={'modal-body'}>
                             Would you like to book the following timeslot?
-                            <div id={'timeslotInfo'}>
-                                {slot.time}
+                            <div id={'timeslotInfo'} className={'table justify-content-center'}>
+                                <table className={'table table-responsive-sm'}>
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{slot.date}</td>
+                                            <td>{slot.time}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                             <div id={'patientInformationForm'}>
                                 <form id={'patientInfoForm'} className={'flex flex-column'}>
-                                    <h2 className="text-center text-white mb-3" style={{top: '100px'}}>Patient
+                                    <h2 className="text-center mb-3" style={{top: '100px'}}>Patient
                                         information</h2>
                                     <div id='displayAlert'></div>
                                     <div className="form-floating mb-4">

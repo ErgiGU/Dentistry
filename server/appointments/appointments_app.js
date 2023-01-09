@@ -39,7 +39,7 @@ try {
     /**
      * The MQTT listener that receives incoming messages and sends back messages after data manipulation.
      */
-    mqttClient.mqttClient.on('message', function (topic, message) {
+    mqttClient.mqttClient.on('message', async function (topic, message) {
         let intermediary = JSON.parse(message)
         console.log(config.module_config.appointmentUser.handler + " service received MQTT message")
         console.log('topic: ' + topic)
@@ -50,12 +50,16 @@ try {
                 mqttClient.sendMessage('testAppointment', "newClinic")
                 break;
             case 'bookAppointment':
-                waitMakeTimeslots(intermediary.body).then(timeslotIDResponse => {
-                    console.log(timeslotIDResponse)
-                    appointments_controller.getTimeslotInfo(timeslotIDResponse).then(timeslotResponse => {
-                        console.log(timeslotResponse)
-                        mqttClient.sendMessage(intermediary.clientId + '/appointmentResponse', JSON.stringify(timeslotResponse))
-                    })
+                appointments_controller.makeAppointment(intermediary.body.clinicId, intermediary.body.dentistID, intermediary.body.patientInfo, intermediary.body.date, intermediary.body.time).then(timeslotID => {
+                    console.log('id:')
+                    console.log(timeslotID)
+                    //setTimeout(() => {
+                        appointments_controller.getTimeslotInfo(timeslotID).then(timeslot => {
+                            console.log('found timeslot:')
+                            console.log(timeslot)
+                            mqttClient.sendMessage(intermediary.clientId + '/appointmentResponse', JSON.stringify(timeslot))
+                        })
+                    //}, 5000)
                 })
                 break;
             case 'testingTestingRequest':
@@ -66,7 +70,8 @@ try {
                 mqttClient.sendMessage('123/testingTesting', JSON.stringify(messageSending))
                 break;
             case 'generateTimeSlots':
-                appointments_controller.generateTimeslots('63af60e44e09e582e395a69d', '63af4ee39556e442b5e1dc3e', '63af50fc4d37ce68a1981263').then(r => {});
+                appointments_controller.generateTimeslots('63af60e44e09e582e395a69d', '63af4ee39556e442b5e1dc3e', '63af50fc4d37ce68a1981263').then(r => {
+                });
                 break;
             case 'generateData':
                 const dataResult = waitGenerateData()
@@ -118,9 +123,8 @@ try {
 
 /**
  * Below are wrapper async functions to avoid making other function async when they don't need to be.
- * @returns {Promise<void>} the result of mongoose manipulations
+ * @returns {Promise<*[]>} the result of mongoose manipulations
  */
-
 async function waitTimeslotData(intermediary) {
     console.log(JSON.stringify(intermediary.body))
     return await appointments_controller.sendAppointmentInformation(intermediary.body.clinicId)
@@ -131,11 +135,11 @@ async function waitGenerateData() {
 }
 
 async function waitMakeTimeslots(message) {
-    return appointments_controller.makeAppointment(message.clinicId, message.dentistID, message.patientInfo, message.date, message.time);
+    return await appointments_controller.makeAppointment(message.clinicId, message.dentistID, message.patientInfo, message.date, message.time)
 }
 
 async function waitMailData(timeslotID) {
-    return appointments_controller.getTimeslotInfo(timeslotID);
+    return await appointments_controller.getTimeslotInfo(timeslotID);
 }
 
 async function waitClinicNotifMail(mailingData) {
