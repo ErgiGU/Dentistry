@@ -3,6 +3,7 @@ import mapboxgl from "mapbox-gl";
 import "./ClinicsMap.css";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import config from "../config-client"
+import NavBar from "../common_components/PatientNavbar"
 import {useNavigate} from "react-router-dom";
 
 // Access token for API
@@ -99,8 +100,11 @@ export default function Maps(props) {
     }
 
     return (
-        <div id="map-wrapper">
-            <div className="map-container" ref={mapContainerRef}/>
+        <div id="topContainerMaps">
+            <NavBar id="mapsNavbar"/>
+            <div id="map-wrapper">
+                <div className="map-container" ref={mapContainerRef}/>
+            </div>
         </div>
     );
 };
