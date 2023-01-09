@@ -97,8 +97,7 @@ export default function Maps(props) {
                 divElement.innerHTML = innerHtmlContent;
                 divElement.appendChild(assignBtn);
                 assignBtn.addEventListener('click', (e) => {
-
-                    //navigate('/appointments')
+                    navigate('/appointments')
                 });
 
                 // make a marker for each clinic and add to the map
