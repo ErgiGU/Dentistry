@@ -7,6 +7,7 @@
 const assert = require('assert')
 const mqttHandler = require('../helpers/mqtt_handler');
 const util = require("util");
+const resolvePath = require("object-resolve-path")
 const {MqttClient} = require("mqtt");
 let config
 try {
@@ -86,7 +87,7 @@ describe("Tests to see if the tests are working", function () {
                 __v: 1
             }
             clinicStored = await asyncMethod("clinicDataRequest", "clinicData", {
-                id: "123",
+                clientId: "123",
                 body: {email: "gusaskbu@student.gu.se"}
             }, expectedResult)
 
@@ -97,29 +98,78 @@ describe("Tests to see if the tests are working", function () {
 describe('AppointmentTests. Runs tests that checks up on every backend endpoint belonging to the appointments service.', function () {
     describe('bookAppointment', function () {
         it('See if timeslot gets booked', async function () {
-            this.timeout(10000)
+            this.timeout(20000)
             const messageSend = {
                 clientId: "123",
                 body: {
                     clinicId: clinicStored._id,
-                    dentistID: clinicStored.dentists[0],
                     patientInfo: {
                         name: "John Jane",
                         email: "burakaskan2001@gmail.com",
-                        dateOfBirth: "17/08/01",
+                        dateOfBirth: "2001-08-17",
                         text: "My tooth aches"
                     },
-                    timeslotTime: "9:30"
+                    dentistID: clinicStored.dentists[0],
+                    date: "2023-08-17",
+                    time: "09:30"
                 }
             }
+
             const expectedResult = {
-                response: {
-                    response: "Success"
-                }
+                _id:"id",
+                dentist:{
+                    workweek:{
+                        monday:false,
+                        tuesday:true,
+                        wednesday:false,
+                        thursday:true,
+                        friday:false
+                    },
+                    _id:"id",
+                    clinic:"id",
+                    name:"Solomon Mathews",
+                    email:"burakaskan2001@gmail.com",
+                    phoneNumber:"0769136300",
+                    timeslots:["id"],
+                    __v:0
+                },
+                patient:{
+                    _id:"id",
+                    timeslots:["id"],
+                    name:"John Jane",
+                    email:"burakaskan2001@gmail.com",
+                    dateOfBirth:"2001-08-17",
+                    text:"My tooth aches",
+                    __v:0
+                },
+                clinic:{
+                    coordinates:{longitude:11.943074635698956,latitude:57.7057104},
+                    openingHours:{
+                        monday:{start:"08:00",end:"17:00"},
+                        tuesday:{start:"08:00",end:"17:00"},
+                        wednesday:{start:"08:00",end:"17:00"},
+                        thursday:{start:"08:00",end:"17:00"},
+                        friday:{start:"08:00",end:"17:00"},
+                        lunchHour:"12:00",fikaHour:"14:00"},
+                    _id:"id",
+                    dentists:["id"],
+                    mapStorage:{},
+                    name:"Clinic Testing",
+                    password:"password",
+                    email:"gusaskbu@student.gu.se",
+                    address:"Lindholmen",
+                    city:"Göteborg",
+                    __v:1,
+                    owner:"Oscar Davidsson"
+                },
+                date:"2023-08-17",
+                startTime:"09:30",
+                __v:0
             }
-            await asyncMethod("bookTimeslot", "bookTimeslot", messageSend, expectedResult)
+           await asyncMethod("bookAppointment", "appointmentResponse", messageSend, expectedResult)
         })
     })
+
     describe('sendAppointmentInformation', function () {
         it('See if timeslot(s) can be recieved', async function () {
             this.timeout(10000)
@@ -130,18 +180,21 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                     test: "This is for a test"
                 }
             }
-            const expectedResult = [{
-                id: "id",
-                patient: {
-                    name: "John Jane",
-                    text: "My tooth aches"
-                },
-                dentist: {
-                    name: "Solomon Mathews"
-                },
-                timeslot: "9:30"
-            }]
-
+            const expectedResult = {
+                body:{
+                    sortedArray:[{
+                        key:"2023-08-17",
+                        value:[{
+                            id:"id",
+                            patient:{
+                                name:"John Jane",
+                                text:"My tooth aches"
+                            },
+                            dentist:{name:"Solomon Mathews"},
+                            timeslot:"09:30"}
+                        ]}
+                    ]}
+            }
             await asyncMethod("sendAppointmentInformation", "appointmentInformationResponse", messageSend, expectedResult)
         })
     })
@@ -171,11 +224,12 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                 clientId: "123",
                 body: {email: "gusaskbu@student.gu.se"}
             }, fetchClinicExpectation)
-            console.log(clinicStored)
+            const mapStorage = new Map(Object.entries(clinicStored.mapStorage))
+            const mapStorageContents = mapStorage.get("2023-08-17")
             const messageSend = {
                 clientId: "123",
                 body: {
-                    timeslotID: clinicStored.timeslots[0]
+                    timeslotID: mapStorageContents.timeslots[0]
                 }
             }
             const expectedResult = {
@@ -191,7 +245,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                     clinicId: clinicStored._id
                 }
             }
-            const expectedResult = []
+            const expectedResult = {}
             await asyncMethod("sendAppointmentInformation", "appointmentInformationResponse", messageSend, expectedResult)
         })
     })

@@ -4,7 +4,7 @@
  */
 import './ViewAppointments.css'
 import React, {useCallback, useEffect, useRef, useState} from "react";
-import TimeslotCard from './components/timeslotCard'
+import DateCard from './components/DateCard'
 import mqttHandler from "../common_components/MqttHandler";
 import {useNavigate} from "react-router-dom";
 import PrivateNavbar from "../common_components/PrivateNavbar";
@@ -14,7 +14,7 @@ import jwt from "jsonwebtoken";
 export default function ViewAppointments() {
 
     const [client, setClient] = useState(null);
-    const [appointments, setAppointments] = useState([]);
+    const [appointmentsArray, setAppointmentsArray] = useState([]);
     const navigate = useNavigate();
     let appointmentsFlag = useRef(true)
 
@@ -69,20 +69,18 @@ export default function ViewAppointments() {
                 }
             })
             client.on('message', function (topic, message) {
+                const pMessage = JSON.parse(message)
                 appointmentsFlag.current = false
                 switch (topic) {
                     case client.options.clientId + '/appointmentInformationResponse':
-                        console.log(JSON.parse(message))
-                        const pMessage = JSON.parse(message)
                         if (pMessage.length === 0) {
                             const alertPlaceholder = document.getElementById('currentAppointments')
                             alertPlaceholder.innerHTML = "No booked appointments for now"
                         }
-                        setAppointments(pMessage)
+                        setAppointmentsArray(pMessage.body.sortedArray)
                         break;
                     case client.options.clientId + '/canceledAppointment':
-                        console.log(JSON.parse(message))
-                        alert(JSON.parse(message))
+                        alert(pMessage.response)
                         break;
                     default:
                         (new Error("The wrong message is received"))
@@ -109,7 +107,7 @@ export default function ViewAppointments() {
         console.log(timeslotID)
         if (client !== null) {
             sendMessage('cancelAppointment', {
-                    id: client.options.clientId,
+                    clientId: client.options.clientId,
                     body: {
                         timeslotID: timeslotID
                     }
@@ -118,7 +116,6 @@ export default function ViewAppointments() {
         }
     }
 
-//Line 125 with empty h2 I added a empty space to stop the empty header complaint -Askan
     return (
         <>
             <PrivateNavbar/>
@@ -128,8 +125,8 @@ export default function ViewAppointments() {
                         <div className="col-3">
                             <div id="cardAppointment">
                                 <div className="card-body">
-                                    <h3 id={"currentAppointments"}> Current appointments </h3>
-                                    <h2 id={"currentAppointmentsNumber"}>~</h2>
+                                    <h3 id={"currentAppointments"}> Current appointments: </h3>
+                                    <h2 id={"currentAppointmentsNumber"}>{appointmentsArray.length}</h2>
                                     <img id="clinicImage"
                                          src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
                                          alt="clinic"/>
@@ -138,9 +135,9 @@ export default function ViewAppointments() {
                         </div>
                         <div className='col-8'>
                             <div id={"timeslots"}>
-                                {Array.from(appointments).map((appointment) => (
-                                    <TimeslotCard key={appointment.id} appointment={appointment}
-                                                  parentCallback={handleChildClick}/>
+                                {appointmentsArray.map((mappedDates, index) => (
+                                    <DateCard key={index} date={mappedDates.key} timeslots={mappedDates.value}
+                                                  handleChildClick={handleChildClick}/>
                                 ))}
                             </div>
                         </div>
