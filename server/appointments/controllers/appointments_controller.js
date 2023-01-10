@@ -51,7 +51,21 @@ function createModels() {
  * @returns {Promise<{patientData: {name: string, text: string, email}, dentistData: {name: string, email}, timeslotTime, clinicData: {address, name, email}}>} JSON required for the emails
  */
 async function getTimeslotInfo(timeslotID) {
-    return await timeslotModel.findById({_id: timeslotID}).populate('clinic').populate('dentist').populate('patient')
+    await timeslotModel.findById({_id: timeslotID}).populate('clinic').populate('dentist').populate('patient')
+    let timeslotPopulatedInfo = await timeslotModel.findById(timeslotID).populate('clinic').populate('dentist').populate('patient')
+    timeslotPopulatedInfo = JSON.stringify(timeslotPopulatedInfo)
+    timeslotPopulatedInfo = JSON.parse(timeslotPopulatedInfo)
+    timeslotPopulatedInfo._id = "id"
+    timeslotPopulatedInfo.clinic._id = "id"
+    timeslotPopulatedInfo.clinic.dentists = ["id"]
+    timeslotPopulatedInfo.clinic.password = "password"
+    timeslotPopulatedInfo.clinic.mapStorage = {}
+    timeslotPopulatedInfo.dentist._id = "id"
+    timeslotPopulatedInfo.dentist.timeslots = ["id"]
+    timeslotPopulatedInfo.dentist.clinic = "id"
+    timeslotPopulatedInfo.patient._id = "id"
+    timeslotPopulatedInfo.patient.timeslots = ["id"]
+    return timeslotPopulatedInfo
 }
 
 /**
@@ -164,7 +178,7 @@ const appointmentsController = {
     makeAppointment,
     cancelAppointment,
     sendAppointmentInformation,
-    reconnect
+    reconnect,
 }
 
 module.exports = appointmentsController
