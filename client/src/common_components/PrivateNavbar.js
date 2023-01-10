@@ -3,7 +3,7 @@
  * @author Agata Ciuchta (@ciuchta)
  */
 import React from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
