@@ -48,9 +48,6 @@ try {
         console.log(intermediary);
 
         switch (topic) {
-            case 'firstTest':
-                mqttClient.sendMessage('testAppointment', 'Testing callback')
-                break;
             case 'mapDataRequest':
                 const body = await clinic_data_controller.mapDataRequest()
                 console.log(body)

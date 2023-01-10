@@ -64,7 +64,6 @@ async function getDentist(email) {
     return await dentistModel.findOne({email: email})
 }
 
-//TODO documentation
 async function getClinics() {
     return await clinicModel.find({}).populate('dentists')
 }

@@ -86,6 +86,7 @@ try {
                         r = JSON.parse(r)
                         r[0].id = "id"
                     }
+                    console.log(r)
                     mqttClient.sendMessage(intermediary.clientId + "/appointmentInformationResponse", JSON.stringify(r))
                 })
                 break;

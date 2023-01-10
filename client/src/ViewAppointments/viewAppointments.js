@@ -4,7 +4,7 @@
  */
 import './ViewAppointments.css'
 import React, {useCallback, useEffect, useRef, useState} from "react";
-import TimeslotCard from './components/timeslotCard'
+import DateCard from './components/DateCard'
 import mqttHandler from "../common_components/MqttHandler";
 import {useNavigate} from "react-router-dom";
 import PrivateNavbar from "../common_components/PrivateNavbar";
@@ -14,7 +14,7 @@ import jwt from "jsonwebtoken";
 export default function ViewAppointments() {
 
     const [client, setClient] = useState(null);
-    const [appointments, setAppointments] = useState([]);
+    const [appointmentsArray, setAppointmentsArray] = useState([]);
     const navigate = useNavigate();
     let appointmentsFlag = useRef(true)
 
@@ -72,13 +72,16 @@ export default function ViewAppointments() {
                 appointmentsFlag.current = false
                 switch (topic) {
                     case client.options.clientId + '/appointmentInformationResponse':
-                        console.log(JSON.parse(message))
                         const pMessage = JSON.parse(message)
+                        console.log(pMessage.body.sortedArray)
                         if (pMessage.length === 0) {
                             const alertPlaceholder = document.getElementById('currentAppointments')
                             alertPlaceholder.innerHTML = "No booked appointments for now"
                         }
-                        setAppointments(pMessage)
+                        appointmentsArray.forEach((mappedDates) => {
+                            console.log(mappedDates)
+                        })
+                        setAppointmentsArray(pMessage.body.sortedArray)
                         break;
                     case client.options.clientId + '/canceledAppointment':
                         console.log(JSON.parse(message))
@@ -118,7 +121,6 @@ export default function ViewAppointments() {
         }
     }
 
-//Line 125 with empty h2 I added a empty space to stop the empty header complaint -Askan
     return (
         <>
             <PrivateNavbar/>
@@ -138,9 +140,9 @@ export default function ViewAppointments() {
                         </div>
                         <div className='col-8'>
                             <div id={"timeslots"}>
-                                {Array.from(appointments).map((appointment) => (
-                                    <TimeslotCard key={appointment.id} appointment={appointment}
-                                                  parentCallback={handleChildClick}/>
+                                {appointmentsArray.map(mappedDates => (
+                                    <DateCard key={mappedDates.date} date={mappedDates.date} timeslots={mappedDates.timeslots}
+                                                  handleChildClick={handleChildClick}/>
                                 ))}
                             </div>
                         </div>

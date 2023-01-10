@@ -148,29 +148,33 @@ async function cancelAppointment(timeslotID) {
  * @returns the clinicTimeslots array
  */
 async function sendAppointmentInformation(intermediary) {
-    let clinicTimeslots = [];
+    let response = {
+        body: {
+            sortedArray: []
+        }
+    };
+    const clinic = await clinicModel.findOne({_id: intermediary}).populate("mapStorage.$*.timeslots.$*")
 
-    const timeslots = await timeslotModel.find({clinic: intermediary}).populate("patient").populate("dentist")
-    console.log(timeslots)
     try {
-        timeslots.forEach(timeslot => {
-            clinicTimeslots.push({
-                id: timeslot._id,
-                patient: {
-                    name: timeslot.patient.name,
-                    text: timeslot.patient.text
-                },
-                dentist: {
-                    name: timeslot.dentist.name
-                },
-                timeslot: timeslot.startTime
+        let map = clinic.mapStorage
+        let dateArray = [];
+        for (const date of map.keys()) {
+            dateArray.push(date)
+        }
+        dateArray.sort(function(a,b){
+            return (new Date(a) - new Date(b));
+        });
+        dateArray.forEach(date => {
+            response.body.sortedArray.push({
+                date: date,
+                timeslots: map.get(date)
             })
         })
+        return response
     } catch (e) {
         console.log(e)
+        return e
     }
-    console.log(clinicTimeslots)
-    return clinicTimeslots
 }
 
 const appointmentsController = {
