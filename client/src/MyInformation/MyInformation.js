@@ -39,11 +39,11 @@ export default function MyInformation() {
             client.publish(topic, JSON.stringify(json))
             setTimeout(() => {
                 if (clinicDataFlag.current) {
-                    //navigate("/error");
+                    navigate("/error");
                 }
             }, 3000);
         } else {
-            //navigate("/error")
+            navigate("/error")
         }
     }, [client, navigate])
 
