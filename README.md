@@ -96,13 +96,13 @@ This is the generated graph that shows response times over time(10 seconds) for 
 
 | Authors           | Roles                    |
 |-------------------|--------------------------|
-| Agata Ciuchta     | Developer                |
-| Aieh Eissa        | Developer                |
-| Burak Askan       | Developer                |
-| Ergi Senja        | Project Owner, Developer |
-| Mathias Hallander | SCRUM Master, Developer  |
-| Ossian Ålund      | Developer                |
-| Sejal Kanaskar    | Developer                |
+| Agata Ciuchta(@ciuchta)     | Developer                |
+| Aieh Eissa(@aieh)        | Developer                |
+| Burak Askan(@askan)       | Developer                |
+| Ergi Senja(@ergi)        | Project Owner, Developer |
+| Mathias Hallander(@mathalla) | SCRUM Master, Developer  |
+| Ossian Ålund(@ossiana)      | Developer                |
+| Sejal Kanaskar(@sejal)    | Developer                |
 
 ### Source Links
 Following are the links to related sources our team used for project management:
