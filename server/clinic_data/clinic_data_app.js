@@ -68,12 +68,12 @@ try {
                 break;
             case 'editInfo':
                 clinicData.editInfo(intermediary).then(res => {
-                    mqttClient.sendMessage(intermediary.clientId + '/editInfoResponse', res)
+                    mqttClient.sendMessage(intermediary.id + '/editInfoResponse', res)
                 })
                 break;
             case 'changePassword':
                 clinicData.changePassword(intermediary).then(res => {
-                    mqttClient.sendMessage(intermediary.clientId + '/changePasswordResponse', res)
+                    mqttClient.sendMessage(intermediary.id + '/changePasswordResponse', res)
                 })
                 break;
             case 'getDentist':
