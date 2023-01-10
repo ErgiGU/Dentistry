@@ -106,11 +106,11 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                     patientInfo: {
                         name: "John Jane",
                         email: "burakaskan2001@gmail.com",
-                        dateOfBirth: "2001/08/17",
+                        dateOfBirth: "2001-08-17",
                         text: "My tooth aches"
                     },
                     dentistID: clinicStored.dentists[0],
-                    date: "2023/08/17",
+                    date: "2023-08-17",
                     time: "09:30"
                 }
             }
@@ -138,7 +138,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                     timeslots:["id"],
                     name:"John Jane",
                     email:"burakaskan2001@gmail.com",
-                    dateOfBirth:"2001/08/17",
+                    dateOfBirth:"2001-08-17",
                     text:"My tooth aches",
                     __v:0
                 },
@@ -162,6 +162,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                     __v:1,
                     owner:"Oscar Davidsson"
                 },
+                date:"2023-08-17",
                 startTime:"09:30",
                 __v:0
             }
@@ -179,17 +180,21 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                     test: "This is for a test"
                 }
             }
-            const expectedResult = [{
-                id: "id",
-                patient:{
-                    name: "John Jane",
-                    text: "My tooth aches"
-                },
-                dentist:{
-                    name: "Solomon Mathews"
-                },
-                timeslot: "09:30"
-            }]
+            const expectedResult = {
+                body:{
+                    sortedArray:[{
+                        key:"2023-08-17",
+                        value:[{
+                            id:"id",
+                            patient:{
+                                name:"John Jane",
+                                text:"My tooth aches"
+                            },
+                            dentist:{name:"Solomon Mathews"},
+                            timeslot:"09:30"}
+                        ]}
+                    ]}
+            }
             await asyncMethod("sendAppointmentInformation", "appointmentInformationResponse", messageSend, expectedResult)
         })
     })
@@ -220,7 +225,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                 body: {email: "gusaskbu@student.gu.se"}
             }, fetchClinicExpectation)
             const mapStorage = new Map(Object.entries(clinicStored.mapStorage))
-            const mapStorageContents = mapStorage.get("2023/08/17")
+            const mapStorageContents = mapStorage.get("2023-08-17")
             const messageSend = {
                 clientId: "123",
                 body: {
@@ -240,7 +245,7 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
                     clinicId: clinicStored._id
                 }
             }
-            const expectedResult = []
+            const expectedResult = {}
             await asyncMethod("sendAppointmentInformation", "appointmentInformationResponse", messageSend, expectedResult)
         })
     })
@@ -252,11 +257,11 @@ describe('AppointmentTests. Runs tests that checks up on every backend endpoint 
     })
 
     //Is needed to close the runner in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
-    /*describe('Closing runner', function () {
+    describe('Closing runner', function () {
         it('Is this closing the runner?', function () {
             mqttClient.sendMessage('test', JSON.stringify({message: 'no expectation'}))
         })
-    })*/
+    })
 })
 //Is needed to close the tester in the CI/CD pipeline. Shouldn't be changed. Should be uncommented before going for a merge.
 after(function () {

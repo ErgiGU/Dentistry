@@ -84,7 +84,7 @@ try {
                     if (intermediary.body.test) {
                         r = JSON.stringify(r)
                         r = JSON.parse(r)
-                        r[0].id = "id"
+                        r.body.sortedArray[0].value[0].id = "id"
                     }
                     mqttClient.sendMessage(intermediary.clientId + "/appointmentInformationResponse", JSON.stringify(r))
                 })
