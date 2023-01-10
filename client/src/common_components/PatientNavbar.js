@@ -16,10 +16,10 @@ export default function PatientNavbar() {
                 <img id="logoNavbar" src={Logo} alt="logo"/>
                 <h1 id={'name'}>DENTISTRY</h1>
             </div>
-            <Navbar id="navbar" expand="lg">
+            <Navbar id="navbar" expand={'md'}>
                 <Container className="me-auto">
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-                    <Navbar.Collapse id="basic-navbar-nav" className={'justify-content-center'}>
+                    <Navbar.Collapse id="basic-navbar-nav" className={'nav-fill justify-content-evenly justify-content-center'}>
                         <Nav.Link href="home">Home</Nav.Link>
                         <Nav.Link href="map">Clinics map</Nav.Link>
                         <Nav.Link href="appointments">Book appointment</Nav.Link>

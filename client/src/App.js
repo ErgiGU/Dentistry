@@ -21,16 +21,16 @@ export default function App() {
         <div id={'topPage'}>
             <Routes>
                 <Route path="/" element={< Home/>}/>
-                <Route path="/addDentist" element={<NewDentist/>}/>
+                <Route path="/clinic/addDentist" element={<NewDentist/>}/>
                 <Route path="/registration" element={< Registration/>}/>
                 <Route path="/login" element={< Login/>}/>
                 <Route path="/Home" element={< Home/>}/>
                 <Route path="/map" element={< MapPage/>}/>
-                <Route path="/clinicAppointments" element={< ClinicAppointments/>}/>
+                <Route path="/clinic/schedule" element={< ClinicAppointments/>}/>
                 <Route path="/appointments" element={< Appointments/>}/>
                 <Route path="/clinic" element={< ClinicHomePage/>}/>
-                <Route path="/clinic/dentists" element={< EditDentists/>}/>
-                <Route path="/profile" element={< MyInformation/>}/>
+                <Route path="/clinic/editDentists" element={< EditDentists/>}/>
+                <Route path="/clinic/profile" element={< MyInformation/>}/>
                 <Route path="/aboutUs" element={< AboutUsSkeleton/>}/>
                 <Route path="/error" element={<ErrorPage/>}/>
                 <Route/>

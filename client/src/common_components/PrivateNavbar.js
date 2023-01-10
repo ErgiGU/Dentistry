@@ -4,6 +4,7 @@
  */
 import React from 'react';
 import {Link, useNavigate} from 'react-router-dom';
+import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Logo from '../assets/logo.png'
@@ -27,15 +28,16 @@ export default function PrivateNavbar() {
                 <img id="logoNavbar" src={Logo} alt="logo"/>
                 <h1 id={'name'}>DENTISTRY</h1>
             </div>
-            <Navbar id="navbar" expand="lg">
+            <Navbar id="navbar" expand={'md'}>
                 <Container className="me-auto">
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-                    <Navbar.Collapse id="basic-navbar-nav" className={'justify-content-center'}>
-                        <Link to={'/clinicAppointments'}>Schedule</Link>
-                        <Link to={'/profile'}>Your information</Link>
-                        <Link to={'/addDentist'}>Add a dentist</Link>
-                        <Link to={'/clinic/dentists'}>Edit dentists</Link>
-                        <Link onClick={logout} to={'/login'}>Log out</Link>
+                    <Navbar.Collapse id="basic-navbar-nav" className={'nav-fill justify-content-evenly justify-content-center'}>
+                        <Nav.Link href={'/clinic'}>Home</Nav.Link>
+                        <Nav.Link href={'/clinic/schedule'}>Schedule</Nav.Link>
+                        <Nav.Link href={'/clinic/profile'}>Your information</Nav.Link>
+                        <Nav.Link href={'/clinic/addDentist'}>Add a dentist</Nav.Link>
+                        <Nav.Link href={'/clinic/editDentists'}>Edit dentists</Nav.Link>
+                        <Nav.Link onClick={logout} to={'/login'}>Log out</Nav.Link>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>

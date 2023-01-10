@@ -69,23 +69,18 @@ export default function ViewAppointments() {
                 }
             })
             client.on('message', function (topic, message) {
+                const pMessage = JSON.parse(message)
                 appointmentsFlag.current = false
                 switch (topic) {
                     case client.options.clientId + '/appointmentInformationResponse':
-                        const pMessage = JSON.parse(message)
-                        console.log(pMessage.body.sortedArray)
                         if (pMessage.length === 0) {
                             const alertPlaceholder = document.getElementById('currentAppointments')
                             alertPlaceholder.innerHTML = "No booked appointments for now"
                         }
-                        appointmentsArray.forEach((mappedDates) => {
-                            console.log(mappedDates)
-                        })
                         setAppointmentsArray(pMessage.body.sortedArray)
                         break;
                     case client.options.clientId + '/canceledAppointment':
-                        console.log(JSON.parse(message))
-                        alert(JSON.parse(message))
+                        alert(pMessage.response)
                         break;
                     default:
                         (new Error("The wrong message is received"))
@@ -112,7 +107,7 @@ export default function ViewAppointments() {
         console.log(timeslotID)
         if (client !== null) {
             sendMessage('cancelAppointment', {
-                    id: client.options.clientId,
+                    clientId: client.options.clientId,
                     body: {
                         timeslotID: timeslotID
                     }
@@ -130,8 +125,8 @@ export default function ViewAppointments() {
                         <div className="col-3">
                             <div id="cardAppointment">
                                 <div className="card-body">
-                                    <h3 id={"currentAppointments"}> Current appointments </h3>
-                                    <h2 id={"currentAppointmentsNumber"}>~</h2>
+                                    <h3 id={"currentAppointments"}> Current appointments: </h3>
+                                    <h2 id={"currentAppointmentsNumber"}>{appointmentsArray.length}</h2>
                                     <img id="clinicImage"
                                          src="https://cdn-icons-png.flaticon.com/512/2317/2317964.png"
                                          alt="clinic"/>
@@ -140,8 +135,8 @@ export default function ViewAppointments() {
                         </div>
                         <div className='col-8'>
                             <div id={"timeslots"}>
-                                {appointmentsArray.map(mappedDates => (
-                                    <DateCard key={mappedDates.date} date={mappedDates.date} timeslots={mappedDates.timeslots}
+                                {appointmentsArray.map((mappedDates, index) => (
+                                    <DateCard key={index} date={mappedDates.key} timeslots={mappedDates.value}
                                                   handleChildClick={handleChildClick}/>
                                 ))}
                             </div>

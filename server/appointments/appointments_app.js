@@ -86,7 +86,6 @@ try {
                         r = JSON.parse(r)
                         r[0].id = "id"
                     }
-                    console.log(r)
                     mqttClient.sendMessage(intermediary.clientId + "/appointmentInformationResponse", JSON.stringify(r))
                 })
                 break;
@@ -117,7 +116,6 @@ try {
  * @returns {Promise<*[]>} the result of mongoose manipulations
  */
 async function waitTimeslotData(intermediary) {
-    console.log(JSON.stringify(intermediary.body))
     return await appointments_controller.sendAppointmentInformation(intermediary.body.clinicId)
 }
 
@@ -176,13 +174,13 @@ async function bookAppointment(intermediary) {
  */
 async function cancelAppointment(intermediary) {
     //METHOD CALL FOR DB MANIPULATION THAT DELETES THE TIMESLOT BUT RETURNS IT
-    const canceledTimeslot = await waitDeleteTimeslot(intermediary.body)
-    if (canceledTimeslot.result === "Failure") {
+    const cancelledTimeslot = await waitDeleteTimeslot(intermediary.body)
+    if (cancelledTimeslot.result === "Failure") {
         return {response: "Failure"}
     }
-    console.log(canceledTimeslot)
-    const mailCancelation = mailer.sendAppointmentCancelNotif(canceledTimeslot.timeslot.patient.email, canceledTimeslot.timeslot.startTime, canceledTimeslot.timeslot.clinic, canceledTimeslot.timeslot.dentist)
-    if (mailCancelation === "Success") {
+    console.log(cancelledTimeslot)
+    const mailCancellation = mailer.sendAppointmentCancelNotif(cancelledTimeslot.timeslot.patient.email, cancelledTimeslot.timeslot.startTime, cancelledTimeslot.timeslot.clinic, cancelledTimeslot.timeslot.dentist)
+    if (mailCancellation === "Success") {
         return {response: "Success"}
     } else {
         return {response: "Failure"}

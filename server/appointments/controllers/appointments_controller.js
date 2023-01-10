@@ -7,6 +7,8 @@ const timeslotSchema = require('../../helpers/schemas/timeslot')
 const dentistSchema = require('../../helpers/schemas/dentist')
 const patientSchema = require('../../helpers/schemas/patient')
 const clinicSchema = require('../../helpers/schemas/clinic')
+const resolvePath = require('object-resolve-path')
+const datefns = require('date-fns')
 
 let config
 try {
@@ -97,6 +99,7 @@ async function makeAppointment(clinicId, dentistID, patientInfo, date, time) {
 
     const timeslot = new timeslotModel({
         startTime: time,// <-- The start-time of the selected timeslot goes here
+        date: datefns.formatISO(datefns.parseISO(date), {representation: "date"}),
         clinic: clinicId,
         patient: patient._id,
         dentist: dentist._id
@@ -153,23 +156,41 @@ async function sendAppointmentInformation(intermediary) {
             sortedArray: []
         }
     };
-    const clinic = await clinicModel.findOne({_id: intermediary}).populate("mapStorage.$*.timeslots.$*")
+    const timeslots = await timeslotModel.find({clinic: intermediary}).populate("patient dentist")
 
     try {
-        let map = clinic.mapStorage
-        let dateArray = [];
-        for (const date of map.keys()) {
-            dateArray.push(date)
-        }
-        dateArray.sort(function(a,b){
-            return (new Date(a) - new Date(b));
-        });
-        dateArray.forEach(date => {
-            response.body.sortedArray.push({
-                date: date,
-                timeslots: map.get(date)
-            })
+        let unsortedMap = new Map()
+        timeslots.forEach(timeslot => {
+            let intermediary = {
+                id: timeslot._id,
+                patient: {
+                    name: timeslot.patient.name,
+                    text: timeslot.patient.text
+                },
+                dentist: {
+                    name: timeslot.dentist.name
+                },
+                timeslot: timeslot.startTime
+            }
+            let currentDate = datefns.formatISO(datefns.parseISO(timeslot.date), {representation: "date"})
+            let current = unsortedMap.get(currentDate)
+            let array
+            if (current === undefined) {
+                array = [intermediary]
+                unsortedMap.set(currentDate, array)
+            } else {
+                console.log('adding to ' + current)
+                current.push(intermediary)
+                unsortedMap.set(currentDate, current)
+                console.log(unsortedMap.get(currentDate))
+            }
         })
+        let intermediaryArray = Array.from(unsortedMap, ([key, value]) => ({key, value}));
+        intermediaryArray.sort(function(a,b){
+            return (new Date(a.key) - new Date(b.key));
+        });
+        response.body.sortedArray = intermediaryArray;
+        console.log(response.body.sortedArray[0].value[0])
         return response
     } catch (e) {
         console.log(e)
