@@ -26,7 +26,7 @@ export default function ViewAppointments() {
                 if (appointmentsFlag.current) {
                     navigate("/error");
                 }
-            }, 3000);
+            }, 10000);
 
         } else {
             navigate("/error")

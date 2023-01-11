@@ -28,7 +28,7 @@ export default function NewDentist() {
                 if (clinicDataFlag.current) {
                     navigate("/error");
                 }
-            }, 3000);
+            }, 10000);
 
         } else {
             navigate("/error")

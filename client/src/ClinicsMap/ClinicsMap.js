@@ -25,7 +25,7 @@ export default function Maps(props) {
                 if (clinicData.current) {
                     navigate("/error");
                 }
-            }, 3000);
+            }, 10000);
 
         } else {
             navigate("/error")

@@ -64,7 +64,7 @@ const Modal = ({id, open, onClose, name, workweek}) => {
                 if (clinicDataBackend.current) {
                     navigate("/error");
                 }
-            }, 3000);
+            }, 10000);
 
         } else {
             navigate("/error")

@@ -41,7 +41,7 @@ export default function MyInformation() {
                 if (clinicDataFlag.current) {
                     //navigate("/error");
                 }
-            }, 3000);
+            }, 10000);
         } else {
             //navigate("/error")
         }
