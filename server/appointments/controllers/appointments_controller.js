@@ -7,6 +7,8 @@ const timeslotSchema = require('../../helpers/schemas/timeslot')
 const dentistSchema = require('../../helpers/schemas/dentist')
 const patientSchema = require('../../helpers/schemas/patient')
 const clinicSchema = require('../../helpers/schemas/clinic')
+const resolvePath = require('object-resolve-path')
+const datefns = require('date-fns')
 
 let config
 try {
@@ -51,7 +53,21 @@ function createModels() {
  * @returns {Promise<{patientData: {name: string, text: string, email}, dentistData: {name: string, email}, timeslotTime, clinicData: {address, name, email}}>} JSON required for the emails
  */
 async function getTimeslotInfo(timeslotID) {
-    return await timeslotModel.findById({_id: timeslotID}).populate('clinic').populate('dentist').populate('patient')
+    await timeslotModel.findById({_id: timeslotID}).populate('clinic').populate('dentist').populate('patient')
+    let timeslotPopulatedInfo = await timeslotModel.findById(timeslotID).populate('clinic').populate('dentist').populate('patient')
+    timeslotPopulatedInfo = JSON.stringify(timeslotPopulatedInfo)
+    timeslotPopulatedInfo = JSON.parse(timeslotPopulatedInfo)
+    timeslotPopulatedInfo._id = "id"
+    timeslotPopulatedInfo.clinic._id = "id"
+    timeslotPopulatedInfo.clinic.dentists = ["id"]
+    timeslotPopulatedInfo.clinic.password = "password"
+    timeslotPopulatedInfo.clinic.mapStorage = {}
+    timeslotPopulatedInfo.dentist._id = "id"
+    timeslotPopulatedInfo.dentist.timeslots = ["id"]
+    timeslotPopulatedInfo.dentist.clinic = "id"
+    timeslotPopulatedInfo.patient._id = "id"
+    timeslotPopulatedInfo.patient.timeslots = ["id"]
+    return timeslotPopulatedInfo
 }
 
 /**
@@ -83,6 +99,7 @@ async function makeAppointment(clinicId, dentistID, patientInfo, date, time) {
 
     const timeslot = new timeslotModel({
         startTime: time,// <-- The start-time of the selected timeslot goes here
+        date: datefns.formatISO(datefns.parseISO(date), {representation: "date"}),
         clinic: clinicId,
         patient: patient._id,
         dentist: dentist._id
@@ -134,13 +151,17 @@ async function cancelAppointment(timeslotID) {
  * @returns the clinicTimeslots array
  */
 async function sendAppointmentInformation(intermediary) {
-    let clinicTimeslots = [];
+    let response = {
+        body: {
+            sortedArray: []
+        }
+    };
+    const timeslots = await timeslotModel.find({clinic: intermediary}).populate("patient dentist")
 
-    const timeslots = await timeslotModel.find({clinic: intermediary}).populate("patient").populate("dentist")
-    console.log(timeslots)
     try {
+        let unsortedMap = new Map()
         timeslots.forEach(timeslot => {
-            clinicTimeslots.push({
+            let intermediary = {
                 id: timeslot._id,
                 patient: {
                     name: timeslot.patient.name,
@@ -150,13 +171,31 @@ async function sendAppointmentInformation(intermediary) {
                     name: timeslot.dentist.name
                 },
                 timeslot: timeslot.startTime
-            })
+            }
+            let currentDate = datefns.formatISO(datefns.parseISO(timeslot.date), {representation: "date"})
+            let current = unsortedMap.get(currentDate)
+            let array
+            if (current === undefined) {
+                array = [intermediary]
+                unsortedMap.set(currentDate, array)
+            } else {
+                console.log('adding to ' + current)
+                current.push(intermediary)
+                unsortedMap.set(currentDate, current)
+                console.log(unsortedMap.get(currentDate))
+            }
         })
+        let intermediaryArray = Array.from(unsortedMap, ([key, value]) => ({key, value}));
+        intermediaryArray.sort(function(a,b){
+            return (new Date(a.key) - new Date(b.key));
+        });
+        response.body.sortedArray = intermediaryArray;
+        console.log(response.body.sortedArray[0].value[0])
+        return response
     } catch (e) {
         console.log(e)
+        return e
     }
-    console.log(clinicTimeslots)
-    return clinicTimeslots
 }
 
 const appointmentsController = {
@@ -164,7 +203,7 @@ const appointmentsController = {
     makeAppointment,
     cancelAppointment,
     sendAppointmentInformation,
-    reconnect
+    reconnect,
 }
 
 module.exports = appointmentsController

@@ -39,11 +39,11 @@ export default function MyInformation() {
             client.publish(topic, JSON.stringify(json))
             setTimeout(() => {
                 if (clinicDataFlag.current) {
-                    //navigate("/error");
+                    navigate("/error");
                 }
             }, 10000);
         } else {
-            //navigate("/error")
+            navigate("/error")
         }
     }, [client, navigate])
 
@@ -83,9 +83,11 @@ export default function MyInformation() {
                 clinicDataFlag.current = false
                 switch (topic) {
                     case client.options.clientId + '/editInfoResponse':
+                        console.log(message.toString())
                         receivedMessage(message.toString())
                         break;
                     case client.options.clientId + '/changePasswordResponse':
+                        console.log(message.toString())
                         receivedMessage(message.toString())
                         break;
                     case client.options.clientId + '/currentLoggedInClinicResponse':
@@ -163,13 +165,13 @@ export default function MyInformation() {
      */
     const handleChanges = (e) => {
         const {id, value} = e.target;
-        if (id === "oldPassword") {
+        if (id === "passwordFormOldPassword") {
             setOldPassword(value);
         }
-        if (id === "password") {
+        if (id === "passwordFormPassword") {
             setPassword(value)
         }
-        if (id === "confirmPassword") {
+        if (id === "passwordFormConfirmPassword") {
             setConfirmPassword(value)
         } else {
             setChangedValue(true)
@@ -263,7 +265,7 @@ export default function MyInformation() {
                 sendMessage('changePassword', {
                         id: client.options.clientId,
                         body: {
-                            email: currentClinic.email,
+                            email: currentClinic.clinicInfoEmail,
                             password: password,
                             oldPassword: oldPassword
                         }

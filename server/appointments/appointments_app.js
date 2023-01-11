@@ -53,13 +53,15 @@ try {
                 appointments_controller.makeAppointment(intermediary.body.clinicId, intermediary.body.dentistID, intermediary.body.patientInfo, intermediary.body.date, intermediary.body.time).then(timeslotID => {
                     console.log('id:')
                     console.log(timeslotID)
-                    //setTimeout(() => {
-                        appointments_controller.getTimeslotInfo(timeslotID).then(timeslot => {
+                    setTimeout(() => {
+                        appointments_controller.getTimeslotInfo(timeslotID, intermediary.body.date).then(timeslot => {
+                            waitPatientNotifMail(timeslot)
+                            waitClinicNotifMail(timeslot)
                             console.log('found timeslot:')
                             console.log(timeslot)
                             mqttClient.sendMessage(intermediary.clientId + '/appointmentResponse', JSON.stringify(timeslot))
                         })
-                    //}, 5000)
+                    }, 5000)
                 })
                 break;
             case 'testingTestingRequest':
@@ -82,7 +84,7 @@ try {
                     if (intermediary.body.test) {
                         r = JSON.stringify(r)
                         r = JSON.parse(r)
-                        r[0].id = "id"
+                        r.body.sortedArray[0].value[0].id = "id"
                     }
                     mqttClient.sendMessage(intermediary.clientId + "/appointmentInformationResponse", JSON.stringify(r))
                 })
@@ -114,12 +116,7 @@ try {
  * @returns {Promise<*[]>} the result of mongoose manipulations
  */
 async function waitTimeslotData(intermediary) {
-    console.log(JSON.stringify(intermediary.body))
     return await appointments_controller.sendAppointmentInformation(intermediary.body.clinicId)
-}
-
-async function waitGenerateData() {
-    await appointments_controller.generateData('6391e39a3e08ac910fbede6f')
 }
 
 async function waitMakeTimeslots(message) {
@@ -131,11 +128,11 @@ async function waitMailData(timeslotID) {
 }
 
 async function waitClinicNotifMail(mailingData) {
-    return await mailer.sendAppointmentNotifClinic(mailingData.patientData, mailingData.timeslotTime, mailingData.clinicData.email, mailingData.dentistData)
+    return await mailer.sendAppointmentNotifClinic(mailingData.patient, mailingData.startTime, mailingData.clinic.email, mailingData.dentist)
 }
 
 async function waitPatientNotifMail(mailingData) {
-    return await mailer.sendAppointmentNotifPatient(mailingData.patientData.email, mailingData.timeslotTime, mailingData.clinicData, mailingData.dentistData)
+    return await mailer.sendAppointmentNotifPatient(mailingData.patient.email, mailingData.startTime, mailingData.clinic, mailingData.dentist)
 }
 
 async function waitDeleteTimeslot(message) {
@@ -154,18 +151,20 @@ async function waitBookAppointment(message) {
 async function bookAppointment(intermediary) {
     //Creates a timeslot. Returns the timeslot JSON.
     const timeslot = await waitMakeTimeslots(intermediary.body)
+    console.log("This iss the timeslot " + JSON.stringify(timeslot))
     //Takes the ID of the timeslot JSON and ID. Returns success or failure of emailing.
-    const mailingData = await waitMailData({_id:timeslot._id})
-    const mailingPatient = await waitPatientNotifMail(mailingData)
-    const mailingClinic = await waitClinicNotifMail(mailingData)
-    if (mailingPatient === "Success" && mailingClinic === "Success") {
-        console.log("Successful Email")
-        return {response: "Success"}
-    } else {
-        console.log("Failure to Email")
-        return {response: "Failure"}
-    }
-
+    setTimeout(async () => {
+        console.log(JSON.stringify(timeslot) + "help find")
+        const mailingPatient = await waitPatientNotifMail(timeslot)
+        const mailingClinic = await waitClinicNotifMail(timeslot)
+        if (mailingPatient === "Success" && mailingClinic === "Success") {
+            console.log("Successful Email")
+            return timeslot
+        } else {
+            console.log("Failure to Email")
+            return timeslot
+        }
+    },1500)
 }
 
 /**
@@ -175,13 +174,13 @@ async function bookAppointment(intermediary) {
  */
 async function cancelAppointment(intermediary) {
     //METHOD CALL FOR DB MANIPULATION THAT DELETES THE TIMESLOT BUT RETURNS IT
-    const canceledTimeslot = await waitDeleteTimeslot(intermediary.body)
-    if (canceledTimeslot.result === "Failure") {
+    const cancelledTimeslot = await waitDeleteTimeslot(intermediary.body)
+    if (cancelledTimeslot.result === "Failure") {
         return {response: "Failure"}
     }
-    console.log(canceledTimeslot)
-    const mailCancelation = mailer.sendAppointmentCancelNotif(canceledTimeslot.timeslot.patient.email, canceledTimeslot.timeslot.startTime, canceledTimeslot.timeslot.clinic, canceledTimeslot.timeslot.dentist)
-    if (mailCancelation === "Success") {
+    console.log(cancelledTimeslot)
+    const mailCancellation = mailer.sendAppointmentCancelNotif(cancelledTimeslot.timeslot.patient.email, cancelledTimeslot.timeslot.startTime, cancelledTimeslot.timeslot.clinic, cancelledTimeslot.timeslot.dentist)
+    if (mailCancellation === "Success") {
         return {response: "Success"}
     } else {
         return {response: "Failure"}

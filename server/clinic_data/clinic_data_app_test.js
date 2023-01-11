@@ -124,7 +124,7 @@ describe('ClinicDataTests. Runs tests that checks up on every backend MQTT endpo
         it('Editing the info of a given clinic', async function () {
             this.timeout(10000)
             const messageSend = {
-                clientId: "123",
+                id: "123",
                 body: {
                     name: "Clinic Testing",
                     owner: "Oscar Davidsson",

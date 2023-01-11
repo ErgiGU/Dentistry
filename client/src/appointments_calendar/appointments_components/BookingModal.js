@@ -9,10 +9,6 @@ export default function BookingModal({modalShow, onClose, slot, clinic, client})
         patientDateOfBirth: '',
         patientText: ''
     });
-    const patientName = document.getElementById('clinicName');
-    const patientEmail = document.getElementById('address');
-    const patientDateOfBirth = document.getElementById('email');
-    const patientText = document.getElementById('password');
 
     //This is for the checkbox
     const [checked, setChecked] = useState(false);

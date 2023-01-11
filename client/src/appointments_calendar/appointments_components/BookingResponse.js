@@ -7,10 +7,12 @@ export default function BookingResponse({bookingResponse}) {
             <h1>Your booking</h1>
             <table className={'table table-bordered'}>
                 <thead>
-                    <th scope={'col'}>Clinic</th>
-                    <th scope={'col'}>Appointment time</th>
-                    <th scope={'col'}>Dentist</th>
-                    <th scope={'col'}>Location</th>
+                    <tr>
+                        <th scope={'col'}>Clinic</th>
+                        <th scope={'col'}>Appointment time</th>
+                        <th scope={'col'}>Dentist</th>
+                        <th scope={'col'}>Location</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr>

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Calendar from "./appointments_components/Calendar";
 import Loading from "./appointments_components/Loading";
 import mqttHandler from "../common_components/MqttHandler";

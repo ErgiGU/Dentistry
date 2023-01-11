@@ -84,7 +84,6 @@ export default function Maps(props) {
             // add markers to map
             for (const clinic of r.clinics) {
 
-                const name = clinic.properties.title;
                 const innerHtmlContent = `<div>
                             <h3>${clinic.properties.title}</h3> +
                             <p>${clinic.properties.address}</p> +
