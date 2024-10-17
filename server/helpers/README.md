@@ -7,6 +7,6 @@ There is also a schema directory which creates mongoose schemas for clinic, dent
 ## Diagram
 The Entity-Relation diagram
 
-![ER Diagram](../../client/src/assets/ER Diagram.png)
+![ER Diagram](../../images/ER Diagram.png)
 
 

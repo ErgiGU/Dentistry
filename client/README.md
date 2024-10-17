@@ -15,7 +15,7 @@ The frontend is set up using React and consists of the following directories
 
 ## Visuals
 
-![client_home_page](/src/assets/clinic_home_page.png)
+![client_home_page](../images/clinic_home_page.png)
 
 This is the client home page, and what is seen as the application opens. 
 From this page, the user can navigate to multiple different pages as seen in the Navbar. These include book appointment, 
@@ -23,9 +23,9 @@ the map of the clinics and a page with information about all the registered clin
 
 
 [placeholder: the three pages connected to home page]
-![book_appointments](/src/assets/public_clinic_book.png)
-![clinic_map](/src/assets/public_clinic_map.png)
-![about_us](/src/assets/public_clinic_aboutus.png)
+![book_appointments](../images/public_clinic_book.png)
+![clinic_map](../images/public_clinic_map.png)
+![about_us](../images/public_clinic_aboutus.png)
 
 These pages are each connected to different backend components and have different functionalities.
 The page "book appointment" is connected to the "appointments" backend component and is responsible for making sure the user is able to book appointments. 
@@ -36,26 +36,26 @@ Moreover, the page "Clinics map" is connected to the backend component "clinic-d
 Lastly, the page "Our clinics" is also connected to the backend component 
 and shows information about the registered clinics at our application.
 
-![sign_in](/src/assets/sign_in_clinic.png)
-![sign_up](/src/assets/register_clinic.png)
+![sign_in](../images/sign_in_clinic.png)
+![sign_up](../images/register_clinic.png)
 
 Clinics can register themselves in our application in order to access other functionalities.
 From the client's homepage, clinics is able to navigate to a login page where they either log in or sign up for an account.
 These pages are connected to the authorization component in the backend and manage all authorization and account creation logic.
 
-![clinic_home](/src/assets/clinic_home_page.png)
+![clinic_home](../images/clinic_home_page.png)
 
 Upon logging in, a clinic is navigated to a "clinic's home page" where there they are met with links to multiple different functionality pages.
 Namely, a schedule page, a "My information", an "Add a dentist" page, and lastly, an "Edit dentist" page. 
 
-![schedule](/src/assets/clinic_booked_appointments.png)
+![schedule](../images/clinic_booked_appointments.png)
 
 This page shows the clinic all the current booked timeslots, with all the necessary information such as the start time, patient information, dentist name and additional information.
 It is connected to the "appointments" backend component in order to fetch the necessary information.
 
-![profile](/src/assets/clinic_edit_information.png)
-![add_dentist](/src/assets/clinic_add_dentist.png)
-![edit_dentist](/src/assets/clinic_edit_dentists.png)
+![profile](../images/clinic_edit_information.png)
+![add_dentist](../images/clinic_add_dentist.png)
+![edit_dentist](../images/clinic_edit_dentists.png)
 
 The above pages deal with the updating the clinic's information. Furthermore, all of them
 interact with the backend component "clinic-data" to fetch and update information.

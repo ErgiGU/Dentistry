@@ -9,5 +9,5 @@ It is built upon a custom, HiveMQ based, MQTT backend implementation which handl
 
 ### MongoDB 
 
-Using the Schemas that are stored within a external [helpers folder](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/server/helpers). The schemas that this component creates and deletes are the timeslot and patient schemas. It does make use of the clinic and dentist schema to extract information. 
+Using the Schemas that are stored within a external [helpers folder](https://github.com/ErgimanGU/Dentistry/tree/main/server/helpers). The schemas that this component creates and deletes are the timeslot and patient schemas. It does make use of the clinic and dentist schema to extract information. 
 

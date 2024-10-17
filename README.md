@@ -4,11 +4,11 @@
 ## Table of Contents
 | Title                                                                                                                       | Description |
 | ------                                                                                                                      | ------ |
-| [Appointments Service](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/server/appointments)   | Directory that handles booking appointment from the MQTT side of the application.     |
-| [Authorization Service](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/server/authorization) | Directory that handles succeful log in and authorization of a Clinic.       |
-| [Clinic Data Service](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/server/clinic_data)     | Directory that helps interact with Clinic data stored in the database via MQTT broker.     |
-| [Helpers and Schemas](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/server/helpers)         | A helpers directory which also includes schemas for each entity.       |
-| [Front-end side](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/client)                      | The Client side react based application that runs on a local host       |
+| [Appointments Service](https://github.com/ErgimanGU/Dentistry/tree/main/server/appointments)   | Directory that handles booking appointment from the MQTT side of the application.     |
+| [Authorization Service](https://github.com/ErgimanGU/Dentistry/tree/main/server/authorization) | Directory that handles succeful log in and authorization of a Clinic.       |
+| [Clinic Data Service](https://github.com/ErgimanGU/Dentistry/tree/main/server/clinic_data)     | Directory that helps interact with Clinic data stored in the database via MQTT broker.     |
+| [Helpers and Schemas](https://github.com/ErgimanGU/Dentistry/tree/main/server/helpers)         | A helpers directory which also includes schemas for each entity.       |
+| [Front-end side](https://github.com/ErgimanGU/Dentistry/tree/main/client)                      | The Client side react based application that runs on a local host       |
 
 
 ## Description
@@ -72,20 +72,20 @@ get their responses back even when the system is close to its limit. The screens
 
 The amount of clients connected and the successful publishes:
 
-![max load](client/src/assets/Screenshot_21.png)
+![max load](images/Screenshot_21.png)
 
 This is the 47th client(user) getting the response with the clinic information, which shows resilience in our system and 
 that the messages get delivered even when the broker is near its limit(50 in this case):
 
-![responses](client/src/assets/Screenshot_20.png)
+![responses](images/Screenshot_20.png)
 
 This is how things look on the broker's end: 
 
-![broker](client/src/assets/Screenshot_22.png)
+![broker](images/Screenshot_22.png)
 
 This is the generated graph that shows response times over time(10 seconds) for each test:
 
-![graph](client/src/assets/Screenshot_23.png)
+![graph](images/Screenshot_23.png)
 
 
 
@@ -116,11 +116,11 @@ Following are the links to related sources our team used for project management:
 
 ### Links to the other components/directories
 
-1. [Authorization service](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/server/authorization)
-2. [Clinic data service](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/server/clinic_data)
-3. [Appointments service](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/server/appointments)
-4. [Helpers (includes ER diagram)](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/server/helpers)
-5. [Client (includes screenshots of our interface)](https://git.chalmers.se/courses/dit355/dit356-2022/t-7/t7-project/-/tree/main/client)
+1. [Authorization service](https://github.com/ErgimanGU/Dentistry/tree/main/server/authorization)
+2. [Clinic data service](https://github.com/ErgimanGU/Dentistry/tree/main/server/clinic_data)
+3. [Appointments service](https://github.com/ErgimanGU/Dentistry/tree/main/server/appointments)
+4. [Helpers (includes ER diagram)](https://github.com/ErgimanGU/Dentistry/tree/main/server/helpers)
+5. [Client (includes screenshots of our interface)](https://github.com/ErgimanGU/Dentistry/tree/main/client)
 
 ## Software Requirements Specification
 All the requirements below can be found on the [closed issues] () section of our repository
@@ -182,7 +182,7 @@ We decided to combine three different architectural styles which are:
 2. Client-server architecture which uses a 3-tier system where the middleware (here MQTT) will receive requests from the client (here subscriptions) and send them to the server to handle them appropriately
 3. Service-based architecture ensures consistency between different repositories and extensibility to add functionality to the system in the future. 
 <br> All these architectural styles support efficiency and scalability. The **deployment diagram** below gives an idea of how our system works:
-   ![deploymentDiagram](client/src/assets/deploymentDiagram.png)
+   ![deploymentDiagram](images/deploymentDiagram.png)
    
 
 ### Mapping the design to our technologies
@@ -238,7 +238,7 @@ on Actual, Earned and Expected time.</p>
 together with dependencies that exist. That also showed our progress with the various developments.
 We created a SPEM diagram to visualize the development process we used.</p>
 
-![SPEMdiagram](client/src/assets/SPEM diagram.png)
+![SPEMdiagram](images/SPEM diagram.png)
 
 </details>
 
