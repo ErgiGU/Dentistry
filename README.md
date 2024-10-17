@@ -4,11 +4,11 @@
 ## Table of Contents
 | Title                                                                                                                       | Description |
 | ------                                                                                                                      | ------ |
-| [Appointments Service](https://github.com/ErgimanGU/Dentistry/tree/main/server/appointments)   | Directory that handles booking appointment from the MQTT side of the application.     |
-| [Authorization Service](https://github.com/ErgimanGU/Dentistry/tree/main/server/authorization) | Directory that handles succeful log in and authorization of a Clinic.       |
-| [Clinic Data Service](https://github.com/ErgimanGU/Dentistry/tree/main/server/clinic_data)     | Directory that helps interact with Clinic data stored in the database via MQTT broker.     |
-| [Helpers and Schemas](https://github.com/ErgimanGU/Dentistry/tree/main/server/helpers)         | A helpers directory which also includes schemas for each entity.       |
-| [Front-end side](https://github.com/ErgimanGU/Dentistry/tree/main/client)                      | The Client side react based application that runs on a local host       |
+| [Appointments Service](https://github.com/ErgiGU/Dentistry/tree/main/server/appointments)   | Directory that handles booking appointment from the MQTT side of the application.     |
+| [Authorization Service](https://github.com/ErgiGU/Dentistry/tree/main/server/authorization) | Directory that handles succeful log in and authorization of a Clinic.       |
+| [Clinic Data Service](https://github.com/ErgiGU/Dentistry/tree/main/server/clinic_data)     | Directory that helps interact with Clinic data stored in the database via MQTT broker.     |
+| [Helpers and Schemas](https://github.com/ErgiGU/Dentistry/tree/main/server/helpers)         | A helpers directory which also includes schemas for each entity.       |
+| [Front-end side](https://github.com/ErgiGU/Dentistry/tree/main/client)                      | The Client side react based application that runs on a local host       |
 
 
 ## Description
@@ -116,11 +116,11 @@ Following are the links to related sources our team used for project management:
 
 ### Links to the other components/directories
 
-1. [Authorization service](https://github.com/ErgimanGU/Dentistry/tree/main/server/authorization)
-2. [Clinic data service](https://github.com/ErgimanGU/Dentistry/tree/main/server/clinic_data)
-3. [Appointments service](https://github.com/ErgimanGU/Dentistry/tree/main/server/appointments)
-4. [Helpers (includes ER diagram)](https://github.com/ErgimanGU/Dentistry/tree/main/server/helpers)
-5. [Client (includes screenshots of our interface)](https://github.com/ErgimanGU/Dentistry/tree/main/client)
+1. [Authorization service](https://github.com/ErgiGU/Dentistry/tree/main/server/authorization)
+2. [Clinic data service](https://github.com/ErgiGU/Dentistry/tree/main/server/clinic_data)
+3. [Appointments service](https://github.com/ErgiGU/Dentistry/tree/main/server/appointments)
+4. [Helpers (includes ER diagram)](https://github.com/ErgiGU/Dentistry/tree/main/server/helpers)
+5. [Client (includes screenshots of our interface)](https://github.com/ErgiGU/Dentistry/tree/main/client)
 
 ## Software Requirements Specification
 All the requirements below can be found on the [closed issues] () section of our repository

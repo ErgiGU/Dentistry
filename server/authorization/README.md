@@ -9,4 +9,4 @@ It is built upon a custom HiveMQ-based MQTT backend implementation which handles
 
 ### MongoDB
 
-Using the Schemas that are stored within a external [helpers folder](https://github.com/ErgimanGU/Dentistry/tree/main/server/helpers). The schema that this component is using is the "clinic" schema. It ensures that the clinic registered adheres to that structure. 
+Using the Schemas that are stored within a external [helpers folder](https://github.com/ErgiGU/Dentistry/tree/main/server/helpers). The schema that this component is using is the "clinic" schema. It ensures that the clinic registered adheres to that structure. 
